@@ -2,7 +2,7 @@
 
 **JchemoDemo** is a repository containing scripts (examples) illustrating some functions of package [**Jchemo.jl**](https://github.com/mlesnoff/Jchemo.jl).
 
-The scripts are available [here](https://github.com/mlesnoff/JchemoDemo/tree/main/src).
+The scripts are available [**here**](https://github.com/mlesnoff/JchemoDemo/tree/main/src).
 
 The **datasets** used in the examples are stored in package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl). 
 
