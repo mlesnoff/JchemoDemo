@@ -361,7 +361,9 @@ nam = ["fgvvh" ; "nngfjkjjk"]
 SubString.(nam, 2, 4)
 SubString.(nam, 2)
 
+############### UNICODE 
 
+## http://web.mit.edu/julia_v0.6.2/julia/share/doc/julia/html/en/manual/unicode-input.html
 
 
 
