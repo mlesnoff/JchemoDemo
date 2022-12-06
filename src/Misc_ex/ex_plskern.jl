@@ -10,7 +10,7 @@ pnames(fm)
 fm.T
 fm.P 
 
-Jchemo.summary(fm, Xtrain, ytrain)
+summary(fm, Xtrain)
 
 fm.T
 Jchemo.transform(fm, Xtrain)
