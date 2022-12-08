@@ -47,6 +47,6 @@ freqtable(vec(pred), ytest)
 
 ## Averaging
 nlv = "0:50"
-fm = plsrda_avg(Xtrain, ytrain; nlv = nlv) ;
+fm = plsrdaavg(Xtrain, ytrain; nlv = nlv) ;
 pred = Jchemo.predict(fm, Xtest).pred
 err(pred, ytest)

@@ -51,7 +51,7 @@ plotxy(vec(pred), ytest; color = (:red, .5),
 
 ## Averaging
 nlv = "0:50"
-fm = plsr_avg(Xtrain, ytrain; nlv = nlv) ;
+fm = plsravg(Xtrain, ytrain; nlv = nlv) ;
 pred = Jchemo.predict(fm, Xtest).pred
 rmsep(pred, ytest)
 

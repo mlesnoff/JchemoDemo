@@ -58,7 +58,7 @@ plotxy(vec(pred), ytest; color = (:red, .5),
 
 ## Averaging
 nlv = "0:20"
-fm = lwplsr_avg(Xtrain, ytrain; nlvdis = 25, 
+fm = lwplsravg(Xtrain, ytrain; nlvdis = 25, 
     metric = "mahal", h = 1, k = 1000, 
     nlv = nlv, verbose = true) ;
 pred = Jchemo.predict(fm, Xtest).pred

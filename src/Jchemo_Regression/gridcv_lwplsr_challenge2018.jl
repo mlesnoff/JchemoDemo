@@ -83,11 +83,11 @@ nlv = ["0:20"; "0:30"; "0:50"; "5:20"; "5:30"; "5:50"]
 pars = mpar(nlv = nlv, nlvdis = nlvdis, metric = metric, h = h, k = k)
 length(pars[1])
 res = gridcv(Xtrain, ytrain; segm = segm, score = rmsep, 
-    fun = lwplsr_avg, pars = pars, verbose = true).res
+    fun = lwplsravg, pars = pars, verbose = true).res
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 
-fm = lwplsr_avg(Xtrain, ytrain; nlvdis = res.nlvdis[u], 
+fm = lwplsravg(Xtrain, ytrain; nlvdis = res.nlvdis[u], 
     metric = res.metric[u], h = res.h[u], k = res.k[u], 
     nlv = res.nlv[u], verbose = true) ;
 pred = Jchemo.predict(fm, Xtest).pred
@@ -97,7 +97,7 @@ rmsep(pred, ytest)
 nlv = "5:20"
 #nlv = "0:30"
 #nlv = "0:50"
-fm = lwplsr_avg(Xtrain, ytrain; nlvdis = 15, 
+fm = lwplsravg(Xtrain, ytrain; nlvdis = 15, 
     metric = "mahal", h = 2, k = 200, 
     nlv = nlv, verbose = true) ;
 pred = Jchemo.predict(fm, Xtest).pred

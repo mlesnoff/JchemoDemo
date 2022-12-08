@@ -97,7 +97,7 @@ res = gridscorelv(Xtrain, Ytrain, Xtest, Ytest;
 
 pars = mpar(nlv = ["1:2"; "1:3"])
 res = gridscore(Xtrain, Ytrain, Xtest, Ytest;
-    score = rmsep, fun = plsr_avg, pars = pars)
+    score = rmsep, fun = plsravg, pars = pars)
 
 ############ kNN-LWPLSR-AGG
 
@@ -108,7 +108,7 @@ h = [1.; 3.] ; k = [20; 10]
 nlv = ["1:2"; "2:5"] ;
 pars = mpar(nlv = nlv, nlvdis = nlvdis, metric = metric, h = h, k = k) ;
 res = gridscore(Xtrain, Ytrain, Xtest, Ytest;
-    score = rmsep, fun = lwplsr_avg, pars = pars, verbose = true)
+    score = rmsep, fun = lwplsravg, pars = pars, verbose = true)
 
 
 

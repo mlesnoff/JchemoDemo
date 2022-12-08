@@ -102,7 +102,7 @@ gridscorelv(Xtrain, ytrain, Xtest, ytest;
 
 pars = mpar(nlv = ["1:2"; "1:3"])
 gridscore(Xtrain, ytrain, Xtest, ytest;
-    score = err, fun = plsrda_avg, pars = pars)
+    score = err, fun = plsrdaavg, pars = pars)
 
 ############ kNN-LWPLSR-DA-AVG
 
@@ -113,6 +113,6 @@ h = [1.; 3.] ; k = [20; 10]
 nlv = ["1:2"; "2:5"] ;
 pars = mpar(nlv = nlv, nlvdis = nlvdis, metric = metric, h = h, k = k) ;
 gridscore(Xtrain, ytrain, Xtest, ytest;
-    score = err, fun = lwplsrda_avg, pars = pars, verbose = true)
+    score = err, fun = lwplsrdaavg, pars = pars, verbose = true)
 
 
