@@ -2,17 +2,15 @@ using CSV, HDF5, JLD2, MAT, XLSX, DataFrames
 using RData, CodecXz      # RData requires CodecXz
 using JSON
 
-root = "D:/Mes Donnees/Users/Applications/Tools/Nirs/Packages/Julia/Training/Data/" 
+root = "C:/Users/lesnoff/.julia/dev/JchemoData/data/" 
 
 #################### CSV
 
 db = string(root, "dat_2021.csv") ;
-dat = CSV.File(db, header = 1, delim = ";") 
-dat
-df = DataFrame(CSV.File(db))
+df = CSV.read(db, DataFrame; header = 1, delim = ";") 
 # Same as:
-#df = CSV.File(db) |> DataFrame 
-#df = CSV.read(db, DataFrame; header = 1, delim = ";") 
+#df = CSV.File(db; header = 1, delim = ";") |> DataFrame 
+#df = DataFrame(CSV.File(db, header = 1, delim = ";"))
 size(df)
 names(df)
 
