@@ -133,6 +133,12 @@ X = reshape([NaN; rand(8); NaN], 5, 2)
 X[isnan.(X)] .= 1
 X
 
+############### LINRANGE 
+
+LinRange(-.1, 0.3, 5)
+
+collect(range(-0.1, 0.3; length = 5))
+
 ############### LOWERCASE, UPPERCASE 
 
 x = ["a" ; "c"]
