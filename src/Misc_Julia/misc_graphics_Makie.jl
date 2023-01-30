@@ -24,6 +24,7 @@ using GLMakie
 CairoMakie.activate!()  # ==> backend CairoMakie is used
 GLMakie.activate!()     # ==> backend GLMakie is used
 
+using Jchemo
 res = scatter(randn(100, 2)) 
 pnames(res)
 
@@ -173,14 +174,6 @@ title = "Type"
 Legend(f[1, 2], elt, lab, title; 
     nbanks = 1, rowgap = 10, bgcolor = "lightgrey")
 f
-
-################# DELETE
-
-## You can delete a plot object directly via 
-delete!(ax, plotobj)
-
-## You can also remove all plots with 
-empty!(ax)
 
 ################# ERRORBARS 
 
