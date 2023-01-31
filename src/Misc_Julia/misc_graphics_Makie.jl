@@ -379,9 +379,9 @@ f
 
 f = Figure()
 Axis(f[1, 1])
-elt_1 = MarkerElement(color = "red", marker = '●', markersize = 15)
-elt_2 = MarkerElement(color = "blue", marker = 'o', markersize = 15)
-Legend(f[1, 2], [elt_1, elt_2], ["A", "B"], rowgap = 10)
+elt1 = MarkerElement(color = "red", marker = '●', markersize = 15)
+elt2 = MarkerElement(color = "blue", marker = 'o', markersize = 15)
+Legend(f[1, 2], [elt1, elt2], ["A", "B"], rowgap = 10)
 f
 
 f = Figure(resolution = (500, 300))
@@ -467,10 +467,10 @@ barplot!(ax, x, y; direction = :x,
     dodge = grp, color = colors[grp])
 lab = ["A"; "B"; "C"]
 mks_l = 10
-elt_1 = MarkerElement(color = cols[1], marker = '●', markersize = mks_l)
-elt_2 = MarkerElement(color = cols[2], marker = '●', markersize = mks_l)
-elt_3 = MarkerElement(color = cols[3], marker = '●', markersize = mks_l)
-elt = [elt_1; elt_2; elt_3]
+elt1 = MarkerElement(color = cols[1], marker = '●', markersize = mks_l)
+elt2 = MarkerElement(color = cols[2], marker = '●', markersize = mks_l)
+elt3 = MarkerElement(color = cols[3], marker = '●', markersize = mks_l)
+elt = [elt1; elt2; elt3]
 title = "Model"
 Legend(f[1, 2], elt, lab, title)
 f
