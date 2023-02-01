@@ -1,6 +1,6 @@
 using CairoMakie, GLMakie
 
-CairoMakie.activate!()  # ==> backend CairoMakie is used
+CairoMakie.activate!()   # ==> backend CairoMakie is used
 #GLMakie.activate!()     # ==> backend GLMakie is used  
 
 ################ HEATMAP 
@@ -97,6 +97,7 @@ ax = Axis3(f[1, 1],
 scatter!(ax, x, y, z, 
     markersize = mks, color = year, colormap = (:Dark2_5, .7))
 f[1, 1] = ax 
+## Legend
 lab = string.(lev)
 elt = [MarkerElement(color = cols[i], marker = '●', markersize = 10) for i in 1:nlev]
 #elt = [PolyElement(polycolor = cols[i]) for i in 1:nlev]
