@@ -269,10 +269,10 @@ z = SubString.(id, 3)
 parse.(Int64, z) 
 Meta.parse.(z)   
 
-fun = "sum"
-flearn = eval(Meta.parse(fun))
+nam = "sum"
+myfun = eval(Meta.parse(nam))
 x = rand(5)
-flearn(x)
+myfun(x)
 
 ############### PASTE 
 

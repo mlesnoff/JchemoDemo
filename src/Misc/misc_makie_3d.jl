@@ -1,11 +1,45 @@
 using CairoMakie, GLMakie
 
-CairoMakie.activate!()   # ==> backend CairoMakie is used
-#GLMakie.activate!()     # ==> backend GLMakie is used  
+## https://docs.makie.org/stable/examples/plotting_functions
+
+################ CONTOUR 
+
+CairoMakie.activate!()  
+#GLMakie.activate!() 
+
+n = 100
+x = LinRange(0, 10, n) 
+y = LinRange(0, 15, n) 
+z = [cos(x) * sin(y) for x in x, y in y] 
+
+contour(z;
+    axis = (xlabel = "a", ylabel = "b", 
+        title = "Cos(a) * Sin(a)"))
+
+f = Figure(resolution = (500, 400))
+ax = Axis(f[1, 1]; xlabel = "a", ylabel = "b", 
+        title = "Cos(a) * Sin(a)")
+contour!(ax, x, y, z; levels = 10)
+f
+
+contourf(z;
+    axis = (xlabel = "a", ylabel = "b", 
+        title = "Cos(a) * Sin(a)"))
+
+## Contour withi vortex
+x = randn(200)
+y = randn(200)
+z = x .* y
+f, ax, tr = tricontourf(x, y, z, colormap = :batlow)
+scatter!(x, y, color = z, colormap = :batlow, strokewidth = 1, strokecolor = :black)
+Colorbar(f[1, 2], tr)
+f
 
 ################ HEATMAP 
 
-## https://docs.makie.org/stable/examples/plotting_functions/heatmap/
+
+CairoMakie.activate!()  
+#GLMakie.activate!() 
 
 x = [1, 2, 3, 1, 2, 3, 1, 2, 3]
 y = [1, 1, 1, 2, 2, 2, 3, 3, 3]
@@ -28,11 +62,10 @@ f
 rg = (minimum(z), maximum(z))
 cmp = :thermal
 f = Figure()
-ax = Axis(f, aspect = 1, 
+ax = Axis(f[1, 1]; aspect = 1, 
     xlabel = "x axis", ylabel = "y axis")
 heatmap!(ax, x, y, z; colormap = cmp)
-f[1, 1] = ax
-Colorbar(f[:, end + 1], colorrange = rg,
+Colorbar(f[:, end + 1]; colorrange = rg,
     colormap = cmp)
 f
 
@@ -44,12 +77,12 @@ heatmap(ax, X)
 f
 
 f = Figure()
-ax = Axis(f[1, 1], aspect = 1, xlabel = "x axis", ylabel = "y axis")
+ax = Axis(f[1, 1]; aspect = 1, xlabel = "x axis", ylabel = "y axis")
 heatmap!(ax, X)
 Colorbar(f[1, 2])
 f
 
-f, ax, hm = heatmap(X,
+f, ax, hm = heatmap(X;
     figure = (backgroundcolor = :lightgrey,),
     axis = (aspect = 1, xlabel = "x axis", 
         ylabel = "y axis"))
@@ -79,24 +112,22 @@ scatter(x, y, z,
         zlabel = "Axis 3", title = "3D"))
 
 f = Figure(resolution = (700, 500))
-mks = 15; i = 1
+mks = 15
 ax = Axis3(f[1, 1]; aspect = (1, 1, 1), perspectiveness = 0.2)
 scatter!(ax, x, y, z,
     markersize = mks, color = year, colormap = (:Dark2_5, .7))
-f[1, 1] = ax 
 f
 
 f = Figure(resolution = (700, 500))
 mks = 15
 cols = cgrad(:Dark2_5, collect(1:nlev); alpha = .7) 
 #cols = cgrad(:tab10, collect(1:nlev); alpha = .3) 
-ax = Axis3(f[1, 1],
+ax = Axis3(f[1, 1];
     xlabel = "Axis 1", ylabel = "Axis 2", 
     zlabel = "Axis 3", 
     perspectiveness = 0.2, azimuth = 1.2pi) 
 scatter!(ax, x, y, z, 
     markersize = mks, color = year, colormap = (:Dark2_5, .7))
-f[1, 1] = ax 
 ## Legend
 lab = string.(lev)
 elt = [MarkerElement(color = cols[i], marker = '●', markersize = 10) for i in 1:nlev]
@@ -125,7 +156,6 @@ for j = 1:nlev
     scatter!(ax, x[s], y[s], z[s], 
         markersize = mks, color = cols[j], label = lev[j])
 end
-f[1, 1] = ax 
 #axislegend(ax, position = :rb)
 #f[1, 2] = Legend(f, ax, "Type", framevisible = false) 
 f
@@ -148,16 +178,23 @@ f
 
 ################ SURFACE 
 
-x = LinRange(0, 10, 100) 
-y = LinRange(0, 15, 100) 
+CairoMakie.activate!()  
+#GLMakie.activate!() 
+
+n = 100
+x = LinRange(0, 10, n) 
+y = LinRange(0, 15, n) 
 z = [cos(x) * sin(y) for x in x, y in y] 
-surface(x, y, z,
+
+surface(z,
     axis = (type = Axis3, xlabel = "a", ylabel = "b", zlabel = "",
         title = "Cos(a) * Sin(a)", perspectiveness = 0))
 
-
-
-
+f = Figure(resolution = (500, 400))
+ax = Axis3(f[1, 1]; xlabel = "a", ylabel = "b", zlabel = "", 
+        title = "Cos(a) * Sin(a)")
+surface!(ax, x, y, z)
+f
 
 ## https://juliadatascience.io/glmakie
 function peaks(; n = 49)
@@ -176,6 +213,14 @@ contour!(ax[2], x, y, z; levelt=20)
 contourf!(ax[3], x, y, z)
 Colorbar(f[1, 4], hm, height = Relative(0.5))
 f
+
+################ WIREFRAME
+
+x, y = collect(-8:0.5:8), collect(-8:0.5:8)
+z = [sinc(√(X^2 + Y^2) / π) for X ∈ x, Y ∈ y]
+wireframe(x, y, z, 
+    axis = (; type = Axis3), color = :grey)
+
 
 
 
