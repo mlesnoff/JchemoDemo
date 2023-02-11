@@ -1,5 +1,8 @@
-using JLD2, CairoMakie, StatsBase
+using JLD2, CairoMakie, GLMakie
 using Jchemo, JchemoData
+
+CairoMakie.activate!()
+#GLMakie.activate!() 
 
 mypath = dirname(dirname(pathof(JchemoData)))
 db = joinpath(mypath, "data", "cassav.jld2") 
@@ -15,6 +18,9 @@ wl_num = parse.(Float64, wl)
 
 tab(year)
 
+lev = sort(unique(year))
+nlev = length(lev)
+
 ######## End Data
 
 fm = pcasvd(X, nlv = 6) ; 
@@ -28,8 +34,14 @@ plotxy(T[:, i], T[:, i + 1]; color = (:red, .5),
 i = 1
 plotxy(T[:, i], T[:, i + 1], year;
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
-    zeros = true).f
+    zeros = true, ellipse = true).f
 
+i = 1
+colm = cgrad(:Dark2_5, nlev; categorical = true)
+plotxy(T[:, i], T[:, i + 1], year; 
+    color = colm,
+    xlabel = string("PC", i), ylabel = string("PC", i + 1),
+    zeros = true, ellipse = true).f
 
 
 
