@@ -10,7 +10,7 @@ X = dat.X
 wl = names(X)
 wl_num = parse.(Float64, wl)
 
-######## End Data
+############ END DATA
 
 fm = pcasvd(X, nlv = 6) ; 
 pnames(fm)

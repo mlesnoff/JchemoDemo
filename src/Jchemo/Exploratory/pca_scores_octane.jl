@@ -9,8 +9,9 @@ pnames(dat)
 X = dat.X 
 wl = names(X)
 wl_num = parse.(Float64, wl)
+n = nro(X)
 
-######## End Data
+############ END DATA
 
 fm = pcasvd(X, nlv = 6) ; 
 pnames(fm)
@@ -22,7 +23,7 @@ plotxy(T[:, 1], T[:, 2];
 i = 1
 plotxy(T[:, i], T[:, i + 1]; color = (:red, .5),
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
-    zeros = true).f
+    zeros = true, markersize = 15).f
 
 f = Figure(resolution = (700, 500))     
 ax = list(4)
@@ -38,8 +39,8 @@ for j = 1:2
 end
 f    
 
-GLMakie.activate!() 
-#CairoMakie.activate!()  
+CairoMakie.activate!()  
+#GLMakie.activate!() 
 i = 1
 f = Figure(resolution = (700, 500))
 ax = Axis3(f[1, 1]; perspectiveness = 0.2,
@@ -49,8 +50,6 @@ scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2],
     markersize = 15)
 f
 
-GLMakie.activate!() 
-#CairoMakie.activate!()  
 i = 1
 f = Figure(resolution = (700, 500))
 ax = Axis3(f[1, 1]; perspectiveness = 0.2,
@@ -61,6 +60,5 @@ scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2],
 text!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; 
     text = string.(1:n), fontsize = 15)
 f
-
 
 

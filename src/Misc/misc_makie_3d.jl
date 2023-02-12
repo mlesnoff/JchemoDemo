@@ -120,41 +120,41 @@ f
 
 f = Figure(resolution = (700, 500))
 mks = 15
-cols = cgrad(:Dark2_5, collect(1:nlev); alpha = .7) 
-#cols = cgrad(:tab10, collect(1:nlev); alpha = .3) 
+colsh = :Dark2_5 # :default, :tab10
+colm = cgrad(colsh, nlev; alpha = .7, categorical = true) 
 ax = Axis3(f[1, 1];
     xlabel = "Axis 1", ylabel = "Axis 2", 
     zlabel = "Axis 3", 
     perspectiveness = 0.2, azimuth = 1.2pi) 
 scatter!(ax, x, y, z, 
-    markersize = mks, color = year, colormap = (:Dark2_5, .7))
+    markersize = mks, color = year, colormap = colm)
 ## Legend
 lab = string.(lev)
-elt = [MarkerElement(color = cols[i], marker = '●', markersize = 10) for i in 1:nlev]
-#elt = [PolyElement(polycolor = cols[i]) for i in 1:nlev]
+elt = [MarkerElement(color = colm[i], marker = '●', markersize = 10) for i in 1:nlev]
+#elt = [PolyElement(polycolor = colm[i]) for i in 1:nlev]
 title = "Years"
 Legend(f[1, 2], elt, lab, title; 
     nbanks = 1, rowgap = 10, framevisible = false)
 f
 ## Alternative
 mks_l = 10
-elt1 = MarkerElement(color = cols[1], marker = '●', markersize = mks_l)
-elt2 = MarkerElement(color = cols[2], marker = '●', markersize = mks_l)
-elt3 = MarkerElement(color = cols[3], marker = '●', markersize = mks_l)
+elt1 = MarkerElement(color = colm[1], marker = '●', markersize = mks_l)
+elt2 = MarkerElement(color = colm[2], marker = '●', markersize = mks_l)
+elt3 = MarkerElement(color = colm[3], marker = '●', markersize = mks_l)
 Legend(f[1, 2], [elt1, elt2, elt3], lab)
 f
 ## End
 
 ## Function axislegend does not work
 f = Figure(resolution = (800, 500))
-cols = cgrad(:Dark2_5, collect(1:nlev); alpha = .7) 
-#cols = cgrad(:tab10, collect(1:nlev); alpha = .3) 
+colsh = :Dark2_5 # :default, :tab10
+colm = cgrad(colsh, nlev; alpha = .7, categorical = true) 
 mks = 10 ; i = 1
 ax = Axis3(f[1, 1]; aspect = (1, 1, 1), perspectiveness = 0.5)  
 for j = 1:nlev
     s = year .== lev[j]
     scatter!(ax, x[s], y[s], z[s], 
-        markersize = mks, color = cols[j], label = lev[j])
+        markersize = mks, color = colm[j], label = lev[j])
 end
 #axislegend(ax, position = :rb)
 #f[1, 2] = Legend(f, ax, "Type", framevisible = false) 

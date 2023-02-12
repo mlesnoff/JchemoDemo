@@ -10,9 +10,10 @@ X = dat.X
 wl = names(X)
 wl_num = parse.(Float64, wl)
 
-## Six of the samples (25, 26, and 36-39) contain added alcohol.
+## Six of the samples (= 25, 26, and 36-39) of the dataset contain 
+## added alcohol.
 
-######## End Data
+############ END DATA
 
 fm = pcasvd(X, nlv = 3) ; 
 pnames(fm)
@@ -40,8 +41,8 @@ f, ax = plotxy(zsd, zod;
     xlabel = "SD", ylabel = "OD")
 f
 
-GLMakie.activate!() 
-#CairoMakie.activate!()  
+CairoMakie.activate!()  
+#GLMakie.activate!() 
 res_sd = occsd(fm).d
 res_od = occod(fm, X).d
 zsd = res_sd.dstand 
