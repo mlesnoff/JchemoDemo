@@ -2,9 +2,7 @@
 
 **JchemoDemo** is a repository containing scripts (examples) illustrating some functions of package [**Jchemo.jl**](https://github.com/mlesnoff/Jchemo.jl).
 
-Scripts specific to **Jchemo.jl** are available [**here**](https://github.com/mlesnoff/JchemoDemo/tree/main/src/Jchemo_Examples). The **datasets** used in the examples are stored in package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl). 
-
-Some packages have to be installed to run the examples [(**See here**)](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml).
+Scripts specific to **Jchemo.jl** are available [**here**](https://github.com/mlesnoff/JchemoDemo/tree/main/src/Jchemo_Examples). The **datasets** used in the examples are stored in package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl). Some packages have to be installed to run the examples [(**See here**)](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml).
 
 Scripts about generic Julia syntax are available [**here**](https://github.com/mlesnoff/JchemoDemo/tree/main/src/Julia_Misc).
 
