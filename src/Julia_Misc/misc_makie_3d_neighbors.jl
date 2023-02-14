@@ -1,5 +1,5 @@
 using JLD2, CairoMakie, GLMakie
-using JchemoData
+using Jchemo, JchemoData
 
 mypath = dirname(dirname(pathof(JchemoData)))
 db = joinpath(mypath, "data", "cassav.jld2")

@@ -61,15 +61,15 @@ df = DataFrame(
     a = [0, 1, 2, missing, 4, 5, NaN, 7, missing, 9], 
     b = ["a", "b", "c", "d", missing, "f", NaN, "g", "h", "i"])
 zdf = copy(df)
-@btime zdf[ismissing.(zdf.a), :a] .= 0           # Median time: 38.7 µs
+@time zdf[ismissing.(zdf.a), :a] .= 0           # Median time: 38.7 µs
 zdf = copy(df)
-@btime collect(Missings.replace(zdf[!, :a], 0)) # 32.6 µs
+@time collect(Missings.replace(zdf[!, :a], 0)) # 32.6 µs
 zdf = copy(df)
-@btime zdf.a = coalesce.(zdf.a, 0)               # Median time: 5.4 µs
+@time zdf.a = coalesce.(zdf.a, 0)               # Median time: 5.4 µs
 zdf = copy(df)
-@btime zdf.a = replace(zdf.a, missing => 0)      # Median time: 0.2 µs
+@time zdf.a = replace(zdf.a, missing => 0)      # Median time: 0.2 µs
 zdf = copy(df)
-@btime replace!(zdf.a, missing => 0)            # Median time: 0.08 µs (!)
+@time replace!(zdf.a, missing => 0)            # Median time: 0.08 µs (!)
 
 ## REPLACE MISSING VALUES IN ALL COLUMS
 ## The following example uses the fastest solution (see above) in a for loop. 

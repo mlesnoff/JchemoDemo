@@ -1,4 +1,4 @@
-using StatsBase, DataFrames, FreqTables
+using DataFrames, StatsBase, FreqTables
 
 x = rand(1:5, 100)
 res = countmap(x)

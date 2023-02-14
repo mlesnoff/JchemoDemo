@@ -1,5 +1,3 @@
-using Jchemo
-
 # https://docs.julialang.org/en/v1/manual/arrays/#Broadcasting-1
 
 z = rand(5)
@@ -7,7 +5,8 @@ foreach(println, z)
 
 ## map, reduce, mapreduce, zip
 ## map(f, c...) -> collection
-## Transform collection c by applying f to each element. For multiple collection arguments, apply f elementwise.
+## Transform collection c by applying f to each element. 
+## For multiple collection arguments, apply f elementwise.
 
 map(+, [1, 2, 3], [10, 20, 30])
 
@@ -48,7 +47,7 @@ X = rand(n, n)
 #### reduce
 
 n = 1000 ; p = 1000 ; m = 100
-X = list(m, Matrix{Float64})
+X = Vector{Matrix{Float64}}(undef, m)
 for i = 1:m
     X[i] = rand(n, p)
 end
@@ -62,7 +61,7 @@ end
 @time zX = reduce(hcat, X) ;  
 
 n = 1000 ; m = 100
-x = list(m, Vector{Float64})
+x = Vector{Vector{Float64}}(undef, m)
 for i = 1:m
     x[i] = rand(n)
 end

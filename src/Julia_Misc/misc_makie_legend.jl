@@ -1,4 +1,5 @@
-using GLMakie, CairoMakie 
+using GLMakie, CairoMakie, StatsBase 
+using Jchemo
 
 ## https://docs.makie.org/v0.19/examples/blocks/legend/index.html
 
@@ -54,7 +55,7 @@ f[1, 2] = Legend(f, ax, "Type", framevisible = false)
 f
 
 f = Figure(resolution = (800, 300))
-ax = list(3)
+ax = Vector{Any}(nothing, 3)
 y = [5.82; 4.00; 1.60; 4.23; 2.20; 1.63; 6.10; 6.30; 6.13]
 z = [5.26; 3.65; 1.69; 4.35; 2.12; 1.40; 4.60; 6.96; 5.18]
 x = collect(1:length(y))

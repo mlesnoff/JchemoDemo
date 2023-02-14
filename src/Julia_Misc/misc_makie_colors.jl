@@ -1,4 +1,5 @@
 using CairoMakie 
+using Jchemo
 
 ## https://docs.makie.org/stable/documentation/colors/
 ## https://docs.makie.org/stable/documentation/transparency/ 

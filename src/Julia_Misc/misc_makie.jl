@@ -1,5 +1,5 @@
 using GLMakie, CairoMakie 
-using Distributions
+using DataFrames, Distributions
 
 ## CairoMakie, GLMakie and WGLMakie are different backend packages
 ## Each backend re-exports Makie.jl ==> no need to install Makie.jl 
@@ -27,9 +27,9 @@ using Distributions
 ## GLMakie.activate!()     # ==> backend GLMakie is used
 
 res = scatter(randn(100, 2)) 
-pnames(res)
+propertynames(res)
 
-################# ABLINES!, VLINES!, HLINES! 
+############# ABLINES!, VLINES!, HLINES! 
 
 n = 10
 x = rand(n) ; y = rand(n)
@@ -39,7 +39,7 @@ vlines!(ax, [0; 1]; color = [:green, :purple])
 ablines!(ax, 0, 1; color = :lightgrey)
 f
 
-################# BARPLOTS 
+############# BARPLOTS 
 
 df = DataFrame(
     x = [1, 1, 1, 2, 2, 2],
@@ -67,18 +67,19 @@ z = [.73; 1; 1.28; 1.73; 2; 2.28]
 errorbars!(ax, z, df.height, df.std, color = :red) 
 f
 
+colm = Makie.wong_colors()
 f = Figure()
 ax = Axis(f[1,1], xticks = (1:2, ["left", "right"]),
     title = "Dodged bars with legend")
 barplot!(ax, df.x, df.height, dodge = df.grp,
-    color = colors[df.grp])
+    color = colm[df.grp])
 lab = ["group 1", "group 2", "group 3"]
-elt = [PolyElement(polycolor = colors[i]) for i in 1:length(lab)]
+elt = [PolyElement(polycolor = colm[i]) for i in 1:length(lab)]
 title = "Groups"
 Legend(f[1, 2], elt, lab, title)
 f
 
-################# BOXPLOTS
+############# BOXPLOTS
 
 n = 200
 x = rand(1:3, n) ; y = randn(n)
@@ -98,20 +99,20 @@ boxplot(x, y,
     axis = (xticks = (1:3, ["A", "B", "C"]),
         title = "Dodged bars"))
 
-colors = Makie.wong_colors()
+colm = Makie.wong_colors()
 f = Figure(resolution = (500, 300))
 ax = Axis(f[1, 1],
     xticks = (1:3, ["A", "B", "C"]), title = "Dodged bars")
 boxplot!(ax, x, y, 
     dodge = grp, show_notch = true, 
-    color = colors[grp])
+    color = colm[grp])
 lab = ["group 1", "group 2"]
-elt = [PolyElement(polycolor = colors[i]) for i in 1:length(lab)]
+elt = [PolyElement(polycolor = colm[i]) for i in 1:length(lab)]
 title = "Groups"
 Legend(f[1, 2], elt, lab, title)
 f
 
-################# ECDF 
+############# ECDF 
 
 n = 500
 x = rand(n)
@@ -124,7 +125,7 @@ ecdfplot!(ax, y; label = "Normal")
 axislegend(position = :rb)
 f
 
-################# ERRORBARS 
+############# ERRORBARS 
 ## See also function rangebars
 
 x = 0:0.5:10
@@ -157,11 +158,11 @@ errorbars!(y, x, higherrors;
     whiskerwidth = 15, direction = :x)
 f
 
-################# EXPORT
+############# EXPORT
 
 ## https://makie.juliaplots.org/stable/documentation/backends_and_output/figure_size/
 
-################# HISTOGRAMS, DENSITY 
+############# HISTOGRAMS, DENSITY 
 
 x = randn(1000)
 f, ax = hist(x, bins = 50)
@@ -219,7 +220,7 @@ axislegend(position = :rt)
 f[1, 1] = ax
 f
 
-################# LAYOUT 
+############# LAYOUT 
 
 x = rand(20)
 f = Figure()
@@ -286,7 +287,7 @@ let
     f
 end
 
-################# LIMITS
+############# LIMITS
 
 n = 1000
 x = rand(n) 
@@ -302,7 +303,7 @@ f, ax = scatter(x, y)
 limits!(ax, minimum(z), maximum(z), minimum(z), maximum(z))
 f
 
-################# LINES 
+############# LINES 
 
 x = range(0, 10; length = 100)
 y1 = sin.(x)
@@ -335,18 +336,17 @@ for (indx, i) in enumerate(p)
         Y[:, indx] = x.^i
     end
 end
-cbarPal = :thermal
-cmap = get(colorschemes[cbarPal], LinRange(0, 1, length(p)))
+colm = cgrad(:Dark2_5, LinRange(0, 1, length(p)))
 f = Figure(resolution = (700, 450), font =:sans, fontsize = 18)
 ax = Axis(f, aspect = 1, xlabel = "x", ylabel = "xᵖ")
-lins = [lines!( x, Y[:, v], color = cmap[v]) for v in 1:length(p)]
+lins = [lines!( x, Y[:, v], color = colm[v]) for v in 1:length(p)]
 leg = Legend(f, lins, string.(p), "p", nbanks = 2, labelsize = 12,
     valign = :center)
 f[1, 1] = ax
 f[1, 2] = leg
 f
 
-################# MARKERS 
+############# MARKERS 
 
 ## https://docs.makie.org/stable/examples/plotting_functions/scatter/
 
@@ -385,7 +385,7 @@ zm = vcat(repeat([:circle], 5), repeat(['X'], 5))
 scatter(x, y;
     marker = zm, markersize = 20)
 
-################# QQPLOT, QNORM 
+############# QQPLOT, QNORM 
 
 n = 500
 x = rand(Uniform(-1, 1), n)
@@ -400,7 +400,7 @@ f
 y = 2 .* randn(100) .+ 3
 qqnorm(y, qqline = :fitrobust)
 
-################## SCATTER 
+############## SCATTER 
 
 x = range(0, 10, length = 100)
 y = sin.(x)
@@ -445,7 +445,7 @@ function FigGridScatters()
 end
 f = FigGridScatters()
 
-################## TOOLTIP 
+############## TOOLTIP 
 
 x = [1.; 2]
 y = [0.; 4]
@@ -456,7 +456,7 @@ scatter!(ax, x, y)
 tooltip!(x[1], y[1], "x")
 f 
 
-################## TRANSPARENCY 
+############## TRANSPARENCY 
 
 n = 10000 ; p = 2 
 X = randn(n, p) 

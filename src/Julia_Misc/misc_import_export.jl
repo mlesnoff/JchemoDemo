@@ -4,9 +4,9 @@ using JSON
 
 root = "C:/Users/lesnoff/.julia/dev/JchemoData/data/" 
 
-#################### CSV
+########### CSV
 
-db = string(root, "dat_2021.csv") ;
+db = string(root, "dat_2021.csv")
 df = CSV.read(db, DataFrame; header = 1, delim = ";") 
 # Same as:
 #df = CSV.File(db; header = 1, delim = ";") |> DataFrame 
@@ -25,7 +25,7 @@ CSV.write(file, X; delim = ";",  missingstring =  "0.0")
 # See also:
 #X |> CSV.write(file; kwargs...)
 
-#################### JLD2 
+########### JLD2 
 
 X1 = rand(5, 3)
 X2 = DataFrame(rand(5, 2), ["y1", "y2"]) 
@@ -38,7 +38,7 @@ db = string(root, "res.jld2")
 keys(dat)
 dat.X1
 
-#################### HDF5
+########### HDF5
 #HDF5 stands for Hierarchical Data Format v5 and is closely modeled on file systems. 
 #In HDF5, a "group" is analogous to a directory, a "dataset" is like a file. 
 #HDF5 also uses "attributes" to associate metadata with a particular group or dataset. 
@@ -91,7 +91,7 @@ fid
 HDF5.read(fid["X"])
 HDF5.close(fid)
 
-#################### JSON
+########### JSON
 
 dat = """
 {"id":[92084,92085,92086],"1100":[0.0978,0.1024,0.0798],
@@ -116,7 +116,7 @@ z = read(db, String)
 z = JSON.parse(z, dicttype = DataStructures.OrderedDict)
 DataFrame(zdat)
 
-#################### MAT 
+########### MAT 
 
 # This package can only read Matlab files, 
 # not save data in the Matlab format  
@@ -147,7 +147,7 @@ keys(dat)
 z = dat["LAMDATA"] 
 keys(z)
 
-#################### RData
+########### RData
 
 db = string(root, "octane.rda") ;
 dat = load(db)
@@ -170,7 +170,7 @@ ytrain = z["ytrain"]
 Xtest = z["Xtest"]
 ytest = z["ytest"]
 
-#################### XLSX 
+########### XLSX 
 
 db = string(root, "tecator.xlsx") 
 dat = XLSX.readxlsx(db) 

@@ -1,4 +1,4 @@
-using Random, Distributions, StatsBase
+using StatsBase, Random, Distributions 
 
 rand(5)
 rand(5, 3)
@@ -23,7 +23,7 @@ rand(mnd)
 
 probs = [0.3, 0.3, 0.2, 0.15, 0.05]
 items = 1:length(probs) #[i for i in 1:length(probs)]
-weights = Weights(probabilities)
+weights = Weights(probs)
 for i in 1:20
     println(sample(items, weights))
 end
@@ -66,14 +66,14 @@ n = 10^6 ; x = collect(1:n) ;
 @time sample!(1:n, Vector{Int}(undef, 100), replace = false) ; ## Same
 
 ## Much slower since inefficient ways
-@btime sample_wr!(collect(1:n), 100) ; # Slower
-@btime randperm(n)[1:100] ;
-@btime randperm!(Vector{Int}(undef, n))[1:100] ;
-@btime shuffle(collect(1:n))[1:100] ;
-@btime shuffle!(collect(1:n))[1:100] ;
+@time sample_wr!(collect(1:n), 100) ; # Slower
+@time randperm(n)[1:100] ;
+@time randperm!(Vector{Int}(undef, n))[1:100] ;
+@time shuffle(collect(1:n))[1:100] ;
+@time shuffle!(collect(1:n))[1:100] ;
 ## Even more slower
-@btime sample(1:n, n, replace = false)[1:100] ;
-@btime sample!(1:n, Vector{Int}(undef, n), replace = false)[1:100] ;
+@time sample(1:n, n, replace = false)[1:100] ;
+@time sample!(1:n, Vector{Int}(undef, n), replace = false)[1:100] ;
 
 ##### Permutations
 
@@ -97,5 +97,5 @@ x = collect(1:n)
 @time sample(x, n, replace = false) ;
 @time shuffle(x)
 
-https://stackoverflow.com/questions/27559958/how-do-i-select-a-random-item-from-a-weighted-array-in-julia
+# https://stackoverflow.com/questions/27559958/how-do-i-select-a-random-item-from-a-weighted-array-in-julia
 

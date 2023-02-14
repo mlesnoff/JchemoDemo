@@ -1,9 +1,7 @@
-using StatsBase, DataFrames, FreqTables
+using Statistics, StatsBase
 
 parentmodule(mean)
 typeof(mean)
-
-Base.loaded_modules
 
 ############### CONVERT
 
@@ -15,9 +13,6 @@ typeof(x)
 convert(Vector{Float64}, x)
 convert.(Float64, x)
 Float64.(x)
-
-X = DataFrame(rand(5, 3), :auto)
-convert(Array, X)
 
 ############### DICTIONNARY, NAMES  
 
@@ -83,16 +78,18 @@ y
 
 ############### IS
 
-if isdefined(fm, :C) == true
-end
-@isdefined
+dat = (X = 1, Y = 2)
+isdefined(dat, :Y)
+
+isdefined(Base, :sum)
+@isdefined sum
 
 z = rand(1:9, 3)
 typeof(z)
 isa(x, Array)
 isa(x, Vector)
 
-summary(z)
+typeof(z)
 
 ################ FILL, REPEAT
 
@@ -358,6 +355,8 @@ v
 ## See StatsBase.ordinalrank
 
 ############### STRING
+
+string("X", "train", "_cassav")
 
 X = rand(5, 2) 
 string.(X)

@@ -2,7 +2,7 @@ pwd()
 homedir()
 tempdir()
 
-path = "D:/Mes Donnees/Users/Applications/Tools/" 
+path = "D:/Mes Donnees/Users/Applications/NIRS/" 
 dirname(path)
 readdir(path)
 @__DIR__        # Directory where is the current file 
@@ -13,7 +13,7 @@ splitpath("/home/myuser/example.jl")
 splitext("/home/myuser/example.jl")
 basename("/home/myuser/example.jl")
 
-using Jchemo
+using JchemoData
 pathof(JchemoData)
 dirname(pathof(JchemoData))
 dirname(dirname(pathof(JchemoData)))
@@ -24,7 +24,7 @@ db = joinpath(mypath, "data", "iris.jld2")
 #const path_data2 = joinpath(dirname(@__FILE__), "..", "data")
 
 ## Source the files existing in a path
-function fsource(path)
+function my_fsource(path)
     z = readdir(path)  ## List of files in path
     n = length(z)
     for i in 1:n
@@ -32,7 +32,7 @@ function fsource(path)
     end
 end
 
-;  # ==> Shell 
-.  # Current directory
-.. # Above directory
+## ;  # ==> Shell 
+## .  # Current directory
+## .. # Above directory
 

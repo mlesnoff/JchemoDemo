@@ -1,5 +1,4 @@
 using LinearAlgebra, SparseArrays, StatsBase
-using Jchemo
 
 # https://docs.julialang.org/en/v1/base/arrays/
 
@@ -137,13 +136,6 @@ D = Diagonal(d)
 @time D * X ;
 @time d .* X ;
 @time (*).(d, X) ; # slow
-
-n = 10^6 ; p = 500
-q = 10
-X = rand(n, p) ; Y = rand(n, q)
-nlv = 25
-@time plskern(X, Y[:, 1]; nlv = nlv) ;
-@time plskern(X, Y[:, 1:10]; nlv = nlv) ; 
 
 #################### MAPSLICES
 
