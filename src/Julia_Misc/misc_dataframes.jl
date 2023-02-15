@@ -50,10 +50,9 @@ df = DataFrame(:A => ["x1", "x2", "x1", "x2", "x1"],
                :D => ["green", "blue", "red", "blue", "yellow"])
 gdf = groupby(df, [:A ; :B])
 combine(gdf, :C => sum)
+## See: Jchemo.aggstat(df; group_nam = [:A ; :B], var_nam = :C, fun = sum)
 
-## Jchemo.aggstat(df; group_nam = [:A ; :B], var_nam = :C, fun = sum)
-
-# https://discourse.julialang.org/t/aggregate-deprecated-use-combine/42809/4
+## https://discourse.julialang.org/t/aggregate-deprecated-use-combine/42809/4
 zdf = DataFrame(group = rand(["A", "B", "C"], 15), var1 = randn(15), var2 = rand(15))
 combine(groupby(zdf, :group), [:var1 ; :var2] .=> [mean, std])
 combine(groupby(zdf, :group), ([:var1 ; :var2] .=> f for f in (mean, std))...)
@@ -61,11 +60,10 @@ combine(groupby(zdf, :group), ([:var1 ; :var2] .=> f for f in (mean, std))...)
 combine(groupby(zdf, :group), [:var1 ; :var2] .=> mean, [:var1 ; :var2] .=> std)
 
 ## Tabulation
-
 df
 gdf = groupby(df, [:A ; :B])
 combine(gdf, nrow)
-# Or: using FreqTables
+## Or: use package FreqTables
 
 ########### CONCATENATION
 
@@ -146,7 +144,7 @@ sort!(zdf; rev = true)
 
 sort!(zdf, [:age ; :height])
 
-########### ALTERNATIVES
+########### ALTERNATIVES TO DataFrames
 
 ## https://github.com/davidavdav/NamedArrays.jl
 ## https://github.com/JuliaData/Tables.jl
