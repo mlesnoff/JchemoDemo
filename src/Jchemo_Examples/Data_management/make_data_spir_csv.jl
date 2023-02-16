@@ -1,5 +1,3 @@
-## Build a JLD2 dataset from a NIR csv file 
-
 using JLD2, CSV, DataFrames
 using Jchemo, JchemoData
 

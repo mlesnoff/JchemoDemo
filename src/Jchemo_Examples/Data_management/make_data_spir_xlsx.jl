@@ -1,5 +1,3 @@
-## Build a JLD2 dataset from a NIR xlsx file 
-
 using JLD2, XLSX, DataFrames
 using Jchemo, JchemoData
 
