@@ -13,10 +13,11 @@ db = joinpath(mypath, "data", "dat_2021.csv")
 ## Same as: 
 ## db = string(mypath, "\\data\\dat_2021.csv")
 ## End
-df = CSV.read(db, DataFrame; header = 1, delim = ";") 
+df = CSV.read(db, DataFrame; header = 1, decimal = '.', 
+    delim = ';') 
 # Same as:
-#df = CSV.File(db; header = 1, delim = ";") |> DataFrame 
-#df = DataFrame(CSV.File(db, header = 1, delim = ";"))
+#df = CSV.File(db; header = 1, delim = ';') |> DataFrame 
+#df = DataFrame(CSV.File(db, header = 1, delim = ';'))
 size(df)
 names(df)
 
@@ -26,7 +27,7 @@ X = DataFrame(X, :auto)
 file = string(root, "res.csv")
 CSV.write(file, X; delim = ";")
 file = string(root, "res2.csv")
-CSV.write(file, X; delim = ";",  missingstring =  "0.0")
+CSV.write(file, X; delim = ';',  missingstring =  "0.0")
 
 # See also syntax:
 #X |> CSV.write(file; kwargs...)
