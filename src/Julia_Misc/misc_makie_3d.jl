@@ -96,18 +96,23 @@ X1 = randn(n, 3)
 X2 = 2 * randn(n, 3) .+ 3
 X3 = .5 * randn(n, 3) .- [10 2 1]
 X = vcat(X1, X2, X3)
-year = sort(repeat(2009:2011, n))
+group = sort(repeat(["A"; "B";"C"], n)) 
+lev = sort(unique(group))
+nlev = length(lev)
+group_num = [if group[i] == lev[1] 1 elseif group[i] == lev[2] 2 else 3 end ; 
+    for i = eachindex(group)]
+## Alternative to above
+## group_num = Jchemo.recodcat2int(group)
+## End
 x = X[:, 1]
 y = X[:, 2]
 z = X[:, 3]
-lev = sort(unique(year))
-nlev = length(lev)
 
 CairoMakie.activate!()  
 #GLMakie.activate!() 
 mks = 20
 scatter(x, y, z, 
-    markersize = mks, color = year, colormap = (:Dark2_5, .7),
+    markersize = mks, color = group_num, colormap = (:Dark2_5, .7),
     axis = (type = Axis3, xlabel = "Axis 1", ylabel = "Axis 2", 
         zlabel = "Axis 3", title = "3D"))
 
@@ -115,24 +120,24 @@ f = Figure(resolution = (700, 500))
 mks = 15
 ax = Axis3(f[1, 1]; aspect = (1, 1, 1), perspectiveness = 0.2)
 scatter!(ax, x, y, z,
-    markersize = mks, color = year, colormap = (:Dark2_5, .7))
+    markersize = mks, color = group_num, colormap = (:Dark2_5, .7))
 f
 
 f = Figure(resolution = (700, 500))
 mks = 15
-colsh = :Dark2_5 # :default, :tab10
+colsh = :default #:tab10
 colm = cgrad(colsh, nlev; alpha = .7, categorical = true) 
 ax = Axis3(f[1, 1];
     xlabel = "Axis 1", ylabel = "Axis 2", 
     zlabel = "Axis 3", 
     perspectiveness = 0.2, azimuth = 1.2pi) 
 scatter!(ax, x, y, z, 
-    markersize = mks, color = year, colormap = colm)
+    markersize = mks, color = group_num, colormap = colm)
 ## Legend
 lab = string.(lev)
 elt = [MarkerElement(color = colm[i], marker = '●', markersize = 10) for i in 1:nlev]
 #elt = [PolyElement(polycolor = colm[i]) for i in 1:nlev]
-title = "Years"
+title = "Group"
 Legend(f[1, 2], elt, lab, title; 
     nbanks = 1, rowgap = 10, framevisible = false)
 f
@@ -147,12 +152,12 @@ f
 
 ## Function axislegend does not work
 f = Figure(resolution = (800, 500))
-colsh = :Dark2_5 # :default, :tab10
+colsh = :default #:tab10
 colm = cgrad(colsh, nlev; alpha = .7, categorical = true) 
 mks = 10 ; i = 1
 ax = Axis3(f[1, 1]; aspect = (1, 1, 1), perspectiveness = 0.5)  
 for j = 1:nlev
-    s = year .== lev[j]
+    s = group .== lev[j]
     scatter!(ax, x[s], y[s], z[s], 
         markersize = mks, color = colm[j], label = lev[j])
 end

@@ -49,7 +49,7 @@ group = vcat(repeat(["0-Train";], ntrain), repeat(["1-Test";], ntest))
 colm = [:blue, (:red, .5)]
 i = 3
 plotxy(T[:, i], T[:, i + 1], group; color = colm,
-    xlabel = "PC1", ylabel = "PC2").f
+    xlabel = string("PC", i), ylabel = string("PC", i + 1)).f
 
 #### SD and OD distances
 
@@ -58,13 +58,13 @@ dtrain = res.d
 dtest = Jchemo.predict(res, Xtest).d
 
 f = Figure(resolution = (500, 400))
-ax = Axis(f, xlabel = "SD", ylabel = "OD")
+ax = Axis(f[1, 1], xlabel = "SD", ylabel = "OD")
 scatter!(ax, dtrain.sd_dstand, dtrain.od_dstand, label = "Train")
-scatter!(ax, dtest.sd_dstand, dtest.od_dstand, color = (:red, .5), label = "Test")
+scatter!(ax, dtest.sd_dstand, dtest.od_dstand, 
+    color = (:red, .5), label = "Test")
 hlines!(ax, 1; color = :grey, linestyle = "-")
 vlines!(ax, 1; color = :grey, linestyle = "-")
 axislegend(position = :rt)
-f[1, 1] = ax
 f
 
 ## Same with plotxy
@@ -72,15 +72,15 @@ d = vcat(dtrain, dtest)
 group = vcat(repeat(["0-Train";], ntrain), repeat(["1-Test";], ntest))
 colm = [:blue, (:red, .5)]
 plotxy(d.sd_dstand, d.od_dstand, group; color = colm,
-    xlabel = "PC1", ylabel = "PC2").f
+    xlabel = "Stand. SD", ylabel = "Stand. OD").f
 
 ## Composite distance SD-OD
 f = Figure(resolution = (500, 400))
-ax = Axis(f, xlabel = "Standardized distance", ylabel = "Nb. observations")
+ax = Axis(f[1, 1], xlabel = "Standardized distance", 
+    ylabel = "Nb. observations")
 hist!(ax, dtrain.dstand; bins = 50, label = "Train")
 hist!(ax, dtest.dstand; bins = 50, label = "Test")
 vlines!(ax, 1; color = :grey, linestyle = "-")
 axislegend(position = :rt, framevisible = false)
-f[1, 1] = ax
 f
 

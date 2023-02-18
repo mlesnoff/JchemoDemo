@@ -20,6 +20,7 @@ tab(year)
 
 lev = sort(unique(year))
 nlev = length(lev)
+group_num = recodcat2int(year)
 
 ############ END DATA
 
@@ -55,21 +56,22 @@ scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2];
 f
 
 i = 1
-f = Figure(resolution = (600, 400))
-colsh = :Dark2_5
-#colsh = :default
-#colsh = :tab10
+f = Figure(resolution = (700, 500))
+mks = 15
+colsh = :Dark2_5 #:default, :tab10
 colm = cgrad(colsh, nlev; alpha = .7, categorical = true) 
 ax = Axis3(f[1, 1]; perspectiveness = 0.2,
-    xlabel = string("PC", i), ylabel = string("PC", i + 1), zlabel = string("PC", i + 2), 
+    xlabel = string("PC", i), ylabel = string("PC", i + 1), 
+    zlabel = string("PC", i + 2), 
     title = "PCA score space") 
 scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2], 
-    markersize = 15, color = year, colormap = colm)
+    markersize = 15, color = group_num, colormap = colm)
 lab = string.(lev)
 elt = [MarkerElement(color = colm[i], marker = '●', markersize = 10) for i in 1:nlev]
-title = "Years"
+title = "Year"
 Legend(f[1, 2], elt, lab, title; 
     nbanks = 1, rowgap = 10, framevisible = false)
 f
+
 
 
