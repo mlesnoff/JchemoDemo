@@ -421,16 +421,16 @@ scatter(rand(10000), color = (:red, .5))
 
 n = 50 
 x, y, color = rand(n), rand(n), rand(n)
-cmaps = [:cool, :viridis, :plasma, :inferno, :thermal, :leonardo, :winter, :spring, :ice] 
+colms = [:cool, :viridis, :plasma, :inferno, :thermal, :leonardo, :winter, :spring, :ice] 
 markers = [:+, :diamond, :star4, :rtriangle, :rect, :circle, :pentagon, :cross,:star5] 
 function FigGridScatters()
     f = Figure(resolution = (1200, 800))
     c = 1
     for i in 1:2, j in 1:2:5
-        ax = Axis(f[i, j],aspect = 1,xgridstyle=:dash,ygridstyle=:dash,
-                                xtickalign=1, ytickalign=1)
-        pnts = scatter!(x, y.^c, color = color, colormap=cmaps[c],
-                markersize = 15, marker = markers[c], strokewidth=0)
+        ax = Axis(f[i, j],aspect = 1, xgridstyle = :dash, ygridstyle = :dash,
+                                xtickalign = 1, ytickalign = 1)
+        pnts = scatter!(x, y.^c, color = color, colormap = colms[c],
+                markersize = 15, marker = markers[c], strokewidth = 0)
         limits!(ax, -0.1, 1.1, -0.1, 1.1)
         ax.xticks = [0, 1]
         ax.yticks = [0, 1]
