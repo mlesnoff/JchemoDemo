@@ -41,32 +41,20 @@ ntot = ntrain + ntest
 ######################### END
 
 ## Train is used to tune the model.
-## Build of the segments within Train
-## (1) If K-fold CV
-K = 3
-segm = segmkf(ntrain, K; rep = 10)
-## (2) If "test-set" validation 
-## ==> splitting Train = Cal + Val
-## e.g. Val = 30% of traing (Cal = 70%=)
-m = round(.30 * ntrain)
-segm = segmts(ntrain, m; rep = 30)
-## i : segment within a replication
-## j : replication
-i = 1 ; j = 1
-segm[i]
-segm[i][j]
+## Splitting Train = Cal + Val
+## (1) Random sampling
+nval = Int64(round(.30 * ntrain))
+## Or: nval = 40
+s = sample(1:ntrain, nval; replace = false)
+Xcal = rmrow(Xtrain, s)
+ycal = rmrow(ytrain, s)
+Xval = Xtrain[s, :]
+yval = ytrain[s, :]
 ## End
 
 nlv = 0:20
-rescv = gridcvlv(Xtrain, ytrain; segm = segm, 
-    score = rmsep, fun = plskern, nlv = nlv, 
-    verbose = true) ;
-pnames(rescv)
-# Results average over the replications
-res = rescv.res
-## Results for each replication
-res_rep = rescv.res_rep
-
+res = gridscorelv(Xcal, ycal, Xval, yval; 
+    score = rmsep, fun = plskern, nlv = nlv) 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 plotgrid(res.nlv, res.y1; step = 2,
@@ -80,11 +68,6 @@ plotxy(vec(pred), ytest; color = (:red, .5), step = 2,
     bisect = true, xlabel = "Prediction", 
     ylabel = "Observed").f
 
-## Variability between folds and replications
-group = string.(res_rep.segm, "-", res_rep.repl)
-plotgrid(res_rep.nlv, res_rep.y1, group; step = 2,
-    xlabel = "Nb. LVs", ylabel = "RMSEP", leg = false).f
-
 ## Parcimony
 res_sel = selwold(res.nlv, res.y1; smooth = false, 
     alpha = .05, graph = true) ;
@@ -97,12 +80,11 @@ pred = Jchemo.predict(fm, Xtest).pred
 rmsep(pred, ytest)
 
 ## !!!
-## Function "gridcv" (instead "gridcvlv") can also be used
+## Function "gridscore" (instead "gridscorelv") can also be used
 ## but this is not time-efficient for LV-based methods
 nlv = 0:20
 pars = mpar(nlv = nlv)
-rescv = gridcv(Xtrain, ytrain; segm = segm, 
-    score = rmsep, fun = plskern, pars = pars, 
-    verbose = true) ;
-pnames(rescv)
+res = gridscore(Xcal, ycal, Xval, yval;  
+    score = rmsep, fun = plskern, pars = pars) 
+
 

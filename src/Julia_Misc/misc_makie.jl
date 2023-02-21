@@ -89,11 +89,11 @@ boxplot(x, y)
 
 boxplot(x, y; orientation = :horizontal)
 
-boxplot(x, y, 
+boxplot(x, y; 
     dodge = grp, show_notch = true, 
     color = grp)
 
-boxplot(x, y, 
+boxplot(x, y; 
     dodge = grp, show_notch = true, 
     color = grp,
     axis = (xticks = (1:3, ["A", "B", "C"]),
@@ -103,7 +103,7 @@ colm = Makie.wong_colors()
 f = Figure(resolution = (500, 300))
 ax = Axis(f[1, 1],
     xticks = (1:3, ["A", "B", "C"]), title = "Dodged bars")
-boxplot!(ax, x, y, 
+boxplot!(ax, x, y; 
     dodge = grp, show_notch = true, 
     color = colm[grp])
 lab = ["group 1", "group 2"]
