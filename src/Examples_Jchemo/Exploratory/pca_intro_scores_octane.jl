@@ -11,12 +11,21 @@ wl = names(X)
 wl_num = parse.(Float64, wl)
 n = nro(X)
 
-############ END DATA
+## Six of the samples of the dataset contain 
+## added alcohol  (= 25, 26, and 36-39)
+plotsp(X, wl_num;
+    xlabel ="Wavelength (nm)", ylabel = "Absorbance",
+    title = "Octane data").f
 
+## Model fitting
 fm = pcasvd(X, nlv = 6) ; 
+## Robust PCA
+#fm = pcasvd(X, nlv = 3) ;  
+## End 
 pnames(fm)
 T = fm.T
 
+## 2-D Score space 
 plotxy(T[:, 1], T[:, 2]; 
     xlabel = "PC1", ylabel = "PC2").f
 
@@ -39,6 +48,7 @@ for j = 1:2
 end
 f    
 
+## 3-D Score space
 CairoMakie.activate!()  
 #GLMakie.activate!() 
 i = 1

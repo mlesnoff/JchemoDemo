@@ -15,18 +15,16 @@ y = Y.tbc
 year = Y.year
 wl = names(X)
 wl_num = parse.(Float64, wl)
-
 tab(year)
 
 lev = sort(unique(year))
 nlev = length(lev)
 group_num = recodcat2int(year)
 
-############ END DATA
-
 fm = pcasvd(X, nlv = 6) ; 
 T = fm.T
 
+## 2-D Score space
 i = 1
 plotxy(T[:, i], T[:, i + 1]; color = (:red, .5),
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
@@ -44,6 +42,7 @@ plotxy(T[:, i], T[:, i + 1], year;
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
     zeros = true, ellipse = true).f
 
+## 3-D Score space 
 CairoMakie.activate!()  
 #GLMakie.activate!() 
 i = 1
@@ -57,7 +56,6 @@ f
 
 i = 1
 f = Figure(resolution = (700, 500))
-mks = 15
 colsh = :Dark2_5 #:default, :tab10
 colm = cgrad(colsh, nlev; alpha = .7, categorical = true) 
 ax = Axis3(f[1, 1]; perspectiveness = 0.2,
@@ -72,6 +70,4 @@ title = "Year"
 Legend(f[1, 2], elt, lab, title; 
     nbanks = 1, rowgap = 10, framevisible = false)
 f
-
-
 

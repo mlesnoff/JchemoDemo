@@ -23,7 +23,8 @@ allowmissing!(Y)
 for j = 1:3
     Y[:, j] = replace(Y[:, j], 0 => missing)
 end
-## This would work if column "test" was not presnt:
+## The command below would work if column "test" 
+## was not present:
 ## for col in eachcol(Y)
 ##    replace!(col, 0 => missing)
 ## end
@@ -36,23 +37,23 @@ id_M = string.(v[2:end, 1])
 nam = lowercase.(v[1, 2:end]) 
 M = DataFrame(v[2:end, 2:end], Symbol.(nam))
 
-#### Check consistency of IDs
+## Check consistency of IDs
 s = id .!= id_Y
 DataFrame((id_X = id[s], id_Y = id_Y[s]))
 s = id .!= id_M
 DataFrame((id_X = id[s], id_M = id_Y[s]))
-#### Check duplicated ids
+## Check duplicated ids
 res = tab(id) 
 lev = res.keys
 z = res.vals
 s = z .> 1
 DataFrame((ID = lev[s], Nb = z[s]))
-#### Check duplicated rows 
+## Check duplicated rows 
 u = 1:50:nco(X)
 checkdupl(X[:, u])
 checkdupl(Y)
 checkdupl(hcat(X[:, u], Y))
-### End
+## End
 
 dat = (X = X, Y, M, id) 
 

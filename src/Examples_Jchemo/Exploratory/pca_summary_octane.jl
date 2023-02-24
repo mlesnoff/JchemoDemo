@@ -10,36 +10,33 @@ X = dat.X
 wl = names(X)
 wl_num = parse.(Float64, wl)
 
-############ END DATA
-
+## Model fitting
 fm = pcasvd(X, nlv = 6) ; 
+#fm = pcasvd(X, nlv = 3) ;    # Robust PCA 
 pnames(fm)
 
+## Summary of the fitted model
 res = summary(fm, X) ;
 pnames(res)
 
-#### % Variance explained
-
+## % Variance explained
 z = res.explvarx
 plotgrid(z.lv, 100 * z.pvar; step = 1,
     xlabel = "nb. PCs", ylabel = "% variance explained").f
 
-#### Individuals' contributions to scores
-
+## Individuals' contributions to scores
 z = res.contr_ind
 i = 1
 scatter(z[:, i];
     axis = (xlabel = "Observation", ylabel = "Contribution", 
         title = string("PC", i)))
 
-#### Variables' contributions
-
+## Variables' contributions
 z = res.contr_var 
 i = 1
 scatter(z[:, i], z[:, i + 1])
 
-#### Correlation circle
-
+## Correlation circle
 z = res.cor_circle
 i = 1
 plotxy(z[:, i], z[:, i + 1]; resolution = (600, 600),

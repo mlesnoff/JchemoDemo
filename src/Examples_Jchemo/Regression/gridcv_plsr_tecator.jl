@@ -23,25 +23,30 @@ Xp = savgol(snv(X); f = f, pol = pol, d = d)
 plotsp(Xp, wl_num,
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
-## Tot = Train + Test
+## The model is tuned on Train.
+## Splitting: Tot = Train + Test
 ## Here the splitting is provided by the dataset
-## but Tot could be splitted randomly (sampling). 
-j = 2
-nam = namy[j]
+## (variable "typ").
+## But Tot could be splitted a posteriori 
+## (e.g. random sampling with function "mtest",
+## systematic sampling, etc.) 
 s = Y.typ .== "train"
 Xtrain = Xp[s, :]
-ytrain = Y[s, nam]
+Ytrain = Y[s, namy]
 Xtest = rmrow(Xp, s)
-ytest = rmrow(Y[:, nam], s)
+Ytest = rmrow(Y[:, namy], s)
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 ntot = ntrain + ntest
 (ntot = ntot, ntrain, ntest)
 
-######################### END
+## Work on the second y-variable  
+j = 2
+nam = namy[j]
+ytrain = Ytrain[:, nam]
+ytest = Ytest[:, nam]
 
-## Train is used to tune the model.
-## Build of the segments within Train
+## Build of the segments within Train.
 ## (1) If K-fold CV
 K = 3
 segm = segmkf(ntrain, K; rep = 10)
@@ -55,14 +60,14 @@ segm = segmts(ntrain, m; rep = 30)
 i = 1 ; j = 1
 segm[i]
 segm[i][j]
-## End
 
+## Validation on Train
 nlv = 0:20
 rescv = gridcvlv(Xtrain, ytrain; segm = segm, 
     score = rmsep, fun = plskern, nlv = nlv, 
     verbose = true) ;
 pnames(rescv)
-# Results average over the replications
+## Average results over the replications
 res = rescv.res
 ## Results for each replication
 res_rep = rescv.res_rep
@@ -72,7 +77,7 @@ res[u, :]
 plotgrid(res.nlv, res.y1; step = 2,
     xlabel = "Nb. LVs", ylabel = "RMSEP").f
 
-## Prediction for the optimal model
+## Predictions for the optimal model on Test
 fm = plskern(Xtrain, ytrain; nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
 rmsep(pred, ytest)
@@ -96,9 +101,10 @@ fm = plskern(Xtrain, ytrain; nlv = res_sel.sel) ;
 pred = Jchemo.predict(fm, Xtest).pred
 rmsep(pred, ytest)
 
-## !!!
-## Function "gridcv" (instead "gridcvlv") can also be used
-## but this is not time-efficient for LV-based methods
+## Remark:
+## Function "gridcv" is generic for all the functions.
+## It can be used instead of "gridcvlv" but
+## this is not time-efficient for LV-based methods
 nlv = 0:20
 pars = mpar(nlv = nlv)
 rescv = gridcv(Xtrain, ytrain; segm = segm, 

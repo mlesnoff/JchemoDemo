@@ -13,8 +13,6 @@ wl = names(X)
 wl_num = parse.(Float64, wl)
 tab(year)
 
-############ END DATA
-
 plotsp(X).f
 
 plotsp(X, wl_num;

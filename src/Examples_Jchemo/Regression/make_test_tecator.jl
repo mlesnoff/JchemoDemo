@@ -13,7 +13,6 @@ wl = names(X)
 wl_num = parse.(Float64, wl) 
 namy = names(Y)[1:3]
 ntot, p = size(X)
-y = Y.fat
 typ = Y.typ
 
 plotsp(X, wl_num,
@@ -24,50 +23,59 @@ Xp = savgol(snv(X); f = f, pol = pol, d = d)
 plotsp(Xp, wl_num,
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
-#### Train vs. Test sets
-#### by sampling
-#### Column j of Y:
+## How to make a plitting: Tot = Train + Test
+## Here this is done by random sampling.
+## If there are missing data in Y,
+## (this is not the case of the specific example "tecator")
+## the sampling must be done for each y-variable
+## (i.e. a different splitting has to be done 
+## between the variables).
+## Example of the second y-variable 
 j = 2
-## If there are missing data in Y 
-## (not the case of tecator dataset)
-s = findall(ismissing.(Y[:, j]) .== 0)
+y = Y[:, j]
+## Select observation without missing data for y
+## ==> zX, zy
+s = findall(ismissing.(y) .== 0)
 zX = X[s, :]
-zy = Y[s, j]
-## End 
+zy = y[s]
+## Build a test set representing 30% of 
+## the data zX, zy
 n = nro(zX)
-## Example of test = 30% of the data
-ntest = Int64(round(.30 * n))
-## Or: ntest = 80
+ntest = Int64(round(.30 * n)) # Or: ntest = 80
 s = sample(1:n, ntest; replace = false)
 Xtrain = rmrow(zX, s)
 ytrain = rmrow(zy, s)
 Xtest = zX[s, :]
 ytest = zy[s, :]
-## End
+## ==> This gives Xtrain, ytrain, Xtest, ytest
+## for y
 
-#### The process above can be done automatically 
-#### with function "mtest" 
-#### (accounts for missing data in Y)
+## !!!! More efficient alternative:
+## The process above can be done automatically 
+## with function "mtest" 
+## (accounts for missing data in Y).
+## Below the splitting is replicated "rep" times
 res = mtest(Y[:, 1:3]; test = .30, 
     rep = 10) ;
 pnames(res)
 res.idtest
 res.idtrain
 res.nam 
-## The size of the train and the test can differ between
-## variables if Y contains missing data.
+## The sizes of resulting Train and Test can differ 
+## between variables if Y contains missing data.
 ## i : variable in Y
 ## j : replication
 i = 1 ; j = 1
 res.idtrain[i][j]
 res.idtest[i][j]
 
-## If the objective is to get ntest = 80
+## If the objective is to get a consistent 
+## value ntest = 80
 res = mtest(Y[:, 1:3]; test = 80, 
     rep = 10) ;
 
 #### Then the output of mtest can be saved and 
-#### re-used
+#### re-used in next sessions
 root = "D:/Mes Donnees/Tmp/"
 db = string(root, "idtest_tecator.jld2") 
 #@save db res   

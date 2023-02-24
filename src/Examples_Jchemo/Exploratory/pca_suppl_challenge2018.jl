@@ -23,7 +23,13 @@ freqtable(typ, test)
 f = 21 ; pol = 3 ; d = 2 ;
 Xp = savgol(snv(X); f = f, pol = pol, d = d) 
 
-## Train + Test
+## The PCA is done on Train.
+## Splitting: Tot = Train + Test
+## Here the splitting is provided by the dataset
+## (variable "typ").
+## But Tot could be splitted a posteriori 
+## (e.g. random sampling with function "mtest",
+## systematic sampling, etc.) 
 s = Bool.(test)
 Xtrain = rmrow(Xp, s)
 Ytrain = rmrow(Y, s)
@@ -33,14 +39,14 @@ ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
-############ END DATA
-
+## Model fitting on Train
 nlv = 15
 fm = pcasvd(Xtrain, nlv = nlv) ; 
 res = summary(fm, Xtrain).explvarx
 plotgrid(res.lv, res.pvar; step = 1,
     xlabel = "PC", ylabel = "P. variance explained").f
 
+## Projection of Test in the Train score space
 Ttrain = fm.T
 Ttest = Jchemo.transform(fm, Xtest)
 
@@ -51,10 +57,11 @@ i = 3
 plotxy(T[:, i], T[:, i + 1], group; color = colm,
     xlabel = string("PC", i), ylabel = string("PC", i + 1)).f
 
-#### SD and OD distances
-
+## SD and OD distances
 res = occsdod(fm, Xtrain) ; 
+pnames(res)
 dtrain = res.d
+## Values for test
 dtest = Jchemo.predict(res, Xtest).d
 
 f = Figure(resolution = (500, 400))

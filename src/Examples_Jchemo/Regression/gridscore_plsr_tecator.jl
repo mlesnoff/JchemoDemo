@@ -23,35 +23,46 @@ Xp = savgol(snv(X); f = f, pol = pol, d = d)
 plotsp(Xp, wl_num,
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
-## Tot = Train + Test
+## The model is tuned on Train.
+## Splitting: Tot = Train + Test
 ## Here the splitting is provided by the dataset
-## but Tot could be splitted randomly (sampling). 
-j = 2
-nam = namy[j]
+## (variable "typ").
+## But Tot could be splitted a posteriori 
+## (e.g. random sampling with function "mtest",
+## systematic sampling, etc.) 
 s = Y.typ .== "train"
 Xtrain = Xp[s, :]
-ytrain = Y[s, nam]
+Ytrain = Y[s, namy]
 Xtest = rmrow(Xp, s)
-ytest = rmrow(Y[:, nam], s)
+Ytest = rmrow(Y[:, namy], s)
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 ntot = ntrain + ntest
 (ntot = ntot, ntrain, ntest)
 
-######################### END
+## Work on the second y-variable 
+j = 2
+nam = namy[j]
+ytrain = Ytrain[:, nam]
+ytest = Ytest[:, nam]
 
-## Train is used to tune the model.
-## Splitting Train = Cal + Val
+## Build the split within Train.
+## Train = Cal + Val
+nval = Int64(round(.30 * ntrain)) # Or: nval = 40
 ## (1) Random sampling
-nval = Int64(round(.30 * ntrain))
-## Or: nval = 40
 s = sample(1:ntrain, nval; replace = false)
+## (2) Systematic sampling
+s = sampsys(ytrain; k = nval).train
+ytrain[s]
+## (3) Kennard-Stone sampling
+s = sampks(Xtrain; k = nval).train
+## Selection
 Xcal = rmrow(Xtrain, s)
 ycal = rmrow(ytrain, s)
 Xval = Xtrain[s, :]
 yval = ytrain[s, :]
-## End
 
+## Validation on Train
 nlv = 0:20
 res = gridscorelv(Xcal, ycal, Xval, yval; 
     score = rmsep, fun = plskern, nlv = nlv) 
@@ -79,9 +90,10 @@ fm = plskern(Xtrain, ytrain; nlv = res_sel.sel) ;
 pred = Jchemo.predict(fm, Xtest).pred
 rmsep(pred, ytest)
 
-## !!!
-## Function "gridscore" (instead "gridscorelv") can also be used
-## but this is not time-efficient for LV-based methods
+## Remark:
+## Function "gridscore" is generic for all the functions.
+## It can be used instead of "gridscorelv" but
+## this is not time-efficient for LV-based methods
 nlv = 0:20
 pars = mpar(nlv = nlv)
 res = gridscore(Xcal, ycal, Xval, yval;  

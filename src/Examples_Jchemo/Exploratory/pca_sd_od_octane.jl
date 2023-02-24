@@ -5,58 +5,62 @@ mypath = dirname(dirname(pathof(JchemoData)))
 db = joinpath(mypath, "data", "octane.jld2") 
 @load db dat
 pnames(dat)
-  
+
 X = dat.X 
 wl = names(X)
 wl_num = parse.(Float64, wl)
+n = nro(X)
 
-## Six of the samples (= 25, 26, and 36-39) of the dataset contain 
-## added alcohol.
-
-############ END DATA
-
+## Model fitting
 fm = pcasvd(X, nlv = 3) ; 
+#fm = pcasvd(X, nlv = 3) ;    # Robust PCA 
 pnames(fm)
 
-res = occsd(fm).d
+## Score distance (SD)
+res = occsd(fm) ;
+pnames(res)
+d = res.d
 f = Figure(resolution = (500, 400))
 Axis(f[1, 1]; xlabel = "Standardized score distance", 
     ylabel = "Nb. observations")
-hist!(res.dstand; bins = 20)
+hist!(d.dstand; bins = 20)
 f
 
-res = occod(fm, X).d
+## Orthogonal distance (OD)
+res = occod(fm, X) ;
+pnames(res)
+d = res.d
 f = Figure(resolution = (500, 400))
 Axis(f[1, 1]; xlabel = "Standardized orthogonal distance", 
     ylabel = "Nb. observations")
-hist!(res.dstand; bins = 20)
+hist!(d.dstand; bins = 20)
 f
 
-res_sd = occsd(fm).d
-res_od = occod(fm, X).d
-zsd = res_sd.dstand 
-zod = res_od.dstand 
-n = length(zsd)
-f, ax = plotxy(zsd, zod;
-    xlabel = "SD", ylabel = "OD")
+## SD-OD
+sd = occsd(fm).d
+od = occod(fm, X).d
+f, ax = plotxy(sd.dstand, od.dstand;
+    xlabel = "Standardized SD", ylabel = "Standardized OD")
 f
 
 CairoMakie.activate!()  
 #GLMakie.activate!() 
-res_sd = occsd(fm).d
-res_od = occod(fm, X).d
-zsd = res_sd.dstand 
-zod = res_od.dstand 
-n = length(zsd)
-f, ax = plotxy(zsd, zod;
-    xlabel = "SD", ylabel = "OD")
-text!(ax, zsd, zod; text = string.(1:n), fontsize = 15)
+sd = occsd(fm).d
+od = occod(fm, X).d
+f, ax = plotxy(sd.dstand, od.dstand;
+    xlabel = "Standardized SD", ylabel = "Standardized OD")
+text!(ax, sd.dstand, od.dstand; text = string.(1:n), 
+    fontsize = 15)
 f
 
-res = occsdod(fm, X).d
-n = length(zsd)
-plotxy(1:n, res.dstand;
+## Direct computation of SD-OD
+res = occsdod(fm, X)
+pnames(res)
+d = res.d
+f, ax = plotxy(1:n, d.dstand;
     xlabel = "Observation", 
-    ylabel = "Standardized SD-OD distance").f
-
+    ylabel = "Standardized SD-OD distance")
+text!(ax, 1:n, d.dstand; text = string.(1:n), 
+    fontsize = 15)
+f
 
