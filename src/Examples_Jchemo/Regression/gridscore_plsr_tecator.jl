@@ -11,9 +11,9 @@ X = dat.X
 Y = dat.Y 
 wl = names(X)
 wl_num = parse.(Float64, wl) 
-namy = names(Y)[1:3]
 ntot, p = size(X)
 typ = Y.typ
+namy = names(Y)[1:3]
 
 plotsp(X, wl_num,
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f

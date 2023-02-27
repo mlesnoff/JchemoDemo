@@ -11,9 +11,9 @@ X = dat.X
 Y = dat.Y 
 wl = names(X)
 wl_num = parse.(Float64, wl) 
-namy = names(Y)[1:3]
 ntot, p = size(X)
 typ = Y.typ
+namy = names(Y)[1:3]
 
 plotsp(X, wl_num,
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
@@ -55,34 +55,30 @@ ytest = zy[s, :]
 ## with function "mtest" 
 ## (accounts for missing data in Y).
 ## Below the splitting is replicated "rep" times
-res = mtest(Y[:, 1:3]; test = .30, 
+ids = mtest(Y[:, namy]; test = .30, 
     rep = 10) ;
-pnames(res)
-res.idtest
-res.idtrain
-res.nam 
+pnames(ids)
+ids.test
+ids.train
+ids.nam 
 ## The sizes of resulting Train and Test can differ 
 ## between variables if Y contains missing data.
 ## i : variable in Y
 ## j : replication
-i = 1 ; j = 1
-res.idtrain[i][j]
-res.idtest[i][j]
+i = 1
+ids.train[i]
+ids.test[i]
 
 ## If the objective is to get a consistent 
 ## value ntest = 80
-res = mtest(Y[:, 1:3]; test = 80, 
+ids = mtest(Y[:, 1:3]; test = 80, 
     rep = 10) ;
 
-#### Then the output of mtest can be saved and 
-#### re-used in next sessions
+## Then the output of mtest can be saved and 
+## re-used in next sessions
 root = "D:/Mes Donnees/Tmp/"
-db = string(root, "idtest_tecator.jld2") 
-#@save db res   
+db = string(root, "ids_tecator.jld2") 
+#@save db ids   
 
-#### Re-use 
-## @load db res
-## See script "gridcv_plsr_tecator_double.jl"
-
-
-
+## Re-use 
+#@load db ids

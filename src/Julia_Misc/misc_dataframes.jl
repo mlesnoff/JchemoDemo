@@ -4,8 +4,8 @@ using DataFrames
 ## https://towardsdatascience.com/how-to-manipulate-data-with-dataframes-jl-179d236f8601
 ## https://www.juliabloggers.com/how-is-used-in-dataframes-jl/
 
-x = [2.6 ; 1.3 ; 3] 
-y = [1 ; 5 ; 0]
+x = [2.6; 1.3; 3] 
+y = [1; 5; 0]
 z = ["blue" ; "yellow" ; "orange"]
 df = DataFrame(height = x, age = y, col = z)
 describe(df)
@@ -61,7 +61,7 @@ combine(groupby(zdf, :group), [:var1 ; :var2] .=> mean, [:var1 ; :var2] .=> std)
 
 ## Tabulation
 df
-gdf = groupby(df, [:A ; :B])
+gdf = groupby(df, [:A; :B])
 combine(gdf, nrow)
 ## Or: use package FreqTables
 

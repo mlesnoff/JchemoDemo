@@ -41,6 +41,27 @@ f
 
 ############# BARPLOTS 
 
+n = 20
+x = 1:n
+y = rand(n)
+barplot(x, y) 
+
+stk = 1:2:n
+barplot(x, y;
+    axis = (xticks = stk,
+        xlabel = "x-value"))
+
+barplot(x, y;
+    axis = (xticks = (stk, string.("v", stk)),
+        xlabel = "x-value"))
+
+f = Figure(resolution = (500, 400))
+ax = Axis(f[1, 1],
+    xticks = (stk, string.("v", stk)), 
+    xlabel = "x-value")
+barplot!(ax, x, y)
+f
+
 df = DataFrame(
     x = [1, 1, 1, 2, 2, 2],
     height = 0.1:0.1:0.6,
