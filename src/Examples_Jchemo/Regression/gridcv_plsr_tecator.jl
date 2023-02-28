@@ -23,13 +23,13 @@ Xp = savgol(snv(X); f = f, pol = pol, d = d)
 plotsp(Xp, wl_num,
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
-## The model is tuned on Train.
-## Splitting: Tot = Train + Test
+## Splitting Tot = Train + Test
+## The model is tuned on Train, and
+## the generalization error is estimated on Test.
 ## Here the splitting is provided by the dataset
-## (variable "typ").
-## But Tot could be splitted a posteriori 
-## (e.g. random sampling with function "mtest",
-## systematic sampling, etc.) 
+## (variable "typ"), but the data could be splitted 
+## a posteriori (e.g. random sampling with function 
+## "mtest", systematic sampling, etc.) 
 s = Y.typ .== "train"
 Xtrain = Xp[s, :]
 Ytrain = Y[s, namy]
@@ -46,13 +46,14 @@ nam = namy[j]
 ytrain = Ytrain[:, nam]
 ytest = Ytest[:, nam]
 
-## Build of the segments within Train.
+## Build the segments within Train.
+## Different choices:
 ## (1) If K-fold CV
 K = 3
 segm = segmkf(ntrain, K; rep = 10)
 ## (2) If "test-set" validation 
 ## ==> splitting Train = Cal + Val
-## e.g. Val = 30% of traing (Cal = 70%=)
+## e.g. Val = 30% of traing (Cal = 70%)
 m = round(.30 * ntrain)
 segm = segmts(ntrain, m; rep = 30)
 ## i : segment within a replication
@@ -61,16 +62,16 @@ i = 1 ; j = 1
 segm[i]
 segm[i][j]
 
-## Validation on Train
+## CV
 nlv = 0:20
 rescv = gridcvlv(Xtrain, ytrain; segm = segm, 
     score = rmsep, fun = plskern, nlv = nlv, 
     verbose = true) ;
 pnames(rescv)
-## Average results over the replications
-res = rescv.res
 ## Results for each replication
 res_rep = rescv.res_rep
+## Average results over the replications
+res = rescv.res
 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
@@ -103,8 +104,8 @@ rmsep(pred, ytest)
 
 ## Remark:
 ## Function "gridcv" is generic for all the functions.
-## It can be used instead of "gridcvlv" but
-## this is not time-efficient for LV-based methods
+## Here, it could be used instead of "gridcvlv" 
+## but this is not time-efficient for LV-based methods
 nlv = 0:20
 pars = mpar(nlv = nlv)
 rescv = gridcv(Xtrain, ytrain; segm = segm, 

@@ -23,7 +23,7 @@ Xp = savgol(snv(X); f = f, pol = pol, d = d)
 plotsp(Xp, wl_num,
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
-## How to make a plitting: Tot = Train + Test
+## How to make a splitting Tot = Train + Test
 ## Here this is done by random sampling.
 ## If there are missing data in Y,
 ## (this is not the case of the specific example "tecator")

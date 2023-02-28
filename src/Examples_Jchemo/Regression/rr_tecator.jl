@@ -24,13 +24,13 @@ Xp = savgol(snv(X); f = f, pol = pol, d = d)
 plotsp(Xp, wl_num,
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
-## The model is tuned on Train.
-## Splitting: Tot = Train + Test
+## Splitting Tot = Train + Test
+## The model is fitted on Train, and
+## the generalization error is estimated on Test.
 ## Here the splitting is provided by the dataset
-## (variable "typ").
-## But Tot could be splitted a posteriori 
-## (e.g. random sampling with function "mtest",
-## systematic sampling, etc.) 
+## (variable "typ"), but the data could be splitted 
+## a posteriori (e.g. random sampling with function 
+## "mtest", systematic sampling, etc.) 
 s = Y.typ .== "train"
 Xtrain = Xp[s, :]
 Ytrain = Y[s, namy]
@@ -47,12 +47,12 @@ nam = namy[j]
 ytrain = Ytrain[:, nam]
 ytest = Ytest[:, nam]
 
-## Model fitting on Train
+## Model fitting
 lb = 1e-3
 fm = rr(Xtrain, ytrain; lb = lb) ;
 #fm = rrchol(Xtrain, ytrain; lb = lb) ;
 
-## Predictions on Test
+## Predictions
 pred = Jchemo.predict(fm, Xtest).pred
 
 ## Below, only possible with "rr" (not "rrchol"):

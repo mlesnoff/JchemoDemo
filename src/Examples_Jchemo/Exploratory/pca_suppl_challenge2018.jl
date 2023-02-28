@@ -23,13 +23,12 @@ freqtable(typ, test)
 f = 21 ; pol = 3 ; d = 2 ;
 Xp = savgol(snv(X); f = f, pol = pol, d = d) 
 
-## The PCA is done on Train.
 ## Splitting: Tot = Train + Test
+## The PCA is fitted on Train.
 ## Here the splitting is provided by the dataset
-## (variable "typ").
-## But Tot could be splitted a posteriori 
-## (e.g. random sampling with function "mtest",
-## systematic sampling, etc.) 
+## (variable "typ"), but the data could be splitted 
+## a posteriori (e.g. random sampling with function 
+## "mtest", systematic sampling, etc.) 
 s = Bool.(test)
 Xtrain = rmrow(Xp, s)
 Ytrain = rmrow(Y, s)

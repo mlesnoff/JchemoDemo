@@ -23,13 +23,13 @@ Xp = savgol(snv(X); f = f, pol = pol, d = d)
 plotsp(Xp, wl_num,
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
-## The model is tuned on Train.
-## Splitting: Tot = Train + Test
+## Splitting Tot = Train + Test
+## The model is tuned on Train, and
+## the generalization error is estimated on Test.
 ## Here the splitting is provided by the dataset
-## (variable "typ").
-## But Tot could be splitted a posteriori 
-## (e.g. random sampling with function "mtest",
-## systematic sampling, etc.) 
+## (variable "typ"), but the data could be splitted 
+## a posteriori (e.g. random sampling with function 
+## "mtest", systematic sampling, etc.) 
 s = Y.typ .== "train"
 Xtrain = Xp[s, :]
 Ytrain = Y[s, namy]
@@ -46,9 +46,9 @@ nam = namy[j]
 ytrain = Ytrain[:, nam]
 ytest = Ytest[:, nam]
 
-## Build the split within Train.
-## Train = Cal + Val
+## Build the splitting Train = Cal+Val
 nval = Int64(round(.30 * ntrain)) # Or: nval = 40
+## Different choices:
 ## (1) Random sampling
 s = sample(1:ntrain, nval; replace = false)
 ## (2) Systematic sampling
@@ -62,7 +62,7 @@ ycal = rmrow(ytrain, s)
 Xval = Xtrain[s, :]
 yval = ytrain[s, :]
 
-## Validation on Train
+## Tuning
 nlv = 0:20
 res = gridscorelv(Xcal, ycal, Xval, yval; 
     score = rmsep, fun = plskern, nlv = nlv) 
@@ -92,8 +92,8 @@ rmsep(pred, ytest)
 
 ## Remark:
 ## Function "gridscore" is generic for all the functions.
-## It can be used instead of "gridscorelv" but
-## this is not time-efficient for LV-based methods
+## Here, it could be used instead of "gridscorelv" 
+## but this is not time-efficient for LV-based methods
 nlv = 0:20
 pars = mpar(nlv = nlv)
 res = gridscore(Xcal, ycal, Xval, yval;  
