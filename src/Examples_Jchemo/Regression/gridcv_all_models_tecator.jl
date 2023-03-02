@@ -52,7 +52,7 @@ segm = segmkf(ntrain, 4; rep = 20)
 #m = round(.30 * ntrain)
 #segm = segmts(ntrain, m; rep = 30)
 
-## PLSR
+#### PLSR
 nlv = 0:40
 res = gridcvlv(Xtrain, ytrain; segm = segm, 
     score = rmsep, fun = plskern, nlv = nlv).res ;
@@ -143,7 +143,7 @@ rmsep(pred, ytest)
 
 #### KRR 
 lb = 10.0.^(-15:5) 
-gamma = 10.0.^(-5:5) 
+gamma = 10.0.^(-3:5) 
 pars = mpar(gamma = gamma) 
 length(pars[1])
 res = gridcvlb(Xtrain, ytrain; segm = segm,
@@ -167,7 +167,7 @@ f
 
 #### KPLSR
 nlv = 0:50
-gamma = 10.0.^(-5:5) 
+gamma = 10.0.^(-3:5) 
 pars = mpar(gamma = gamma) 
 length(pars[1])
 res = gridcvlv(Xtrain, ytrain; segm = segm,
@@ -186,7 +186,7 @@ rmsep(pred, ytest)
 
 #### DKPLSR
 nlv = 0:50
-gamma = 10.0.^(-5:5) 
+gamma = 10.0.^(-3:5) 
 pars = mpar(gamma = gamma) 
 length(pars[1])
 res = gridcvlv(Xtrain, ytrain; segm = segm,
@@ -340,11 +340,6 @@ pred = Jchemo.predict(fm, Xtest).pred
 rmsep(pred, ytest)
 
 #### CPLSR-AVG
-ncla = 2 ; nlv_da = 3 ; nlv = "5:15"
-fm = cplsravg(Xtrain, ytrain; 
-    ncla = ncla, nlv_da = nlv_da, nlv = nlv) ;
-@time res = Jchemo.predict(fm, Xtest) ;
-rmsep(res.pred, ytest)
 
 ncla = 2:5 ; nlv_da = 1:5
 nlv = ["0:10"; "0:15"; "0:20"; 
@@ -361,6 +356,12 @@ fm = cplsravg(Xtrain, ytrain; ncla = res.ncla[u],
     nlv_da = res.nlv_da[u], nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
 rmsep(pred, ytest)
+
+ncla = 2 ; nlv_da = 3 ; nlv = "5:15"
+fm = cplsravg(Xtrain, ytrain; 
+    ncla = ncla, nlv_da = nlv_da, nlv = nlv) ;
+@time res = Jchemo.predict(fm, Xtest) ;
+rmsep(res.pred, ytest)
 
 #### KNNR
 nlvdis = [15; 20]  ; metric = ["mahal"] 
@@ -414,10 +415,11 @@ rmsep(pred, ytest)
 
 #### XGBOOSTR 
 zsegm = segmkf(ntrain, 4; rep = 3)
+eta = [.1; .3]
 colsample_bynode = LinRange(.10, .50, 5)
-max_depth = [6; 10; 20; 100 ; 2000]
-lambda = [0; .1; .5; 1; 2; 10]
-pars = mpar(colsample_bynode = colsample_bynode, 
+max_depth = [6; 10; 50; 2000]
+lambda = [0; .1; .3; .5; 1]
+pars = mpar(eta = eta, colsample_bynode = colsample_bynode, 
     max_depth = max_depth, lambda = lambda)
 length(pars[1])
 res = gridcv(Xtrain, ytrain; segm = zsegm,
@@ -425,7 +427,8 @@ res = gridcv(Xtrain, ytrain; segm = zsegm,
     verbose = true).res ;
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
-fm = xgboostr(Xtrain, ytrain; rep = 50, 
+fm = xgboostr(Xtrain, ytrain; rep = 150,
+    eta = res.eta[u], 
     colsample_bynode = res.colsample_bynode[u], 
     max_depth = res.max_depth[u],
     min_child_weight = 5, lambda = res.lambda[u]) ;
