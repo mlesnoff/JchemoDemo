@@ -73,7 +73,7 @@ zpred = vec(pred)
 zfm = loess(zpred, ytest, span = 2 / 3) ;
 z = Loess.predict(zfm, sort(zpred))
 f, ax = plotxy(zpred, ytest; color = (:grey, .5),
-    xlabel = "Predicted", ylabel = "Observed",
+    xlabel = "Predicted", ylabel = "Observed (Test)",
     resolution = (500, 400))
 lines!(ax, sort(zpred), z; color = :red)
 ablines!(ax, 0, 1)
@@ -201,7 +201,7 @@ pred = Jchemo.predict(fm, Xtest).pred
 println(rmsep(pred, ytest))
 plotxy(vec(pred), ytest; color = (:red, .5),
     bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed").f  
+    xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
 fm = lwplsr(Xtrain, ytrain; nlvdis = 15,
     metric = "mahal", h = 2, k = 200, nlv = 15) ;

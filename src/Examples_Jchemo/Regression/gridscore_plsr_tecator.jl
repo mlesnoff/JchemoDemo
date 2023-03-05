@@ -77,7 +77,7 @@ pred = Jchemo.predict(fm, Xtest).pred
 rmsep(pred, ytest)
 plotxy(vec(pred), ytest; color = (:red, .5), step = 2,
     bisect = true, xlabel = "Prediction", 
-    ylabel = "Observed").f
+    ylabel = "Observed (Test)").f
 
 ## Parcimony
 res_sel = selwold(res.nlv, res.y1; smooth = false, 

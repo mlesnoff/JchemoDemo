@@ -56,7 +56,7 @@ segm = segmkf(ntrain, 4; rep = 20)
 nlv = 0:40
 res = gridcvlv(Xtrain, ytrain; segm = segm, 
     score = rmsep, fun = plskern, nlv = nlv).res ;
-plotgrid(res.nlv, res.y1,
+plotgrid(res.nlv, res.y1;
     xlabel ="Nb. LVs", ylabel = "RMSEP").f
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
@@ -67,8 +67,8 @@ zpred = vec(pred)
 zfm = loess(zpred, ytest, span = 2 / 3) ;
 z = Loess.predict(zfm, sort(zpred))
 f, ax = plotxy(zpred, ytest;
-    xlabel = "Predicted", ylabel = "Observed",
-    resolution = (500, 400))
+    xlabel = "Predicted", ylabel = "Observed (Test)",
+    resolution = (450, 350))
 lines!(ax, sort(zpred), z; color = :red)
 ablines!(ax, 0, 1)
 f    
@@ -121,8 +121,8 @@ zpred = vec(pred)
 zfm = loess(zpred, ytest, span = 2 / 3) ;
 z = Loess.predict(zfm, sort(zpred))
 f, ax = plotxy(zpred, ytest;
-    xlabel = "Predicted", ylabel = "Observed",
-    resolution = (500, 400))
+    xlabel = "Predicted", ylabel = "Observed (Test)",
+    resolution = (450, 350))
 lines!(ax, sort(zpred), z; color = :red)
 ablines!(ax, 0, 1)
 f  
@@ -159,8 +159,8 @@ zpred = vec(pred)
 zfm = loess(zpred, ytest, span = 2 / 3) ;
 z = Loess.predict(zfm, sort(zpred))
 f, ax = plotxy(zpred, ytest;
-    xlabel = "Predicted", ylabel = "Observed",
-    resolution = (500, 400))
+    xlabel = "Predicted", ylabel = "Observed (Test)",
+    resolution = (450, 350))
 lines!(ax, sort(zpred), z; color = :red)
 ablines!(ax, 0, 1)
 f  
@@ -228,8 +228,8 @@ zpred = vec(pred)
 zfm = loess(zpred, ytest, span = 2 / 3) ;
 z = Loess.predict(zfm, sort(zpred))
 f, ax = plotxy(zpred, ytest;
-    xlabel = "Predicted", ylabel = "Observed",
-    resolution = (500, 400))
+    xlabel = "Predicted", ylabel = "Observed (Test)",
+    resolution = (450, 350))
 lines!(ax, sort(zpred), z; color = :red)
 ablines!(ax, 0, 1)
 f    
@@ -260,65 +260,11 @@ zpred = vec(pred)
 zfm = loess(zpred, ytest, span = 2 / 3) ;
 z = Loess.predict(zfm, sort(zpred))
 f, ax = plotxy(zpred, ytest;
-    xlabel = "Predicted", ylabel = "Observed",
-    resolution = (500, 400))
+    xlabel = "Predicted", ylabel = "Observed (Test)",
+    resolution = (450, 350))
 lines!(ax, sort(zpred), z; color = :red)
 ablines!(ax, 0, 1)
 f    
-
-#### LWPLSR-DK
-zsegm = segmkf(ntrain, 4; rep = 3)
-gamma = 10.0.^(-5:5)
-nlvdis = [10; 15; 25] ; metric = ["mahal";] 
-h = [1; 2; 6; Inf] ; k = [150]  
-nlv = 1:20 
-pars = mpar(nlvdis = nlvdis, metric = metric, 
-    h = h, k = k, gamma = gamma) 
-length(pars[1])
-res = gridcvlv(Xtrain, ytrain; segm = zsegm,
-    score = rmsep, fun = Jchemo.lwplsr_dk, nlv = nlv, 
-    pars = pars, verbose = true).res 
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-fm = Jchemo.lwplsr_dk(Xtrain, ytrain; nlvdis = res.nlvdis[u],
-    metric = res.metric[u], h = res.h[u], k = res.k[u], nlv = res.nlv[u],
-    gamma = res.gamma[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
-println(rmsep(pred, ytest))
-zpred = vec(pred)
-zfm = loess(zpred, ytest, span = 2 / 3) ;
-z = Loess.predict(zfm, sort(zpred))
-f, ax = plotxy(zpred, ytest;
-    xlabel = "Predicted", ylabel = "Observed",
-    resolution = (500, 400))
-lines!(ax, sort(zpred), z; color = :red)
-ablines!(ax, 0, 1)
-f  
-
-#### LWPLSR-SDK
-zsegm = segmkf(ntrain, 4; rep = 1)
-nlv0 = [20; 30; 50]
-gamma0 = 10.0.^(-5:5)
-nlvdis = [0; 10; 15] ; metric = ["mahal";] 
-h = [1; 2; 6] ; k = [50; 100; 150]  
-nlv = 0:20
-pars = mpar(nlv0 = nlv0, gamma0 = gamma0, nlvdis = nlvdis, 
-    metric = metric, h = h, k = k) 
-length(pars[1])
-res = gridcvlv(Xtrain, ytrain; segm = zsegm,
-    score = rmsep, fun = Jchemo.lwplsr_sdk, nlv = nlv, 
-    pars = pars, verbose = true).res 
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-group = string.("nvl0=", res.nlv0, "gamma0=", res.gamma0, 
-    "nvldis=", res.nlvdis, " h=", res.h, " k=", res.k)
-plotgrid(res.nlv, res.y1, group; leg = false,
-    xlabel ="Nb. LVs", ylabel = "RMSEP").f
-fm = Jchemo.lwplsr_sdk(Xtrain, ytrain; nlv0 = res.nlv0[u], gamma0 = res.gamma0[u],
-    nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
-    k = res.k[u], nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
-rmsep(pred, ytest)
 
 #### LWPLSR-AVG
 zsegm = segmkf(ntrain, 4; rep = 5)

@@ -84,7 +84,7 @@ pred = Jchemo.predict(fm, Xtest).pred
 rmsep(pred, ytest)
 plotxy(vec(pred), ytest; color = (:red, .5), step = 2,
     bisect = true, xlabel = "Prediction", 
-    ylabel = "Observed").f
+    ylabel = "Observed (Test)").f
 
 ## Variability between folds and replications
 group = string.(res_rep.segm, "-", res_rep.repl)
