@@ -76,7 +76,7 @@ f
 zfm = loess(zpred, ytest, span = 2 / 3) ;
 pred_loess = Loess.predict(zfm, sort(zpred))
 f, ax = plotxy(zpred, ytest;
-    xlabel = "Predicted", ylabel = "Observed",
+    xlabel = "Predicted (Test)", ylabel = "Observed",
     resolution = (500, 400))
 lines!(ax, sort(zpred), pred_loess; color = :red)
 ablines!(ax, 0, 1)

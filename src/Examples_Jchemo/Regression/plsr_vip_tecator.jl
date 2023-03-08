@@ -1,6 +1,5 @@
 using JLD2, CairoMakie
 using Jchemo, JchemoData
-using Loess
 
 mypath = dirname(dirname(pathof(JchemoData)))
 db = joinpath(mypath, "data", "tecator.jld2") 

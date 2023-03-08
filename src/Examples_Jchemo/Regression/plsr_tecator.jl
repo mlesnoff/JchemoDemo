@@ -64,7 +64,7 @@ mse(pred, ytest)
 
 zpred = vec(pred)
 f, ax = plotxy(zpred, ytest;
-    xlabel = "Predicted", ylabel = "Observed",
+    xlabel = "Predicted (Test)", ylabel = "Observed",
     resolution = (500, 400))
 ablines!(ax, 0, 1)
 f   

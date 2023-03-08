@@ -204,7 +204,7 @@ pred = Jchemo.predict(fm, Xtest).pred
 rmsep(pred, ytest)
 
 #### LWPLSR 
-nlvdis = [10; 15; 25] ; metric = ["mahal";] 
+nlvdis = [10; 15; 25] ; metric = ["mahal"] 
 h = [1; 2; 6; Inf] ; k = [50; 100; 150]  
 nlv = 0:20
 pars = mpar(nlvdis = nlvdis, metric = metric, 
@@ -236,7 +236,7 @@ f
 
 #### LWPLSR-S
 nlv0 = [15; 20; 30; 40]
-nlvdis = [5; 10; 15] ; metric = ["mahal";] 
+nlvdis = [5; 10; 15] ; metric = ["mahal"] 
 h = [1; 2; 6] ; k = [50; 100; 150]  
 nlv = 0:15
 pars = mpar(nlv0 = nlv0, nlvdis = nlvdis, 
@@ -268,7 +268,7 @@ f
 
 #### LWPLSR-AVG
 zsegm = segmkf(ntrain, 4; rep = 5)
-nlvdis = [10; 15; 25] ; metric = ["mahal";] 
+nlvdis = [10; 15; 25] ; metric = ["mahal"] 
 h = [1; 2; 6; Inf] ; k = [50; 100; 150]  
 nlv = ["0:10"; "0:20"; "0:30"]
 pars = mpar(nlvdis = nlvdis, metric = metric, h = h, 
