@@ -79,13 +79,3 @@ f
 
 
 
-
-  fm.eig
-  fm.sstot
-  # Explained variance by PCA of the class centers
-  # in transformed scale
-  Base.summary(fm)
-
-
-
-
