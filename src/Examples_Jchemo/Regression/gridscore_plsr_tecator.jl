@@ -1,4 +1,4 @@
-using JLD2, CairoMakie
+using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
 using Loess
 

@@ -13,9 +13,10 @@ wl = names(X)
 wl_num = parse.(Float64, wl)
 ntot = nro(X)
 
-plotsp(X, wl_num).f
-summ(Y)
+tab(y)
 freqtable(y, Y.test)
+
+plotsp(X, wl_num).f
 
 s = Bool.(Y.test)
 Xtrain = rmrow(X, s)
@@ -28,25 +29,24 @@ ntest = nro(Xtest)
 
 ######## End Data
 
-m = 100 ; segm = segmts(ntrain, m; rep = 30)      # Test-set CV
-#K = 3 ; segm = segmkf(ntrain, K; rep = 10)       # K-fold CV   
+gamma = 100
+fm = kplsrda(Xtrain, ytrain; nlv = 15, 
+    gamma = gamma) ;
+pnames(fm)
+pnames(fm.fm)
 
-nlv = 0:30
-res = gridcvlv(Xtrain, ytrain; segm = segm, 
-    score = err, fun = plsrda, nlv = nlv, verbose = true).res
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
+res = Jchemo.predict(fm, Xtest)
+pnames(res)
+pred = res.pred
+res.posterior
 
-plotgrid(res.nlv, res.y1; step = 2,
-    xlabel = "Nb. LVs", ylabel = "ERR").f
-
-fm = plsrda(Xtrain, ytrain; nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred
 err(pred, ytest)
 freqtable(vec(pred), ytest)
 
 ## Averaging
-nlv = "0:50"
+nlv = "0:20"
 fm = plsrdaavg(Xtrain, ytrain; nlv = nlv) ;
 pred = Jchemo.predict(fm, Xtest).pred
 err(pred, ytest)
+
+

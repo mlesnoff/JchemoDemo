@@ -40,13 +40,13 @@ yval = ytrain[s]
 (ntot = ntot, ntrain, ncal, nval, ntest)
 ## End 
 
-nlv = 0:30
+nlv = 0:50
 res = gridscorelv(Xcal, ycal, Xval, yval; 
     score = err, fun = plsrda, nlv = nlv)
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 
-plotgrid(res.nlv, res.y1; step = 2,
+plotgrid(res.nlv, res.y1; step = 5,
     xlabel = "Nb. LVs", ylabel = "ERR").f
 
 fm = plsrda(Xtrain, ytrain; nlv = res.nlv[u]) ;

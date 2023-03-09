@@ -28,21 +28,22 @@ ntest = nro(Xtest)
 
 ######## End Data
 
-m = 100 ; segm = segmts(ntrain, m; rep = 6)     # Test-set CV
-#K = 3 ; segm = segmkf(ntrain, K; rep = 2)      # K-fold CV  
+K = 3 ; segm = segmkf(ntrain, K; rep = 1)       # K-fold CV  
+#m = 100 ; segm = segmts(ntrain, m; rep = 3)    # Test-set CV
 
 nlvdis = [25] ; metric = ["mahal"]
 h = [1; 2; 5] ; k = [100; 250; 500]
-pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k)
+pars = mpar(nlvdis = nlvdis, metric = metric, h = h, 
+    k = k)
 length(pars[1])
 nlv = 0:15
-res = gridcvlv(Xtrain, ytrain; segm = segm, score = err, 
-    fun = lwplsrda, nlv = nlv, pars = pars, 
+res = gridcvlv(Xtrain, ytrain; segm = segm, 
+    score = err, fun = lwplsrda, nlv = nlv, pars = pars, 
     verbose = true).res
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 
-group = string.(res.metric, res.nlvdis, " h=", res.h, " k=", res.k)
+group = string.("metric=", res.metric, res.nlvdis, " h=", res.h, " k=", res.k)
 plotgrid(res.nlv, res.y1, group; step = 2,
     xlabel = "Nb. LVs", ylabel = "ERR").f
 
@@ -53,11 +54,5 @@ pred = Jchemo.predict(fm, Xtest).pred
 err(pred, ytest)
 freqtable(vec(pred), ytest)
 
-## Averaging
-nlv = "0:20"
-fm = lwplsrdaavg(Xtrain, ytrain; nlvdis = 25, 
-    metric = "mahal", h = 1, k = 1000, 
-    nlv = nlv, verbose = true) ;
-pred = Jchemo.predict(fm, Xtest).pred
-err(pred, ytest)
+
 

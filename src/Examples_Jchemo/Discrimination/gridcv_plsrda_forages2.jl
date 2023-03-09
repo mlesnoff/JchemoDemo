@@ -28,16 +28,15 @@ ntest = nro(Xtest)
 
 ######## End Data
 
-m = 100 ; segm = segmts(ntrain, m; rep = 30)      # Test-set CV
-#K = 3 ; segm = segmkf(ntrain, K; rep = 10)       # K-fold CV   
+K = 3 ; segm = segmkf(ntrain, K; rep = 10)         # K-fold CV   
+#m = 100 ; segm = segmts(ntrain, m; rep = 30)      # Test-set CV
 
-nlv = 0:30
+nlv = 0:50
 res = gridcvlv(Xtrain, ytrain; segm = segm, 
     score = err, fun = plsrda, nlv = nlv, verbose = true).res
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-
-plotgrid(res.nlv, res.y1; step = 2,
+plotgrid(res.nlv, res.y1; step = 5,
     xlabel = "Nb. LVs", ylabel = "ERR").f
 
 fm = plsrda(Xtrain, ytrain; nlv = res.nlv[u]) ;
@@ -45,8 +44,17 @@ pred = Jchemo.predict(fm, Xtest).pred
 err(pred, ytest)
 freqtable(vec(pred), ytest)
 
-## Averaging
-nlv = "0:50"
-fm = plsrdaavg(Xtrain, ytrain; nlv = nlv) ;
+## PLSLDA
+nlv = 1:50  ## !!: Does not start from nlv=0
+res = gridcvlv(Xtrain, ytrain; segm = segm, 
+    score = err, fun = plslda, nlv = nlv, verbose = true).res
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
+plotgrid(res.nlv, res.y1; step = 5,
+    xlabel = "Nb. LVs", ylabel = "ERR").f
+fm = plslda(Xtrain, ytrain; nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
 err(pred, ytest)
+
+
+
