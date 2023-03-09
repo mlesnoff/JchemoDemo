@@ -1,4 +1,4 @@
-using JLD2, CairoMakie
+using JLD2, CairoMakie, FreqTables 
 using Jchemo, JchemoData
 
 mypath = dirname(dirname(pathof(JchemoData)))
@@ -8,15 +8,14 @@ pnames(dat)
   
 X = dat.X 
 Y = dat.Y
+y = Y.typ
 wl = names(X)
 wl_num = parse.(Float64, wl)
 ntot = nro(X)
 
-plotsp(X, wl_num; nsamp = 5).f
+plotsp(X, wl_num).f
 summ(Y)
-
-y = Y.ndf
-#y = Y.dm
+freqtable(y, Y.test)
 
 s = Bool.(Y.test)
 Xtrain = rmrow(X, s)
@@ -30,28 +29,24 @@ ntest = nro(Xtest)
 ######## End Data
 
 m = 100 ; segm = segmts(ntrain, m; rep = 30)      # Test-set CV
-#K = 3 ; segm = segmkf(ntrain, K; rep = 10)       # K-fold CV      
+#K = 3 ; segm = segmkf(ntrain, K; rep = 10)       # K-fold CV   
 
 nlv = 0:30
 res = gridcvlv(Xtrain, ytrain; segm = segm, 
-    score = rmsep, fun = plskern, nlv = nlv, verbose = true).res
+    score = err, fun = plsrda, nlv = nlv, verbose = true).res
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 
 plotgrid(res.nlv, res.y1; step = 2,
-    xlabel = "Nb. LVs", ylabel = "RMSEP").f
+    xlabel = "Nb. LVs", ylabel = "ERR").f
 
-fm = plskern(Xtrain, ytrain; nlv = res.nlv[u]) ;
+fm = plsrda(Xtrain, ytrain; nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
-rmsep(pred, ytest)
-mse(pred, ytest)
-
-plotxy(vec(pred), ytest; color = (:red, .5),
-    bisect = true, xlabel = "Prediction", ylabel = "Observed").f
+err(pred, ytest)
+freqtable(vec(pred), ytest)
 
 ## Averaging
 nlv = "0:50"
-fm = plsravg(Xtrain, ytrain; nlv = nlv) ;
+fm = plsrdaavg(Xtrain, ytrain; nlv = nlv) ;
 pred = Jchemo.predict(fm, Xtest).pred
-rmsep(pred, ytest)
-
+err(pred, ytest)
