@@ -48,14 +48,7 @@ f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
     ellipse = true, title = "FDA")
 f
 
-
-scatter!(ax, ct[:, 1], ct[:, 2],
-    markersize = 10, color = :red)
-
-
-
-## Here, a pseudo-inverse is required
-## since X is colinear
+## 2) FDA using a pseudo-inverse 
 fm = fda(Xtrain, ytrain; nlv = 2,
     pseudo = true) ;
 #fm = fdasvd(Xtrain, ytrain; nlv = 2, pseudo = true) ;
@@ -64,13 +57,13 @@ lev = fm.lev
 nlev = length(lev)
 ct = fm.Tcenters
 Ttrain = fm.T
-
 f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
     title = "FDA")
 scatter!(ax, ct[:, 1], ct[:, 2],
     markersize = 10, color = :red)
 f
-
+## This approaches overfits the 
+## discrimination of new observations
 Ttest = Jchemo.transform(fm, Xtest)
 i = 1
 s = ytest .== lev[i]
