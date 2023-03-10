@@ -27,17 +27,15 @@ ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
-######## End Data
-
-#### Spectra X (already pre-processed SavGol(Snv; f = 21, p = 3, d=2))
-
+## Spectra X 
+## (already pre-processed SavGol(Snv; f = 21, p = 3, d=2))
 plotsp(X, wl_num; nsamp = 10,
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 #### PCAs on X
-
 fm = pcasvd(X, nlv = 15) ; 
 pnames(fm)
+T = fm.T
 
 res = summary(fm, X) ;
 pnames(res)
@@ -46,23 +44,22 @@ z = res.explvarx
 plotgrid(z.lv, 100 * z.pvar; step = 1,
     xlabel = "nb. PCs", ylabel = "% variance explained").f
 
-T = fm.T
-plotxy(T[:, 1], T[:, 2]; color = (:red, .5),
+i = 1
+plotxy(T[:, i], T[:, i + 1]; color = (:red, .5),
     xlabel = "PC1", ylabel = "PC2").f
 
-plotxy(T[:, 1], T[:, 2], typ; ellipse = true,
+plotxy(T[:, i], T[:, i + 1], typ; ellipse = true,
     xlabel = "PC1", ylabel = "PC2").f
 
 ## Train vs Test
-
 fm = pcasvd(Xtrain, nlv = 15) ; 
-
 Ttrain = fm.T
 Ttest = Jchemo.transform(fm, Xtest)
-T = vcat(Ttrain, Ttest)
-group = vcat(repeat(["Train";], ntrain), repeat(["Test";], ntest))
+
+zT = vcat(Ttrain, Ttest)
+group = vcat(repeat(["0-Train";], ntrain), repeat(["1-Test";], ntest))
 i = 1
-plotxy(T[:, i], T[:, i + 1], group;
+plotxy(zT[:, i], zT[:, i + 1], group;
     xlabel = "PC1", ylabel = "PC2").f
 
 res_sd = occsd(fm) ; 
@@ -94,54 +91,57 @@ axislegend(position = :rt)
 f[1, 1] = ax
 f
 
-########## Variable y
+## Variable y
+summ(Y)
+summ(Y, test)
 
 nam = "ndf"
 #nam = "dm"
-y = Y[:, nam]
-summ(y)
+aggstat(Y[:, nam], test; fun = mean).X
+aggstat(Y; vars = nam, groups = :test)
 
-aggstat(y; group = test, fun = mean).X
+y = Float64.(Y[:, nam])  # To remove type "Missing" 
+s = Bool.(test)
+ytrain = rmrow(y, s)
+ytest = y[s]
 
-ytrain = Float64.(Ytrain[:, nam])
-ytest = Float64.(Ytest[:, nam])
 f = Figure(resolution = (500, 400))
-ax = Axis(f, xlabel = uppercase(nam), ylabel = "Nb. observations")
+ax = Axis(f[1, 1], xlabel = "Protein", ylabel = "Nb. observations")
 hist!(ax, ytrain; bins = 50, label = "Train")
 hist!(ax, ytest; bins = 50, label = "Test")
 axislegend(position = :rt)
-f[1, 1] = ax
 f
 
 f = Figure(resolution = (500, 400))
 offs = [30; 0]
-Axis(f[1, 1], xlabel = uppercase(nam), ylabel = "Nb. observations",
+ax = Axis(f[1, 1], xlabel = "Protein", 
+    ylabel = "Nb. observations",
     yticks = (offs, ["Train" ; "Test"]))
-hist!(ytrain; offset = offs[1], bins = 50)
-hist!(ytest; offset = offs[2], bins = 50)
+hist!(ax, ytrain; offset = offs[1], bins = 50)
+hist!(ax, ytest; offset = offs[2], bins = 50)
 f
 
 f = Figure(resolution = (500, 400))
-Axis(f[1, 1], xlabel = uppercase(nam), ylabel = "Density")
-density!(ytrain; color = :blue, label = "Train")
-density!(ytest; color = (:red, .5), label = "Test")
+ax = Axis(f[1, 1], xlabel = nam, ylabel = "Density")
+density!(ax, ytrain; color = :blue, label = "Train")
+density!(ax, ytest; color = (:red, .5), label = "Test")
 axislegend(position = :rt)
 f
 
 f = Figure(resolution = (500, 400))
-offs = [.1; 0]
-Axis(f[1, 1], xlabel = uppercase(nam), ylabel = "Density",
+offs = [.08; 0]
+ax = Axis(f[1, 1], xlabel = nam, ylabel = "Density",
     yticks = (offs, ["Train" ; "Test"]))
-density!(ytrain; offset = offs[1], color = (:slategray, 0.5),
+density!(ax, ytrain; offset = offs[1], color = (:slategray, 0.5),
     bandwidth = 0.2)
-density!(ytest; offset = offs[2], color = (:slategray, 0.5),
+density!(ax, ytest; offset = offs[2], color = (:slategray, 0.5),
     bandwidth = 0.2)
 f
 
-zgroup = Int64.(zeros(ntot)) ; zgroup[s] .= 1
 f = Figure(resolution = (500, 400))
-ax = Axis(f, xlabel = "Group", ylabel = uppercase(nam))
-boxplot!(ax, zgroup, y; show_notch = true)
-f[1, 1] = ax
+ax = Axis(f[1, 1], 
+    xticks = (0:1, ["Train", "Test"]),
+    xlabel = "Group", ylabel = nam)
+boxplot!(ax, test, y; width = .5, 
+    show_notch = true)
 f
-

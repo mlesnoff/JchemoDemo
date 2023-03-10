@@ -14,10 +14,10 @@ tab(year)
 wl = names(X)
 wl_num = parse.(Float64, wl)
 
-######## End Data
+lev = mlev(year)
+nlev = length(lev) 
 
-#### Spectra
-
+## Spectra
 plotsp(X, wl_num; nsamp = 10, 
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
@@ -28,7 +28,6 @@ plotsp(Xp, wl_num; nsamp = 10,
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 #### PCA
-
 fm = pcasvd(Xp, nlv = 10) ; 
 pnames(fm)
 
@@ -36,7 +35,7 @@ res = summary(fm, Xp) ;
 pnames(res)
 z = res.explvarx
 plotgrid(z.lv, 100 * z.pvar; step = 1,
-    xlabel = "nb. PCs", ylabel = "% variance explained").f
+    xlabel = "Nb. PCs", ylabel = "% variance explained").f
 
 T = fm.T
 plotxy(T[:, 1], T[:, 2]; color = (:red, .5),
@@ -45,18 +44,32 @@ plotxy(T[:, 1], T[:, 2]; color = (:red, .5),
 plotxy(T[:, 1], T[:, 2], year; ellipse = true,
     xlabel = "PC1", ylabel = "PC2").f
 
-######## Variable y
-
+## Variable y
 summ(y)
 
 f = Figure(resolution = (500, 400))
-Axis(f[1, 1], xlabel = "TBC", ylabel = "Nb. samples")
-hist!(y; bins = 50)
+ax = Axis(f[1, 1], xlabel = "TBC", ylabel = "Nb. samples")
+hist!(ax, y; bins = 50)
 f
 
 f = Figure(resolution = (500, 400))
-Axis(f[1, 1], xlabel = "Year", ylabel = "TBC")
-boxplot!(year, y; show_notch = true)
+ax = Axis(f[1, 1], xlabel = "Year", ylabel = "TBC")
+boxplot!(ax, year, y; show_notch = true)
 f
+
+f = Figure(resolution = (500, 1000))
+ax = list(nlev)
+for i = 1:nlev
+    i == nlev ? xlab = "tbc" : xlab = ""
+    ax[i] = Axis(f[i, 1], title = string(lev[i]),
+        xlabel = xlab, 
+        ylabel = "Nb. obs.")
+    xlims!(0, maximum(y))
+    s = year .== lev[i]
+    hist!(ax[i], y[s]; bins = 30,
+        color = (:red, .5))
+end
+f
+
 
 
