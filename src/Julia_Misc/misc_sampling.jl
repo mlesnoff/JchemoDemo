@@ -44,6 +44,18 @@ z = [1 ; 2; 21.1 ; 5 ; 32]
 sample_wr!(z, 3)
 z
 
+n = 100 ; pq = 3 ; pz = 2
+X = randn(n, 3)
+μ = zeros(pq)
+Σ = .9 * ones(pq, pq)
+Σ[diagind(Σ)] .= 1
+d = MvNormal(μ, Σ)
+Q = rand(d, n)'
+cor(Q)
+Z = randn(n, pz)
+d = Normal(0, .5)
+e = rand(d, n)
+
 #### Sampling without replacement
 
 sample(1:10, 5; replace = false)

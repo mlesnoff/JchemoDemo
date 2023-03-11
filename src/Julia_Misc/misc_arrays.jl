@@ -104,6 +104,22 @@ spdiagm(1:5)    # SparseArrays
 X = diagm(1:5)
 isdiag(X)
 
+## Change the diagonal
+n = 4
+X = .9 * ones(n, n)
+diagind(X)
+X[diagind(X)] .= 1
+X
+
+X = .9 * ones(n, n)
+for i in 1:4 ; X[i, i] = 1 ; end
+X
+
+X = .9 * ones(4, 4)
+for i in zip(1:4, 1:4) ; X[i...] = 1 ; end 
+X
+
+## Speed
 n = 2000 # medium-size problem to illustrate the differences
 M = diagm(0 => 1:n) 
 D = Diagonal(1:n) 
