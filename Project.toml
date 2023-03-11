@@ -1,7 +1,10 @@
 [deps]
+CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
 CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
 FreqTables = "da1fdf0e-e0ff-5433-a45f-9bb5ff651cb1"
 JLD2 = "033835bb-8acc-5ee8-8aae-3f567f8a3819"
 Jchemo = "fbca9394-dd0a-4d1c-b066-ae75f6ef1ad5"
 JchemoData = "3440f217-e3fb-4eda-bd77-d99cfb805e7c"
+Loess = "4345ca2d-374a-55d4-8d30-97f9976e7612"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
+XLSX = "fdbf4ff8-1666-58a4-91e7-1b58723a45e0"
