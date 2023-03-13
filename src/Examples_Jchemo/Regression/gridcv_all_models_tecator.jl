@@ -64,7 +64,7 @@ fm = plskern(Xtrain, ytrain; nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred ;
 println(rmsep(pred, ytest))
 zpred = vec(pred)
-zfm = loess(zpred, ytest, span = 2 / 3) ;
+zfm = loess(zpred, Float64.(ytest), span = 2 / 3) ;
 z = Loess.predict(zfm, sort(zpred))
 f, ax = plotxy(zpred, ytest;
     xlabel = "Predicted", ylabel = "Observed (Test)",
@@ -101,43 +101,15 @@ fm = rr(Xtrain, ytrain; lb = res.lb[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
 rmsep(pred, ytest)
 
-#### RRR 
-nlv = 0:15
-tau = [1e-5; collect(0.1:.1:1)]
-pars = mpar(nlv = nlv, tau = tau)
-res = gridcv(Xtrain, ytrain; segm = segm,
-    score = rmsep, fun = rrr, pars = pars,
-    verbose = true).res 
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-group = string.("tau=", res.tau)
-plotgrid(res.nlv, res.y1, group;
-    xlabel ="Nb. LVs", ylabel = "RMSEP").f
-fm = rrr(Xtrain, ytrain; nlv = res.nlv[u], 
-    tau = res.tau[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred
-println(rmsep(pred, ytest))
-zpred = vec(pred)
-zfm = loess(zpred, ytest, span = 2 / 3) ;
-z = Loess.predict(zfm, sort(zpred))
-f, ax = plotxy(zpred, ytest;
-    xlabel = "Predicted", ylabel = "Observed (Test)",
-    resolution = (450, 350))
-lines!(ax, sort(zpred), z; color = :red)
-ablines!(ax, 0, 1)
-f  
-
 #### COVSELR
 nlv = [5; 10; 15; 20; 30]
-typ = ["cov"; "cor"]
-pars = mpar(nlv = nlv, typ = typ)
+pars = mpar(nlv = nlv)
 res = gridcv(Xtrain, ytrain; segm = segm,
     score = rmsep, fun = covselr, pars = pars, 
     verbose = true).res ;
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-fm = covselr(Xtrain, ytrain; nlv = res.nlv[u],
-    typ = res.typ[u]) ;
+fm = covselr(Xtrain, ytrain; nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
 rmsep(pred, ytest)
 
@@ -156,7 +128,7 @@ fm = krr(Xtrain, ytrain; lb = res.lb[u],
 pred = Jchemo.predict(fm, Xtest).pred
 println(rmsep(pred, ytest))
 zpred = vec(pred)
-zfm = loess(zpred, ytest, span = 2 / 3) ;
+zfm = loess(zpred, Float64.(ytest), span = 2 / 3) ;
 z = Loess.predict(zfm, sort(zpred))
 f, ax = plotxy(zpred, ytest;
     xlabel = "Predicted", ylabel = "Observed (Test)",
@@ -225,7 +197,7 @@ fm = lwplsr(Xtrain, ytrain; nlvdis = res.nlvdis[u],
 pred = Jchemo.predict(fm, Xtest).pred 
 println(rmsep(pred, ytest))
 zpred = vec(pred)
-zfm = loess(zpred, ytest, span = 2 / 3) ;
+zfm = loess(zpred, Float64.(ytest), span = 2 / 3) ;
 z = Loess.predict(zfm, sort(zpred))
 f, ax = plotxy(zpred, ytest;
     xlabel = "Predicted", ylabel = "Observed (Test)",
@@ -257,7 +229,7 @@ fm = lwplsr_s(Xtrain, ytrain; nlv0 = res.nlv0[u],
 pred = Jchemo.predict(fm, Xtest).pred 
 println(rmsep(pred, ytest))
 zpred = vec(pred)
-zfm = loess(zpred, ytest, span = 2 / 3) ;
+zfm = loess(zpred, Float64.(ytest), span = 2 / 3) ;
 z = Loess.predict(zfm, sort(zpred))
 f, ax = plotxy(zpred, ytest;
     xlabel = "Predicted", ylabel = "Observed (Test)",
