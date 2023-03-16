@@ -788,7 +788,7 @@ uuid = "fbca9394-dd0a-4d1c-b066-ae75f6ef1ad5"
 version = "0.1.14"
 
 [[deps.JchemoData]]
-git-tree-sha1 = "047649d03cb0f2dc2e79749ceab6dc3fddeb4bac"
+git-tree-sha1 = "229efc004a788d0ac46de2f7522c0ca2a068ad2c"
 repo-rev = "main"
 repo-url = "https://github.com/mlesnoff/JchemoData.jl.git"
 uuid = "3440f217-e3fb-4eda-bd77-d99cfb805e7c"
@@ -1449,9 +1449,9 @@ version = "0.3.3"
 
 [[deps.SciMLBase]]
 deps = ["ArrayInterface", "CommonSolve", "ConstructionBase", "Distributed", "DocStringExtensions", "EnumX", "FunctionWrappersWrappers", "IteratorInterfaceExtensions", "LinearAlgebra", "Logging", "Markdown", "Preferences", "RecipesBase", "RecursiveArrayTools", "Reexport", "RuntimeGeneratedFunctions", "SciMLOperators", "SnoopPrecompile", "StaticArraysCore", "Statistics", "SymbolicIndexingInterface", "Tables", "TruncatedStacktraces"]
-git-tree-sha1 = "c5876dce653513953e145316f1406e8507ec5765"
+git-tree-sha1 = "4848a0542bfa419b44b57d7e016cd82479a8a27c"
 uuid = "0bca4576-84f4-4d90-8ffe-ffa030f20462"
-version = "1.90.0"
+version = "1.91.0"
 
 [[deps.SciMLOperators]]
 deps = ["ArrayInterface", "DocStringExtensions", "Lazy", "LinearAlgebra", "Setfield", "SparseArrays", "StaticArraysCore", "Tricks"]
@@ -1559,9 +1559,9 @@ version = "0.1.1"
 
 [[deps.StaticArrays]]
 deps = ["LinearAlgebra", "Random", "StaticArraysCore", "Statistics"]
-git-tree-sha1 = "2d7d9e1ddadc8407ffd460e24218e37ef52dd9a3"
+git-tree-sha1 = "6aa098ef1012364f2ede6b17bf358c7f1fbe90d4"
 uuid = "90137ffa-7385-5640-81b9-e52037218182"
-version = "1.5.16"
+version = "1.5.17"
 
 [[deps.StaticArraysCore]]
 git-tree-sha1 = "6b7ba252635a5eff6a0b0664a41ee140a1c9e72a"
