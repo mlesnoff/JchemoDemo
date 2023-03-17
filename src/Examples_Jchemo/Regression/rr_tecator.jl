@@ -24,14 +24,7 @@ Xp = savgol(snv(X); f = f, pol = pol, d = d)
 plotsp(Xp, wl_num,
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
-## Splitting Tot = Train + Test
-## The model is fitted on Train, and
-## the generalization error is estimated on Test.
-## Here the splitting is provided by the dataset
-## (variable "typ"), but the data could be splitted 
-## a posteriori (e.g. random sampling with function 
-## "mtest", systematic sampling, etc.) 
-s = Y.typ .== "train"
+s = typ .== "train"
 Xtrain = Xp[s, :]
 Ytrain = Y[s, namy]
 Xtest = rmrow(Xp, s)

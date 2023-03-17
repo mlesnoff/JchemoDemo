@@ -53,7 +53,9 @@ Ttrain = fm.T
 ## Projection of Test in the Train score space
 ## Below function 'transform' has to be qualified
 ## since both packages Jchemo and DataFrames export 
-## a function 'transform'
+## a function 'transform'.
+## This will be the same with common function names
+## such as 'predict', 'coef', etc.
 Ttest = Jchemo.transform(fm, Xtest)
 
 T = vcat(Ttrain, Ttest)

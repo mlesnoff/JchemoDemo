@@ -27,10 +27,9 @@ plotsp(Xp, wl_num,
 ## The model is tuned on Train, and
 ## the generalization error is estimated on Test.
 ## Here the splitting is provided by the dataset
-## (variable "typ"), but the data could be splitted 
-## a posteriori (e.g. random sampling with function 
-## "mtest", systematic sampling, etc.) 
-s = Y.typ .== "train"
+## (= variable "typ"), but data Tot could be splitted 
+## a posteriori (e.g. random sampling, systematic sampling, etc.) 
+s = typ .== "train"
 Xtrain = Xp[s, :]
 Ytrain = Y[s, namy]
 Xtest = rmrow(Xp, s)

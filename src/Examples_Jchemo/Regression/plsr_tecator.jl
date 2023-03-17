@@ -17,7 +17,8 @@ typ = Y.typ
 namy = names(Y)[1:3]
 
 plotsp(X, wl_num,
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+    xlabel = "Wavelength (nm)", 
+    ylabel = "Absorbance").f
 
 f = 15 ; pol = 3 ; d = 2 
 Xp = savgol(snv(X); f = f, pol = pol, d = d) 
@@ -26,12 +27,12 @@ plotsp(Xp, wl_num,
 
 ## Splitting Tot = Train + Test
 ## The model is fitted on Train, and
-## the generalization error is estimated on Test.
+## the generalization error will be estimated on Test.
 ## Here the splitting is provided by the dataset
-## (variable "typ"), but the data could be splitted 
-## a posteriori (e.g. random sampling with function 
-## "mtest", systematic sampling, etc.) 
-s = Y.typ .== "train"
+## (= variable "typ"), but data Tot could be splitted 
+## a posteriori (e.g. random sampling, systematic 
+## sampling, etc.) 
+s = typ .== "train"
 Xtrain = Xp[s, :]
 Ytrain = Y[s, namy]
 Xtest = rmrow(Xp, s)
@@ -78,5 +79,4 @@ f, ax = plotxy(zpred, ytest;
 lines!(ax, sort(zpred), pred_loess; color = :red)
 ablines!(ax, 0, 1)
 f    
-
 
