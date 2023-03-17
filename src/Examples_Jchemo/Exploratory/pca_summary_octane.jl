@@ -1,5 +1,6 @@
 using JLD2, CairoMakie, GLMakie
 using Jchemo, JchemoData
+CairoMakie.activate!()
 
 mypath = dirname(dirname(pathof(JchemoData)))
 db = joinpath(mypath, "data", "octane.jld2") 
@@ -11,8 +12,8 @@ wl = names(X)
 wl_num = parse.(Float64, wl)
 
 ## Model fitting
-fm = pcasvd(X, nlv = 6) ; 
-#fm = pcasvd(X, nlv = 3) ;    # Robust PCA 
+fm = pcasvd(X; nlv = 6) ; 
+#fm = pcasvd(X; nlv = 6) ;    # Robust PCA 
 pnames(fm)
 
 ## Summary of the fitted model
@@ -39,6 +40,8 @@ scatter(z[:, i], z[:, i + 1])
 ## Correlation circle
 z = res.cor_circle
 i = 1
-plotxy(z[:, i], z[:, i + 1]; resolution = (600, 600),
-    circle = true, zeros = true).f
+plotxy(z[:, i], z[:, i + 1]; resolution = (400, 400),
+    circle = true, zeros = true,
+    xlabel = string("PC", i), 
+    ylabel = string("PC", i + 1)).f
 

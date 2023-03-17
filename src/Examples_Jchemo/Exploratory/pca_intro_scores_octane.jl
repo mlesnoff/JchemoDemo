@@ -1,5 +1,6 @@
 using JLD2, CairoMakie, GLMakie
 using Jchemo, JchemoData
+CairoMakie.activate!()  
 
 mypath = dirname(dirname(pathof(JchemoData)))
 db = joinpath(mypath, "data", "octane.jld2") 
@@ -18,15 +19,15 @@ plotsp(X, wl_num;
     title = "Octane data").f
 
 ## Model fitting
-fm = pcasvd(X, nlv = 6) ; 
+fm = pcasvd(X; nlv = 6) ; 
 ## Robust PCA
-#fm = pcasvd(X, nlv = 3) ;  
+#fm = pcasph(X; nlv = 6) ;  
 ## End 
 pnames(fm)
 T = fm.T
 
 ## 2-D Score space 
-plotxy(T[:, 1], T[:, 2]; 
+plotxy(T[:, 1], T[:, 2]; zeros = true,
     xlabel = "PC1", ylabel = "PC2").f
 
 i = 1
@@ -49,8 +50,8 @@ end
 f    
 
 ## 3-D Score space
-CairoMakie.activate!()  
-#GLMakie.activate!() 
+GLMakie.activate!() 
+#CairoMakie.activate!()  
 i = 1
 f = Figure(resolution = (700, 500))
 ax = Axis3(f[1, 1]; perspectiveness = 0.2,

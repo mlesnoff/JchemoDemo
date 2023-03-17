@@ -21,7 +21,7 @@ lev = sort(unique(year))
 nlev = length(lev)
 group_num = recodcat2int(year)
 
-fm = pcasvd(X, nlv = 6) ; 
+fm = pcasvd(X; nlv = 6) ; 
 T = fm.T
 
 ## 2-D Score space

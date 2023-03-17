@@ -33,7 +33,7 @@ plotsp(X, wl_num; nsamp = 10,
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 #### PCAs on X
-fm = pcasvd(X, nlv = 15) ; 
+fm = pcasvd(X; nlv = 15) ; 
 pnames(fm)
 T = fm.T
 

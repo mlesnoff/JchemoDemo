@@ -1,5 +1,6 @@
 using JLD2, CairoMakie, GLMakie
 using Jchemo, JchemoData
+CairoMakie.activate!()  
 
 mypath = dirname(dirname(pathof(JchemoData)))
 db = joinpath(mypath, "data", "octane.jld2") 
@@ -12,8 +13,8 @@ wl_num = parse.(Float64, wl)
 n = nro(X)
 
 ## Model fitting
-fm = pcasvd(X, nlv = 3) ; 
-#fm = pcasvd(X, nlv = 3) ;    # Robust PCA 
+fm = pcasvd(X; nlv = 3) ; 
+#fm = pcasph(X; nlv = 3) ;    # Robust PCA 
 pnames(fm)
 
 ## Score distance (SD)
@@ -39,12 +40,11 @@ f
 ## SD-OD
 sd = occsd(fm).d
 od = occod(fm, X).d
-f, ax = plotxy(sd.dstand, od.dstand;
-    xlabel = "Standardized SD", ylabel = "Standardized OD")
-f
+plotxy(sd.dstand, od.dstand;
+    xlabel = "Standardized SD", ylabel = "Standardized OD").f
 
-CairoMakie.activate!()  
-#GLMakie.activate!() 
+GLMakie.activate!() 
+#CairoMakie.activate!()  
 sd = occsd(fm).d
 od = occod(fm, X).d
 f, ax = plotxy(sd.dstand, od.dstand;
@@ -53,8 +53,8 @@ text!(ax, sd.dstand, od.dstand; text = string.(1:n),
     fontsize = 15)
 f
 
-## Direct computation of SD-OD
-res = occsdod(fm, X)
+## Direct computation of a composite SD-OD
+res = occsdod(fm, X) ;
 pnames(res)
 d = res.d
 f, ax = plotxy(1:n, d.dstand;

@@ -1,6 +1,7 @@
 using JLD2, CairoMakie, GLMakie
 using Jchemo, JchemoData
 using FreqTables
+CairoMakie.activate!() 
 
 mypath = dirname(dirname(pathof(JchemoData)))
 db = joinpath(mypath, "data", "challenge2018.jld2") 
@@ -20,16 +21,18 @@ freqtable(string.(typ, "-", Y.label))
 freqtable(typ, test)
 
 ## Preprocesssing
-f = 21 ; pol = 3 ; d = 2 ;
+f = 21 ; pol = 3 ; d = 2
 Xp = savgol(snv(X); f = f, pol = pol, d = d) 
 
 ## Splitting: Tot = Train + Test
-## The PCA is fitted on Train.
+## The PCA is fitted on Train, and Test will be 
+## the supplementary observations.
 ## Here the splitting is provided by the dataset
-## (variable "typ"), but the data could be splitted 
-## a posteriori (e.g. random sampling with function 
-## "mtest", systematic sampling, etc.) 
+## (= variable "typ"), but data Tot could be splitted 
+## a posteriori (e.g. random sampling, systematic 
+## sampling, etc.) 
 s = Bool.(test)
+## or: s = test .== 1
 Xtrain = rmrow(Xp, s)
 Ytrain = rmrow(Y, s)
 Xtest = Xp[s, :]
@@ -42,25 +45,31 @@ ntest = nro(Xtest)
 nlv = 15
 fm = pcasvd(Xtrain, nlv = nlv) ; 
 res = summary(fm, Xtrain).explvarx
-plotgrid(res.lv, res.pvar; step = 1,
-    xlabel = "PC", ylabel = "P. variance explained").f
+plotgrid(res.lv, res.pvar; step = 2,
+    xlabel = "PC", 
+    ylabel = "Prop. variance explained").f
 
-## Projection of Test in the Train score space
 Ttrain = fm.T
+## Projection of Test in the Train score space
+## Below function 'transform' has to be qualified
+## since both packages Jchemo and DataFrames export 
+## a function 'transform'
 Ttest = Jchemo.transform(fm, Xtest)
 
 T = vcat(Ttrain, Ttest)
-group = vcat(repeat(["0-Train";], ntrain), repeat(["1-Test";], ntest))
+group = vcat(repeat(["0-Train";], ntrain), 
+    repeat(["1-Test";], ntest))
 colm = [:blue, (:red, .5)]
 i = 3
 plotxy(T[:, i], T[:, i + 1], group; color = colm,
-    xlabel = string("PC", i), ylabel = string("PC", i + 1)).f
+    xlabel = string("PC", i), 
+    ylabel = string("PC", i + 1)).f
 
 ## SD and OD distances
 res = occsdod(fm, Xtrain) ; 
 pnames(res)
 dtrain = res.d
-## Values for test
+## Values for Test
 dtest = Jchemo.predict(res, Xtest).d
 
 f = Figure(resolution = (500, 400))
@@ -75,7 +84,8 @@ f
 
 ## Same with plotxy
 d = vcat(dtrain, dtest)
-group = vcat(repeat(["0-Train";], ntrain), repeat(["1-Test";], ntest))
+group = vcat(repeat(["0-Train";], ntrain), 
+    repeat(["1-Test";], ntest))
 colm = [:blue, (:red, .5)]
 plotxy(d.sd_dstand, d.od_dstand, group; color = colm,
     xlabel = "Stand. SD", ylabel = "Stand. OD").f
