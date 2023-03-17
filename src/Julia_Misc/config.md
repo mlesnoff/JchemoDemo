@@ -10,7 +10,7 @@ This script provides some tips about the environment of Julia (orientated for Wi
 #### **Locations**
 
 - By default, Julia is installed at (e.g. for release 1.8.3)  
-"C:\Users\your_user_name\AppData\Local\Programs\Julia 1.8.3"
+*C:\Users\your_user_name\AppData\Local\Programs\Julia 1.8.3*
 
 - During the installation, no need to put a path in the PATH Variable
 
@@ -20,7 +20,7 @@ package (only if Pkg.rm is not enough) may help when there is a compilation prob
 when "using ..." 
 
 - The pre-compiled packages are at
-"C:\Users\your_user_name\.julia\compiled\v1.8"
+*"*C:\Users\your_user_name\.julia\compiled\v1.8*"*
 
 ### **2. INSTALL VSCode**
 
@@ -31,7 +31,7 @@ when "using ..."
 #### **Location**
 
 - By default, VsCode is installed at
-"C:\Users\your_user_name\AppData\Local\Programs\Microsoft VS Code"
+*C:\Users\your_user_name\AppData\Local\Programs\Microsoft VS Code*
 
 #### **Configuration**
 
@@ -45,7 +45,7 @@ when "using ..."
 - Connect VsCode and a given release of Julia 
     - "Manage" ==> Settings ==> Commonly used ==> Extensions ==> Julia ==> Executable path
     - Copy the full path of the location of the file "julia.exe" of the release that has to be used, 
-        e.g.: "C:\Users\your_user_name\AppData\Local\Programs\Julia 1.8.3\bin\julia.exe"
+        e.g.: *C:\Users\your_user_name\AppData\Local\Programs\Julia 1.8.3\bin\julia.exe*
     - If another release has to be used in future sessions, replace this path in the same way, and re-run VsCode 
 
 - Then a REPL (= Julia command console) can be open 
@@ -77,16 +77,16 @@ https://docs.julialang.org/en/v1/manual/faq/#How-can-I-transfer-the-list-of-inst
     (if not, create it)
 - First option (safer)
     - Copy file "Project.toml" from 
-        "C:\Users\your_user_name\.julia\environments\v1.8\" to 
-        "C:\Users\your_user_name\.julia\environments\v1.9\"
+        *C:\Users\your_user_name\.julia\environments\v1.8\* to 
+        *C:\Users\your_user_name\.julia\environments\v1.9\*
     - In the VsCode REPL, use the "package management mode" 
     (by typing `]`) and type command `instantiate`
     - This creates the file "Manifest.toml" corresponding to 
     the contents of "Project.toml" and resolves automatically eventual compatibility constraints
 - Second option
     - Copy files "Project.toml" and "Manifest.toml" from 
-    "C:\Users\your_user_name\.julia\environments\v1.8\" to 
-    "C:\Users\your_user_name\.julia\environments\v1.9\"
+    *C:\Users\your_user_name\.julia\environments\v1.8\* to 
+    *C:\Users\your_user_name\.julia\environments\v1.9\*
     - This will correspond to the same environment as under v1.8 (exactly the same package versions) but do not protect against compatibility problems with the use of v1.9
 
 ### **5. PROJECT ENVIRONMENTS WITH VsCode**
@@ -109,9 +109,9 @@ In a simplified view, a project is a directory and, if this directory contains f
 
 An easy way is the following (many other ways are possible).
 
-- Create an empty directory that will receive the project (e.g. "Nn"), for instance "D:/Users/Tmp/Nn/" 
+- Create an empty directory that will receive the project (e.g. "Nn"), for instance *D:/Users/Tmp/Nn/* 
 - Menu "File" ==> "Open Folder"
-- Select the directory "D:/Users/Tmp/Nn/"
+- Select the directory *D:/Users/Tmp/Nn/*
 - ==> VsCode locates in the corresponding path
 - Install one (any) package, for instance package "StatsBse.jl" from the official Julia pckages repository 
     - In the REPL, use the management mode (`]`) and 
@@ -133,7 +133,7 @@ Any project environment can be loaded using command `activate` in the management
     - `cd(path)`
 
 An easy way to switch from a local environment, e.g. "Nn", to the global environment is as follows. 
-Assume that VsCode is located to "D:/Users/Tmp/Nn/". In the management mode (`]`)
+Assume that VsCode is located to *D:/Users/Tmp/Nn/*. In the management mode (`]`)
 - `activate` : Load the global environment
 - `activate .` : Coming back to the local enviroment
 

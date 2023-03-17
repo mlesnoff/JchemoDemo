@@ -1,11 +1,13 @@
 # JchemoDemo
 
-**JchemoDemo** is a repository containing material (scripts) illustrating selected functions 
-of package [**Jchemo.jl**](https://github.com/mlesnoff/Jchemo.jl).
+**JchemoDemo** is a project (with its [**environment**](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)) containing material demonstrating functions 
+of package [**Jchemo.jl**](https://github.com/mlesnoff/Jchemo.jl). Two types of scripts are provided
 
-1. Scripts specific to **Jchemo.jl** are available [**here**](https://github.com/mlesnoff/JchemoDemo/tree/main/src/Jchemo_Examples). The **datasets** used in the examples are stored in package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl). Some packages have to be installed to run the examples [(**See here**)](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml).
+1. [**Examples with Jchemo.jl**](https://github.com/mlesnoff/JchemoDemo/tree/main/src/Jchemo_Examples)
 
-2. Scripts about generic Julia syntax are available [**here**](https://github.com/mlesnoff/JchemoDemo/tree/main/src/Julia_Misc).
+2. [**Few tips on Julia syntax**](https://github.com/mlesnoff/JchemoDemo/tree/main/src/Julia_Misc)
+
+The **datasets** used in the examples are stored in package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl) (already installed in the [**environment**](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)).
 
 When studying a given script, it is recommended to run the code in the REPL row by row (or by block) to observe the corresponding outputs. 
 
