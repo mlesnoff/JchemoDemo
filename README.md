@@ -1,7 +1,7 @@
 # JchemoDemo
 
 **JchemoDemo** is a project (with its own [**environment**](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)) demonstrating functions 
-of package [**Jchemo.jl**](https://github.com/mlesnoff/Jchemo.jl). This project can be used for trainings. 
+of package [**Jchemo.jl**](https://github.com/mlesnoff/Jchemo.jl). This project is used for trainings. 
 
 Two types of scripts are provided
 
