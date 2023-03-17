@@ -91,6 +91,8 @@ https://docs.julialang.org/en/v1/manual/faq/#How-can-I-transfer-the-list-of-inst
 
 See:
 - https://pkgdocs.julialang.org/v1/
+- https://pkgdocs.julialang.org/v1/getting-started/
+- https://pkgdocs.julialang.org/v1/environments/
 - https://towardsdatascience.com/how-to-setup-project-environments-in-julia-ec8ae73afe9c 
 
 In a simplified view, a project is a directory and, if this directory contains files *Project.toml* and *Manifest.toml*, the project has its own independant environment (project environment).
@@ -143,11 +145,15 @@ Any project environment can be loaded using command `activate` in the REPL manag
 
 - `versioninfo()`
 - `VERSION`
-- `tempdir()` 
+- `tempdir()`   # Location of the default temporary directory 
 - `pwd()`
 - `readdir()`
-- `cd("..")`
+- `cd()`        # Locate in default
+- `cd("..")`    # Locate above 
 - `cd("./Nn/")`
+- `mkdir("dd")` # create sub-directory "dd" under the active path  
+- `rm("dd")`    # remove "dd"
+
 
 #### **Management mode (`]`)**
 
