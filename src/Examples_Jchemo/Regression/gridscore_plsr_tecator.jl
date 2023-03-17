@@ -23,12 +23,6 @@ Xp = savgol(snv(X); f = f, pol = pol, d = d)
 plotsp(Xp, wl_num,
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
-## Splitting Tot = Train + Test
-## The model is tuned on Train, and
-## the generalization error is estimated on Test.
-## Here the splitting is provided by the dataset
-## (= variable "typ"), but data Tot could be splitted 
-## a posteriori (e.g. random sampling, systematic sampling, etc.) 
 s = typ .== "train"
 Xtrain = Xp[s, :]
 Ytrain = Y[s, namy]
@@ -45,16 +39,24 @@ nam = namy[j]
 ytrain = Ytrain[:, nam]
 ytest = Ytest[:, nam]
 
-## Build the splitting Train = Cal+Val
-nval = Int64(round(.30 * ntrain)) # Or: nval = 40
+## Build the splitting Train = Cal + Val
+pct = .30
+nval = Int64(round(pct * ntrain))    # or: nval = 40
 ## Different choices:
 ## (1) Random sampling
 s = sample(1:ntrain, nval; replace = false)
-## (2) Systematic sampling
-s = sampsys(ytrain; k = nval).train
+## (2) Systematic sampling over y
+res = sampsys(ytrain; k = nval)
+s = res.train
 ytrain[s]
 ## (3) Kennard-Stone sampling
-s = sampks(Xtrain; k = nval).train
+## Output 'train' contains higher variability
+## than output 'test'
+res = sampks(Xtrain; k = nval)
+s = res.train
+## (4) Duplex sampling
+res = sampdp(Xtrain; k = nval)
+s = res.train
 ## Selection
 Xcal = rmrow(Xtrain, s)
 ycal = rmrow(ytrain, s)
@@ -89,13 +91,16 @@ fm = plskern(Xtrain, ytrain; nlv = res_sel.sel) ;
 pred = Jchemo.predict(fm, Xtest).pred
 rmsep(pred, ytest)
 
-## Remark:
-## Function "gridscore" is generic for all the functions.
-## Here, it could be used instead of "gridscorelv" 
-## but this is not time-efficient for LV-based methods
+## Remark!!!
+## Function 'gridscore' is generic for all the functions.
+## Here, 'gridscore' could be used instead of 'gridscorelv' 
+## but this is not time-efficient for LV-based methods.
+## Commands below return the same results as 
+## with 'gridscorelv'
 nlv = 0:20
 pars = mpar(nlv = nlv)
 res = gridscore(Xcal, ycal, Xval, yval;  
     score = rmsep, fun = plskern, pars = pars) 
-
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
 

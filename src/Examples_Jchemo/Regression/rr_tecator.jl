@@ -17,12 +17,14 @@ typ = Y.typ
 namy = names(Y)[1:3]
 
 plotsp(X, wl_num,
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+    xlabel = "Wavelength (nm)", 
+    ylabel = "Absorbance").f
 
 f = 15 ; pol = 3 ; d = 2 
 Xp = savgol(snv(X); f = f, pol = pol, d = d) 
 plotsp(Xp, wl_num,
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+    xlabel = "Wavelength (nm)", 
+    ylabel = "Absorbance").f
 
 s = typ .== "train"
 Xtrain = Xp[s, :]
@@ -48,11 +50,11 @@ fm = rr(Xtrain, ytrain; lb = lb) ;
 ## Predictions
 pred = Jchemo.predict(fm, Xtest).pred
 
-## Below, only possible with "rr" (not "rrchol"):
+## Commands below are only possible with "rr" 
+## (not with "rrchol")
 Jchemo.predict(fm, Xtest; lb = 1e-2).pred
 zlb = 10.0.^(-6:-1)
 Jchemo.predict(fm, Xtest; lb = zlb).pred
-## End
 
 rmsep(pred, ytest)
 bias(pred, ytest)
@@ -74,5 +76,4 @@ f, ax = plotxy(zpred, ytest;
 lines!(ax, sort(zpred), pred_loess; color = :red)
 ablines!(ax, 0, 1)
 f    
-
 
