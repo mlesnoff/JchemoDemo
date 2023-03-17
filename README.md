@@ -1,11 +1,13 @@
 # JchemoDemo
 
-**JchemoDemo** is a project (with its [**environment**](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)) containing material demonstrating functions 
+**JchemoDemo** is a project (with its own [**environment**](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)) demonstrating functions 
 of package [**Jchemo.jl**](https://github.com/mlesnoff/Jchemo.jl). Two types of scripts are provided
 
 1. [**Examples with Jchemo.jl**](https://github.com/mlesnoff/JchemoDemo/tree/main/src/Jchemo_Examples)
 
-2. [**Few tips on Julia syntax**](https://github.com/mlesnoff/JchemoDemo/tree/main/src/Julia_Misc)
+2. [**Some Julia syntax**](https://github.com/mlesnoff/JchemoDemo/tree/main/src/Julia_Misc)
+
+Few tips about **Julia** installation and environment are given [**here**](https://github.com/mlesnoff/JchemoDemo/blob/main/src/Julia_Misc/config.md).
 
 The **datasets** used in the examples are stored in package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl) (already installed in the [**environment**](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)).
 
