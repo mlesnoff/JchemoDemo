@@ -15,12 +15,12 @@ ntot = nro(X)
 typ = Y.typ
 namy = names(Y)[1:3]
 
-plotsp(X, wl_num,
+plotsp(X, wl_num;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 f = 15 ; pol = 3 ; d = 2 
 Xp = savgol(snv(X); f = f, pol = pol, d = d) 
-plotsp(Xp, wl_num,
+plotsp(Xp, wl_num;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 s = typ .== "train"
@@ -40,9 +40,11 @@ ytrain = Ytrain[:, nam]
 ytest = Ytest[:, nam]
 
 ## Build the splitting Train = Cal + Val
+## The model will be fitted on cal and 
+## optimized on Val
 pct = .30
 nval = Int64(round(pct * ntrain))    # or: nval = 40
-## Different choices:
+## Different choices to select Val
 ## (1) Random sampling
 s = sample(1:ntrain, nval; replace = false)
 ## (2) Systematic sampling over y
@@ -72,7 +74,7 @@ res[u, :]
 plotgrid(res.nlv, res.y1; step = 2,
     xlabel = "Nb. LVs", ylabel = "RMSEP").f
 
-## Prediction for the optimal model
+## Prediction of Test using the optimal model
 fm = plskern(Xtrain, ytrain; nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
 rmsep(pred, ytest)
@@ -80,7 +82,7 @@ plotxy(vec(pred), ytest; color = (:red, .5), step = 2,
     bisect = true, xlabel = "Prediction", 
     ylabel = "Observed (Test)").f
 
-## Parcimony
+## Parcimony approach
 res_sel = selwold(res.nlv, res.y1; smooth = false, 
     alpha = .05, graph = true) ;
 pnames(res)
@@ -91,12 +93,12 @@ fm = plskern(Xtrain, ytrain; nlv = res_sel.sel) ;
 pred = Jchemo.predict(fm, Xtest).pred
 rmsep(pred, ytest)
 
-## Remark!!!
+## !!! Remark
 ## Function 'gridscore' is generic for all the functions.
 ## Here, 'gridscore' could be used instead of 'gridscorelv' 
 ## but this is not time-efficient for LV-based methods.
 ## Commands below return the same results as 
-## with 'gridscorelv'
+## with 'gridscorelv', but in a slower way
 nlv = 0:20
 pars = mpar(nlv = nlv)
 res = gridscore(Xcal, ycal, Xval, yval;  

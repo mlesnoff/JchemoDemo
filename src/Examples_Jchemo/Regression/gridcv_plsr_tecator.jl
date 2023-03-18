@@ -11,19 +11,17 @@ X = dat.X
 Y = dat.Y 
 wl = names(X)
 wl_num = parse.(Float64, wl) 
-ntot, p = size(X)
+ntot = nro(X)
 typ = Y.typ
 namy = names(Y)[1:3]
 
-plotsp(X, wl_num,
-    xlabel = "Wavelength (nm)", 
-    ylabel = "Absorbance").f
+plotsp(X, wl_num;
+    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 f = 15 ; pol = 3 ; d = 2 
 Xp = savgol(snv(X); f = f, pol = pol, d = d) 
-plotsp(Xp, wl_num,
-    xlabel = "Wavelength (nm)", 
-    ylabel = "Absorbance").f
+plotsp(Xp, wl_num;
+    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 s = typ .== "train"
 Xtrain = Xp[s, :]
@@ -41,15 +39,16 @@ nam = namy[j]
 ytrain = Ytrain[:, nam]
 ytest = Ytest[:, nam]
 
-## Build the segments within Train.
-## Different choices:
-## (1) If K-fold CV
+## The CV is done within Train
+## Different choices of building the segments 
+## (1) K-fold CV
 K = 3
 segm = segmkf(ntrain, K; rep = 10)
-## (2) If "test-set" validation 
+## (2) "Test-set" CV 
 ## ==> splitting Train = Cal + Val
 ## e.g. Val = 30% of traing (Cal = 70%)
-m = round(.30 * ntrain)
+pct = .30
+m = round(pct * ntrain)
 segm = segmts(ntrain, m; rep = 30)
 ## i : segment within a replication
 ## j : replication
@@ -57,7 +56,7 @@ i = 1 ; j = 1
 segm[i]
 segm[i][j]
 
-## CV
+## Tuning
 nlv = 0:20
 rescv = gridcvlv(Xtrain, ytrain; segm = segm, 
     score = rmsep, fun = plskern, nlv = nlv, 
@@ -73,7 +72,7 @@ res[u, :]
 plotgrid(res.nlv, res.y1; step = 2,
     xlabel = "Nb. LVs", ylabel = "RMSEP").f
 
-## Predictions for the optimal model on Test
+## Prediction of Test using the optimal model
 fm = plskern(Xtrain, ytrain; nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
 rmsep(pred, ytest)
@@ -81,12 +80,13 @@ plotxy(vec(pred), ytest; color = (:red, .5), step = 2,
     bisect = true, xlabel = "Prediction", 
     ylabel = "Observed (Test)").f
 
-## Variability between folds and replications
+## Variability of the performance 
+## between folds and replications
 group = string.(res_rep.segm, "-", res_rep.repl)
 plotgrid(res_rep.nlv, res_rep.y1, group; step = 2,
     xlabel = "Nb. LVs", ylabel = "RMSEP", leg = false).f
 
-## Parcimony
+## Parcimony approach
 res_sel = selwold(res.nlv, res.y1; smooth = false, 
     alpha = .05, graph = true) ;
 pnames(res)
@@ -97,14 +97,17 @@ fm = plskern(Xtrain, ytrain; nlv = res_sel.sel) ;
 pred = Jchemo.predict(fm, Xtest).pred
 rmsep(pred, ytest)
 
-## Remark:
+## !!! Remark
 ## Function "gridcv" is generic for all the functions.
 ## Here, it could be used instead of "gridcvlv" 
-## but this is not time-efficient for LV-based methods
+## but this is not time-efficient for LV-based methods.
+## Commands below return the same results as 
+## with 'gridcvlv', but in a slower way
 nlv = 0:20
 pars = mpar(nlv = nlv)
-rescv = gridcv(Xtrain, ytrain; segm = segm, 
+res = gridcv(Xtrain, ytrain; segm = segm, 
     score = rmsep, fun = plskern, pars = pars, 
-    verbose = true) ;
-pnames(rescv)
+    verbose = true).res
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
 

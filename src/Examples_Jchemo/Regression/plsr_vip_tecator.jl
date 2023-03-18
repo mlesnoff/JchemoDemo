@@ -14,12 +14,12 @@ ntot, p = size(X)
 typ = Y.typ
 namy = names(Y)[1:3]
 
-plotsp(X, wl_num,
+plotsp(X, wl_num;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 f = 15 ; pol = 3 ; d = 2 
 Xp = savgol(snv(X); f = f, pol = pol, d = d) 
-plotsp(Xp, wl_num,
+plotsp(Xp, wl_num;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 s = typ .== "train"
@@ -121,7 +121,7 @@ f = Figure(resolution = (500, 400))
 ax = Axis(f[1, 1];
     xlabel = "Wavelength (nm)", 
     ylabel = "VIP")
-scatter!(ax, wl_num, res.imp; color = (:red, .5))
+scatter!(ax, wl_num; res.imp; color = (:red, .5))
 u = [910; 950]
 vlines!(ax, u; color = :grey, linewidth = 1)
 hlines!(ax, 1)

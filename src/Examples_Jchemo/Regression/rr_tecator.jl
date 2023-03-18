@@ -16,13 +16,13 @@ y = Y.fat
 typ = Y.typ
 namy = names(Y)[1:3]
 
-plotsp(X, wl_num,
+plotsp(X, wl_num;
     xlabel = "Wavelength (nm)", 
     ylabel = "Absorbance").f
 
 f = 15 ; pol = 3 ; d = 2 
 Xp = savgol(snv(X); f = f, pol = pol, d = d) 
-plotsp(Xp, wl_num,
+plotsp(Xp, wl_num;
     xlabel = "Wavelength (nm)", 
     ylabel = "Absorbance").f
 
