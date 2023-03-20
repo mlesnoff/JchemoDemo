@@ -14,6 +14,7 @@ year = dat.Y.year
 wl = names(X)
 wl_num = parse.(Float64, wl) 
 tab(year)
+
 s = year .<= 2012
 Xtrain = X[s, :]
 ytrain = y[s]
@@ -39,6 +40,8 @@ Xcal = rmrow(Xtrain, s)
 ycal = rmrow(ytrain, s)
 Xval = Xtrain[s, :]
 yval = ytrain[s, :]
+ncal = ntrain - nval
+(ntot = ntot, ntrain, ntest, ncal, nval)
 
 ## PLSR
 nlv = 0:40
@@ -50,6 +53,7 @@ plotgrid(res.nlv, res.y1; step = 2,
     xlabel = "Nb. LVs", ylabel = "RMSEP").f
 fm = plskern(Xtrain, ytrain; nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred ;
+println(rmsep(pred, ytest))
 mse(pred, ytest)
 f, ax = plotxy(vec(pred), ytest; color = (:red, .5),
     xlabel = "Predicted", ylabel = "Observed (Test)",
@@ -57,7 +61,7 @@ f, ax = plotxy(vec(pred), ytest; color = (:red, .5),
 ablines!(ax, 0, 1)
 f 
 
-## LWMLR-S(PCA) = LWR(Naes et al.1990)
+## LWMLR-S with PCA = "LWR" (Naes et al.1990)
 metric = ["eucl", "mahal"]
 h = [1; 2; 6] ; k = [50; 100; 150]  
 nlv = Int64.(LinRange(5, 20, 4))
@@ -74,12 +78,13 @@ fm = lwmlr_s(Xtrain, ytrain; metric = res.metric[u],
     h = res.h[u], k = res.k[u], nlv = res.nlv[u], 
     typ = res.typ[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
+println(rmsep(pred, ytest))
 mse(pred, ytest)
 plotxy(vec(pred), ytest; color = (:red, .5),
     bisect = true, xlabel = "Prediction",
     ylabel = "Observed (Test)").f
 
-## LWMLR-S(PLS)
+## LWMLR-S with PLS
 metric = ["eucl", "mahal"]
 h = [1; 2; 6] ; k = [50; 100; 150]  
 nlv = Int64.(LinRange(5, 20, 4))
@@ -96,12 +101,13 @@ fm = lwmlr_s(Xtrain, ytrain; metric = res.metric[u],
     h = res.h[u], k = res.k[u], nlv = res.nlv[u], 
     typ = res.typ[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
+println(rmsep(pred, ytest))
 mse(pred, ytest)
 plotxy(vec(pred), ytest; color = (:red, .5),
     bisect = true, xlabel = "Prediction",
     ylabel = "Observed (Test)").f
 
-## LWMLR-S(DKPLS)
+## LWMLR-S with DKPLS
 metric = ["eucl", "mahal"]
 h = [1; 2; 6] ; k = [50; 100; 150]  
 nlv = Int64.(LinRange(5, 20, 4))
@@ -119,7 +125,10 @@ fm = lwmlr_s(Xtrain, ytrain; metric = res.metric[u],
     h = res.h[u], k = res.k[u], nlv = res.nlv[u], 
     gamma = res.gamma[u], typ = res.typ[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
+println(rmsep(pred, ytest))
 mse(pred, ytest)
 plotxy(vec(pred), ytest; color = (:red, .5),
     bisect = true, xlabel = "Prediction",
     ylabel = "Observed (Test)").f
+
+

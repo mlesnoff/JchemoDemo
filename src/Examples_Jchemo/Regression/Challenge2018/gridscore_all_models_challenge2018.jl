@@ -1,6 +1,6 @@
 using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
-using FreqTables, Loess
+using FreqTables
 
 mypath = dirname(dirname(pathof(JchemoData)))
 db = joinpath(mypath, "data", "challenge2018.jld2") 
@@ -26,12 +26,6 @@ f = 21 ; pol = 3 ; d = 2
 Xp = savgol(snv(X); f = f, pol = pol, d = d) ;
 plotsp(Xp, wl_num; nsamp = 20).f
 
-## Splitting Tot = Train + Test
-## The model is tuned on Train, and
-## the generalization error is estimated on Test.
-## Here the splitting is provided by the dataset
-## (= variable "typ"), but data Tot could be splitted 
-## a posteriori (e.g. random sampling, systematic sampling, etc.) 
 s = Bool.(test)
 Xtrain = rmrow(Xp, s)
 ytrain = rmrow(y, s)
@@ -41,9 +35,7 @@ ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
-## Splitting Train = Cal + Val
-#pct = .20
-#nval = Int64.(round(pct * ntrain))
+## Train = Cal + Val
 nval = 300 
 ncal = ntrain - nval 
 s = sample(1:ntrain, nval; replace = false)
@@ -68,20 +60,16 @@ fm = plskern(Xtrain, ytrain; nlv = res.nlv[u],
     scal = res.scal[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
 println(rmsep(pred, ytest))
-zpred = vec(pred)
-zfm = loess(zpred, ytest, span = 2 / 3) ;
-z = Loess.predict(zfm, sort(zpred))
-f, ax = plotxy(zpred, ytest; color = (:grey, .5),
-    xlabel = "Predicted", ylabel = "Observed (Test)",
-    resolution = (500, 400))
-lines!(ax, sort(zpred), z; color = :red)
-ablines!(ax, 0, 1)
-f    
+plotxy(vec(pred), ytest; resolution = (500, 400),
+    color = (:red, .5), bisect = true, 
+    xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
 #### PLSRAVG 
 nlv = ["0:30"; "0:50"; "0:70"; "0:100"]
-typf = ["unif"; "aic"; "cv"; "stack"]
+typf = ["unif"]
+#typf = ["unif"; "aic"; "cv"; "stack"]
 pars = mpar(nlv = nlv, typf = typf)
+length(pars[1])
 res = gridscore(Xcal, ycal, Xval, yval;
     score = rmsep, fun = plsravg, pars = pars,
     verbose = true) 
@@ -108,15 +96,13 @@ rmsep(pred, ytest)
 
 #### COVSELR
 nlv = [10; 20; 30; 40]
-typ = ["cov"; "cor"]
-pars = mpar(nlv = nlv, typ = typ)
+pars = mpar(nlv = nlv)
 res = gridscore(Xcal, ycal, Xval, yval;
     score = rmsep, fun = covselr, pars = pars, 
     verbose = true)
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-fm = covselr(Xtrain, ytrain; nlv = res.nlv[u],
-    typ = res.typ[u]) ;
+fm = covselr(Xtrain, ytrain; nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
 rmsep(pred, ytest)
 
@@ -125,8 +111,8 @@ lb = 10.0.^(-15:3)
 gamma = 10.0.^(-3:5) 
 pars = mpar(gamma = gamma) 
 length(pars[1])
-## To decrease the computation time 
-## Sampling in Cal
+## To decrease the computation time, 
+## sampling in Cal
 m = 1000
 s = sample(1:ncal, m; replace = false)
 zXcal = Xcal[s, :]
@@ -145,6 +131,7 @@ rmsep(pred, ytest)
 #### KPLSR
 nlv = 0:100 
 pars = mpar(gamma = 10.0.^(-3:5))
+length(pars[1])
 ## To decrease the computation time 
 ## Sampling in Cal
 m = 1000
@@ -160,8 +147,7 @@ res[u, :]
 fm = kplsr(Xtrain, ytrain; nlv = res.nlv[u], 
     gamma = res.gamma[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred ;
-println(rmsep(pred, ytest))
-# End
+rmsep(pred, ytest)
 
 #### DKPLSR
 nlv = 0:100 
@@ -198,8 +184,8 @@ fm = lwplsr(Xtrain, ytrain; nlvdis = res.nlvdis[u],
     nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
 println(rmsep(pred, ytest))
-plotxy(vec(pred), ytest; color = (:red, .5),
-    bisect = true, 
+plotxy(vec(pred), ytest; resolution = (500, 400),
+    color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
 fm = lwplsr(Xtrain, ytrain; nlvdis = 15,
@@ -255,13 +241,7 @@ fm = lwplsr_s(Xtrain, ytrain; nlv0 = res.nlv0[u],
     nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
     k = res.k[u], nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
-println(rmsep(pred, ytest))
-
-fm = lwplsr_s(Xtrain, ytrain; nlv0 = 30, nlvdis = 0,
-           metric = "eucl", h = 2, k = 250, nlv = 15,
-           scal = false) ;
-@time pred = Jchemo.predict(fm, Xtest).pred ;
-println(rmsep(pred, ytest))
+rmsep(pred, ytest)
 
 #### CPLSR-AVG 
 ncla = 2:5 ; nlv_da = 1:5
@@ -307,7 +287,8 @@ rmsep(pred, ytest)
 #### RFR
 colsample_bynode = LinRange(.10, .50, 5)
 max_depth = [10; 20; 2000]
-pars = mpar(colsample_bynode = colsample_bynode, max_depth = max_depth)
+pars = mpar(colsample_bynode = colsample_bynode, 
+    max_depth = max_depth)
 length(pars[1])
 res = gridscore(Xcal, ycal, Xval, yval;
     score = rmsep, fun = rfr_xgb, pars = pars, 

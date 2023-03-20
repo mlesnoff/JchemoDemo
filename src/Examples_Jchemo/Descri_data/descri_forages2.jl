@@ -15,6 +15,8 @@ summ(Y)
 typ = Y.typ
 test = Y.test
 
+summ(X).res
+
 freqtable(typ, test)
 
 # Tot ==> Train + Test

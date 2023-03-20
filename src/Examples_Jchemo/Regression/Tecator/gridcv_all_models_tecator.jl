@@ -1,6 +1,5 @@
 using JLD2, CairoMakie
 using Jchemo, JchemoData
-using Loess
 
 mypath = dirname(dirname(pathof(JchemoData)))
 db = joinpath(mypath, "data", "tecator.jld2") 
@@ -23,12 +22,6 @@ Xp = savgol(snv(X); f = f, pol = pol, d = d)
 plotsp(Xp, wl_num;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
-## Splitting Tot = Train + Test
-## The model is tuned on Train, and
-## the generalization error is estimated on Test.
-## Here the splitting is provided by the dataset
-## (= variable "typ"), but data Tot could be splitted 
-## a posteriori (e.g. random sampling, systematic sampling, etc.) 
 s = typ .== "train"
 Xtrain = Xp[s, :]
 Ytrain = Y[s, namy]
@@ -39,17 +32,13 @@ ntest = nro(Xtest)
 ntot = ntrain + ntest
 (ntot = ntot, ntrain, ntest)
 
-## Work on the second y-variable  
-j = 2
+j = 2  # y-variable
 nam = namy[j]
 ytrain = Ytrain[:, nam]
 ytest = Ytest[:, nam]
 
-## Replicated K-fold CV
 segm = segmkf(ntrain, 4; rep = 20)
-## Replicated test-set CV
-#m = round(.30 * ntrain)
-#segm = segmts(ntrain, m; rep = 30)
+zsegm = segm[1:3] # Only 3 reps for slow models
 
 #### PLSR
 nlv = 0:40
@@ -62,15 +51,9 @@ res[u, :]
 fm = plskern(Xtrain, ytrain; nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred ;
 println(rmsep(pred, ytest))
-zpred = vec(pred)
-zfm = loess(zpred, Float64.(ytest), span = 2 / 3) ;
-z = Loess.predict(zfm, sort(zpred))
-f, ax = plotxy(zpred, ytest;
-    xlabel = "Predicted", ylabel = "Observed (Test)",
-    resolution = (450, 350))
-lines!(ax, sort(zpred), z; color = :red)
-ablines!(ax, 0, 1)
-f    
+plotxy(vec(pred), ytest; resolution = (500, 400),
+    color = (:red, .5), bisect = true, 
+    xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
 #### PLSR-AVG
 nlv = ["0:10"; "0:20"; "0:30"; "0:50"]
@@ -126,15 +109,9 @@ fm = krr(Xtrain, ytrain; lb = res.lb[u],
     gamma = res.gamma[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
 println(rmsep(pred, ytest))
-zpred = vec(pred)
-zfm = loess(zpred, Float64.(ytest), span = 2 / 3) ;
-z = Loess.predict(zfm, sort(zpred))
-f, ax = plotxy(zpred, ytest;
-    xlabel = "Predicted", ylabel = "Observed (Test)",
-    resolution = (450, 350))
-lines!(ax, sort(zpred), z; color = :red)
-ablines!(ax, 0, 1)
-f  
+plotxy(vec(pred), ytest; resolution = (500, 400),
+    color = (:red, .5), bisect = true, 
+    xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
 #### KPLSR
 nlv = 0:50
@@ -195,15 +172,9 @@ fm = lwplsr(Xtrain, ytrain; nlvdis = res.nlvdis[u],
     nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
 println(rmsep(pred, ytest))
-zpred = vec(pred)
-zfm = loess(zpred, Float64.(ytest), span = 2 / 3) ;
-z = Loess.predict(zfm, sort(zpred))
-f, ax = plotxy(zpred, ytest;
-    xlabel = "Predicted", ylabel = "Observed (Test)",
-    resolution = (450, 350))
-lines!(ax, sort(zpred), z; color = :red)
-ablines!(ax, 0, 1)
-f    
+plotxy(vec(pred), ytest; resolution = (500, 400),
+    color = (:red, .5), bisect = true, 
+    xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
 #### LWPLSR-S
 nlv0 = [15; 20; 30; 40]
@@ -227,25 +198,18 @@ fm = lwplsr_s(Xtrain, ytrain; nlv0 = res.nlv0[u],
     k = res.k[u], nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
 println(rmsep(pred, ytest))
-zpred = vec(pred)
-zfm = loess(zpred, Float64.(ytest), span = 2 / 3) ;
-z = Loess.predict(zfm, sort(zpred))
-f, ax = plotxy(zpred, ytest;
-    xlabel = "Predicted", ylabel = "Observed (Test)",
-    resolution = (450, 350))
-lines!(ax, sort(zpred), z; color = :red)
-ablines!(ax, 0, 1)
-f    
+plotxy(vec(pred), ytest; resolution = (500, 400),
+    color = (:red, .5), bisect = true, 
+    xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
 #### LWPLSR-AVG
-zsegm = segmkf(ntrain, 4; rep = 5)
 nlvdis = [10; 15; 25] ; metric = ["mahal"] 
 h = [1; 2; 6; Inf] ; k = [50; 100; 150]  
 nlv = ["0:10"; "0:20"; "0:30"]
 pars = mpar(nlvdis = nlvdis, metric = metric, h = h, 
     k = k, nlv = nlv) 
 length(pars[1])
-res = gridcv(Xtrain, ytrain; segm = segm,
+res = gridcv(Xtrain, ytrain; segm = zsegm,
     score = rmsep, fun = lwplsravg, pars = pars, 
     verbose = true).res 
 u = findall(res.y1 .== minimum(res.y1))[1] 
@@ -257,7 +221,6 @@ pred = Jchemo.predict(fm, Xtest).pred
 rmsep(pred, ytest)
 
 #### CPLSR-AVG
-
 ncla = 2:5 ; nlv_da = 1:5
 nlv = ["0:10"; "0:15"; "0:20"; 
     "5:15"; "5:20"]
@@ -274,14 +237,8 @@ fm = cplsravg(Xtrain, ytrain; ncla = res.ncla[u],
 pred = Jchemo.predict(fm, Xtest).pred 
 rmsep(pred, ytest)
 
-ncla = 2 ; nlv_da = 3 ; nlv = "5:15"
-fm = cplsravg(Xtrain, ytrain; 
-    ncla = ncla, nlv_da = nlv_da, nlv = nlv) ;
-@time res = Jchemo.predict(fm, Xtest) ;
-rmsep(res.pred, ytest)
-
 #### KNNR
-nlvdis = [15; 20]  ; metric = ["mahal"] 
+nlvdis = [15; 20]  ; metric = ["eucl"; "mahal"] 
 h = [1; 2; 4; Inf] ;
 k = [1; collect(5:10:100)] 
 pars = mpar(nlvdis = nlvdis, metric = metric, 
@@ -303,7 +260,7 @@ epsilon = (.1, .25)
 gamma = 10.0.^(-3:3)
 pars = mpar(cost = cost, epsilon = epsilon, gamma = gamma)
 length(pars[1])
-res = gridcv(Xtrain, ytrain; segm = segm,
+res = gridcv(Xtrain, ytrain; segm = zsegm,
     score = rmsep, fun = svmr, pars = pars, 
     verbose = true).res ;
 u = findall(res.y1 .== minimum(res.y1))[1]
@@ -316,9 +273,10 @@ rmsep(pred, ytest)
 #### RFR 
 colsample_bynode = LinRange(.10, .50, 5)
 max_depth = [6; 10; 20; 2000]
-pars = mpar(colsample_bynode = colsample_bynode, max_depth = max_depth)
+pars = mpar(colsample_bynode = colsample_bynode, 
+    max_depth = max_depth)
 length(pars[1])
-res = gridcv(Xtrain, ytrain; segm = segm,
+res = gridcv(Xtrain, ytrain; segm = zsegm,
     score = rmsep, fun = rfr_xgb, pars = pars, 
     verbose = true).res ;
 u = findall(res.y1 .== minimum(res.y1))[1]
@@ -331,7 +289,6 @@ pred = Jchemo.predict(fm, Xtest).pred
 rmsep(pred, ytest)
 
 #### XGBOOSTR 
-zsegm = segmkf(ntrain, 4; rep = 3)
 eta = [.1; .3]
 colsample_bynode = LinRange(.10, .50, 5)
 max_depth = [6; 10; 50; 2000]

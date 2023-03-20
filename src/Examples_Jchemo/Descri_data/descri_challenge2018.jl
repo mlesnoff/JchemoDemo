@@ -1,4 +1,4 @@
-using JLD2, CairoMakie, StatsBase, FreqTables
+using JLD2, CairoMakie, FreqTables
 using Jchemo, JchemoData
 
 mypath = dirname(dirname(pathof(JchemoData)))
@@ -15,6 +15,8 @@ summ(Y)
 y = Y.conc
 typ = Y.typ
 test = Y.test
+
+summ(X).res
 
 lev = mlev(typ)
 nlev = length(lev)
@@ -33,7 +35,7 @@ Xp = savgol(snv(X); f = f, pol = pol, d = d)
 plotsp(Xp, wl_num; nsamp = 10,
     xlabel = "Wavelength (nm)", ylabel = "Reflectance").f
 
-## Total ==> Train + Test
+## Tot = Train + Test
 s = Bool.(test)
 Xtrain = rmrow(Xp, s)
 Ytrain = rmrow(Y, s)
@@ -153,7 +155,7 @@ f = Figure(resolution = (500, 400))
 ax = Axis(f[1, 1], 
     xticks = (0:1, ["Train", "Test"]),
     xlabel = "Group", ylabel = "Protein")
-boxplot!(ax, test, y; width = .5, 
+boxplot!(ax, test, y; width = .3, 
     show_notch = true)
 f
 

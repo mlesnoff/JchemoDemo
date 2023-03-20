@@ -12,26 +12,17 @@ Y = dat.Y
 wl = names(X)
 wl_num = parse.(Float64, wl) 
 ntot = nro(X)
-y = Y.fat
 typ = Y.typ
 namy = names(Y)[1:3]
 
 plotsp(X, wl_num;
-    xlabel = "Wavelength (nm)", 
-    ylabel = "Absorbance").f
+    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 f = 15 ; pol = 3 ; d = 2 
 Xp = savgol(snv(X); f = f, pol = pol, d = d) 
 plotsp(Xp, wl_num;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
-## Splitting Tot = Train + Test
-## The model is fitted on Train, and
-## the generalization error will be estimated on Test.
-## Here the splitting is provided by the dataset
-## (= variable "typ"), but data Tot could be splitted 
-## a posteriori (e.g. random sampling, systematic 
-## sampling, etc.) 
 s = typ .== "train"
 Xtrain = Xp[s, :]
 Ytrain = Y[s, namy]
@@ -42,41 +33,33 @@ ntest = nro(Xtest)
 ntot = ntrain + ntest
 (ntot = ntot, ntrain, ntest)
 
-## Work on the second y-variable 
-j = 2
+j = 2  # y-variable
 nam = namy[j]
 ytrain = Ytrain[:, nam]
 ytest = Ytest[:, nam]
 
-## Model fitting
-nlv = 15
-fm = plskern(Xtrain, ytrain; nlv = nlv) ;
-pnames(fm)
+gamma = 100
+lb = 1e-3
+fm = krr(Xtrain, ytrain; gamma = gamma, 
+    lb = lb) ;
 
-## Predictions
 pred = Jchemo.predict(fm, Xtest).pred
-
-Jchemo.predict(fm, Xtest; nlv = 2).pred
-Jchemo.predict(fm, Xtest; nlv = 0:2).pred
 
 rmsep(pred, ytest)
 bias(pred, ytest)
 mse(pred, ytest)
 
 zpred = vec(pred)
-f, ax = plotxy(zpred, ytest;
-    xlabel = "Predicted (Test)", ylabel = "Observed",
-    resolution = (500, 400))
-ablines!(ax, 0, 1)
-f   
+plotxy(zpred, ytest; resolution = (500, 400),
+    color = (:red, .5), bisect = true, 
+    xlabel = "Prediction", ylabel = "Observed (Test)").f   
 
-## Using Loess
-zfm = loess(zpred, ytest, span = 2 / 3) ;
+zfm = loess(zpred, ytest; span = 2/3) ;
 pred_loess = Loess.predict(zfm, sort(zpred))
 f, ax = plotxy(zpred, ytest;
     xlabel = "Predicted", ylabel = "Observed",
     resolution = (500, 400))
 lines!(ax, sort(zpred), pred_loess; color = :red)
-ablines!(ax, 0, 1)
+ablines!(ax, 0, 1; color = :grey)
 f    
 

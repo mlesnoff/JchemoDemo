@@ -14,6 +14,8 @@ tab(year)
 wl = names(X)
 wl_num = parse.(Float64, wl)
 
+summ(X).res
+
 lev = mlev(year)
 nlev = length(lev) 
 
@@ -30,6 +32,7 @@ plotsp(Xp, wl_num; nsamp = 10,
 #### PCA
 fm = pcasvd(Xp, nlv = 10) ; 
 pnames(fm)
+T = fm.T
 
 res = summary(fm, Xp) ;
 pnames(res)
@@ -37,11 +40,11 @@ z = res.explvarx
 plotgrid(z.lv, 100 * z.pvar; step = 1,
     xlabel = "Nb. PCs", ylabel = "% variance explained").f
 
-T = fm.T
-plotxy(T[:, 1], T[:, 2]; color = (:red, .5),
+i = 1
+plotxy(T[:, i], T[:, i + 1]; color = (:red, .5),
     xlabel = "PC1", ylabel = "PC2").f
 
-plotxy(T[:, 1], T[:, 2], year; ellipse = true,
+plotxy(T[:, i], T[:, i + 1], year; ellipse = true,
     xlabel = "PC1", ylabel = "PC2").f
 
 ## Variable y

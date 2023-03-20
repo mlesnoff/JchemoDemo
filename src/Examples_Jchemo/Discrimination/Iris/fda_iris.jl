@@ -30,17 +30,17 @@ lev = fm.lev
 nlev = length(lev)
 
 fm.T
-# Projections of the class centers to the score space
+# Class centers projected on the score space
 ct = fm.Tcenters
 
 f, ax = plotxy(fm.T[:, 1], fm.T[:, 2], ytrain;
-    ellipse = true, title = "FDA")
+    ellipse = true, title = "FDA", zeros = true)
 scatter!(ax, ct[:, 1], ct[:, 2],
     markersize = 10, color = :red)
 f
 
 # Projection of Xtest to the score space
-Jchemo.transform(fm, Xtest)
+Ttest = Jchemo.transform(fm, Xtest)
 
 # X-loadings matrix
 # = coefficients of the linear discriminant function

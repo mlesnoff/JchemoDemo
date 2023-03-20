@@ -1,4 +1,4 @@
-using JLD2, CairoMakie, StatsBase
+using JLD2, CairoMakie
 using Jchemo, JchemoData
 using Loess
 
@@ -33,46 +33,51 @@ ntest = nro(Xtest)
 ntot = ntrain + ntest
 (ntot = ntot, ntrain, ntest)
 
-## Work on the second y-variable 
-j = 2
+j = 2  # y-variable
 nam = namy[j]
 ytrain = Ytrain[:, nam]
 ytest = Ytest[:, nam]
 
-## Build the splitting Train = Cal + Val
-## The model will be fitted on cal and 
-## optimized on Val
+## The CV is done within Train, and
+## the generalization error is estimated on Test
+## Different choices of building the segments 
+## within Train
+## (1) Replicated K-fold CV
+K = 3
+segm = segmkf(ntrain, K; rep = 10)
+## (2) Replicated "Test-set" CV 
+## ==> splitting Train = Cal + Val
+## e.g. Val = 30% of traing (Cal = 70%)
 pct = .30
-nval = Int64(round(pct * ntrain))    # or: nval = 40
-## Different choices to select Val
-## (1) Random sampling
-s = sample(1:ntrain, nval; replace = false)
-## (2) Systematic sampling over y
-res = sampsys(ytrain; k = nval)
-s = res.train
-ytrain[s]
-## (3) Kennard-Stone sampling
-## Output 'train' contains higher variability
-## than output 'test'
-res = sampks(Xtrain; k = nval)
-s = res.train
-## (4) Duplex sampling
-res = sampdp(Xtrain; k = nval)
-s = res.train
-## Selection
-Xcal = rmrow(Xtrain, s)
-ycal = rmrow(ytrain, s)
-Xval = Xtrain[s, :]
-yval = ytrain[s, :]
+m = round(pct * ntrain)
+segm = segmts(ntrain, m; rep = 30)
+## i : segment within a replication
+## j : replication
+i = 1 ; j = 1
+segm[i]
+segm[i][j]
 
 ## Tuning
 nlv = 0:20
-res = gridscorelv(Xcal, ycal, Xval, yval; 
-    score = rmsep, fun = plskern, nlv = nlv) 
+rescv = gridcvlv(Xtrain, ytrain; segm = segm, 
+    score = rmsep, fun = plskern, nlv = nlv, 
+    verbose = true) ;
+pnames(rescv)
+## Results for each replication
+res_rep = rescv.res_rep
+## Average results over the replications
+res = rescv.res
+
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 plotgrid(res.nlv, res.y1; step = 2,
     xlabel = "Nb. LVs", ylabel = "RMSEP").f
+
+## Variability of the performance 
+## between folds and replications
+group = string.(res_rep.segm, "-", res_rep.repl)
+plotgrid(res_rep.nlv, res_rep.y1, group; step = 2,
+    xlabel = "Nb. LVs", ylabel = "RMSEP", leg = false).f
 
 ## Prediction of Test using the optimal model
 fm = plskern(Xtrain, ytrain; nlv = res.nlv[u]) ;
@@ -94,15 +99,16 @@ pred = Jchemo.predict(fm, Xtest).pred
 rmsep(pred, ytest)
 
 ## !!! Remark
-## Function 'gridscore' is generic for all the functions.
-## Here, 'gridscore' could be used instead of 'gridscorelv' 
+## Function "gridcv" is generic for all the functions.
+## Here, it could be used instead of "gridcvlv" 
 ## but this is not time-efficient for LV-based methods.
 ## Commands below return the same results as 
-## with 'gridscorelv', but in a slower way
+## with 'gridcvlv', but in a slower way
 nlv = 0:20
 pars = mpar(nlv = nlv)
-res = gridscore(Xcal, ycal, Xval, yval;  
-    score = rmsep, fun = plskern, pars = pars) 
+res = gridcv(Xtrain, ytrain; segm = segm, 
+    score = rmsep, fun = plskern, pars = pars, 
+    verbose = true).res
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 
