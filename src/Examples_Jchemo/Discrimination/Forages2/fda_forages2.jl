@@ -42,13 +42,10 @@ fm = fda(Ttrain, ytrain; nlv = 2) ;
 pnames(fm)
 lev = fm.lev
 nlev = length(lev)
-ct = fm.Tcenters
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
+plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
     resolution = (800, 400), ellipse = true, 
     title = "FDA").f
-scatter!(ax, ct[:, 1], ct[:, 2],
-    markersize = 10, color = :red)
-f
+
 ## 2) FDA using a pseudo-inverse 
 fm = fda(Xtrain, ytrain; nlv = 2,
     pseudo = true) ;
@@ -63,8 +60,8 @@ f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
 scatter!(ax, ct[:, 1], ct[:, 2],
     markersize = 10, color = :red)
 f
-## This approaches overfits the 
-## discrimination of new observations
+## Here, using a pseudo-inverse highly overfits 
+## the discrimination of new observations
 Ttest = Jchemo.transform(fm, Xtest)
 i = 1
 s = ytest .== lev[i]
