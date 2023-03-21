@@ -26,8 +26,6 @@ ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
-######## End Data
-
 ## Train ==> Cal + Val
 pct = .30
 nval = Int64.(round(pct * ntrain))
@@ -38,7 +36,6 @@ ycal = rmrow(ytrain, s)
 Xval = Xtrain[s, :] 
 yval = ytrain[s] 
 (ntot = ntot, ntrain, ncal, nval, ntest)
-## End 
 
 nlv = 0:50
 res = gridscorelv(Xcal, ycal, Xval, yval; 

@@ -26,8 +26,6 @@ ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
-######## End Data
-
 K = 3 ; segm = segmkf(ntrain, K; rep = 10)         # K-fold CV   
 #m = 100 ; segm = segmts(ntrain, m; rep = 30)      # Test-set CV
 

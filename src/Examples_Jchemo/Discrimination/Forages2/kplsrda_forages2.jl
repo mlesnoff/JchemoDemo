@@ -27,13 +27,12 @@ ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
-######## End Data
-
-gamma = 100
+gamma = .001
 fm = kplsrda(Xtrain, ytrain; nlv = 15, 
-    gamma = gamma) ;
+    gamma = gamma, scal = true) ;
 pnames(fm)
 pnames(fm.fm)
+typeof(fm.fm)
 
 res = Jchemo.predict(fm, Xtest)
 pnames(res)
@@ -42,11 +41,5 @@ res.posterior
 
 err(pred, ytest)
 freqtable(vec(pred), ytest)
-
-## Averaging
-nlv = "0:20"
-fm = plsrdaavg(Xtrain, ytrain; nlv = nlv) ;
-pred = Jchemo.predict(fm, Xtest).pred
-err(pred, ytest)
 
 

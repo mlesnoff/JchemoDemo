@@ -27,17 +27,17 @@ ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
-######## End Data
-
+## Different types of PLSDA
 fm = plsrda(Xtrain, ytrain; nlv = 15) ;
 #fm = plslda(Xtrain, ytrain; nlv = 15) ;
 #fm = plsqda(Xtrain, ytrain; nlv = 15) ;
 #fm = plsqda(Xtrain, ytrain; nlv = 15, prior = "prop") ;
+## Ridge (RR-DA) 
 #fm = rrda(Xtrain, ytrain; lb = 1e-5) ;
 pnames(fm)
 pnames(fm.fm)
 
-res = Jchemo.predict(fm, Xtest)
+res = Jchemo.predict(fm, Xtest) ;
 pnames(res)
 pred = res.pred
 res.posterior
