@@ -113,6 +113,7 @@ An easy way is the following (many other ways are possible).
 - Menu "File" ==> "Open Folder"
 - Select the directory *D:/Users/Tmp/Nn/*
 - ==> VsCode locates in the corresponding path
+- use the management mode (`]`) and type command `activate .`
 - Install one (any) package, for instance package "StatsBse.jl" from the official Julia pckages repository 
     - In the REPL, use the management mode (`]`) and 
         type command `add StatsBase`
