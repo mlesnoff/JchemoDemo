@@ -1,19 +1,23 @@
 # JchemoDemo
 
 **JchemoDemo** is a Julia project (with its own [**environment**](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)) demonstrating functions 
-of package [**Jchemo.jl**](https://github.com/mlesnoff/Jchemo.jl). This project is used for trainings. 
+of package [**Jchemo.jl**](https://github.com/mlesnoff/Jchemo.jl). 
 
-Two types of scripts are provided
+This project is used for trainings. 
+
+What is provided
 
 1. [**Examples with Jchemo.jl**](https://github.com/mlesnoff/JchemoDemo/tree/main/src/Jchemo_Examples)
 
 2. [**Some Julia syntax**](https://github.com/mlesnoff/JchemoDemo/tree/main/src/Julia_Misc)
 
-**Some methodological materials** are available [**here**](https://github.com/mlesnoff/JchemoDemo/tree/main/docs), and **few tips about Julia** installation and environment are given [**here**](https://github.com/mlesnoff/JchemoDemo/blob/main/src/Julia_Misc/config.md).
+3. [**Few tips about Julia installation and environment**](https://github.com/mlesnoff/JchemoDemo/blob/main/src/Julia_Misc/config.md)
+
+4. [**Some methodological materials**](https://github.com/mlesnoff/JchemoDemo/tree/main/docs)
 
 The **datasets** used in the examples are stored in package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl) (already installed in the [**environment**](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)).
 
-When studying a given script, it is recommended to run the code in the REPL row by row (or by block) to observe the corresponding outputs. 
+When studying a given script, it is recommended to run the code row by row (or by block) in the REPL to observe the corresponding outputs. 
 
 ## <span style="color:green"> **Author** </span> 
 
