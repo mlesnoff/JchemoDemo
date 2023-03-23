@@ -10,7 +10,7 @@ X = dat.X
 Y = dat.Y 
 wl = names(X)
 wl_num = parse.(Float64, wl) 
-ntot = nro(X)
+ntot, p = size(X)
 typ = Y.typ
 namy = names(Y)[1:3]
 
@@ -254,58 +254,22 @@ fm = knnr(Xtrain, ytrain; nlvdis = res.nlvdis[u],
 pred = Jchemo.predict(fm, Xtest).pred ;
 rmsep(pred, ytest)
 
-#### SVMR
-cost = 10.0.^(-4:4)
-epsilon = (.1, .25)
-gamma = 10.0.^(-3:3)
-pars = mpar(cost = cost, epsilon = epsilon, gamma = gamma)
-length(pars[1])
-res = gridcv(Xtrain, ytrain; segm = zsegm,
-    score = rmsep, fun = svmr, pars = pars, 
-    verbose = true).res ;
-u = findall(res.y1 .== minimum(res.y1))[1]
-res[u, :]
-fm = svmr(Xtrain, ytrain; cost = res.cost[u], 
-    epsilon = res.epsilon[u], gamma = res.gamma[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred
-rmsep(pred, ytest)
-
 #### RFR 
-colsample_bynode = LinRange(.10, .50, 5)
+n_trees = [50]
+n_subfeatures = LinRange(10, p, 5)
 max_depth = [6; 10; 20; 2000]
-pars = mpar(colsample_bynode = colsample_bynode, 
+pars = mpar(n_trees = n_trees, n_subfeatures = n_subfeatures, 
     max_depth = max_depth)
 length(pars[1])
-res = gridcv(Xtrain, ytrain; segm = zsegm,
-    score = rmsep, fun = rfr_xgb, pars = pars, 
+res = gridcv(Xtrain, ytrain; segm = segm,
+    score = rmsep, fun = rfr_dt, pars = pars, 
     verbose = true).res ;
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
-fm = rfr_xgb(Xtrain, ytrain; rep = 50, 
-    colsample_bynode = res.colsample_bynode[u], 
-    max_depth = res.max_depth[u],
-    min_child_weight = 5) ;
+fm = rfr_dt(Xtrain, ytrain; n_trees = res.n_trees[u], 
+    n_subfeatures = res.n_subfeatures[u], 
+    max_depth = res.max_depth[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
 rmsep(pred, ytest)
 
-#### XGBOOSTR 
-eta = [.1; .3]
-colsample_bynode = LinRange(.10, .50, 5)
-max_depth = [6; 10; 50; 2000]
-lambda = [0; .1; .3; .5; 1]
-pars = mpar(eta = eta, colsample_bynode = colsample_bynode, 
-    max_depth = max_depth, lambda = lambda)
-length(pars[1])
-res = gridcv(Xtrain, ytrain; segm = zsegm,
-    score = rmsep, fun = xgboostr, pars = pars, 
-    verbose = true).res ;
-u = findall(res.y1 .== minimum(res.y1))[1]
-res[u, :]
-fm = xgboostr(Xtrain, ytrain; rep = 150,
-    eta = res.eta[u], 
-    colsample_bynode = res.colsample_bynode[u], 
-    max_depth = res.max_depth[u],
-    min_child_weight = 5, lambda = res.lambda[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred
-rmsep(pred, ytest)
 

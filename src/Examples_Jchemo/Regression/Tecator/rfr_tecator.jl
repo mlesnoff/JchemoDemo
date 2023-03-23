@@ -11,7 +11,7 @@ X = dat.X
 Y = dat.Y 
 wl = names(X)
 wl_num = parse.(Float64, wl) 
-ntot = nro(X)
+ntot, p = size(X)
 typ = Y.typ
 namy = names(Y)[1:3]
 
@@ -38,11 +38,14 @@ nam = namy[j]
 ytrain = Ytrain[:, nam]
 ytest = Ytest[:, nam]
 
-max_depth = 20 ; min_child_weight = 5
-fm = rfr_xgb(Xtrain, ytrain; rep = 100,
-      subsample = .7, colsample_bynode = 1/5,
-      max_depth = max_depth, 
-      min_child_weight = min_child_weight)
+n_trees = 100
+partial_sampling = .7
+n_subfeatures = p / 3
+max_depth = 20
+fm = rfr_dt(Xtrain, ytrain; n_trees = n_trees,
+    partial_sampling = partial_sampling,
+    n_subfeatures = n_subfeatures,
+    max_depth = max_depth) ;
 pnames(fm)
 
 pred = Jchemo.predict(fm, Xtest).pred
@@ -66,13 +69,15 @@ ablines!(ax, 0, 1; color = :grey)
 f    
 
 ## With function baggr
-max_depth = 20 ; min_child_weight = 5
+rep = 100
+rowsamp = .7
+n_subfeatures = p / 3
+max_depth = 20
 fm = baggr(Xtrain, ytrain; rep = 100,
-    rowsamp = .7, colsamp = 1,
-    fun = treer_xgb,
-    subsample = 1, colsample_bynode = 1/5,
-    max_depth = max_depth, 
-    min_child_weight = min_child_weight) ;
+    rowsamp = rowsamp, colsamp = 1,
+    fun = treer_dt,
+    n_subfeatures = n_subfeatures,
+    max_depth = max_depth) ;
 pnames(fm)
 pred = Jchemo.predict(fm, Xtest).pred
 println(rmsep(pred, ytest))
