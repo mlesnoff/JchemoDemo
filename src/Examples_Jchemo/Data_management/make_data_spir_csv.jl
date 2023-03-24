@@ -1,9 +1,9 @@
 using JLD2, CSV, DataFrames
 using Jchemo, JchemoData
 
-mypath = dirname(dirname(pathof(JchemoData)))
-root = "D:/Mes Donnees/Tmp/"
+root_out = "D:/Mes Donnees/Tmp/"
 
+mypath = dirname(dirname(pathof(JchemoData)))
 ## X
 db = joinpath(mypath, "data", "datspir_X.csv")  
 df = CSV.read(db, DataFrame; header = 1, decimal = ',', 
@@ -20,7 +20,7 @@ id_Y = df.ID
 nam = lowercase.(names(Y))
 rename!(Y, nam)
 ## End
-allowmissing!(Y) 
+allowmissing!(Y)  # to transform zero(s) to missing value(s) 
 for j = 1:3
     Y[:, j] = replace(Y[:, j], 0 => missing)
 end
@@ -48,11 +48,7 @@ DataFrame((id_X = id[s], id_Y = id_Y[s]))
 s = id .!= id_M
 DataFrame((id_X = id[s], id_M = id_Y[s]))
 ## Check duplicated ids
-res = tab(id) 
-lev = res.keys
-z = res.vals
-s = z .> 1
-DataFrame((ID = lev[s], Nb = z[s]))
+tabdupl(id) 
 ## Check duplicated rows 
 u = 1:50:nco(X)
 checkdupl(X[:, u])

@@ -1,15 +1,15 @@
 using JLD2, XLSX, DataFrames
 using Jchemo, JchemoData
 
-mypath = dirname(dirname(pathof(JchemoData)))
-root = "D:/Mes Donnees/Tmp/"
+root_out = "D:/Mes Donnees/Tmp/"
 
+mypath = dirname(dirname(pathof(JchemoData)))
 db = joinpath(mypath, "data", "datspir.xlsx")  
 
 dat = XLSX.readxlsx(db) 
 ## X
 z = dat["X"] 
-v = z["A1:ZY13"]
+v = z["A1:ZY13"]  # or: v = z[:] when good delimitations
 nam = v[1, 2:end] 
 X = DataFrame(Float64.(v[2:end, 2:end]), Symbol.(nam)) 
 id = string.(v[2:end, 1])
@@ -19,7 +19,7 @@ v = z["A1:E13"]
 nam = lowercase.(v[1, 2:end]) 
 Y = DataFrame(Float64.(v[2:end, 2:end]), Symbol.(nam)) 
 id_Y = string.(v[2:end, 1])
-allowmissing!(Y) 
+allowmissing!(Y)  # to transform zero(s) to missing value(s) 
 for j = 1:3
     Y[:, j] = replace(Y[:, j], 0 => missing)
 end
@@ -43,11 +43,7 @@ DataFrame((id_X = id[s], id_Y = id_Y[s]))
 s = id .!= id_M
 DataFrame((id_X = id[s], id_M = id_Y[s]))
 ## Check duplicated ids
-res = tab(id) 
-lev = res.keys
-z = res.vals
-s = z .> 1
-DataFrame((ID = lev[s], Nb = z[s]))
+tabdupl(id)
 ## Check duplicated rows 
 u = 1:50:nco(X)
 checkdupl(X[:, u])
@@ -57,7 +53,7 @@ checkdupl(hcat(X[:, u], Y))
 
 dat = (X = X, Y, M, id) 
 
-db = string(root, "datspir.jld2") 
+db = string(root_out, "datspir.jld2") 
 #@save db dat   
 
 
