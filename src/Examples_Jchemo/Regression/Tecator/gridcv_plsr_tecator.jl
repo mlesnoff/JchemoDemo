@@ -51,11 +51,10 @@ segm = segmkf(ntrain, K; rep = 10)
 pct = .30
 m = round(pct * ntrain)
 segm = segmts(ntrain, m; rep = 30)
-## i : segment within a replication
-## j : replication
-i = 1 ; j = 1
+i = 1  # segment within a replication
+k = 1  # replication
 segm[i]
-segm[i][j]
+segm[i][k]
 
 ## Tuning
 nlv = 0:20

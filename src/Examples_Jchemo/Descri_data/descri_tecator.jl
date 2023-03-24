@@ -51,7 +51,7 @@ summ(Y[:, namy]).res
 
 aggstat(Y; vars = namy, groups = :typ)
 
-j = 2
+j = 2  # y-variable
 nam = namy[2]
 y = Y[:, 2]
 mlev(typ)
