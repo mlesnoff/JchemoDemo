@@ -9,9 +9,9 @@ What is provided
 
 1. [**Few tips about Julia installation and environment**](https://github.com/mlesnoff/JchemoDemo/blob/main/src/Julia_Misc/config.md)
 
-2. [**Examples with Jchemo.jl**](https://github.com/mlesnoff/JchemoDemo/tree/main/src/Examples_Jchemo)
+2. [**Some Julia syntax**](https://github.com/mlesnoff/JchemoDemo/tree/main/src/Julia_Misc)
 
-3. [**Some Julia syntax**](https://github.com/mlesnoff/JchemoDemo/tree/main/src/Julia_Misc)
+3. [**Examples with Jchemo.jl**](https://github.com/mlesnoff/JchemoDemo/tree/main/src/Examples_Jchemo)
 
 4. [**Some methodological materials**](https://github.com/mlesnoff/JchemoDemo/tree/main/docs)
 
