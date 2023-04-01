@@ -65,16 +65,45 @@ for i in eachindex(x)
 end
 f
 
-
-
-
-A = reshape(1:6, 2, 3)
+z = [0, 1, 2, 3, 4, NaN]
+## reshape & vec ==> bycol
+A = reshape(z, 3, 2)
+vec(A)
 n, p = size(A)
-## The plot = A after left rotation 90°
-## ==> p rows, n columns
+## heatmap displays 90° left rotation of A
+## Column 1 of A ==> Row 1 of plot, 
+## Column 2 of A ==> Row 2 of plot, etc.
 f, ax, hm = heatmap(A)
 Colorbar(f[:, end + 1], hm)
 f
+
+## Display the same disposition 
+## as A
+zA = (A')[:, end:-1:1]
+f, ax, hm = heatmap(zA)
+Colorbar(f[:, end + 1], hm)
+f
+
+f = Figure(resolution = (500, 400))
+ax = Axis(f[1, 1], xlabel = "pred", ylabel = "y", 
+    xticks = (1:p, string.(1:p)), 
+    yticks = (1:n, string.(n:-1:1)))
+hm = heatmap!(ax, zA)
+Colorbar(f[:, end + 1], hm; label = "Value")
+for i = 1:n, j = 1:p
+    val = string(A[i, j])
+    text!(ax, val; position = (j, n - i + 1), 
+        align = (:center, :center), fontsize = 15,
+        color = :red)
+end
+ax.xticklabelrotation = π / 3   # default: 0
+ax.xticklabelalign = (:right, :center)
+f
+
+
+
+
+
 
 
 
