@@ -41,10 +41,42 @@ f
 CairoMakie.activate!()  
 #GLMakie.activate!() 
 
-x = [1, 2, 3, 1, 2, 3, 1, 2, 3]
-y = [1, 1, 1, 2, 2, 2, 3, 3, 3]
-z = [1, 2, 3, 4, 5, 6, 7, 8, NaN]
+x = [1, 2, 3, 1, 2, 3]
+y = [1, 1, 1, 2, 2, 2]
+z = [1, 2, 3, 4, 5, NaN]
+[x y z]
+## Plot x, y with
+## x-coordonate x[i], y-coordinate y[i]) ==> z[i]
 heatmap(x, y, z)
+
+levx = unique(x) 
+nlevx = length(levx)
+levy = unique(y) 
+nlevy = length(levy)
+f = Figure(resolution = (500, 400))
+ax = Axis(f[1, 1], xlabel = "x", ylabel = "y", 
+    xticks = (1:nlevx, string.(levx)), 
+    yticks = (1:nlevy, string.(levy)))
+hm = heatmap!(ax, x, y, z)
+for i in eachindex(x)
+    val = string(z[i])
+    text!(ax, val; position = (x[i], y[i]),
+        color = :white)
+end
+f
+
+
+
+
+A = reshape(1:6, 2, 3)
+n, p = size(A)
+## The plot = A after left rotation 90°
+## ==> p rows, n columns
+f, ax, hm = heatmap(A)
+Colorbar(f[:, end + 1], hm)
+f
+
+
 
 n = 100
 x = range(0, 2π, length = n)
