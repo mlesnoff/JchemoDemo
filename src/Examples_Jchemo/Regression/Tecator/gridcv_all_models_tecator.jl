@@ -176,6 +176,24 @@ plotxy(vec(pred), ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
+#### LWPLSR-AVG
+nlvdis = [10; 15; 25] ; metric = ["mahal"] 
+h = [1; 2; 6; Inf] ; k = [50; 100; 150]  
+nlv = ["0:10"; "0:20"; "0:30"]
+pars = mpar(nlvdis = nlvdis, metric = metric, h = h, 
+    k = k, nlv = nlv) 
+length(pars[1])
+res = gridcv(Xtrain, ytrain; segm = zsegm,
+    score = rmsep, fun = lwplsravg, pars = pars, 
+    verbose = true).res 
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
+fm = lwplsravg(Xtrain, ytrain; nlvdis = res.nlvdis[u],
+    metric = res.metric[u], h = res.h[u], k = res.k[u], 
+    nlv = res.nlv[u]) ;
+pred = Jchemo.predict(fm, Xtest).pred 
+rmsep(pred, ytest)
+
 #### LWPLSR-S
 nlv0 = [15; 20; 30; 40]
 metric = ["mahal"] 
@@ -230,24 +248,6 @@ println(rmsep(pred, ytest))
 plotxy(vec(pred), ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
-
-#### LWPLSR-AVG
-nlvdis = [10; 15; 25] ; metric = ["mahal"] 
-h = [1; 2; 6; Inf] ; k = [50; 100; 150]  
-nlv = ["0:10"; "0:20"; "0:30"]
-pars = mpar(nlvdis = nlvdis, metric = metric, h = h, 
-    k = k, nlv = nlv) 
-length(pars[1])
-res = gridcv(Xtrain, ytrain; segm = zsegm,
-    score = rmsep, fun = lwplsravg, pars = pars, 
-    verbose = true).res 
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-fm = lwplsravg(Xtrain, ytrain; nlvdis = res.nlvdis[u],
-    metric = res.metric[u], h = res.h[u], k = res.k[u], 
-    nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
-rmsep(pred, ytest)
 
 #### CPLSR-AVG
 ncla = 2:5 ; nlv_da = 1:5
