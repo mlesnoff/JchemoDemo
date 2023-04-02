@@ -65,9 +65,9 @@ f
 metric = ["eucl", "mahal"]
 h = [1; 2; 6] ; k = [50; 100; 150]  
 nlv = Int64.(LinRange(5, 20, 4))
-typ = ["pca"] 
+reduc = ["pca"] 
 pars = mpar(metric = metric, h = h, k = k, 
-    nlv = nlv, typ = typ) 
+    nlv = nlv, reduc = reduc) 
 length(pars[1])
 res = gridscore(Xcal, ycal, Xval, yval; 
     score = rmsep, fun = lwmlr_s, pars = pars,
@@ -76,7 +76,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 fm = lwmlr_s(Xtrain, ytrain; metric = res.metric[u], 
     h = res.h[u], k = res.k[u], nlv = res.nlv[u], 
-    typ = res.typ[u]) ;
+    reduc = res.reduc[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
 println(rmsep(pred, ytest))
 mse(pred, ytest)
@@ -88,9 +88,9 @@ plotxy(vec(pred), ytest; color = (:red, .5),
 metric = ["eucl", "mahal"]
 h = [1; 2; 6] ; k = [50; 100; 150]  
 nlv = Int64.(LinRange(5, 20, 4))
-typ = ["pls"] 
+reduc = ["pls"] 
 pars = mpar(metric = metric, h = h, k = k, 
-    nlv = nlv, typ = typ) 
+    nlv = nlv, reduc = reduc) 
 length(pars[1])
 res = gridscore(Xcal, ycal, Xval, yval; 
     score = rmsep, fun = lwmlr_s, pars = pars,
@@ -99,7 +99,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 fm = lwmlr_s(Xtrain, ytrain; metric = res.metric[u], 
     h = res.h[u], k = res.k[u], nlv = res.nlv[u], 
-    typ = res.typ[u]) ;
+    reduc = res.reduc[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
 println(rmsep(pred, ytest))
 mse(pred, ytest)
@@ -112,9 +112,9 @@ metric = ["eucl", "mahal"]
 h = [1; 2; 6] ; k = [50; 100; 150]  
 nlv = Int64.(LinRange(5, 20, 4))
 gamma = 10.0.^(-2:3)
-typ = ["dkpls"] 
+reduc = ["dkpls"] 
 pars = mpar(metric = metric, h = h, k = k, 
-    nlv = nlv, gamma = gamma, typ = typ) 
+    nlv = nlv, gamma = gamma, reduc = reduc) 
 length(pars[1])
 res = gridscore(Xcal, ycal, Xval, yval; 
     score = rmsep, fun = lwmlr_s, pars = pars,
@@ -123,7 +123,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 fm = lwmlr_s(Xtrain, ytrain; metric = res.metric[u], 
     h = res.h[u], k = res.k[u], nlv = res.nlv[u], 
-    gamma = res.gamma[u], typ = res.typ[u]) ;
+    gamma = res.gamma[u], reduc = res.reduc[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
 println(rmsep(pred, ytest))
 mse(pred, ytest)

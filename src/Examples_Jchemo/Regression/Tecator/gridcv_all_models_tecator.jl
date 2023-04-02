@@ -178,23 +178,52 @@ plotxy(vec(pred), ytest; resolution = (500, 400),
 
 #### LWPLSR-S
 nlv0 = [15; 20; 30; 40]
-nlvdis = [5; 10; 15] ; metric = ["mahal"] 
+metric = ["mahal"] 
 h = [1; 2; 6] ; k = [50; 100; 150]  
 nlv = 0:15
-pars = mpar(nlv0 = nlv0, nlvdis = nlvdis, 
-    metric = metric, h = h, k = k) 
+pars = mpar(nlv0 = nlv0, metric = metric, 
+    h = h, k = k) 
 length(pars[1])
 res = gridcvlv(Xtrain, ytrain; segm = segm,
     score = rmsep, fun = lwplsr_s, nlv = nlv, 
     pars = pars, verbose = true).res 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-group = string.("nvl0=", res.nlv0, "nvldis=", res.nlvdis, 
-    " h=", res.h, " k=", res.k)
+group = string.("nvl0=", res.nlv0, " h=", res.h, 
+    " k=", res.k)
 plotgrid(res.nlv, res.y1, group;
     xlabel ="Nb. LVs", ylabel = "RMSEP").f
 fm = lwplsr_s(Xtrain, ytrain; nlv0 = res.nlv0[u], 
-    nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
+    metric = res.metric[u], h = res.h[u], 
+    k = res.k[u], nlv = res.nlv[u]) ;
+pred = Jchemo.predict(fm, Xtest).pred 
+println(rmsep(pred, ytest))
+plotxy(vec(pred), ytest; resolution = (500, 400),
+    color = (:red, .5), bisect = true, 
+    xlabel = "Prediction", ylabel = "Observed (Test)").f  
+
+## Working in a KPLS score space
+
+nlv0 = [15; 20; 30; 40]
+reduc = ["dkpls"] ; gamma = 10.0.^(-3:3) 
+metric = ["mahal"] 
+h = [1; 2; 6] ; k = [50; 100; 150]  
+nlv = 0:15
+pars = mpar(nlv0 = nlv0, reduc = reduc, gamma = gamma, 
+    metric = metric, h = h, k = k) 
+length(pars[1])
+res = gridcvlv(Xtrain, ytrain; segm = zsegm,
+    score = rmsep, fun = lwplsr_s, nlv = nlv, 
+    pars = pars, verbose = true).res 
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
+group = string.("nvl0=", res.nlv0, ", gamma=", res.gamma,
+    ", h=", res.h, " k=", res.k)
+plotgrid(res.nlv, res.y1, group; leg = false,
+    xlabel ="Nb. LVs", ylabel = "RMSEP").f
+fm = lwplsr_s(Xtrain, ytrain; nlv0 = res.nlv0[u],
+    reduc = res.reduc[u], gamma = res.gamma[u], 
+    metric = res.metric[u], h = res.h[u], 
     k = res.k[u], nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
 println(rmsep(pred, ytest))
