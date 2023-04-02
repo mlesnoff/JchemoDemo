@@ -269,7 +269,6 @@ fm = lwplsr_s(Xtrain, ytrain; nlv0 = res.nlv0[u],
 pred = Jchemo.predict(fm, Xtest).pred 
 rmsep(pred, ytest)
 
-
 #### CPLSR-AVG 
 ncla = 2:5 ; nlv_da = 1:5
 nlv = ["0:10"; "0:15"; "0:20"; 
