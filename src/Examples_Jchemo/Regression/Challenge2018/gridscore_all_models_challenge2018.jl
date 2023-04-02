@@ -130,7 +130,8 @@ rmsep(pred, ytest)
 
 #### KPLSR
 nlv = 0:100 
-pars = mpar(gamma = 10.0.^(-3:5))
+gamma = 10.0.^(-3:5)
+pars = mpar(gamma = gamma)
 length(pars[1])
 ## To decrease the computation time 
 ## Sampling in Cal
@@ -151,7 +152,8 @@ rmsep(pred, ytest)
 
 #### DKPLSR
 nlv = 0:100 
-pars = mpar(gamma = 10.0.^(-3:5)) 
+gamma = 10.0.^(-3:5)
+pars = mpar(gamma = gamma)
 length(pars[1])
 res = gridscorelv(Xcal, ycal, Xval, yval;
     score = rmsep, fun = dkplsr, nlv = nlv, pars = pars, 
@@ -223,25 +225,50 @@ rmsep(pred, ytest)
 
 #### LWPLSR-S
 nlv0 = [20 ; 30 ; 50]
-nlvdis = [15; 20] ; metric = ["eucl"; "mahal"] 
+metric = ["eucl"; "mahal"] 
 h = [1; 2; 4; 5] ; k = [150; 200; 350; 500]  
 nlv = 1:20 
-pars = mpar(nlv0 = nlv0, nlvdis = nlvdis, metric = metric, 
-    h = h, k = k)
+pars = mpar(nlv0 = nlv0, metric = metric, h = h, 
+    k = k)
 length(pars[1])
 res = gridscorelv(Xcal, ycal, Xval, yval;
     score = msep, fun = lwplsr_s, nlv = nlv, pars = pars, 
     verbose = true) 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-group = string.(res.nlv0, "-", res.nlvdis, "-", res.h, "-", res.k) 
+group = string.(res.nlv0, "-", res.metric, "-", res.h, "-", res.k) 
 plotgrid(res.nlv, res.y1, group;
     xlabel ="Nb. LVs", ylabel = "RMSEP").f
 fm = lwplsr_s(Xtrain, ytrain; nlv0 = res.nlv0[u], 
-    nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
+    metric = res.metric[u], h = res.h[u], 
     k = res.k[u], nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
 rmsep(pred, ytest)
+
+## Working in a KPLS score space
+nlv0 = [20 ; 30 ; 50]
+metric = ["eucl"; "mahal"] 
+reduc = ["dkpls"] ; gamma = 10.0.^(-3:3) 
+h = [1; 2] ; k = [150; 200; 350]  
+nlv = 1:20 
+psamp = [.30]
+pars = mpar(nlv0 = nlv0, metric = metric, 
+    reduc = reduc, gamma = gamma, h = h, k = k,
+    psamp = psamp)
+length(pars[1])
+res = gridscorelv(Xcal, ycal, Xval, yval;
+    score = msep, fun = lwplsr_s, nlv = nlv, pars = pars, 
+    verbose = true) 
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
+fm = lwplsr_s(Xtrain, ytrain; nlv0 = res.nlv0[u],
+    reduc = res.reduc[u], gamma = res.gamma[u], 
+    metric = res.metric[u], h = res.h[u], 
+    k = res.k[u], nlv = res.nlv[u],
+    psamp = res.psamp[u]) ;
+pred = Jchemo.predict(fm, Xtest).pred 
+rmsep(pred, ytest)
+
 
 #### CPLSR-AVG 
 ncla = 2:5 ; nlv_da = 1:5

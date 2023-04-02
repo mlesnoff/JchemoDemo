@@ -196,7 +196,7 @@ rmsep(pred, ytest)
 
 #### LWPLSR-S
 nlv0 = [15; 20; 30; 40]
-metric = ["mahal"] 
+metric = ["eucl"; "mahal"] 
 h = [1; 2; 6] ; k = [50; 100; 150]  
 nlv = 0:15
 pars = mpar(nlv0 = nlv0, metric = metric, 
@@ -221,7 +221,6 @@ plotxy(vec(pred), ytest; resolution = (500, 400),
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
 ## Working in a KPLS score space
-
 nlv0 = [15; 20; 30; 40]
 reduc = ["dkpls"] ; gamma = 10.0.^(-3:3) 
 metric = ["mahal"] 
