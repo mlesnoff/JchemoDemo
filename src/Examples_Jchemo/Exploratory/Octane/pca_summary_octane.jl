@@ -13,7 +13,7 @@ wl_num = parse.(Float64, wl)
 
 ## Model fitting
 fm = pcasvd(X; nlv = 6) ; 
-#fm = pcasvd(X; nlv = 6) ;    # Robust PCA 
+#fm = pcasph(X; nlv = 6) ;    # Robust PCA 
 pnames(fm)
 
 ## Summary of the fitted model
