@@ -1,5 +1,4 @@
 using DataFrames
-using Jchemo 
 using JchemoData
  
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -42,35 +41,29 @@ db = joinpath(path_jdat, "data", "cassav.jld2")
 res = load(db) ;
 keys(res)
 dat = res["dat"]
-pnames(dat)
-
-
-@load db dat ;
-pnames(dat)
-
-
-res = load(db, "dat") ;
-dat = res["dat"]
-pnames(dat)
-
-dat = load(db, "dat") ;
-pnames(dat)
-
-
-
-
-@load db dat
 keys(dat)
-dat.X
+X = dat.X
+Y = dat.Y
+## Or
+dat = load(db, "dat") ;
+keys(dat)
+## Or
+@load db dat ;
+keys(dat)
 
 ## Exportation
 X1 = rand(5, 3)
 X2 = DataFrame(rand(5, 2), ["y1", "y2"]) 
 info = "Fictive data"
 dat = (X1 = X1, X2 = X2, info = info)
+
 db = joinpath(path_out, "res.jld2") 
+jldsave(db, true; dat)  # 'true" ==> compression   
+## Or
 @save db dat 
-#@load db dat ; keys(dat)
+
+#load(db, "dat")
+#keys(dat)
 
 ########### HDF5
 ## HDF5 stands for Hierarchical Data Format v5 and is closely 
