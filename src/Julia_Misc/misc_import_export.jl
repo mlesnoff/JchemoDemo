@@ -1,41 +1,64 @@
-using CSV, HDF5, JLD2, MAT, XLSX, DataFrames
-using RData, CodecXz      # RData requires CodecXz
-using JSON
+using DataFrames
+using Jchemo 
 using JchemoData
  
-mypath = dirname(dirname(pathof(JchemoData)))
-root = "D:/Mes Donnees/Tmp/"
+path_jdat = dirname(dirname(pathof(JchemoData)))
+path_out = "D:/Mes Donnees/Tmp"
+## Or (temporary path_out files)
+#path_out = tempname() 
 
 ########### CSV
+using CSV
 
 ## Importation
-db = joinpath(mypath, "data", "dat_2021.csv") 
-## Same as: 
-## db = string(mypath, "\\data\\dat_2021.csv")
-## End
+db = joinpath(path_jdat, "data", "dat_2021.csv") 
+## Same as 
+#db = string(path_jdat, "\\data\\dat_2021.csv")
+
 df = CSV.read(db, DataFrame; header = 1, decimal = '.', 
     delim = ';') 
-# Same as:
+## Same as
 #df = CSV.File(db; header = 1, delim = ';') |> DataFrame 
 #df = DataFrame(CSV.File(db, header = 1, delim = ';'))
-size(df)
-names(df)
 
 ## Exportation
 X = reshape([missing ; rand(9)], 5, 2)
 X = DataFrame(X, :auto)
-file = string(root, "res.csv")
-CSV.write(file, X; delim = ";")
-file = string(root, "res2.csv")
-CSV.write(file, X; delim = ';',  missingstring =  "0.0")
 
-# See also syntax:
+db = joinpath(path_out, "res.csv")
+CSV.write(db, X; delim = ";")
+
+db = joinpath(path_out, "res2.csv")
+CSV.write(db, X; delim = ';',  missingstring =  "0.0")
+
+## Alternative syntax:
 #X |> CSV.write(file; kwargs...)
 
 ########### JLD2 
+using JLD2
 
 ## Importation
-db = joinpath(mypath, "data", "cassav.jld2") 
+db = joinpath(path_jdat, "data", "cassav.jld2") 
+res = load(db) ;
+keys(res)
+dat = res["dat"]
+pnames(dat)
+
+
+@load db dat ;
+pnames(dat)
+
+
+res = load(db, "dat") ;
+dat = res["dat"]
+pnames(dat)
+
+dat = load(db, "dat") ;
+pnames(dat)
+
+
+
+
 @load db dat
 keys(dat)
 dat.X
@@ -45,7 +68,7 @@ X1 = rand(5, 3)
 X2 = DataFrame(rand(5, 2), ["y1", "y2"]) 
 info = "Fictive data"
 dat = (X1 = X1, X2 = X2, info = info)
-db = string(root, "res.jld2") 
+db = joinpath(path_out, "res.jld2") 
 @save db dat 
 #@load db dat ; keys(dat)
 
@@ -54,6 +77,7 @@ db = string(root, "res.jld2")
 ## modeled on file systems. In HDF5, a "group" is analogous to a directory, 
 ## a "dataset" is like a file. HDF5 also uses "attributes" to associate metadata 
 ## with a particular group or dataset. 
+using HDF5 
 
 ## h5open()
 ## mode	Meaning
@@ -66,8 +90,8 @@ db = string(root, "res.jld2")
 X = rand(5, 8) 
 y = collect(1:3) 
 z = ["b", "d", "a", "u"] 
-db = string(root, "res.h5")
-#db = tempname() # temporary file
+
+db = joinpath(path_out, "res.h5")
 fid = h5open(db, "w")
 HDF5.write(fid, "X", X)
 HDF5.write(fid, "y", y)
@@ -106,15 +130,16 @@ HDF5.read(fid["X"])
 HDF5.close(fid)
 
 ########### JSON
+using JSON
 
 ## Importation
-db = joinpath(mypath, "data", "dat2.json") 
+db = joinpath(path_jdat, "data", "dat2.json") 
 z = read(db, String)
 z = JSON.parse(z)
 z = JSON.parse(z[1])
 res = DataFrame(z)
 
-db = joinpath(mypath, "data", "dat.json") 
+db = joinpath(path_jdat, "data", "dat.json") 
 z = read(db, String)
 z = JSON.parse(z)
 DataFrame(zdat)
@@ -131,25 +156,25 @@ res[!, 2:end] = convert.(Float64, res[:, 2:end])
 #res[!, 2:end] = convert.(Float64, res[!, 2:end])
 res
 
-########### MAT 
-
+########### MATLAB (.mat)
 ## Package MAT can only read Matlab files, 
 ## not save data in the Matlab format  
+using MAT
 
 ## Importation
-db = joinpath(mypath, "data", "mango.mat") 
+db = joinpath(path_jdat, "data", "mango.mat") 
 dat = matopen(db)
 keys(dat)
 Xcal = read(dat, "SP_cal")
 Ycal = read(dat, "DM_cal")
 close(dat)
-# Same as:
+## Same as
 dat = matread(db) 
 keys(dat)
 Xcal = dat["SP_cal"] 
 Ycal = dat["SP_cal"]
 
-db = joinpath(mypath, "data", "machine.mat") 
+db = joinpath(path_jdat, "data", "machine.mat") 
 dat = matopen(db)
 keys(dat)
 z = read(dat, "LAMDATA") 
@@ -157,59 +182,55 @@ z["INFORMATION"]
 Xcal = z["calibration"]
 Xcal = reduce(vcat, Xcal)
 close(dat)
-
+## Same as
 dat = matread(db) ;
 keys(dat)
 z = dat["LAMDATA"] 
 keys(z)
 
-########### RData
+########### R (.rda)
+using RData, CodecXz      # RData requires CodecXz when compressing
 
 ## Importation
-db = joinpath(mypath, "data", "octane.rda") 
+db = joinpath(path_jdat, "data", "octane.rda") 
 dat = load(db)
 keys(dat)
 z = dat["octane"] ;
 keys(z)
 ## Same as
-## z = get(dat, "datoctane", nothing) ;
+#z = get(dat, "datoctane", nothing) ;
 X = z["X"] 
-size(X)
 
-db = joinpath(mypath, "data", "cassav.rda") 
+db = joinpath(path_jdat, "data", "cassav.rda") 
 dat = load(db)
 keys(dat)
-z = dat["cassav"] ;
+z = dat["dat"] ;
 keys(z)
-year = z["year"]
-Xtrain = z["Xtrain"]
-ytrain = z["ytrain"] 
-Xtest = z["Xtest"]
-ytest = z["ytest"]
+X = z["X"]
+Y = z["Y"] 
 
 ########### XLSX 
+using XLSX 
 
 ## Importation
-db = joinpath(mypath, "data", "tecator.xlsx") 
+db = joinpath(path_jdat, "data", "tecator.xlsx") 
 dat = XLSX.readxlsx(db) 
 nam = XLSX.sheetnames(dat)
-z = dat["X Cal"]
+z = dat["X"]
 #z = dat[nam[1]]
-Xcal = z[:]
-z["A1:CV158"]
-z[2, 2]
-z = dat["Y cal"]
-Ycal = z[:]
-# Same as:
-Xcal = XLSX.readdata(db, "X Cal", "A1:CV158")
+X = z[:]
+#X = z["A1:CV158"]
+## Same as
+#X = XLSX.readdata(db, "X", "A1:CV158")
+z = dat["Y"]
+Y = z[:]
 
 ## Exportation
 X1 = DataFrame(rand(5, 3), :auto)
 X2 = DataFrame(rand(5, 2), ["y1", "y2"]) 
-db = string(root, "res.xlsx") 
+db = joinpath(path_out, "res.xlsx") 
 XLSX.writetable(db, 
     Xcal  = (collect(DataFrames.eachcol(X1)), DataFrames.names(X1)), 
     Ycal = (collect(DataFrames.eachcol(X2)), DataFrames.names(X2)),
     overwrite = true)
-
 
