@@ -2,8 +2,8 @@ using JLD2, CairoMakie, GLMakie
 using Jchemo, JchemoData
 CairoMakie.activate!()
 
-mypath = dirname(dirname(pathof(JchemoData)))
-db = joinpath(mypath, "data", "octane.jld2") 
+path_jdat = dirname(dirname(pathof(JchemoData)))
+db = joinpath(path_jdat, "data", "octane.jld2") 
 @load db dat
 pnames(dat)
   

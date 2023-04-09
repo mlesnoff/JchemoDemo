@@ -3,8 +3,8 @@ using Jchemo, JchemoData
 
 root_out = "D:/Mes Donnees/Tmp/"
 
-mypath = dirname(dirname(pathof(JchemoData)))
-db = joinpath(mypath, "data", "datspir.xlsx")  
+path_jdat = dirname(dirname(pathof(JchemoData)))
+db = joinpath(path_jdat, "data", "datspir.xlsx")  
 
 dat = XLSX.readxlsx(db) 
 ## X

@@ -3,15 +3,15 @@ using Jchemo, JchemoData
 
 root_out = "D:/Mes Donnees/Tmp/"
 
-mypath = dirname(dirname(pathof(JchemoData)))
+path_jdat = dirname(dirname(pathof(JchemoData)))
 ## X
-db = joinpath(mypath, "data", "datspir_X.csv")  
+db = joinpath(path_jdat, "data", "datspir_X.csv")  
 df = CSV.read(db, DataFrame; header = 1, decimal = ',', 
     delim = ';') 
 X = df[:, 2:end]
 id = df.ID
 ## Y
-db = joinpath(mypath, "data", "datspir_Y.csv")  
+db = joinpath(path_jdat, "data", "datspir_Y.csv")  
 df = CSV.read(db, DataFrame; header = 1, decimal = ',', 
     delim = ';') 
 Y = df[:, 2:end]
@@ -32,7 +32,7 @@ end
 ## End
 Y
 ## M
-db = joinpath(mypath, "data", "datspir_M.csv")  
+db = joinpath(path_jdat, "data", "datspir_M.csv")  
 df = CSV.read(db, DataFrame; header = 1, decimal = ',', 
     delim = ';') 
 M = df[:, 2:end]

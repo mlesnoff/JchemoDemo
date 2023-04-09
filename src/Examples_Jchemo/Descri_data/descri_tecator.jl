@@ -1,8 +1,8 @@
 using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
 
-mypath = dirname(dirname(pathof(JchemoData)))
-db = joinpath(mypath, "data", "tecator.jld2") 
+path_jdat = dirname(dirname(pathof(JchemoData)))
+db = joinpath(path_jdat, "data", "tecator.jld2") 
 @load db dat
 pnames(dat)
 

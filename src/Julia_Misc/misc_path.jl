@@ -17,8 +17,8 @@ using JchemoData
 pathof(JchemoData)
 dirname(pathof(JchemoData))
 dirname(dirname(pathof(JchemoData)))
-mypath = dirname(dirname(pathof(JchemoData)))
-db = joinpath(mypath, "data", "iris.jld2")
+path_jdat = dirname(dirname(pathof(JchemoData)))
+db = joinpath(path_jdat, "data", "iris.jld2")
 
 #const path_data1 = joinpath(@__DIR__, "../data")
 #const path_data2 = joinpath(dirname(@__FILE__), "..", "data")

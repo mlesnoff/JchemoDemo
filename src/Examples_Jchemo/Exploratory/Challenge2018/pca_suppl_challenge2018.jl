@@ -3,8 +3,8 @@ using Jchemo, JchemoData
 using FreqTables
 CairoMakie.activate!() 
 
-mypath = dirname(dirname(pathof(JchemoData)))
-db = joinpath(mypath, "data", "challenge2018.jld2") 
+path_jdat = dirname(dirname(pathof(JchemoData)))
+db = joinpath(path_jdat, "data", "challenge2018.jld2") 
 @load db dat
 pnames(dat)
 
