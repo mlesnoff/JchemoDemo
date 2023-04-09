@@ -10,7 +10,7 @@ path_out = "D:/Mes Donnees/Tmp"
 using CSV
 
 ## Importation
-db = joinpath(path_jdat, "data", "dat_2021.csv") 
+db = joinpath(path_jdat, "data/dat_2021.csv") 
 ## Same as 
 #db = string(path_jdat, "\\data\\dat_2021.csv")
 
@@ -37,7 +37,7 @@ CSV.write(db, X; delim = ';',  missingstring =  "0.0")
 using JLD2
 
 ## Importation
-db = joinpath(path_jdat, "data", "cassav.jld2") 
+db = joinpath(path_jdat, "data/cassav.jld2") 
 res = load(db) ;
 keys(res)
 dat = res["dat"]
@@ -127,13 +127,13 @@ HDF5.close(fid)
 using JSON
 
 ## Importation
-db = joinpath(path_jdat, "data", "dat2.json") 
+db = joinpath(path_jdat, "data/dat2.json") 
 z = read(db, String)
 z = JSON.parse(z)
 z = JSON.parse(z[1])
 res = DataFrame(z)
 
-db = joinpath(path_jdat, "data", "dat.json") 
+db = joinpath(path_jdat, "data/dat.json") 
 z = read(db, String)
 z = JSON.parse(z)
 DataFrame(zdat)
@@ -156,7 +156,7 @@ res
 using MAT
 
 ## Importation
-db = joinpath(path_jdat, "data", "mango.mat") 
+db = joinpath(path_jdat, "data/mango.mat") 
 dat = matopen(db)
 keys(dat)
 Xcal = read(dat, "SP_cal")
@@ -168,7 +168,7 @@ keys(dat)
 Xcal = dat["SP_cal"] 
 Ycal = dat["SP_cal"]
 
-db = joinpath(path_jdat, "data", "machine.mat") 
+db = joinpath(path_jdat, "data/machine.mat") 
 dat = matopen(db)
 keys(dat)
 z = read(dat, "LAMDATA") 
@@ -186,7 +186,7 @@ keys(z)
 using RData, CodecXz      # RData requires CodecXz when compressing
 
 ## Importation
-db = joinpath(path_jdat, "data", "octane.rda") 
+db = joinpath(path_jdat, "data/octane.rda") 
 dat = load(db)
 keys(dat)
 z = dat["octane"] ;
@@ -195,7 +195,7 @@ keys(z)
 #z = get(dat, "datoctane", nothing) ;
 X = z["X"] 
 
-db = joinpath(path_jdat, "data", "cassav.rda") 
+db = joinpath(path_jdat, "data/cassav.rda") 
 dat = load(db)
 keys(dat)
 z = dat["dat"] ;
@@ -207,7 +207,7 @@ Y = z["Y"]
 using XLSX 
 
 ## Importation
-db = joinpath(path_jdat, "data", "tecator.xlsx") 
+db = joinpath(path_jdat, "data/tecator.xlsx") 
 dat = XLSX.readxlsx(db) 
 nam = XLSX.sheetnames(dat)
 z = dat["X"]
