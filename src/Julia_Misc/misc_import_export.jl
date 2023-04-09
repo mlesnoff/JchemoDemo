@@ -135,7 +135,7 @@ res = DataFrame(z)
 db = joinpath(path_jdat, "data/dat.json") 
 z = read(db, String)
 z = JSON.parse(z)
-DataFrame(zdat)
+DataFrame(z)
 
 dat = """
 {"id":[92084,92085,92086],"1100":[0.0978,0.1024,0.0798],
@@ -182,7 +182,8 @@ z = dat["LAMDATA"]
 keys(z)
 
 ########### R (.rda)
-using RData, CodecXz      # RData requires CodecXz when compressing
+using RData
+using CodecXz # required to read XZ-compressed RData files
 
 ## Importation
 db = joinpath(path_jdat, "data/octane.rda") 

@@ -1,11 +1,10 @@
 using JLD2, XLSX, DataFrames
 using Jchemo, JchemoData
 
-root_out = "D:/Mes Donnees/Tmp/"
-
 path_jdat = dirname(dirname(pathof(JchemoData)))
-db = joinpath(path_jdat, "data", "datspir.xlsx")  
+path_out = "D:/Mes Donnees/Tmp"
 
+db = joinpath(path_jdat, "data/datspir.xlsx")  
 dat = XLSX.readxlsx(db) 
 ## X
 z = dat["X"] 
@@ -53,7 +52,7 @@ checkdupl(hcat(X[:, u], Y))
 
 dat = (X = X, Y, M, id) 
 
-db = string(root_out, "datspir.jld2") 
-#@save db dat   
+db = joinpath(path_out, "datspir.jld2") 
+jldsave(db; dat)   
 
 

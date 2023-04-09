@@ -1,11 +1,11 @@
 using JLD2, CSV, DataFrames
 using Jchemo, JchemoData
 
-root_out = "D:/Mes Donnees/Tmp/"
-
 path_jdat = dirname(dirname(pathof(JchemoData)))
+path_out = "D:/Mes Donnees/Tmp"
+
 ## X
-db = joinpath(path_jdat, "data", "datspir_X.csv")  
+db = joinpath(path_jdat, "data/datspir_X.csv")  
 df = CSV.read(db, DataFrame; header = 1, decimal = ',', 
     delim = ';') 
 X = df[:, 2:end]
@@ -32,7 +32,7 @@ end
 ## End
 Y
 ## M
-db = joinpath(path_jdat, "data", "datspir_M.csv")  
+db = joinpath(path_jdat, "data/datspir_M.csv")  
 df = CSV.read(db, DataFrame; header = 1, decimal = ',', 
     delim = ';') 
 M = df[:, 2:end]
@@ -58,7 +58,7 @@ checkdupl(hcat(X[:, u], Y))
 
 dat = (X = X, Y, M, id) 
 
-db = string(root, "datspir.jld2") 
-#@save db dat   
+db = joinpath(path_out, "datspir.jld2") 
+jldsave(db; dat)   
 
 
