@@ -58,7 +58,8 @@ info = "Fictive data"
 dat = (X1 = X1, X2 = X2, info = info)
 
 db = joinpath(path_out, "res.jld2") 
-jldsave(db, true; dat)  # 'true" ==> compression   
+jldsave(db; dat)
+#jldsave(db, true; dat)  # 'true" ==> compression   
 ## Or
 @save db dat 
 
