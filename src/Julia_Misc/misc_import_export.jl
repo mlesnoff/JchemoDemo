@@ -33,38 +33,6 @@ CSV.write(db, X; delim = ';',  missingstring =  "0.0")
 ## Alternative syntax:
 #X |> CSV.write(file; kwargs...)
 
-########### JLD2 
-using JLD2
-
-## Importation
-db = joinpath(path_jdat, "data/cassav.jld2") 
-res = load(db) ;
-keys(res)
-dat = res["dat"]
-keys(dat)
-X = dat.X
-Y = dat.Y
-## Or
-dat = load(db, "dat") ;
-keys(dat)
-## Or
-@load db dat ;
-keys(dat)
-
-## Exportation
-X1 = rand(5, 3)
-X2 = DataFrame(rand(5, 2), ["y1", "y2"]) 
-info = "Fictive data"
-dat = (X1 = X1, X2 = X2, info = info)
-
-db = joinpath(path_out, "res.jld2") 
-jldsave(db; dat)
-#jldsave(db, true; dat)  # 'true" ==> compression   
-## Or
-@save db dat 
-#load(db, "dat")
-#keys(dat)
-
 ########### HDF5
 ## HDF5 stands for Hierarchical Data Format v5 and is closely 
 ## modeled on file systems. In HDF5, a "group" is analogous to a directory, 
@@ -121,6 +89,38 @@ fid["X"] = 5
 fid
 HDF5.read(fid["X"])
 HDF5.close(fid)
+
+########### JLD2 
+using JLD2
+
+## Importation
+db = joinpath(path_jdat, "data/cassav.jld2") 
+res = load(db) ;
+keys(res)
+dat = res["dat"]
+keys(dat)
+X = dat.X
+Y = dat.Y
+## Or
+dat = load(db, "dat") ;
+keys(dat)
+## Or
+@load db dat ;
+keys(dat)
+
+## Exportation
+X1 = rand(5, 3)
+X2 = DataFrame(rand(5, 2), ["y1", "y2"]) 
+info = "Fictive data"
+dat = (X1 = X1, X2 = X2, info = info)
+
+db = joinpath(path_out, "res.jld2") 
+jldsave(db; dat)
+#jldsave(db, true; dat)  # 'true" ==> compression   
+## Or
+@save db dat 
+#load(db, "dat")
+#keys(dat)
 
 ########### JSON
 using JSON
