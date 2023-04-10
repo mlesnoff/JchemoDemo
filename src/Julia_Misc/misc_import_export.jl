@@ -95,17 +95,17 @@ using JLD2
 
 ## Importation
 db = joinpath(path_jdat, "data/cassav.jld2") 
-res = load(db) ;
-keys(res)
-dat = res["dat"]
+@load db dat ;
 keys(dat)
 X = dat.X
 Y = dat.Y
 ## Or
-dat = load(db, "dat") ;
+res = load(db) ;
+keys(res)
+dat = res["dat"]
 keys(dat)
 ## Or
-@load db dat ;
+dat = load(db, "dat") ;
 keys(dat)
 
 ## Exportation
