@@ -3,16 +3,16 @@ using Jchemo, JchemoData
 using Loess
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
-db = joinpath(path_jdat, "data", "tecator.jld2") 
+db = joinpath(path_jdat, "data/tecator.jld2") 
 @load db dat
 pnames(dat)
 
 X = dat.X
 Y = dat.Y 
+typ = Y.typ
 wl = names(X)
 wl_num = parse.(Float64, wl) 
 ntot = nro(X)
-typ = Y.typ
 namy = names(Y)[1:3]
 
 plotsp(X, wl_num;
