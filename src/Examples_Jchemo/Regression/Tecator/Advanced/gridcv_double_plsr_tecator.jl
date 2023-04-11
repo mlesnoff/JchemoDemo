@@ -1,17 +1,18 @@
 using JLD2, CairoMakie
+using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
-db = joinpath(path_jdat, "data", "tecator.jld2") 
+db = joinpath(path_jdat, "data/tecator.jld2") 
 @load db dat
 pnames(dat)
 
 X = dat.X
 Y = dat.Y 
+typ = Y.typ
 wl = names(X)
 wl_num = parse.(Float64, wl) 
 ntot, p = size(X)
-typ = Y.typ
 namy = names(Y)[1:3]
 nvar = length(namy)
 
@@ -224,5 +225,4 @@ ax = Axis(f[1, 1], title = namy[j],
     xlabel = "RMSEP", ylabel = "Nb. occurences")
 hist!(ax, res_mse_avg.rmsep; bins = 30)
 f
-
 
