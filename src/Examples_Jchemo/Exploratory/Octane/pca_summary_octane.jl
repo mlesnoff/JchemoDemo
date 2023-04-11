@@ -3,7 +3,7 @@ using Jchemo, JchemoData
 CairoMakie.activate!()
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
-db = joinpath(path_jdat, "data", "octane.jld2") 
+db = joinpath(path_jdat, "data/octane.jld2") 
 @load db dat
 pnames(dat)
   
@@ -31,6 +31,11 @@ i = 1
 scatter(z[:, i];
     axis = (xlabel = "Observation", ylabel = "Contribution", 
         title = string("PC", i)))
+
+## Same
+plotxy(1:n, z[:, i];
+    xlabel = "Observation", ylabel = "Contribution", 
+    title = string("PC", i)).f
 
 ## Variables' contributions
 z = res.contr_var 

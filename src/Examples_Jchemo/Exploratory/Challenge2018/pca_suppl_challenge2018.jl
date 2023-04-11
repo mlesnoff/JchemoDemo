@@ -4,7 +4,7 @@ using FreqTables
 CairoMakie.activate!() 
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
-db = joinpath(path_jdat, "data", "challenge2018.jld2") 
+db = joinpath(path_jdat, "data/challenge2018.jld2") 
 @load db dat
 pnames(dat)
 
@@ -17,7 +17,9 @@ summ(Y)
 typ = Y.typ
 test = Y.test
 
-freqtable(string.(typ, "-", Y.label))
+z = string.(typ, "-", Y.label)
+tab(z)
+freqtable(z)
 freqtable(typ, test)
 
 ## Preprocesssing
@@ -50,6 +52,7 @@ plotgrid(res.lv, res.pvar; step = 2,
     ylabel = "Prop. variance explained").f
 
 Ttrain = fm.T
+
 ## Projection of Test in the Train score space
 ## Below function 'transform' has to be qualified
 ## since both packages Jchemo and DataFrames export 

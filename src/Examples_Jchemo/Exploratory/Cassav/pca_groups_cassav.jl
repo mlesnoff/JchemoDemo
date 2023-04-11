@@ -5,7 +5,7 @@ CairoMakie.activate!()
 #GLMakie.activate!() 
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
-db = joinpath(path_jdat, "data", "cassav.jld2") 
+db = joinpath(path_jdat, "data/cassav.jld2") 
 @load db dat
 pnames(dat)
   
@@ -48,8 +48,8 @@ CairoMakie.activate!()
 i = 1
 f = Figure(resolution = (600, 400))
 ax = Axis3(f[1, 1]; perspectiveness = 0.2,
-    xlabel = string("PC", i), ylabel = string("PC", i + 1), zlabel = string("PC", i + 2), 
-    title = "PCA score space")
+    xlabel = string("PC", i), ylabel = string("PC", i + 1), 
+    zlabel = string("PC", i + 2), title = "PCA score space")
 scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2];
     markersize = 15, color = (:red, .5))
 f

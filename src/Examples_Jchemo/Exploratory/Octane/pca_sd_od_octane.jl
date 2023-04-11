@@ -3,7 +3,7 @@ using Jchemo, JchemoData
 CairoMakie.activate!()  
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
-db = joinpath(path_jdat, "data", "octane.jld2") 
+db = joinpath(path_jdat, "data/octane.jld2") 
 @load db dat
 pnames(dat)
 
@@ -21,6 +21,7 @@ pnames(fm)
 res = occsd(fm) ;
 pnames(res)
 d = res.d
+
 f = Figure(resolution = (500, 400))
 Axis(f[1, 1]; xlabel = "Standardized score distance", 
     ylabel = "Nb. observations")
@@ -31,6 +32,7 @@ f
 res = occod(fm, X) ;
 pnames(res)
 d = res.d
+
 f = Figure(resolution = (500, 400))
 Axis(f[1, 1]; xlabel = "Standardized orthogonal distance", 
     ylabel = "Nb. observations")
@@ -57,6 +59,7 @@ f
 res = occsdod(fm, X) ;
 pnames(res)
 d = res.d
+
 f, ax = plotxy(1:n, d.dstand;
     xlabel = "Observation", 
     ylabel = "Standardized SD-OD distance")

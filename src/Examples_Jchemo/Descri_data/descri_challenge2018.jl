@@ -2,19 +2,18 @@ using JLD2, CairoMakie, FreqTables
 using Jchemo, JchemoData
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
-db = joinpath(path_jdat, "data", "challenge2018.jld2") 
+db = joinpath(path_jdat, "data/challenge2018.jld2") 
 @load db dat
 pnames(dat)
 
 X = dat.X    
 Y = dat.Y
-wl = names(X)
-wl_num = parse.(Float64, wl)
-ntot = nro(X)
-summ(Y)
 y = Y.conc
 typ = Y.typ
 test = Y.test
+wl = names(X)
+wl_num = parse.(Float64, wl)
+ntot = nro(X)
 
 summ(X).res
 

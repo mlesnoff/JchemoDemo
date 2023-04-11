@@ -3,7 +3,7 @@ using Jchemo, JchemoData
 CairoMakie.activate!()  
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
-db = joinpath(path_jdat, "data", "octane.jld2") 
+db = joinpath(path_jdat, "data/octane.jld2") 
 @load db dat
 pnames(dat)
   
@@ -24,6 +24,7 @@ fm = pcasvd(X; nlv = 6) ;
 #fm = pcasph(X; nlv = 6) ;  
 ## End 
 pnames(fm)
+
 T = fm.T
 
 ## 2-D Score space 

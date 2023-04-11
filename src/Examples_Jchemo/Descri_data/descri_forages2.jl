@@ -2,7 +2,7 @@ using JLD2, CairoMakie, StatsBase, FreqTables
 using Jchemo, JchemoData
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
-db = joinpath(path_jdat, "data", "forages2.jld2") 
+db = joinpath(path_jdat, "data/forages2.jld2") 
 @load db dat
 pnames(dat)
   
