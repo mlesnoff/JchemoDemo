@@ -12,8 +12,7 @@ Y = dat.Y
 typ = Y.typ
 wl = names(X)
 wl_num = parse.(Float64, wl) 
-ntot = nro(X)
-p = nco(X)
+ntot, p = size(X)
 namy = names(Y)[1:3]
 
 plotsp(X, wl_num;
