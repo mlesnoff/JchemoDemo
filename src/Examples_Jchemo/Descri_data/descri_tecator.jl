@@ -8,10 +8,11 @@ pnames(dat)
 
 X = dat.X
 Y = dat.Y 
+typ = Y.typ
 wl = names(X)
 wl_num = parse.(Float64, wl) 
 ntot = nro(X)
-typ = Y.typ
+
 namy = names(Y)[1:3]
 tab(typ)
 
@@ -56,7 +57,9 @@ nam = namy[2]
 y = Y[:, 2]
 mlev(typ)
 ztyp = recodcat2int(typ)
-tab(string.(typ, "-", ztyp))
+
+tab(string.(ztyp, "-", typ))
+
 f = Figure(resolution = (500, 400))
 ax = Axis(f[1, 1], 
     xticks = (1:3, mlev(typ)),
@@ -64,6 +67,4 @@ ax = Axis(f[1, 1],
 boxplot!(ax, ztyp, y; width = .5, 
     show_notch = true)
 f
-
-
 

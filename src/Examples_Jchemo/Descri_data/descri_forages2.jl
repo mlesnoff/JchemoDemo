@@ -8,12 +8,11 @@ pnames(dat)
   
 X = dat.X    
 Y = dat.Y
+typ = Y.typ
+test = Y.test
 wl = names(X)
 wl_num = parse.(Float64, wl)
 ntot = nro(X)
-summ(Y)
-typ = Y.typ
-test = Y.test
 
 summ(X).res
 
