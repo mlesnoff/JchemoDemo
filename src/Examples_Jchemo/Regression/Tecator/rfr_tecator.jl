@@ -3,16 +3,17 @@ using Jchemo, JchemoData
 using Loess
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
-db = joinpath(path_jdat, "data", "tecator.jld2") 
+db = joinpath(path_jdat, "data/tecator.jld2") 
 @load db dat
 pnames(dat)
 
 X = dat.X
 Y = dat.Y 
+typ = Y.typ
 wl = names(X)
 wl_num = parse.(Float64, wl) 
-ntot, p = size(X)
-typ = Y.typ
+ntot = nro(X)
+p = nco(X)
 namy = names(Y)[1:3]
 
 plotsp(X, wl_num;
@@ -42,7 +43,8 @@ n_trees = 100
 partial_sampling = .7
 n_subfeatures = p / 3
 max_depth = 20
-fm = rfr_dt(Xtrain, ytrain; n_trees = n_trees,
+fm = rfr_dt(Xtrain, ytrain; 
+    n_trees = n_trees,
     partial_sampling = partial_sampling,
     n_subfeatures = n_subfeatures,
     max_depth = max_depth) ;
@@ -59,16 +61,7 @@ plotxy(zpred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f   
 
-zfm = loess(zpred, ytest; span = 2/3) ;
-pred_loess = Loess.predict(zfm, sort(zpred))
-f, ax = plotxy(zpred, ytest;
-    xlabel = "Predicted", ylabel = "Observed",
-    resolution = (500, 400))
-lines!(ax, sort(zpred), pred_loess; color = :red)
-ablines!(ax, 0, 1; color = :grey)
-f    
-
-## With function baggr
+## RF With function baggr
 rep = 100
 rowsamp = .7
 n_subfeatures = p / 3
