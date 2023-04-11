@@ -2,24 +2,23 @@ using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
-db = joinpath(path_jdat, "data", "tecator.jld2") 
+db = joinpath(path_jdat, "data/tecator.jld2") 
 @load db dat
 pnames(dat)
 
 X = dat.X
 Y = dat.Y 
+typ = Y.typ
 wl = names(X)
 wl_num = parse.(Float64, wl) 
 ntot, p = size(X)
-typ = Y.typ
 namy = names(Y)[1:3]
 
 ## Assume that the objective is to build 
 ## a splitting Tot = Train + Test, by random sampling.
 ## If there are missing data in Y,
-## the sampling must be done taking care of each y-variable
-## (y-column), to avoid situations where Train and Test 
-## will contain missing values.
+## the sampling must be done independently for each y-variable
+## (y-column), removing each time the missing values.
 
 ## This script presents 
 ## 1) and approach "by-hand" for a given y-variable,
@@ -76,7 +75,7 @@ ids.train[j][k]
 ids.test[j][k]
 
 ## If the objective is to get a consistent 
-## value ntest = 80
+## value ntest
 ntest = 60  # Must be Int64
 ids = mtest(Y[:, 1:3]; 
     test = ntest, rep = 10) ;
@@ -84,8 +83,8 @@ ids.test[j][k]
 
 ## The output of 'mtest' can be saved and 
 ## re-used in next sessions
-root_out = "D:/Mes Donnees/Tmp/"
-db = string(root, "ids_tecator.jld2") 
-#@save db ids   
+path_out = "D:/Mes Donnees/Tmp/"
+db = joinpath(path_out, "ids_tecator.jld2") 
+#jldsave(db; ids)   
 ## Re-use 
 #@load db ids
