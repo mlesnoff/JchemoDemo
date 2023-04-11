@@ -2,16 +2,16 @@ using JLD2, CairoMakie
 using Jchemo, JchemoData
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
-db = joinpath(path_jdat, "data", "tecator.jld2") 
+db = joinpath(path_jdat, "data/tecator.jld2") 
 @load db dat
 pnames(dat)
 
 X = dat.X
 Y = dat.Y 
+typ = Y.typ
 wl = names(X)
 wl_num = parse.(Float64, wl) 
 ntot, p = size(X)
-typ = Y.typ
 namy = names(Y)[1:3]
 
 plotsp(X, wl_num;
@@ -207,8 +207,8 @@ res = gridcvlv(Xtrain, ytrain; segm = segm,
     pars = pars, verbose = true).res 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-group = string.("nvl0=", res.nlv0, " h=", res.h, 
-    " k=", res.k)
+group = string.("nvl0=", res.nlv0, " metric =", res.metric, 
+    " h=", res.h, " k=", res.k)
 plotgrid(res.nlv, res.y1, group;
     xlabel ="Nb. LVs", ylabel = "RMSEP").f
 fm = lwplsr_s(Xtrain, ytrain; nlv0 = res.nlv0[u], 
