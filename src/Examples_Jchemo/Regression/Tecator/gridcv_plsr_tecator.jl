@@ -51,6 +51,7 @@ segm = segmkf(ntrain, K; rep = 10)
 pct = .30
 m = round(pct * ntrain)
 segm = segmts(ntrain, m; rep = 30)
+
 i = 1  # segment within a replication
 k = 1  # replication
 segm[i]
@@ -67,10 +68,11 @@ res_rep = rescv.res_rep
 ## Average results over the replications
 res = rescv.res
 
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
 plotgrid(res.nlv, res.y1; step = 2,
     xlabel = "Nb. LVs", ylabel = "RMSEP").f
+
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
 
 ## Variability of the performance 
 ## between folds and replications
