@@ -3,21 +3,21 @@ using Jchemo, JchemoData
 using FreqTables
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
-db = joinpath(path_jdat, "data", "challenge2018.jld2") 
+db = joinpath(path_jdat, "data/challenge2018.jld2") 
 @load db dat
 pnames(dat)
 
 X = dat.X 
 Y = dat.Y
 y = Y.conc
+typ = Y.typ
+label = Y.label 
+test = Y.test
 wl = names(X)
 wl_num = parse.(Float64, wl)
 ntot, p = size(X)
 
 summ(Y)
-typ = Y.typ
-label = Y.label 
-test = Y.test
 
 freqtable(string.(typ, "-", Y.label))
 freqtable(typ, test)
@@ -126,7 +126,10 @@ res[u, :]
 fm = krr(Xtrain, ytrain; lb = res.lb[u], 
     gamma = res.gamma[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
-rmsep(pred, ytest)
+println(rmsep(pred, ytest))
+plotxy(vec(pred), ytest; resolution = (500, 400),
+    color = (:red, .5), bisect = true, 
+    xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
 #### KPLSR
 nlv = 0:100 
@@ -190,6 +193,7 @@ plotxy(vec(pred), ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
+## A performant model 
 fm = lwplsr(Xtrain, ytrain; nlvdis = 15,
     metric = "mahal", h = 2, k = 200, nlv = 15) ;
 @time pred = Jchemo.predict(fm, Xtest).pred ;
@@ -213,6 +217,7 @@ fm = lwplsravg(Xtrain, ytrain; nlvdis = res.nlvdis[u],
 pred = Jchemo.predict(fm, Xtest).pred 
 rmsep(pred, ytest)
 
+## A performant model
 nlvdis = 15 ; metric = "mahal"  
 h = 2 ; k = 200 
 nlv = "5:20" ; typf = "unif"
@@ -270,7 +275,7 @@ pred = Jchemo.predict(fm, Xtest).pred
 rmsep(pred, ytest)
 
 #### CPLSR-AVG 
-ncla = 2:5 ; nlv_da = 1:5
+ncla = 5:10 ; nlv_da = 1:20
 nlv = ["0:10"; "0:15"; "0:20"; 
     "5:15"; "5:20"]
 pars = mpar(ncla = ncla, nlv_da = nlv_da, 
@@ -285,13 +290,6 @@ fm = cplsravg(Xtrain, ytrain; ncla = res.ncla[u],
     nlv_da = res.nlv_da[u], nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
 rmsep(pred, ytest)
-
-ncla = 20 ; nlv_da = 25 ; nlv = "5:20"
-fm = cplsravg(Xtrain, ytrain; 
-    ncla = ncla, nlv_da = nlv_da, 
-    nlv = nlv) ;
-@time res = Jchemo.predict(fm, Xtest) ;
-rmsep(res.pred, ytest)
 
 #### KNNR
 nlvdis = [15; 20]  ; metric = ["mahal"] 
