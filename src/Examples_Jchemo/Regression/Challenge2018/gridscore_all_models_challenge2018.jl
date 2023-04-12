@@ -291,6 +291,12 @@ fm = cplsravg(Xtrain, ytrain; ncla = res.ncla[u],
 pred = Jchemo.predict(fm, Xtest).pred 
 rmsep(pred, ytest)
 
+fm = cplsravg(Xtrain, ytrain; ncla = 10,
+    nlv_da = 14, nlv = "5:20") ;
+pred = Jchemo.predict(fm, Xtest).pred 
+rmsep(pred, ytest)
+
+
 #### KNNR
 nlvdis = [15; 20]  ; metric = ["mahal"] 
 h = [1; 2; 4; 6; Inf] ;
