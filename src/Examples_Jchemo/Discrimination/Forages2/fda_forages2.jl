@@ -60,8 +60,8 @@ f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
 scatter!(ax, ct[:, 1], ct[:, 2],
     markersize = 10, color = :red)
 f
-## Here, using a pseudo-inverse highly overfits 
-## the discrimination of new observations
+## In this example, using a pseudo-inverse 
+## highly overfits the discrimination of new observations
 Ttest = Jchemo.transform(fm, Xtest)
 i = 1  # class 
 s = ytest .== lev[i]
