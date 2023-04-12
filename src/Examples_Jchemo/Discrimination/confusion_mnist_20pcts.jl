@@ -1,5 +1,6 @@
 using JLD2, CairoMakie, FreqTables 
 using Jchemo, JchemoData
+using CodecZlib # requirede since the dataset is compressed 
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/mnist_20pcts.jld2") 
@@ -36,4 +37,4 @@ cf.pct
 cf.accuracy 
 
 plotconf(cf).f
-
+plotconf(cf; cnt = false).f
