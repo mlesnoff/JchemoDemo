@@ -41,13 +41,9 @@ plotgrid(res.nlv, res.y1; step = 5,
 fm = plsrda(Xtrain, ytrain; nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
 err(pred, ytest)
-freqtable(ytest, vec(pred))
-
 res = confusion(pred, ytest) ;
-pnames(res)
 res.cnt
 res.pct
-res.accuracy 
 plotconf(res).f
 
 ## PLSLDA
