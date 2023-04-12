@@ -2,7 +2,7 @@
 
 julia_version = "1.8.5"
 manifest_format = "2.0"
-project_hash = "f4157b57e43f8a355577ed003e90b0f3beb30046"
+project_hash = "5d12586a7b692907f46cbe9e875f462bea10b6d2"
 
 [[deps.AbstractFFTs]]
 deps = ["ChainRulesCore", "LinearAlgebra"]
@@ -486,9 +486,9 @@ version = "2.8.1+1"
 
 [[deps.HypergeometricFunctions]]
 deps = ["DualNumbers", "LinearAlgebra", "OpenLibm_jll", "SpecialFunctions"]
-git-tree-sha1 = "d926e9c297ef4607866e8ef5df41cde1a642917f"
+git-tree-sha1 = "432b5b03176f8182bd6841fbfc42c718506a2d5f"
 uuid = "34004b35-14d8-5ef3-9330-4cdb6864b03a"
-version = "0.3.14"
+version = "0.3.15"
 
 [[deps.HypothesisTests]]
 deps = ["Combinatorics", "Distributions", "LinearAlgebra", "Random", "Rmath", "Roots", "Statistics", "StatsBase"]
@@ -622,18 +622,18 @@ version = "1.4.1"
 
 [[deps.JSON]]
 deps = ["Dates", "Mmap", "Parsers", "Unicode"]
-git-tree-sha1 = "3c837543ddb02250ef42f4738347454f95079d4e"
+git-tree-sha1 = "31e996f0a15c7b280ba9f76636b3ff9e2ae58c9a"
 uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
-version = "0.21.3"
+version = "0.21.4"
 
 [[deps.Jchemo]]
 deps = ["Clustering", "DataFrames", "DataInterpolations", "DecisionTree", "Distances", "Distributions", "HypothesisTests", "ImageFiltering", "Interpolations", "LinearAlgebra", "Makie", "NearestNeighbors", "Random", "SparseArrays", "Statistics", "StatsBase"]
-git-tree-sha1 = "5b34af29892992a7afe18e2d9514742df96263d6"
+git-tree-sha1 = "0bd921f80b3e900ae721c57326e6d66e358b0f35"
 uuid = "fbca9394-dd0a-4d1c-b066-ae75f6ef1ad5"
-version = "0.1.17"
+version = "0.1.18"
 
 [[deps.JchemoData]]
-git-tree-sha1 = "88721f182d016fa0a8c3fcb7550af30ffa1f9f1d"
+git-tree-sha1 = "a56d9b08bd9296f1245816913564f0f0497b7320"
 repo-rev = "main"
 repo-url = "https://github.com/mlesnoff/JchemoData.jl.git"
 uuid = "3440f217-e3fb-4eda-bd77-d99cfb805e7c"
@@ -1319,9 +1319,9 @@ version = "0.3.1"
 
 [[deps.TranscodingStreams]]
 deps = ["Random", "Test"]
-git-tree-sha1 = "94f38103c984f89cf77c402f2a68dbd870f8165f"
+git-tree-sha1 = "0b829474fed270a4b0ab07117dce9b9a2fa7581a"
 uuid = "3bb67fe8-82b1-5028-8e26-92a6c54297fa"
-version = "0.9.11"
+version = "0.9.12"
 
 [[deps.TriplotBase]]
 git-tree-sha1 = "4d4ed7f294cda19382ff7de4c137d24d16adc89b"
