@@ -41,10 +41,11 @@ plotgrid(res.nlv, res.y1; step = 5,
 fm = plsrda(Xtrain, ytrain; nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
 err(pred, ytest)
-res = confusion(pred, ytest) ;
-res.cnt
-res.pct
-plotconf(res).f
+
+cf = confusion(pred, ytest) ;
+cf.cnt
+cf.pct
+plotconf(cf).f
 
 ## PLSLDA
 nlv = 1:50  ## !!: Does not start from nlv=0 (since LDA on scores)

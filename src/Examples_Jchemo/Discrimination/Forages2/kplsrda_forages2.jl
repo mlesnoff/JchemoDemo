@@ -40,8 +40,8 @@ pred = res.pred
 res.posterior
 
 err(pred, ytest)
-res = confusion(pred, ytest) ;
-res.cnt
-res.pct
-plotconf(res).f
+cf = confusion(pred, ytest) ;
+cf.cnt
+cf.pct
+plotconf(cf).f
 

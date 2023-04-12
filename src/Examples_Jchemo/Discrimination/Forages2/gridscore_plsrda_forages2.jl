@@ -2,7 +2,7 @@ using JLD2, CairoMakie, FreqTables, StatsBase
 using Jchemo, JchemoData
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
-db = joinpath(path_jdat, "data", "forages2.jld2") 
+db = joinpath(path_jdat, "data/forages2.jld2") 
 @load db dat
 pnames(dat)
   
@@ -49,5 +49,8 @@ plotgrid(res.nlv, res.y1; step = 5,
 fm = plsrda(Xtrain, ytrain; nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
 err(pred, ytest)
-freqtable(vec(pred), ytest)
 
+cf = confusion(pred, ytest) ;
+cf.cnt
+cf.pct
+plotconf(cf).f

@@ -45,12 +45,12 @@ res.posterior
 err(pred, ytest)
 freqtable(ytest, vec(pred))
 
-res = confusion(pred, ytest) ;
-pnames(res)
-res.cnt
-res.pct
-res.accuracy 
-plotconf(res).f
+cf = confusion(pred, ytest) ;
+pnames(cf)
+cf.cnt
+cf.pct
+cf.accuracy 
+plotconf(cf).f
 
 ## Averaging
 nlv = "0:20"
