@@ -48,11 +48,10 @@ pnames(res)
 res.cnt
 res.pct
 res.accuracy 
-
 plotconf(res).f
 
 ## PLSLDA
-nlv = 1:50  ## !!: Does not start from nlv=0
+nlv = 1:50  ## !!: Does not start from nlv=0 (since LDA on scores)
 res = gridcvlv(Xtrain, ytrain; segm = segm, 
     score = err, fun = plslda, nlv = nlv, verbose = true).res
 u = findall(res.y1 .== minimum(res.y1))[1] 
@@ -62,6 +61,4 @@ plotgrid(res.nlv, res.y1; step = 5,
 fm = plslda(Xtrain, ytrain; nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
 err(pred, ytest)
-
-
 
