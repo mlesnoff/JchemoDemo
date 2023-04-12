@@ -3,21 +3,21 @@ using Jchemo, JchemoData
 using FreqTables
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
-db = joinpath(path_jdat, "data", "challenge2018.jld2") 
+db = joinpath(path_jdat, "data/challenge2018.jld2") 
 @load db dat
 pnames(dat)
 
 X = dat.X 
 Y = dat.Y
 y = Y.conc
+typ = Y.typ
+label = Y.label 
+test = Y.test
 wl = names(X)
 wl_num = parse.(Float64, wl)
 ntot = nro(X)
 
 summ(Y)
-typ = Y.typ
-label = Y.label 
-test = Y.test
 
 freqtable(string.(typ, "-", Y.label))
 freqtable(typ, test)
@@ -48,21 +48,29 @@ nval = 300
 ## Or:
 #pct = .20
 #nval = Int64(round(pct * ntrain))    
+
 ## Different choices to select Val
 ## (1) Random sampling
 s = sample(1:ntrain, nval; replace = false)
+ytrain[s]
+
 ## (2) Kennard-Stone sampling
 ## Output 'train' contains higher variability
 ## than output 'test'
 res = sampks(Xtrain; k = nval)
 s = res.train
+ytrain[s]
+
 ## (3) Duplex sampling
 res = sampdp(Xtrain; k = nval)
 s = res.train
+ytrain[s]
+
 ## (4) Systematic sampling over y
 res = sampsys(ytrain; k = nval)
 s = res.train
 ytrain[s]
+
 ## Selection
 Xcal = rmrow(Xtrain, s)
 ycal = rmrow(ytrain, s)
