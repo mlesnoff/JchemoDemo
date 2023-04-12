@@ -2,17 +2,17 @@ using JLD2, CairoMakie, FreqTables
 using Jchemo, JchemoData
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
-db = joinpath(path_jdat, "data", "forages2.jld2") 
+db = joinpath(path_jdat, "data/forages2.jld2") 
 @load db dat
 pnames(dat)
   
 X = dat.X 
 Y = dat.Y
 y = Y.typ
+test = Y.test
 wl = names(X)
 wl_num = parse.(Float64, wl)
 ntot = nro(X)
-test = Y.test
 
 tab(y)
 freqtable(y, test)
@@ -63,7 +63,7 @@ f
 ## Here, using a pseudo-inverse highly overfits 
 ## the discrimination of new observations
 Ttest = Jchemo.transform(fm, Xtest)
-i = 1
+i = 1  # class 
 s = ytest .== lev[i]
 zT = Ttest[s, :]
 f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
@@ -73,7 +73,5 @@ scatter!(ax, ct[:, 1], ct[:, 2],
 scatter!(ax, zT[:, 1], zT[:, 2],
     markersize = 10, color = (:grey, .8))
 f
-
-
 
 
