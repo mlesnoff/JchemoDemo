@@ -11,7 +11,7 @@ Y = rand(n, q)
 y = Y[:, 1]
 w = rand(n) 
 nlv = 25 
-@time fm = plskern(X, y; nlv = nlv) ;
+@time fm = plskern(X, Y; nlv = nlv) ;
 @time fm = plskern(X, y; nlv = nlv) ;
 
 
