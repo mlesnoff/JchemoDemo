@@ -37,7 +37,6 @@ f
 
 ################ HEATMAP 
 
-
 CairoMakie.activate!()  
 #GLMakie.activate!() 
 
