@@ -277,6 +277,22 @@ lines(f[1, 2], x, y, color = :blue)
 lines(f[2, 1:2], x, y, color = :green)
 f
 
+f = Figure(resolution = (700, 400))
+k = 1
+n = 20
+for i = 1:2, j = 1:3
+    x = rand(n)
+    y = x + rand(n)
+    ax = Axis(f[i, j], 
+        xlabel = "X", ylabel = "Y")
+    scatter!(ax, x, y; color = (:red, .5))
+    ablines!(ax, 0, 1; color = :grey)
+    k = k + 1
+end
+f
+
+
+
 let
     ## https://discourse.julialang.org/t/beautiful-makie-gallery/62523/31
     n = 200
