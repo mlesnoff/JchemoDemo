@@ -213,7 +213,7 @@ years = sort(unique(year))
 
 f = Figure(resolution = (500, 400))
 Axis(f[1, 1], xlabel = "Y", ylabel = "Density")
-for i in 1:length(years)
+for i in 1:lastindex(years)
     s = year .== years[i]
     density!(y[s]; label = string(years[i]))
 end
@@ -224,7 +224,7 @@ f = Figure(resolution = (500, 400))
 offs = [0.; 1.5; 3]
 Axis(f[1, 1], xlabel = "Y", ylabel = "Density",
     yticks = (offs, string.(years)))
-for i in 1:length(years)
+for i in 1:lastindex(years)
     s = year .== years[i]
     density!(y[s]; offset = offs[i], 
         label = string(years[i]), bandwidth = 0.2)
@@ -481,6 +481,7 @@ f
 
 n = 10000 ; p = 2 
 X = randn(n, p) 
-scatter(X[:, 1], X[:, 2]; color = (:blue, .3))
+scatter(X[:, 1], X[:, 2]; 
+    color = (:blue, .3))
 
 
