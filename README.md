@@ -13,7 +13,7 @@ This project is used for training only.
 
 4. [**Some methodological materials**](https://github.com/mlesnoff/JchemoDemo/tree/main/docs)
 
-The **datasets** used in the examples are stored in package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl) (already installed in the [**environment**](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)).
+The **datasets** used in **JchemoDemo** as examples are stored in package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl) (already installed in the [environment](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)).
 
 When studying a given script, it is recommended to run the code row by row (or by block) in the REPL to observe the corresponding outputs. 
 
