@@ -186,7 +186,7 @@ To locate above *StyTrees* directory, type in command REPL
     julia> cd(path)
 ```
 
-**An easy way** to switch from a local environment (e.g. *StudyTrees*) to the global environment is as follows 
+An easy way to **switch from a local environment (e.g. *StudyTrees*) to the global environment** is as follows 
 - Assume that VsCode is located at *D:/Users/Tmp/StudyTrees/*. In the Pkg REPL, typing
     - `activate` loads the global environment
     - `activate .` comes back to the local enviroment *StudyTrees*
