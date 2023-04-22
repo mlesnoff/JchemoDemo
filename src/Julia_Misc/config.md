@@ -131,7 +131,7 @@ It is recommended to create such a project environment for each new operational 
 
 #### **Copy and install an external project environment**
 
-For instance, this section shows how to copy and install the externeal project environment [**JchemoDemo**](https://github.com/mlesnoff/JchemoDemo).
+This section shows for instance how to copy and install the externeal project environment [**JchemoDemo**](https://github.com/mlesnoff/JchemoDemo).
 
 - Go to this [address](https://github.com/mlesnoff/JchemoDemo)
 - Green button 'Code' ==> Download ZIP
@@ -152,13 +152,13 @@ At this step, the dependent packages are not installed yet and therefore cannot 
 - This installs the packages defined in the project environment. 
 - Project *JchemoDemo* and its environment can be used   
 
-The `instantiate` step needs only to be done at the first installation. For the next working sessions, how to open the project environment is described in the previous section.
+The `instantiate` step needs only to be done at the first installation. For the next working sessions, how to simply open the existing project environment is described in the previous section.
 
 #### **Create a project environment from scratch**
 
 An easy way is the following (many other are possible).
 
-- Let us assume that Julia 1.8.5 is ued.
+- Let us assume that Julia 1.8.5 is used.
 - Create an empty directory that will receive the project (e.g. named 'StudyTrees'), for instance *D:/Users/Tmp/StudyTrees/* 
 - In VsCode, menu 'File' ==> Open Folder
 - Select the directory *D:/Users/Tmp/StudyTrees/*
