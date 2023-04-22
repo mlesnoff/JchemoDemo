@@ -61,7 +61,7 @@ julia>
 ```
 * The **Pkg REPL**
 ```julia
-pkg> 
+(@v.1.8)  pkg> 
 ```
 
 **Command REPL** is the usual mode for computations. **Pkg REPL** is used to manage packages and project environments.
@@ -133,51 +133,69 @@ It is recommended to create such a project environment for each new operational 
 
 An easy way is the following (many other are possible).
 
+- Let us assume that Julia 1.8.5 is ued.
 - Create an empty directory that will receive the project (e.g. named 'StudyTrees'), for instance *D:/Users/Tmp/StudyTrees/* 
 - In VsCode, menu 'File' ==> Open Folder
 - Select the directory *D:/Users/Tmp/StudyTrees/*
 - ==> VsCode locates in the corresponding path
 - Type in the Pkg REPL:
 ```julia 
-    pkg> activate .
+    (@v1.8) pkg> activate .
 ```
 
 (the dot at the end of the above command means that VsCode will load the project of where VsCode locates; if the dot is removed, the command loads the global environment)
-- Install one package (any package can be chosen), for instance package *StatsBase.jl*, from the official Julia pckages repository 
+- Install one package (any package can be chosen), for instance package *StatsBase.jl*, from the official Julia packages repository 
     - In the Pkg REPL, type
     ```julia 
         (StudyTrees) pkg> add StatsBase
     ```
-    - This installs *StatsBase.jl* in the environment, and creates the corresponding files *Project.toml* and *Manifest.toml* in the 'StudyTree' directory. The project environment "StudyTrees" is now created
-- To check the installed package in the project environment 'StudyTrees', type in Pkg REPL:  
+    - This installs *StatsBase.jl* in the environment, and creates the corresponding files *Project.toml* and *Manifest.toml* in the *StudyTree* directory. The project environment *StudyTrees* is now created
+- To check the installed package in the project environment *StudyTrees*, type in Pkg REPL:  
 ```julia 
     (StudyTrees) pkg> status
 ```
 
 #### **Activate an environment** 
 
-Any project environment can be loaded using command `activate` in the REPL management mode (`]`). For instance, for project "StudyTrees" already existing at location "D:/Users/Tmp/StudyTrees/"   
-- From any path location 
-    -  In the management mode (`]`), run command `activate "D:/Users/Tmp/StudyTrees"`
-- or locate directly in the directory of the project and, in the management mode  (`]`), run command `activate .`
-    - To locate in the repository, run in REPL
-        - `path = "D:/Users/Tmp/StudyTrees/"`
-        - `cd(path)`
-- or locate above the project repertory and, in the management mode  (`]`), run command `activate StudyTrees` 
-    - To locate above the repository, run in REPL
-        - `path = "D:/Users/Tmp/"`
-        - `cd(path)`
+Any project environment can be loaded using command `activate` in the Pkg REPL. For instance, let us assume that project environment *StudyTrees* already exists at location *D:/Users/Tmp/StudyTrees/*. Then: 
 
-**An easy way** to switch from a local environment (e.g. "StudyTrees") to the global environment is as follows 
-- Assume that VsCode is located at *D:/Users/Tmp/StudyTrees/*. In the management mode (`]`), run
-    - `activate` to load the global environment
-    - `activate .` to come back to the local enviroment "StudyTrees"
+- From any path location, *StudyTrees* can be loaded by typing in Pkg REPL:
+```julia 
+    (@v.1.8) pkg> activate "D:/Users/Tmp/StudyTrees"
+```
 
-See:
-- https://pkgdocs.julialang.org/v1/
-- https://pkgdocs.julialang.org/v1/getting-started/
-- https://pkgdocs.julialang.org/v1/environments/
-- https://towardsdatascience.com/how-to-setup-project-environments-in-julia-ec8ae73afe9c 
+- or locate directly in the directory of project *StudyTrees* and type in Pkg REPL:
+```julia 
+    (@v.1.8) pkg> activate .
+```
+
+To locate in *StudyTrees* directory, type in command REPL
+```julia 
+    julia> path = "D:/Users/Tmp/StudyTrees/"
+    julia> cd(path)
+```
+
+or locate above the directory of project *StudyTrees* and type in Pkg REPL:
+```julia 
+    (@v.1.8) pkg> activate StudyTrees
+```
+
+To locate above *StyTrees* directory, type in command REPL
+```julia 
+    julia> path = "D:/Users/Tmp/"
+    julia> cd(path)
+```
+
+**An easy way** to switch from a local environment (e.g. *StudyTrees*) to the global environment is as follows 
+- Assume that VsCode is located at *D:/Users/Tmp/StudyTrees/*. In the Pkg REPL, typing
+    - `activate` loads the global environment
+    - `activate .` comes back to the local enviroment *StudyTrees*
+
+See also (not exhaustive):
+- [here](https://pkgdocs.julialang.org/v1/)
+- [here](https://pkgdocs.julialang.org/v1/getting-started/)
+- [here](https://pkgdocs.julialang.org/v1/environments/
+- [here](https://towardsdatascience.com/)how-to-setup-project-environments-in-julia-ec8ae73afe9c) 
 
 
 
