@@ -1,4 +1,4 @@
-This script provides some tips about the installation of Julia and how to start with the software. It is orientated for Windows users. 
+This script provides some tips about the **installation of Julia and how to start with the software**. It is orientated for Windows users. 
 
 ### **1. INSTALL Julia** 
 
