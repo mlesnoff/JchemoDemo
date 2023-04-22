@@ -114,11 +114,11 @@ Other information are given [here](https://docs.julialang.org/en/v1/manual/faq/#
 
 ### **PROJECT ENVIRONMENTS**
 
-In a simplified way, a project is a directory and, if this directory contains files *Project.toml* and *Manifest.toml*, this is **project environment**, i.e. a project with its own independant environment (installed packages).
+In a simplified way, a project is a directory and, if this directory contains files *Project.toml* and *Manifest.toml*, this is a **project environment**, i.e. a project with its own independant environment (installed packages).
 
-It is recommended to create such a project environment for each new operational work. This allows to limitate the number of installed package (in the specific environment) and therefore the risk of evnetual conflicts between packages versions.  
+It is recommended to create such a project environment for each new operational work. This allows to limitate the number of installed package in the specific environment and therefore the risk of eventual conflicts between packages versions.  
 
-#### **Open an existing project** 
+#### **Open a project already existing in a given path** 
 
 - In VsCode, menu 'File' ==> 'Open Folder' or 'Open Recent' 
 - Select the directory of the project
@@ -126,8 +126,33 @@ It is recommended to create such a project environment for each new operational 
 ```julia 
     julia> pwd()
 ```
-- If *Project.toml* and *Manifest.toml* are present, the project environment is loaded
+- If *Project.toml* and *Manifest.toml* are present, the environment of the project is loaded (if the dependent packages of this environment have never been installed, use `instantiate` as explained in the next section)
 - If the folder is not a project environment (files *Project.toml* and *Manifest.toml* not present), this is a simple project and VsCode loads the global environment 
+
+#### **Copy and install an external project environment**
+
+For instance, this section shows how to copy and install the externeal project environment [**JchemoDemo**](https://github.com/mlesnoff/JchemoDemo).
+
+- Go to this [address](https://github.com/mlesnoff/JchemoDemo)
+- Green button 'Code' ==> Download ZIP
+- Create a working directory and unzip the zip file. A new unzipped directory is created, in this example *JchemoDemo-main*. The name of this new directory can be modified at will, for instance to *JchemoDemo*; it will be the name of the project
+- In VsCode, menu 'File' ==> Open Folder 
+- Select the directory of the project *JchemoDemo*
+- ==> VsCode locates in the corresponding path
+- Check the dependent packages by typing in Pkg REPL:
+```julia 
+    (JchemoDemo) pkg> status
+```
+
+At this step, the dependent packages are not installed yet and therefore cannot be used.
+- Type in Pkg REPL: 
+```julia 
+    (JchemoDemo) pkg> instantiate
+```
+- This installs the packages defined in the project environment. 
+- Project *JchemoDemo* and its environment can be used   
+
+The `instantiate` step needs only to be done at the first installation. For the next working sessions, how to open the project environment is described in the previous section.
 
 #### **Create a project environment from scratch**
 
@@ -155,7 +180,7 @@ An easy way is the following (many other are possible).
     (StudyTrees) pkg> status
 ```
 
-#### **Activate an environment** 
+#### **General commands to activate an environment** 
 
 Any project environment can be loaded using command `activate` in the Pkg REPL. For instance, let us assume that project environment *StudyTrees* already exists at location *D:/Users/Tmp/StudyTrees/*. Then: 
 
