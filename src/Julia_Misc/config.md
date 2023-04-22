@@ -52,9 +52,9 @@ Before to be able to use Julia within VsCode, some configuration is needed.
     - Icone 'Manage' ==> Command Palette ==> Start REPL 
         (or Alt+J Alt+O)
 
-### **CONSOLE REPL**
+### **Julia REPL**
 
-The **REPL** can be used in two modes:
+The [REPL](https://docs.julialang.org/en/v1/stdlib/REPL/) is a full-featured interactive command-line. Basically, there are two **REPL** modes (in addition with the help):
 * The **command REPL**
 ```julia
 julia>
