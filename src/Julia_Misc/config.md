@@ -122,7 +122,7 @@ It is recommended to create such a project environment for each new operational 
 
 - In VsCode, menu 'File' ==> 'Open Folder' or 'Open Recent' 
 - Select the directory of the project
-- ==> VsCode locates in the corresponding path. This can be checked; type in the command REPL:
+- ==> VsCode locates in the corresponding path. This can be checked by typing in the command REPL:
 ```julia 
     julia> pwd()
 ```
