@@ -90,17 +90,17 @@ When upgrading to a new minor version (e.g. from 1.7 to 1.8), the new global env
 **Examples of how to upgrade the global environment from Julia 1.7.3 to 1.8.1**
 
 - Install 1.8.1 (1.7.3 is already installed)
-- Update the executable path in the settings of VsCode (as indicated in previous section) 
+- Update the executable path in the settings of VsCode (as indicated in a previous section) 
     and re-run VsCode
-- A new directory "v1.8" should be created at 
-    *C:/Users/your_user_name/.julia/environments/v1.8/*. If not, create it
+- A new directory 'v1.8' should be created under 
+    *C:/Users/your_user_name/.julia/environments/*. If not, create it
 - Then, **first option (safer)**
     - Copy file *Project.toml* from 
         *C:/Users/your_user_name/.julia/environments/v1.7/* to 
         *C:/Users/your_user_name/.julia/environments/v1.8/*
     - Type in Pkg REPL: 
         ```julia 
-        pkg> instantiate
+        (@v1.8) pkg> instantiate
         ```
     - This creates file *Manifest.toml* corresponding to 
     the contents of *Project.toml* and resolves automatically eventual compatibility constraints within the new Julia version
