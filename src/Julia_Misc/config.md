@@ -55,16 +55,16 @@ Before to be able to use Julia within VsCode, some configuration is needed.
 ### **CONSOLE REPL**
 
 The **REPL** can be used in two modes:
-* The command REPL
+* The **command REPL**
 ```julia
 julia>
 ```
-* The Pkg REPL
+* The **Pkg REPL**
 ```julia
 pkg> 
 ```
 
-The command REPL is the usual mode for computations. The Pkg REPL is used to manage packages and project environments.
+**Command REPL** is the usual mode for computations. **Pkg REPL** is used to manage packages and project environments.
 
 Typing `]` in the command REPL makes switch to the Pkg REPL, and the backslash makes return to the command REPL.
 
@@ -141,7 +141,8 @@ An easy way is the following (many other are possible).
 ```julia 
     pkg> activate .
 ```
-    (the dot at the end of the above command means that VsCode will load the project of where VsCode locates; if the dot is removed, VsCode loads the global environment)
+
+(the dot at the end of the above command means that VsCode will load the project of where VsCode locates; if the dot is removed, VsCode loads the global environment)
 - Install one package (any package can be chosen), for instance package *StatsBase.jl*, from the official Julia pckages repository 
     - In the Pkg REPL, type
     ```julia 
