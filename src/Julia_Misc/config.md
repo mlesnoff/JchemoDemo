@@ -146,12 +146,12 @@ An easy way is the following (many other are possible).
 - Install one package (any package can be chosen), for instance package *StatsBase.jl*, from the official Julia pckages repository 
     - In the Pkg REPL, type
     ```julia 
-        pkg> add StatsBase
+        (StudyTrees) pkg> add StatsBase
     ```
     - This installs *StatsBase.jl* in the environment, and creates the corresponding files *Project.toml* and *Manifest.toml* in the 'StudyTree' directory. The project environment "StudyTrees" is now created
 - To check the installed package in the project environment 'StudyTrees', type in Pkg REPL:  
 ```julia 
-    pkg> status
+    (StudyTrees) pkg> status
 ```
 
 #### **Activate an environment** 
