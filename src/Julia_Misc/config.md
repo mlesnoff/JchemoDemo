@@ -127,7 +127,7 @@ It is recommended to create such a project environment for each new operational 
     julia> pwd()
 ```
 - If files *Project.toml* and *Manifest.toml* are present in the directory, the environment of the project is loaded (if the dependent packages of this environment have never been installed, use `instantiate` as explained in the next section)
-- If files *Project.toml* and *Manifest.toml* not present are not present, the folder is a simple project (not a project environment) and VsCode loads the global environment 
+- If they are not present, the folder is a simple project (not a project environment) and VsCode loads the global environment 
 
 #### **Copy and install an external project environment**
 
