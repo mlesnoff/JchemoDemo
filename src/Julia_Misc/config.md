@@ -7,16 +7,15 @@ This script provides some tips about the **installation of Julia and how to star
 - Current stable release: https://julialang.org/downloads/
 - For older releases: https://julialang.org/downloads/oldreleases/
 
-#### **Locations**
+During the installation, there is no mandatory need to put a path in the PATH Variable.
+
+#### **Where is installed Julia**
 
 - By default, Julia is installed at (e.g. for release 1.8.3)  
 *C:\Users\your_user_name\AppData\Local\Programs\Julia 1.8.3*
 
-- During the installation, no need to put a path in the PATH Variable
-
 - Packages are installed at 
-*C:\Users\your_user_name\.julia\packages*. Note: In this directory, if there is a compilation problem 
-when `using package_name` and Pkg.rm is not enough, to remove the directory of the corresponding package may help 
+*C:\Users\your_user_name\.julia\packages*. 
 
 - The pre-compiled packages are at
 *C:\Users\your_user_name\.julia\compiled\v1.8*
