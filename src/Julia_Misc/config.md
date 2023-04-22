@@ -142,7 +142,7 @@ An easy way is the following (many other are possible).
     pkg> activate .
 ```
 
-(the dot at the end of the above command means that VsCode will load the project of where VsCode locates; if the dot is removed, VsCode loads the global environment)
+(the dot at the end of the above command means that VsCode will load the project of where VsCode locates; if the dot is removed, the command loads the global environment)
 - Install one package (any package can be chosen), for instance package *StatsBase.jl*, from the official Julia pckages repository 
     - In the Pkg REPL, type
     ```julia 
