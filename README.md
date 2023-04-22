@@ -5,7 +5,7 @@ This project is used for **training only**.
 
 **What is provided:**
 
-1. [**Preliminary tips about Julia installation and environment**](https://github.com/mlesnoff/JchemoDemo/blob/main/src/Julia_Misc/config.md)
+1. [**Tips to start with Julia**](https://github.com/mlesnoff/JchemoDemo/blob/main/src/Julia_Misc/config.md)
 
 2. [**Some Julia syntax**](https://github.com/mlesnoff/JchemoDemo/tree/main/src/Julia_Misc)
 
