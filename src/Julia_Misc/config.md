@@ -1,6 +1,6 @@
 This script provides some tips about the **installation of Julia and how to start with the software**. It is orientated for Windows users. 
 
-### **1. INSTALL Julia** 
+### **INSTALL Julia** 
 
 #### **Download**
 
@@ -20,7 +20,7 @@ During the installation, there is no mandatory need to put a path in the PATH Va
 - The pre-compiled packages are at
 *C:\Users\your_user_name\.julia\compiled\v1.8*
 
-### **2. INSTALL VSCode**
+### **INSTALL Visual Studio Code (VsCode)**
 
 #### **Download**
 
@@ -44,7 +44,7 @@ Before to be able to use Julia within VsCode, some configuration is needed.
 
 - Connect VsCode and a given release of Julia 
     - Icone 'Manage' ==> Settings ==> Commonly used ==> Extensions ==> Julia ==> Executable path
-    - Copy the full path of the file "julia.exe" of the release that has to be used, 
+    - Copy the full path of the file *julia.exe* of the release that has to be used, 
         e.g.: *C:\Users\your_user_name\AppData\Local\Programs\Julia 1.8.3\bin\julia.exe*
     - If another release (e.g. 1.8.4) has to be used in future sessions, replace the new path in the same way, and re-run VsCode 
 
@@ -52,7 +52,7 @@ Before to be able to use Julia within VsCode, some configuration is needed.
     - Icone 'Manage' ==> Command Palette ==> Start REPL 
         (or Alt+J Alt+O)
 
-### **3. THE CONSOLE REPL**
+### **CONSOLE REPL**
 
 The **REPL** can be used in two modes:
 * The command REPL
@@ -61,23 +61,29 @@ julia>
 ```
 * The Pkg REPL
 ```julia
-(@v1.8) pkg> 
+pkg> 
 ```
 
 The command REPL is the usual mode for computations. The Pkg REPL is used to manage packages and project environments.
 
 Typing `]` in the command REPL makes switch to the Pkg REPL, and the backslash makes return to the command REPL.
 
-### **4. GLOBAL Julia ENVIRONMENT**
+### **ENVIRONMENTS**
 
-An environment (= list of the used packages and their versions) is defined by files *Manifest.toml* and *Project.toml*. Note: Do not modify Manifest.toml by hand.
+An environment (= list of the used packages and their versions) is defined by files ***Project.toml*** and ***Manifest.toml***.  File *Project.toml* defines the packages attached to the environment and file *Manifest.toml* manages the versions and dependencies of these packages.
 
-#### **Location** 
-- The global environment (*Manifest.toml* and *Project.toml*) of a given "minor version" of Julia (e.g. 1.8) is located at 
+To understand and know how to magage environments is very important to develop Julia projects in good ways.
+At the installation of Julia, a default environment is created: the **global environment**. It is generally recommended to install only few packages in the global environment. Instead, for each operational study that is developed, it is recommanded to build a specific **project environment** in which its own package dependencies will be defined (*Project.toml* and *Manifest.toml*).
+
+*Note:* In any given environment, it is not safe and not recommanded to modify file *Manifest.toml* by hand. When a package is added to the environment, *Manifest.toml* is automatically updated.
+
+### **GLOBAL Julia ENVIRONMENT**
+
+#### **Where it is located** 
+- The global environment (files *Project.toml* and Manifest*.toml*) of all the [*patch releases*](https://julialang.org/blog/2019/08/release-process/#minor_releases) of Julia (e.g. '1.8.0', 1.8.1' etc.) of a given [*minor version*](https://julialang.org/blog/2019/08/release-process/#minor_releases) of Julia (e.g. version '1.8') is located (for '1.8') at 
 *C:\Users\your_user_name\.julia\environments\v1.8\*
-- The global environment is the same within all the releases of a given minor version (e.g. for minor version 1.8: 1.8.1, 1.8.2, etc) 
 
-### **4. UPGRADE TO A NEW VERSION OF Julia**
+#### **Upgrade to a new version of Julia**
 
 Upgrade from a minor version to another minor version (e.g. from v1.7 to v1.8)
 - See explanations here:
