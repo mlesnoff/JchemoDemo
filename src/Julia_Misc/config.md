@@ -80,12 +80,12 @@ At the installation of Julia, a default environment is created: the **global env
 ### **GLOBAL Julia ENVIRONMENT**
 
 #### **Where it is located** 
-- The global environment (files *Project.toml* and Manifest*.toml*) of all the [*patch releases*](https://julialang.org/blog/2019/08/release-process/#minor_releases) of Julia (e.g. 1.8.0, 1.8.1, etc.) of a given [*minor version*](https://julialang.org/blog/2019/08/release-process/#minor_releases) of Julia (e.g. 1.8) is located (for 1.8) at 
+- The global environment (files *Project.toml* and *Manifest.toml*) of all the [*patch releases*](https://julialang.org/blog/2019/08/release-process/#minor_releases) of Julia (e.g. 1.8.0, 1.8.1, etc.) of a given [*minor version*](https://julialang.org/blog/2019/08/release-process/#minor_releases) of Julia (e.g. 1.8) is located (for the example of 1.8) at 
 *C:\Users\your_user_name\.julia\environments\v1.8*
 
 #### **Upgrade to a new minor version of Julia**
 
-When upgrading to a new minor version (e.g. from 1.7 to 1.8), the new gloabl environment (corresponding to 1.8) will be empty. To build the new environment from the previous one (corresponding to 1.7), several ways can be used. The following example provides two simple ways (not exhaustive).  
+When upgrading to a new minor version (e.g. from 1.7 to 1.8), the new global environment (corresponding to 1.8) will be empty. Several ways can be used to build the new global environment from the previous one (corresponding to 1.7). The following example provides two simple (non exhaustive) ways.  
 
 **Examples of how to upgrade the global environment from Julia 1.7.3 to 1.8.1**
 
