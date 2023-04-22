@@ -59,7 +59,7 @@ The **REPL** can be used in two modes:
 ```julia
 julia>
 ```
-* The **Pkg REPL**
+* The **Pkg REPL** (see [here](https://docs.julialang.org/en/v1/stdlib/Pkg/))
 ```julia
 (@v.1.8)  pkg> 
 ```
@@ -192,16 +192,11 @@ To locate above *StyTrees* directory, type in command REPL
     - `activate .` comes back to the local enviroment *StudyTrees*
 
 See also (not exhaustive):
-- [here](https://pkgdocs.julialang.org/v1/)
-- [here](https://pkgdocs.julialang.org/v1/getting-started/)
-- [here](https://pkgdocs.julialang.org/v1/environments/
-- [here](https://towardsdatascience.com/)how-to-setup-project-environments-in-julia-ec8ae73afe9c) 
+- [here](https://pkgdocs.julialang.org/v1/) , [here](https://pkgdocs.julialang.org/v1/getting-started/),  [here](https://pkgdocs.julialang.org/v1/environments/), [here](https://towardsdatascience.com/how-to-setup-project-environments-in-julia-ec8ae73afe9c) 
 
+### **FEW USEFUL COMMANDS**
 
-
-### **6. FEW COMMANDS**
-
-#### **REPL**
+#### **Command REPL**
 
 - `versioninfo()`
 - `VERSION`
@@ -215,10 +210,11 @@ See also (not exhaustive):
 - `rm("dd")`    # remove "dd"
 
 
-#### **Management mode (`]`)**
+#### **Pkg REPL**
 
 In a project environmenet
 - `instantiate` regenerates Manifest.toml from the existing Project.toml
 - `status` shows the installed packages
+- `update` updates the packages
 - `gc` cleans up any packages that aren’t used by any environment
 
