@@ -52,6 +52,8 @@ Before to be able to use Julia within VsCode, some configuration is needed.
     - Icone 'Manage' ==> Command Palette ==> Start REPL 
         (or Alt+J Alt+O)
 
+### **3. THE CONSOLE REPL**
+
 The **REPL** can be used in two modes:
 * The command REPL
 ```julia
@@ -62,11 +64,13 @@ julia>
 (@v1.8) pkg> 
 ```
 
+The command REPL is the usual mode for computations. The Pkg REPL is used to manage packages and project environments.
 
+Typing `]` in the command REPL makes switch to the Pkg REPL, and the backslash makes return to the command REPL.
 
-### **3. GLOBAL Julia ENVIRONMENT**
+### **4. GLOBAL Julia ENVIRONMENT**
 
-An environement (= list of the used packages and their versions) is defined by files *Manifest.toml* and *Project.toml*. Note: Do not modify Manifest.toml by hand.
+An environment (= list of the used packages and their versions) is defined by files *Manifest.toml* and *Project.toml*. Note: Do not modify Manifest.toml by hand.
 
 #### **Location** 
 - The global environment (*Manifest.toml* and *Project.toml*) of a given "minor version" of Julia (e.g. 1.8) is located at 
