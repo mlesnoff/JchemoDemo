@@ -11,12 +11,12 @@ using CSV
 
 ## Importation
 db = joinpath(path_jdat, "data/dat_2021.csv") 
-## Same as 
+## Same as: 
 #db = string(path_jdat, "\\data\\dat_2021.csv")
 
 df = CSV.read(db, DataFrame; header = 1, decimal = '.', 
     delim = ';') 
-## Same as
+## Same as:
 #df = CSV.File(db; header = 1, delim = ';') |> DataFrame 
 #df = DataFrame(CSV.File(db, header = 1, delim = ';'))
 
@@ -99,12 +99,12 @@ db = joinpath(path_jdat, "data/cassav.jld2")
 keys(dat)
 X = dat.X
 Y = dat.Y
-## Or
+## Or:
 res = load(db) ;
 keys(res)
 dat = res["dat"]
 keys(dat)
-## Or
+## Or:
 dat = load(db, "dat") ;
 keys(dat)
 
@@ -117,7 +117,7 @@ dat = (X1 = X1, X2 = X2, info = info)
 db = joinpath(path_out, "res.jld2") 
 jldsave(db; dat)
 #jldsave(db, true; dat)  # 'true" ==> compression   
-## Or
+## Or:
 @save db dat 
 #load(db, "dat")
 #keys(dat)
@@ -161,7 +161,7 @@ keys(dat)
 Xcal = read(dat, "SP_cal")
 Ycal = read(dat, "DM_cal")
 close(dat)
-## Same as
+## Same as:
 dat = matread(db) 
 keys(dat)
 Xcal = dat["SP_cal"] 
@@ -175,7 +175,7 @@ z["INFORMATION"]
 Xcal = z["calibration"]
 Xcal = reduce(vcat, Xcal)
 close(dat)
-## Same as
+## Same as:
 dat = matread(db) ;
 keys(dat)
 z = dat["LAMDATA"] 
