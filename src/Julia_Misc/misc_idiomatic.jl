@@ -44,7 +44,7 @@ fz(x) = [p = p * 2 for p in x]
 fz([1; 2; 3])
 
 x = [1; 2; 3]
-[p = p * 2 for p in x]
+[p * 2 for p in x]
 
 using LinearAlgebra
 X = rand(5, 3)
