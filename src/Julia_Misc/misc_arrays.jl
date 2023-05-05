@@ -54,7 +54,7 @@ X2 = rand(2, 4)
 x = vec(rand(50, 1))
 describe(x)
 
-#################### CONCATENATION
+############ CONCATENATION
 
 ## Use push! to add individual items to collection which are not already themselves in another collection. 
 ## The result of the preceding example is equivalent to push!([1, 2, 3], 4, 5, 6).
@@ -94,7 +94,7 @@ v = collect(z)
 u = f_comp(v)
 reduce(hcat, u)
 
-#################### DIAGONAL
+############ DIAGONAL
 # https://web.eecs.umich.edu/~fessler/course/551/julia/tutor/03-diag.html
 
 diagm(1:5)      # LinearAlgebra
@@ -153,13 +153,13 @@ D = Diagonal(d)
 @time d .* X ;
 @time (*).(d, X) ; # slow
 
-#################### MAPSLICES
+############ MAPSLICES
 
 X = rand(5, 3)
 mapslices(mean, X, dims = 1)
 StatsBase.mean(X, dims = 1) # much faster
 
-#################### PRODUCTS
+############ PRODUCTS
 
 A = rand(2, 3)
 B = rand(3, 2)
@@ -182,8 +182,13 @@ X = [1. 2 ; 3  4]
 rdiv!(X, 2.0) ;
 X
 
-#### Dot products
+## Product of rows/columns
+X = rand(1000, 1000)
+@time prod(X, dims = 2) ;    # best
+@time map(prod, eachrow(X)) ;
+@time prod.(eachrow(X)) ;
 
+## Dot products
 n = 10
 w = randn(n) 
 w' * w
