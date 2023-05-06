@@ -77,7 +77,7 @@ group = vcat(repeat(["0-Train";], ntrain),
     repeat(["1-Test";], ntest))
 colm = [:blue, (:red, .5)]
 i = 1
-plotxy(zT[:, i], zT[:, i + 1], group; color = colm,
+plotxy(zT[:, i:(i + 1)], group; color = colm,
     xlabel = "PC1", ylabel = "PC2").f
 
 res_sd = occsd(fm) ; 

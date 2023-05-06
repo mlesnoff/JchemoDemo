@@ -60,7 +60,7 @@ Ttest = Jchemo.transform(fm, Xtest)
 zT = vcat(Ttrain, Ttest)
 group = vcat(repeat(["0-Train";], ntrain), repeat(["1-Test";], ntest))
 i = 1
-plotxy(zT[:, i], zT[:, i + 1], group;
+plotxy(zT[:, i:(i + 1)], group;
     xlabel = "PC1", ylabel = "PC2").f
 
 res_sd = occsd(fm) ; 
