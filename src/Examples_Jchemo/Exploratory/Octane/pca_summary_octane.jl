@@ -45,7 +45,7 @@ scatter(z[:, i], z[:, i + 1])
 ## Correlation circle
 z = res.cor_circle
 i = 1
-plotxy(z[:, i], z[:, i + 1]; resolution = (400, 400),
+plotxy(z[:, i:(i + 1)]; resolution = (400, 400),
     circle = true, zeros = true,
     xlabel = string("PC", i), 
     ylabel = string("PC", i + 1)).f

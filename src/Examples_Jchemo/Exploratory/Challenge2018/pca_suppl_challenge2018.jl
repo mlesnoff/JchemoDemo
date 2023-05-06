@@ -79,8 +79,8 @@ dtest = Jchemo.predict(res, Xtest).d
 
 f = Figure(resolution = (500, 400))
 ax = Axis(f[1, 1], xlabel = "SD", ylabel = "OD")
-scatter!(ax, dtrain.sd_dstand, dtrain.od_dstand, label = "Train")
-scatter!(ax, dtest.sd_dstand, dtest.od_dstand, 
+scatter!(ax, dtrain.dstand_sd, dtrain.dstand_od, label = "Train")
+scatter!(ax, dtest.dstand_sd, dtest.dstand_od, 
     color = (:red, .5), label = "Test")
 hlines!(ax, 1; color = :grey, linestyle = "-")
 vlines!(ax, 1; color = :grey, linestyle = "-")
@@ -92,7 +92,7 @@ d = vcat(dtrain, dtest)
 group = vcat(repeat(["0-Train";], ntrain), 
     repeat(["1-Test";], ntest))
 colm = [:blue, (:red, .5)]
-plotxy(d.sd_dstand, d.od_dstand, group; color = colm,
+plotxy(d.dstand_sd, d.dstand_od, group; color = colm,
     xlabel = "Stand. SD", ylabel = "Stand. OD").f
 
 ## Composite distance SD-OD

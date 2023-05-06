@@ -42,4 +42,3 @@ lines!(ax, wl_num, colmean(X); color = :red,
     linewidth = 2)
 f
 
-

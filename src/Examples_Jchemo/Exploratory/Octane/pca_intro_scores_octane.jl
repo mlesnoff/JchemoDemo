@@ -58,7 +58,7 @@ f = Figure(resolution = (700, 500))
 ax = Axis3(f[1, 1]; perspectiveness = 0.2,
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
     zlabel = string("PC", i + 2), title = "PCA score space")
-scatter!(ax, T[:, i:(i + 1)], T[:, i + 2],
+scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2],
     markersize = 15)
 f
 
@@ -67,9 +67,9 @@ f = Figure(resolution = (700, 500))
 ax = Axis3(f[1, 1]; perspectiveness = 0.2,
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
     zlabel = string("PC", i + 2), title = "PCA score space")
-scatter!(ax, T[:, i:(i + 1)], T[:, i + 2],
+scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2],
     markersize = 15)
-text!(ax, T[:, i:(i + 1)], T[:, i + 2]; 
+text!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; 
     text = string.(1:n), fontsize = 15)
 f
 
