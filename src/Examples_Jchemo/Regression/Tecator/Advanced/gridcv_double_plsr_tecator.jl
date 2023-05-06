@@ -1,5 +1,4 @@
-using JLD2, CairoMakie
-using JLD2, CairoMakie, StatsBase
+using JLD2, CairoMakie, StatsBase, DataFrames
 using Jchemo, JchemoData
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
