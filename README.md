@@ -1,4 +1,4 @@
-# JchemoDemo 0.1
+# JchemoDemo (0.1)
 
 **JchemoDemo** is a **Julia project** (with its [**environment**](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)) demonstrating functions of package [**Jchemo.jl**](https://github.com/mlesnoff/Jchemo.jl). 
 This project is used for **training only**. 
