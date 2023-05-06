@@ -73,6 +73,3 @@ for i = 1:nlev
         color = (:red, .5))
 end
 f
-
-
-
