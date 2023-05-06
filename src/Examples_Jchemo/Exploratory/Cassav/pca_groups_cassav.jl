@@ -26,18 +26,18 @@ T = fm.T
 
 ## 2-D Score space
 i = 1
-plotxy(T[:, i], T[:, i + 1]; color = (:red, .5),
+plotxy(T[:, i:(i + 1)]; color = (:red, .5),
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
     zeros = true, markersize = 15).f
 
 i = 1
-plotxy(T[:, i], T[:, i + 1], year;
+plotxy(T[:, i:(i + 1)], year;
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
     zeros = true, ellipse = true).f
 
 i = 1
 colm = cgrad(:Dark2_5, nlev; categorical = true, alpha = .8)
-plotxy(T[:, i], T[:, i + 1], year; 
+plotxy(T[:, i:(i + 1)], year; 
     color = colm,
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
     zeros = true, ellipse = true).f
@@ -50,7 +50,7 @@ f = Figure(resolution = (600, 400))
 ax = Axis3(f[1, 1]; perspectiveness = 0.2,
     xlabel = string("PC", i), ylabel = string("PC", i + 1), 
     zlabel = string("PC", i + 2), title = "PCA score space")
-scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2];
+scatter!(ax, T[:, i:(i + 1)], T[:, i + 2];
     markersize = 15, color = (:red, .5))
 f
 
@@ -62,7 +62,7 @@ ax = Axis3(f[1, 1]; perspectiveness = 0.2,
     xlabel = string("PC", i), ylabel = string("PC", i + 1), 
     zlabel = string("PC", i + 2), 
     title = "PCA score space") 
-scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2], 
+scatter!(ax, T[:, i:(i + 1)], T[:, i + 2], 
     markersize = 15, color = group_num, colormap = colm)
 lab = string.(lev)
 elt = [MarkerElement(color = colm[i], marker = '●', markersize = 10) for i in 1:nlev]

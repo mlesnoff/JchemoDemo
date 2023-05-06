@@ -32,7 +32,7 @@ plotxy(T[:, 1], T[:, 2]; zeros = true,
     xlabel = "PC1", ylabel = "PC2").f
 
 i = 1
-plotxy(T[:, i], T[:, i + 1]; color = (:red, .5),
+plotxy(T[:, i:(i + 1)]; color = (:red, .5),
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
     zeros = true, markersize = 15).f
 
@@ -43,7 +43,7 @@ for j = 1:2
     for k = 1:2
         ax[i] = Axis(f[j, k],
             xlabel = string("PC", i), ylabel = string("PC", i + 1))
-        scatter!(ax[i], T[:, i], T[:, i + 1];
+        scatter!(ax[i], T[:, i:(i + 1)];
             color = (:red, .5))
         i = i + 1
     end
@@ -58,7 +58,7 @@ f = Figure(resolution = (700, 500))
 ax = Axis3(f[1, 1]; perspectiveness = 0.2,
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
     zlabel = string("PC", i + 2), title = "PCA score space")
-scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2],
+scatter!(ax, T[:, i:(i + 1)], T[:, i + 2],
     markersize = 15)
 f
 
@@ -67,9 +67,9 @@ f = Figure(resolution = (700, 500))
 ax = Axis3(f[1, 1]; perspectiveness = 0.2,
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
     zlabel = string("PC", i + 2), title = "PCA score space")
-scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2],
+scatter!(ax, T[:, i:(i + 1)], T[:, i + 2],
     markersize = 15)
-text!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; 
+text!(ax, T[:, i:(i + 1)], T[:, i + 2]; 
     text = string.(1:n), fontsize = 15)
 f
 

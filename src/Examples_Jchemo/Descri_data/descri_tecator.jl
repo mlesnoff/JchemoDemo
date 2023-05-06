@@ -41,10 +41,10 @@ plotgrid(z.lv, 100 * z.pvar; step = 1,
 
 T = fm.T
 i = 1
-plotxy(T[:, i], T[:, i + 1]; color = (:red, .5),
+plotxy(T[:, i:(i + 1)]; color = (:red, .5),
     xlabel = "PC1", ylabel = "PC2").f
 
-plotxy(T[:, i], T[:, i + 1], typ; 
+plotxy(T[:, i:(i + 1)], typ; 
     xlabel = "PC1", ylabel = "PC2").f
 
 ## Variables y
