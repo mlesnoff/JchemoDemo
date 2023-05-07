@@ -663,9 +663,9 @@ version = "0.21.4"
 
 [[deps.Jchemo]]
 deps = ["Clustering", "DataFrames", "DataInterpolations", "DecisionTree", "Distances", "Distributions", "ImageFiltering", "Interpolations", "LinearAlgebra", "Makie", "NearestNeighbors", "Random", "SparseArrays", "Statistics", "StatsBase"]
-git-tree-sha1 = "faf27f29c99f3da02531718db134fd80c22b8769"
+git-tree-sha1 = "9deb5e6e5f9c9f4227b440c341f4a5f367138ff8"
 uuid = "fbca9394-dd0a-4d1c-b066-ae75f6ef1ad5"
-version = "0.1.20"
+version = "0.1.21"
 
 [[deps.JchemoData]]
 git-tree-sha1 = "a56d9b08bd9296f1245816913564f0f0497b7320"
