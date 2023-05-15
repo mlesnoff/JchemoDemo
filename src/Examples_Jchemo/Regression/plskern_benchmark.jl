@@ -14,5 +14,3 @@ nlv = 25
 @time fm = plskern(X, Y; nlv = nlv) ;
 @time fm = plskern!(X, Y; nlv = nlv) ;
 
-
-
