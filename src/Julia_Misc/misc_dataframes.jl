@@ -95,9 +95,12 @@ push!(df, Dict(:A => 1.0, :C => 1.0), cols = :union)
 push!(df, NamedTuple(), cols = :subset)
 
 ## Concatenate single rows of a dataframe
+## Functions vcat, append!, etc. does not run 
+## with type 'DataFrameRow'
+## ==> use intermediate dataframes
 r1 = df1[1, :]
 r2 = df1[2, :]
-typeof(r1)    # vcat, append!, etc. does not run with type 'DataFrameRow'
+typeof(r1)    
 vcat(DataFrame(r1), DataFrame(r2))
 z = DataFrame(r1)
 append!(z, DataFrame(r2))
