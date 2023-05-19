@@ -94,6 +94,14 @@ push!(df, (C = "something", A = true, B = false), cols = :intersect)
 push!(df, Dict(:A => 1.0, :C => 1.0), cols = :union)
 push!(df, NamedTuple(), cols = :subset)
 
+## Concatenate single rows of a dataframe
+r1 = df1[1, :]
+r2 = df1[2, :]
+typeof(r1)    # vcat, append!, etc. does not run with type 'DataFrameRow'
+vcat(DataFrame(r1), DataFrame(r2))
+z = DataFrame(r1)
+append!(z, DataFrame(r2))
+
 ########### MISSING DATA
 
 ## https://stackoverflow.com/questions/34611109/julia-dataframe-replacing-missing-values
