@@ -1,3 +1,7 @@
+## Example of calibration transfert between two machines, 
+## without standards and by orthogonalization, 
+## using function 'difmean'.
+
 using JLD2, CairoMakie, FreqTables
 using Jchemo, JchemoData
 using GLMakie
@@ -26,15 +30,20 @@ Xpm5 = fpreproc(Xm5)
 Xpmp5 = fpreproc(Xmp5)
 Xpmp6 = fpreproc(Xmp6)
 
-## Data selection (machines 1 and 2) for the example
+## Data selection (machines 1 and 2)
 X1 = copy(Xpm5)
-X2 = copy(Xpmp6)    
-m = ntot / 2
+X2 = copy(Xpmp6)
+n1 = nro(X1)
+n2 = nro(X2)    
+m = n1 / 2
 res = sampdp(hcat(X1, X2); k = m) ;
 pnames(res)
 res.train
 res.test
 s = res.train
+## Switch of the train and test between
+## the two machines since corn data are actually
+## standards
 ## Machine 1
 X1train = X1[s, :]
 Y1train = Y[s, :]
@@ -60,11 +69,21 @@ y1test = Y1test[:, j]
 y2train = Y2train[:, j]
 y2test = Y2test[:, j]
 
-#### Model tuning and performance on the reference data (for a given machine)
+#### Model tuning and performance on the reference data
+#### within each machine
 ## On machine 1
-zXtrain = copy(X1train) ; zytrain = copy(y1train) ; zn = copy(n1train) ; zXtest = copy(X1test) ; zytest = copy(y1test) 
+zXtrain = copy(X1train)
+zytrain = copy(y1train)
+zn = copy(n1train)
+zXtest = copy(X1test)
+zytest = copy(y1test) 
 ## On machine 2
-#zXtrain = copy(X2train) ; zytrain = copy(y2train) ; zn = copy(n2train) ; zXtest = copy(X2test) ; zytest = copy(y2test) 
+#zXtrain = copy(X2train)
+#zytrain = copy(y2train)
+#zn = copy(n2train)
+#zXtest = copy(X2test)
+#zytest = copy(y2test)
+# End 
 K = 5
 segm = segmkf(zn, K; rep = 20)
 nlv = 0:15
@@ -80,11 +99,18 @@ plotxy(vec(pred), zytest;
     bisect = true, xlabel = "Prediction",
     ylabel = "Observed").f
 
-#### Model tuning after transfert (for a given machine)
+#### Model tuning after transfert
+#### within each machine
 D = Jchemo.difmean(X1train, X2train).D
 M = eposvd(D; nlv = 1).M
-zXtrain = X1train * M ; zytrain = copy(y1train) ; zn = copy(n1train) 
-#zXtrain = X2train * M ; zytrain = copy(y2train) ; zn = copy(n2train) 
+## On machine 1
+zXtrain = X1train * M 
+zytrain = copy(y1train)
+zn = copy(n1train) 
+## On machine 2
+#zXtrain = X2train * M
+#zytrain = copy(y2train)
+#zn = copy(n2train) 
 K = 5
 segm = segmkf(zn, K; rep = 20)
 nlv = 0:15
