@@ -30,20 +30,70 @@ Xpm5 = fpreproc(Xm5)
 Xpmp5 = fpreproc(Xmp5)
 Xpmp6 = fpreproc(Xmp6)
 
-## Data selection (machines 1 and 2)
 X1 = copy(Xpm5)
 X2 = copy(Xpmp6)
 n1 = nro(X1)
 n2 = nro(X2)    
+
+#### Plotting spectra
+
+## Before transfert
+i = 40
+f = Figure(resolution = (500, 300))
+ax = Axis(f[1, 1])
+lines!(X1[i, :]; label = "x1")
+lines!(ax, X2[i, :]; label = "x2")
+axislegend(position = :rb, framevisible = false)
+f
+## After transfert
+res = Jchemo.difmean(X1, X2) ;
+fm0 = eposvd(res.D; nlv = 1) ;
+M = fm0.M    # orthogonalization matrix
+X1c = X1 * M
+X2c = X2 * M
+f = Figure(resolution = (500, 300))
+ax = Axis(f[1, 1])
+lines!(X1c[i, :]; label = "x1_correct")
+lines!(ax, X2c[i, :]; label = "x2_correct")
+axislegend(position = :rb, framevisible = false)
+f
+
+#### Plotting spectral spaces
+
+## Before transfert
+fm = pcasvd(X1; nlv = 10) ;
+T1 = fm.T
+T2 = Jchemo.transform(fm, X2)
+i = 1
+f, ax = plotxy(T1[:, i:(i + 1)];
+    xlabel = string("PC", i), ylabel = string("PC", i + 1))
+scatter!(ax, T2[:, i:(i + 1)])
+f
+## After transfert
+res = Jchemo.difmean(X1, X2) ;
+fm0 = eposvd(res.D; nlv = 1) ;
+X1c = X1 * fm0.M
+X2c = X2 * fm0.M
+fm = pcasvd(X1c; nlv = 10) ;
+T1 = fm.T
+T2 = Jchemo.transform(fm, X2c)
+i = 1
+f, ax = plotxy(T1[:, i:(i + 1)];
+    xlabel = string("PC", i), ylabel = string("PC", i + 1))
+scatter!(ax, T2[:, i:(i + 1)])
+f
+
+#### Predictions
+
+## Build of training and test sets 
+## Switch of the train and test observations between
+## the two machines since corn data contains actually standards
 m = n1 / 2
 res = sampdp(hcat(X1, X2); k = m) ;
 pnames(res)
 res.train
 res.test
 s = res.train
-## Switch of the train and test between
-## the two machines since corn data are actually
-## standards
 ## Machine 1
 X1train = X1[s, :]
 Y1train = Y[s, :]
@@ -69,8 +119,8 @@ y1test = Y1test[:, j]
 y2train = Y2train[:, j]
 y2test = Y2test[:, j]
 
-#### Model tuning and performance on the reference data
-#### within each machine
+## Model tuning and performance on the reference data,
+## within each machine (benchmark)
 ## On machine 1
 zXtrain = copy(X1train)
 zytrain = copy(y1train)
@@ -99,8 +149,7 @@ plotxy(vec(pred), zytest;
     bisect = true, xlabel = "Prediction",
     ylabel = "Observed").f
 
-#### Model tuning after transfert
-#### within each machine
+## Model tuning after transfert, within each machine
 D = Jchemo.difmean(X1train, X2train).D
 M = eposvd(D; nlv = 1).M
 ## On machine 1
@@ -111,6 +160,7 @@ zn = copy(n1train)
 #zXtrain = X2train * M
 #zytrain = copy(y2train)
 #zn = copy(n2train) 
+## End
 K = 5
 segm = segmkf(zn, K; rep = 20)
 nlv = 0:15
@@ -120,114 +170,28 @@ plotgrid(res.nlv, res.y1).f
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
-#### Model performance after transfert 
+## Model performance after transfert, within each machine
 res = difmean(X1train, X2train)
-fm0 = eposvd(res.D; nlv = nlv0) ;
-## On X1
-zXtrain = X1train * fm0.M
+M = eposvd(res.D; nlv = 1).M 
+## On machine 1
+zXtrain = X1train * M
 zytrain = copy(y1train)
-zXtest = copy(X1test)
-#zXtest = X1test * fm0.M    # not required if PLSR (othogonalization is embedded) 
+zXtest = X1test * M     # correction not required if PLSR (othogonalization is embedded)
+#zXtest = copy(X1test)  # would be enough here (PLSR) 
 zytest = copy(y1test)
-## On X2
+## On machine 2
 #zXtrain = X2train * fm0.M
 #zytrain = copy(y2train)
-#zXtest = copy(X2test)
-#zXtest = X1test * fm0.M    # not required if PLSR (othogonalization is embedded) 
+#zXtest = X2test * M     # correction not required if PLSR (othogonalization is embedded)
+##zXtest = copy(X2test)  # would be enough here (PLSR) 
 #zytest = copy(y2test)
 ## End
-nlv = 7   # depends on X1 vs X2 and y-variable
+nlv = 7   # compromise between machines, for the given y-variable (here j = 1)
 fm = plskern(zXtrain, zytrain; nlv = nlv) ;
-pred = Jchemo.predict(fm, zXtest).pred
+pred = Jchemo.predict(fm, zXtest).pred    # test predictions on corrected spectra
 println(rmsep(pred, zytest))
 plotxy(vec(pred), zytest;
     bisect = true, xlabel = "Prediction",
     ylabel = "Observed").f
-
-
-
-
-
-
-fm = plskern(zXtrain, zytrain; nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, zXtest).pred
-println(rmsep(pred, zytest))
-plotxy(vec(pred), zytest;
-    bisect = true, xlabel = "Prediction",
-    ylabel = "Observed").f
-
-
-scor = nothing
-for a = 1:nlv0
-    D = Jchemo.difload(X1train, X2train; nlv = nlv0).D
-    M = eposvd(D; nlv = a).M
-    zX = X1train * M ; zy = copy(y1train) ; zn = copy(n1train)
-    #zX = X2train * M ; zy = copy(y2train) ; zn = copy(n2train)
-    K = 5
-    segm = segmkf(zn, K; rep = 20)
-    nlv = 0:15
-    res = gridcvlv(zX, zy; segm = segm,
-        score = rmsep, fun = plskern, nlv = nlv).res
-    plotgrid(res.nlv, res.y1).f
-    u = findall(res.y1 .== minimum(res.y1))[1]
-    a == 1 ? scor = DataFrame(res[u, :]) : scor = vcat(scor, DataFrame(res[u, :]))
-end
-insertcols!(scor, 1, :nlv0 => 1:nlv0)
-u = findall(scor.y1 .== minimum(scor.y1))[1]
-scor[u, :]
-plotgrid(1:nlv0, scor.y1; step = 2).f    
-#plotgrid(1:nlv0, scor.nlv; step = 2).f
-
-nlv0 = 1 ; nlv = 6    # j = 1
-#nlv0 = 1 ; nlv = 8    # j = 3
-#nlv0 = 1 ; nlv = 5    # j = 4
-#nlv0 = 5 ; nlv = 5    # j = 4
-rep = 1000
-res = difmean(X1train, X2train)
-#res = Jchemo.mcdif(X1train, X2train; rep = rep)
-#res = Jchemo.difload(X1train, X2train; nlv = nlv0)
-#res = Jchemo.udop(X1train, X2train; nlv = nlv0)
-fm0 = eposvd(res.D; nlv = nlv0) ;
-zX = X1train * fm0.M ; zy = copy(y1train)
-zXtest = copy(X1test) ; zytest = copy(y1test)
-#zXtest = copy(X2test) ; zytest = copy(y2test)
-#zXtest = X1test * fm0.M    # not required if PLSR (othogonalization is embedded) 
-#zXtest = X2test * fm0.M    # not required if PLSR (othogonalization is embedded) 
-fm = plskern(zX, zy; nlv = nlv) ;
-pred = Jchemo.predict(fm, zXtest).pred
-println(rmsep(pred, zytest))
-plotxy(vec(pred), zytest;
-    bisect = true, xlabel = "Prediction",
-    ylabel = "Observed").f
-
-
-D = res.D
-P = fm0.P
-
-P * P'
-D' * inv(D * D') * D
-
-
-
-
-
-
-
-
-X1 = copy(Xpm5) ; X2 = copy(Xpmp6)
-res = Jchemo.difmean(X1, X2) ;
-fm0 = eposvd(res.D; nlv = 1) ;
-X1c = X1 * fm0.M
-X2c = X2 * fm0.M
-zX1 = copy(X1) ; zX2 = copy(X2)
-#zX1 = copy(X1c) ; zX2 = copy(X2c)
-fm = pcasvd(zX1; nlv = 10) ;
-T1 = fm.T
-T2 = Jchemo.transform(fm, zX2)
-i = 1
-f, ax = plotxy(T1[:, i:(i + 1)];
-    xlabel = string("PC", i), ylabel = string("PC", i + 1))
-scatter!(ax, T2[:, i:(i + 1)])
-f
 
 
