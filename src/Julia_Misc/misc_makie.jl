@@ -291,8 +291,6 @@ for i = 1:2, j = 1:3
 end
 f
 
-
-
 let
     ## https://discourse.julialang.org/t/beautiful-makie-gallery/62523/31
     n = 200
