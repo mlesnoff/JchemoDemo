@@ -6,6 +6,7 @@ using DataFrames, Distributions
 ## WGLMakie: 2D and 3D interactive plots working within browsers
 
 ## Docs
+## https://blog.makie.org/
 ## https://docs.makie.org/stable/
 ## https://docs.makie.org/stable/examples/plotting_functions
 ## https://docs.juliahub.com/AbstractPlotting/6fydZ/0.12.12/index.html
