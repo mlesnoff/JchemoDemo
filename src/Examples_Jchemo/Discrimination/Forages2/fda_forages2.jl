@@ -55,7 +55,7 @@ lev = fm.lev
 nlev = length(lev)
 ct = fm.Tcenters
 Ttrain = fm.T
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
+f, ax = plotxy(Ttrain[:, 1:2], ytrain;
     title = "FDA")
 scatter!(ax, ct[:, 1], ct[:, 2],
     markersize = 10, color = :red)
@@ -66,7 +66,7 @@ Ttest = Jchemo.transform(fm, Xtest)
 i = 1  # class 
 s = ytest .== lev[i]
 zT = Ttest[s, :]
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
+f, ax = plotxy(Ttrain[:, 1:2], ytrain;
     title = "FDA")
 scatter!(ax, ct[:, 1], ct[:, 2],
     markersize = 10, color = :red)
