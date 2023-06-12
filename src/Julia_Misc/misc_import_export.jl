@@ -209,15 +209,20 @@ using XLSX
 ## Importation
 db = joinpath(path_jdat, "data/tecator.xlsx") 
 dat = XLSX.readxlsx(db) 
-nam = XLSX.sheetnames(dat)
-z = dat["X"]
-#z = dat[nam[1]]
-X = z[:]
-#X = z["A1:CV158"]
+XLSX.sheetnames(dat)
+## X
+z = dat["X"][:]
+#z = dat["X"]["A1:CV158"]
 ## Same as
-#X = XLSX.readdata(db, "X", "A1:CV158")
-z = dat["Y"]
-Y = z[:]
+#z = XLSX.readdata(db, "X", "A1:CV158")
+nam = z[1, :]
+X = DataFrame(z[2:end, :], nam)
+X = Float64.(X)
+## Y 
+z = dat["Y"][:]
+nam = z[1, :]
+Y = DataFrame(z[2:end, :], nam)
+Y = hcat(Float64.(Y[:, 1:3]), string.(Y[:, 4]))
 
 ## Exportation
 X1 = DataFrame(rand(5, 3), :auto)
