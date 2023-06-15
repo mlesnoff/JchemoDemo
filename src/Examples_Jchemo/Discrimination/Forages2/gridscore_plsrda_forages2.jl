@@ -35,16 +35,16 @@ Xcal = rmrow(Xtrain, s)
 ycal = rmrow(ytrain, s) 
 Xval = Xtrain[s, :] 
 yval = ytrain[s] 
-(ntot = ntot, ntrain, ncal, nval, ntest)
+(ntot = ntot, ntrain, ntest, ncal, nval)
 
 nlv = 0:50
 res = gridscorelv(Xcal, ycal, Xval, yval; 
     score = err, fun = plsrda, nlv = nlv)
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-
 plotgrid(res.nlv, res.y1; step = 5,
     xlabel = "Nb. LVs", ylabel = "ERR").f
+
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
 
 fm = plsrda(Xtrain, ytrain; nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred

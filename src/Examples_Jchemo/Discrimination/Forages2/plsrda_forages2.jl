@@ -28,10 +28,11 @@ ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
 ## Different types of PLSDA
-fm = plsrda(Xtrain, ytrain; nlv = 15) ;
-#fm = plslda(Xtrain, ytrain; nlv = 15) ;
-#fm = plsqda(Xtrain, ytrain; nlv = 15) ;
-#fm = plsqda(Xtrain, ytrain; nlv = 15, prior = "prop") ;
+nlv = 15
+fm = plsrda(Xtrain, ytrain; nlv = nlv) ;
+#fm = plslda(Xtrain, ytrain; nlv = nlv) ;
+#fm = plsqda(Xtrain, ytrain; nlv = nlv) ;
+#fm = plsqda(Xtrain, ytrain; nlv = nlv, prior = "prop") ;
 ## Ridge (RR-DA) 
 #fm = rrda(Xtrain, ytrain; lb = 1e-5) ;
 pnames(fm)
@@ -40,7 +41,7 @@ pnames(fm.fm)
 res = Jchemo.predict(fm, Xtest) ;
 pnames(res)
 pred = res.pred
-res.posterior
+res.posterior   # prediction of the dummy table
 
 err(pred, ytest)
 freqtable(ytest, vec(pred))

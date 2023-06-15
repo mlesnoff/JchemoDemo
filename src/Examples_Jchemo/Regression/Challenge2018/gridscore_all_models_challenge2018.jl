@@ -177,7 +177,7 @@ pars = mpar(nlvdis = nlvdis, metric = metric,
     h = h, k = k)
 length(pars[1])
 res = gridscorelv(Xcal, ycal, Xval, yval;
-    score = msep, fun = lwplsr, nlv = nlv, pars = pars, 
+    score = rmsep, fun = lwplsr, nlv = nlv, pars = pars, 
     verbose = true) 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
