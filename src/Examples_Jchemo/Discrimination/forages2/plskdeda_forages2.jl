@@ -31,6 +31,7 @@ plotsp(Xtrain, wl_num; title = "Preprocessed spectra",
 K = 3
 segm = segmkf(ntrain, K; rep = 10)
 
+## PLS-LDA
 nlv = 1:50
 rescv = gridcvlv(Xtrain, ytrain; segm = segm,
     score = err, fun = plslda, nlv = nlv) ; 
@@ -45,6 +46,7 @@ pred = res.pred
 err(pred, ytest)
 confusion(pred, ytest).pct
 
+## PLS-KDE-DA
 pars = mpar(a = [.5, 1, 1.5])
 nlv = 1:50
 rescv = gridcvlv(Xtrain, ytrain; segm = segm,
@@ -61,4 +63,3 @@ res = Jchemo.predict(fm, Xtest) ;
 pred = res.pred
 err(pred, ytest)
 confusion(pred, ytest).pct
-
