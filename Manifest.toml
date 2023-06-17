@@ -722,7 +722,7 @@ uuid = "fbca9394-dd0a-4d1c-b066-ae75f6ef1ad5"
 version = "0.1.22"
 
 [[deps.JchemoData]]
-git-tree-sha1 = "6e0e5a086259757f3faee34114031b9d33d567d9"
+git-tree-sha1 = "a4a0ebfc49840a48a1cc9f7aa54ed14bd3e8ec8f"
 repo-rev = "main"
 repo-url = "https://github.com/mlesnoff/JchemoData.jl.git"
 uuid = "3440f217-e3fb-4eda-bd77-d99cfb805e7c"
