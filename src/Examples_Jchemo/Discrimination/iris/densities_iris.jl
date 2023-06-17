@@ -49,11 +49,12 @@ end
 f
 
 #### LDA
-W = matW(T, y).W
+res = matW(T, y)
+W = res.W * n / (n - nlev)
 npoints = 2^7
 x1 = LinRange(-4, 4, npoints)
 x2 = LinRange(-2, 2, npoints)
-f = Figure(resolution = (900, 300))
+f = Figure(resolution = (900, 400))
 ax = list(nlev) 
 for i = 1:nlev 
     s = y .== lev[i]
@@ -78,17 +79,18 @@ for i = 1:nlev
     hlines!(ax[i], 0; linestyle = "-", color = :grey)
     vlines!(ax[i], 0; linestyle = "-", color = :grey)
     xlims!(ax[i], -4, 4) ; ylims!(ax[i], -1.7, 1.7)
-    if i == nlev
-        Colorbar(f[1, nlev + 1], co; label = "Density")
-    end
+    Colorbar(f[2, i], co; label = "Density", vertical = false)
 end
 f
 
 #### QDA
+res = matW(T, y)
+Wi = res.Wi
+ni = res.ni
 npoints = 2^7
 x1 = LinRange(-4, 4, npoints)
 x2 = LinRange(-2, 2, npoints)
-f = Figure(resolution = (900, 300))
+f = Figure(resolution = (900, 400))
 ax = list(nlev) 
 for i = 1:nlev 
     s = y .== lev[i]
@@ -96,9 +98,10 @@ for i = 1:nlev
     z = mpar(x1 = x1, x2 = x2)
     grid = reduce(hcat, z)
     m = nro(grid)
-    fm = dmnorm(zT) ;
+    S = Wi[i] * ni[i] / (ni[i] - 1)
+    fm = dmnorm(zT; S = S) ;
     res = Jchemo.predict(fm, grid) ;
-    pred_grid = vec(res.pred)
+    pred_grid = vec(res.pred) 
     ax[i] = Axis(f[1, i]; title = lev[i],
         xlabel = "LV1", ylabel = "LV2")
     co = contour!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
@@ -110,9 +113,7 @@ for i = 1:nlev
     hlines!(ax[i], 0; linestyle = "-", color = :grey)
     vlines!(ax[i], 0; linestyle = "-", color = :grey)
     xlims!(ax[i], -4, 4) ; ylims!(ax[i], -1.7, 1.7)
-    if i == nlev
-        Colorbar(f[1, nlev + 1], co; label = "Density")
-    end
+    Colorbar(f[2, i], co; label = "Density", vertical = false)
 end
 f
 
@@ -120,7 +121,7 @@ f
 npoints = 2^7
 x1 = LinRange(-4, 4, npoints)
 x2 = LinRange(-2, 2, npoints)
-f = Figure(resolution = (900, 300))
+f = Figure(resolution = (900, 400))
 ax = list(nlev) 
 for i = 1:nlev 
     s = y .== lev[i]
@@ -142,8 +143,6 @@ for i = 1:nlev
     hlines!(ax[i], 0; linestyle = "-", color = :grey)
     vlines!(ax[i], 0; linestyle = "-", color = :grey)
     xlims!(ax[i], -4, 4) ; ylims!(ax[i], -1.7, 1.7)
-    if i == nlev
-        Colorbar(f[1, nlev + 1], co; label = "Density")
-    end
+    Colorbar(f[2, i], co; label = "Density", vertical = false)
 end
 f
