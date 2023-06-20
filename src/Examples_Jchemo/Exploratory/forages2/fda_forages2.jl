@@ -32,7 +32,7 @@ ntest = nro(Xtest)
 ## ==> a regularization is required for the FDA, 
 ## for instance:
 ## 1) by preliminary dimension reduction 
-## 2) or using a pseudo-inverse
+## 2) or using a ridge regularization
 
 ## 1) FDA on PCA scores
 zfm = pcasvd(Xtrain; nlv = 10) ;
@@ -42,36 +42,35 @@ fm = fda(Ttrain, ytrain; nlv = 2) ;
 pnames(fm)
 lev = fm.lev
 nlev = length(lev)
-plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
+plotxy(fm.T[:, 1:2], ytrain;
     resolution = (800, 400), ellipse = true, 
     title = "FDA").f
 
-## 2) FDA using a pseudo-inverse 
-fm = fda(Xtrain, ytrain; nlv = 2,
-    pseudo = true) ;
-#fm = fdasvd(Xtrain, ytrain; nlv = 2, pseudo = true) ;
+## 2) FDA using ridge regularization
+## If lb is too small (e.g. 1e-10) 
+## the model overfits the discrimination of new observations
+lb = 1e-5
+fm = fda(Xtrain, ytrain; nlv = 2, lb = lb) ;
+#fm = fdasvd(Xtrain, ytrain; nlv = 2, lb = lb) ;
 pnames(fm)
 lev = fm.lev
 nlev = length(lev)
 ct = fm.Tcenters
 Ttrain = fm.T
 f, ax = plotxy(Ttrain[:, 1:2], ytrain;
-    title = "FDA")
+    title = "FDA", ellipse = true)
 scatter!(ax, ct[:, 1], ct[:, 2],
     markersize = 10, color = :red)
 f
-## In this example, using a pseudo-inverse 
-## highly overfits the discrimination of new observations
 Ttest = Jchemo.transform(fm, Xtest)
 i = 1  # class 
-s = ytest .== lev[i]
-zT = Ttest[s, :]
 f, ax = plotxy(Ttrain[:, 1:2], ytrain;
     title = "FDA")
 scatter!(ax, ct[:, 1], ct[:, 2],
     markersize = 10, color = :red)
+s = ytest .== lev[i]
+zT = Ttest[s, :]
 scatter!(ax, zT[:, 1], zT[:, 2],
-    markersize = 10, color = (:grey, .8))
+    markersize = 10, color = (:purple, .8))
 f
-
 

@@ -43,7 +43,7 @@ f
 Ttest = Jchemo.transform(fm, Xtest)
 
 # X-loadings matrix
-# = coefficients of the linear discriminant function
+# Columns of P = coefficients of the linear discriminant function
 # = "LD" of function lda of package MASS
 fm.P
 fm.P' * fm.P    # not orthogonal
