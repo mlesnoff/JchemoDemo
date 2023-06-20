@@ -46,6 +46,7 @@ Ttest = Jchemo.transform(fm, Xtest)
 # = coefficients of the linear discriminant function
 # = "LD" of function lda of package MASS
 fm.P
+fm.P' * fm.P    # not orthogonal
 
 fm.eig
 fm.sstot
