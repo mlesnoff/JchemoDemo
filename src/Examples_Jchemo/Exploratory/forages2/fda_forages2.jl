@@ -35,20 +35,22 @@ ntest = nro(Xtest)
 ## 2) or using a ridge regularization
 
 ## 1) FDA on PCA scores
-zfm = pcasvd(Xtrain; nlv = 10) ;
-Ttrain = zfm.T 
-fm = fda(Ttrain, ytrain; nlv = 2) ;
-#fm = fdasvd(Ttrain, ytrain; nlv = 2) ;
+fm0 = pcasvd(Xtrain; nlv = 10) ;
+Ttrain_pca = fm0.T 
+fm = fda(Ttrain_pca, ytrain; nlv = 2) ;
+#fm = fdasvd(Ttrain_pca, ytrain; nlv = 2) ;
 pnames(fm)
+Ttrain = fm.T
 lev = fm.lev
 nlev = length(lev)
-plotxy(fm.T[:, 1:2], ytrain;
+plotxy(Ttrain[:, 1:2], ytrain;
     resolution = (800, 400), ellipse = true, 
     title = "FDA").f
 
-## 2) FDA using ridge regularization
-## If lb is too small (e.g. 1e-10) 
-## the model overfits the discrimination of new observations
+## 2) FDA directly on X
+## ==> using ridge regularization
+## Rq: If lb is too small (e.g. here 1e-10) 
+## the model can overfit the discrimination of new observations
 lb = 1e-5
 fm = fda(Xtrain, ytrain; nlv = 2, lb = lb) ;
 #fm = fdasvd(Xtrain, ytrain; nlv = 2, lb = lb) ;
