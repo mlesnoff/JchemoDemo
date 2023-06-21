@@ -64,6 +64,7 @@ f, ax = plotxy(Ttrain[:, 1:2], ytrain;
 scatter!(ax, ct[:, 1], ct[:, 2],
     markersize = 10, color = :red)
 f
+## Test
 Ttest = Jchemo.transform(fm, Xtest)
 i = 1  # class 
 f, ax = plotxy(Ttrain[:, 1:2], ytrain;
