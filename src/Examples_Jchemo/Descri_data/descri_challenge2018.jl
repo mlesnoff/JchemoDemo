@@ -60,11 +60,11 @@ plotgrid(z.lv, 100 * z.pvar; step = 1,
 
 i = 1
 plotxy(T[:, i:(i + 1)]; color = (:red, .5),
-    xlabel = "PC1", ylabel = "PC2").f
+    xlabel = string("PC", i), ylabel = string("PC", i + 1)).f
 
 colm = cgrad(:Dark2_5, nlev; categorical = true)
 plotxy(T[:, i:(i + 1)], typ; color = colm,
-    xlabel = "PC1", ylabel = "PC2").f
+    xlabel = string("PC", i), ylabel = string("PC", i + 1)).f
 
 ## Train vs Test
 fm = pcasvd(Xtrain, nlv = 15) ; 
