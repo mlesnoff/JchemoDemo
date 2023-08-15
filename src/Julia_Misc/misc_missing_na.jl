@@ -46,14 +46,24 @@ for row in eachrow(Y)
 end
 Y
 
-############# NaN 
+#### Add missing values in a matrix²
+X = rand(5, 2)
+X = convert(Matrix{Union{Missing, eltype(X)}}, X)
+X[1, 1] = missing
+X[2:3, 2] .= missing
+X
+## This can be done also with function
+## 'allowmissing' exported by DataFrame.jl 
+## from Missings.jl   
+## Rq: 'allowmissing!' does not work on matrices
+## (only on dataframes)
+X = rand(5, 2)
+X = allowmissing(X)
+X[1, 1] = missing
+X[2:3, 2] .= missing
+X
 
-x = [rand(5) ; NaN]
-replace(x, NaN => -100)
-y = replace(x, NaN => missing)  # The inplace version does not accept to create missing 
-                                # in a Float64 object
-
-############# DATAFRAMES
+#### Dataframes
                                 
 # https://www.roelpeters.be/replacing-nan-missing-in-julia-dataframes/  
 using BenchmarkTools
@@ -129,4 +139,13 @@ for col in eachcol(df)
     replace!(col, 0 => missing)
 end
 df 
+
+################# NaN 
+
+x = [rand(5) ; NaN]
+replace(x, NaN => -100)
+y = replace(x, NaN => missing)  # The inplace version does not accept to create missing 
+                                # in a Float64 object
+
+
 
