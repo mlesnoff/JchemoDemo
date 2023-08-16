@@ -46,7 +46,7 @@ for row in eachrow(Y)
 end
 Y
 
-#### Add missing values in a matrix²
+#### Add missing values in a matrix
 X = rand(5, 2)
 X = convert(Matrix{Union{Missing, eltype(X)}}, X)
 X[1, 1] = missing
@@ -62,6 +62,15 @@ X = allowmissing(X)
 X[1, 1] = missing
 X[2:3, 2] .= missing
 X
+
+x = allowmissing(rand(10))
+x[1:2] .= missing
+x 
+a = x .> .5
+a[ismissing.(a)] .= false
+b = .!ismissing.(x)
+u = findall(a .&& b)
+x[u]
 
 #### Dataframes
                                 
