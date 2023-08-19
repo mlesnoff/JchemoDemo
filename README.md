@@ -1,7 +1,7 @@
 # JchemoDemo
 
 **JchemoDemo** is a **Julia project** (with its [**environment**](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)) demonstrating basic functions of package [**Jchemo.jl**](https://github.com/mlesnoff/Jchemo.jl). 
-This project can be used for building **training sessions**. 
+This project can be used for instance for building **training sessions**. 
 
 **What is provided:**
 
