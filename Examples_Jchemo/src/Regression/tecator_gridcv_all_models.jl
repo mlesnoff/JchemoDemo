@@ -61,7 +61,7 @@ ytrain = Ytrain[:, nam]
 ytest = Ytest[:, nam]
 
 segm = segmkf(ntrain, 4; rep = 20)
-segm_slow = segm[1:3] # Only 3 replications for slow models
+segm_slow = segm[1:3] # for slow models ==> only 3 replications
 
 #-
 #### PLSR

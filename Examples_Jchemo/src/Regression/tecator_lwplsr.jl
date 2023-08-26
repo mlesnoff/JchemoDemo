@@ -61,24 +61,23 @@ nam = namy[j]    # y-variable
 ytrain = Ytrain[:, nam]
 ytest = Ytest[:, nam]
 
-#-
-lb = 1e-3
-fm = rr(Xtrain, ytrain; lb = lb) ;
-## Alternative RR algorithm 
-## (same results, but slower to tune):
-#fm = rrchol(Xtrain, ytrain; lb = lb) ;
+#- 
+nlvdis = 10 ; metric = "mahal"
+h = 3 ; k = 30 
+nlv = 4
+fm = lwplsr(Xtrain, ytrain; nlvdis = nlvdis,
+    metric = metric, h = h, k = k, 
+    nlv = nlv) ;
+pnames(fm)
 
-#-
+#- 
 pred = Jchemo.predict(fm, Xtest).pred
 
-#-
-Jchemo.predict(fm, Xtest; lb = 1e-2).pred
+#- 
+Jchemo.predict(fm, Xtest; nlv = 2).pred
 
-#-
-## Predictions for multiple values of 'lb'
-## are only possible with 'rr' (not with 'rrchol')
-zlb = 10.0.^(-6:-1)
-Jchemo.predict(fm, Xtest; lb = zlb).pred
+#- 
+Jchemo.predict(fm, Xtest; nlv = 0:2).pred
 
 #-
 rmsep(pred, ytest)
@@ -113,4 +112,3 @@ pred_loess = Loess.predict(zfm, sort(ytest))
 lines!(ax, sort(ytest), pred_loess; color = :red)
 hlines!(ax, 0; color = :grey, linestyle = :dashdot)
 f    
-

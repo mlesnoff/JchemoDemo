@@ -49,13 +49,6 @@ Xp = savgol(snv(X); f = f, pol = pol, d = d) ;
 plotsp(Xp, wl_num; nsamp = 30).f
 
 #-
-## Split Tot = Train + Test
-## The model is tuned on Train, and
-## the generalization error is estimated on Test.
-## Here the split of Tot is provided by the dataset
-## (= variable 'test'), but Tot could be split 
-## a posteriori (e.g. random sampling, systematic 
-## sampling, etc.) 
 s = Bool.(test)
 Xtrain = rmrow(Xp, s)
 ytrain = rmrow(y, s)
@@ -66,7 +59,6 @@ ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
 #-
-## Train = Cal + Val
 nval = 300 
 ncal = ntrain - nval 
 s = sample(1:ntrain, nval; replace = false)
