@@ -78,24 +78,20 @@ nval = 300
 ## Different methods can be used to select Val
 ## (1) Random sampling
 s = sample(1:ntrain, nval; replace = false)
-ytrain[s]
 
 ## (2) Or Kennard-Stone sampling
 ## Output 'train' contains higher variability
 ## than output 'test'
 #res = sampks(Xtrain; k = nval)
 #s = res.train
-#ytrain[s]
 
 ## (3) Or duplex sampling
 #res = sampdp(Xtrain; k = nval)
 #s = res.train
-#ytrain[s]
 
 ## (4) Or systematic sampling over y
 #res = sampsys(ytrain; k = nval)
 #s = res.train
-#ytrain[s]
 
 #-
 Xcal = rmrow(Xtrain, s)
@@ -155,7 +151,7 @@ res_sel.sel     # nb. LVs selected with the Wold's criterion
 ## Final prediction with the parcimonious model
 fm = plskern(Xtrain, ytrain; nlv = res_sel.sel) ;
 pred = Jchemo.predict(fm, Xtest).pred
-rmsep(pred, ytest)
+@show rmsep(pred, ytest)
 
 #-
 ## !!! Remark

@@ -91,7 +91,7 @@ res[u, :]
 fm = plskern(Xtrain, ytrain; nlv = res.nlv[u],
     scal = res.scal[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
-println(rmsep(pred, ytest))
+@show rmsep(pred, ytest)
 plotxy(vec(pred), ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
@@ -111,7 +111,7 @@ res[u, :]
 fm = plsravg(Xtrain, ytrain; nlv = res.nlv[u], 
     typf = res.typf[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
-println(rmsep(pred, ytest))
+@show rmsep(pred, ytest)
 
 #-
 #### RR 
@@ -162,7 +162,7 @@ res[u, :]
 fm = krr(Xtrain, ytrain; lb = res.lb[u], 
     gamma = res.gamma[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
-println(rmsep(pred, ytest))
+@show rmsep(pred, ytest)
 plotxy(vec(pred), ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
@@ -227,7 +227,7 @@ fm = lwplsr(Xtrain, ytrain; nlvdis = res.nlvdis[u],
     metric = res.metric[u], h = res.h[u], k = res.k[u], 
     nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
-println(rmsep(pred, ytest))
+@show rmsep(pred, ytest)
 plotxy(vec(pred), ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
