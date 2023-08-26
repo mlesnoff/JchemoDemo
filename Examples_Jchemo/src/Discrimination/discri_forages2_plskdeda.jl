@@ -53,7 +53,7 @@ rescv = gridcvlv(Xtrain, ytrain; segm = segm,
     score = err, fun = plskdeda, pars = pars, nlv = nlv) ; 
 res = rescv.res
 group = string.("a = ", res.a)
-plotgrid(res.nlv, res.y1, group;
+plotgrid(res.nlv, res.y1, group; step = 2,
     xlabel = "Nb. LVs", ylabel = "Err-CV").f
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]

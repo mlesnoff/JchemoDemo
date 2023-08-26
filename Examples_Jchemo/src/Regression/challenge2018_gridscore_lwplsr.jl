@@ -72,6 +72,7 @@ yval = ytrain[s]
 nlvdis = [15; 25] ; metric = ["mahal"] 
 h = [1; 2; 4; 6; Inf]
 k = [150; 200; 350; 500; 1000]  
+nlv = 1:20 
 pars = mpar(nlvdis = nlvdis, metric = metric, 
     h = h, k = k)
 
@@ -79,7 +80,6 @@ pars = mpar(nlvdis = nlvdis, metric = metric,
 length(pars[1])
 
 #-
-nlv = 1:20 
 res = gridscorelv(Xcal, ycal, Xval, yval;
     score = rmsep, fun = lwplsr, nlv = nlv, pars = pars, 
     verbose = false) 
@@ -90,7 +90,7 @@ res[u, :]
 
 #-
 group = string.("nlvdis=", res.nlvdis, ",h=", res.h, ",k=", res.k) 
-plotgrid(res.nlv, res.y1, group;
+plotgrid(res.nlv, res.y1, group; step = 2,
     xlabel ="Nb. LVs", ylabel = "RMSEP").f
 
 #-

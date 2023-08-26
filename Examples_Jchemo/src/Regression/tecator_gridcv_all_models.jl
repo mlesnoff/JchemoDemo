@@ -61,6 +61,8 @@ ytrain = Ytrain[:, nam]
 ytest = Ytest[:, nam]
 
 segm = segmkf(ntrain, 4; rep = 20)
+
+#-
 segm_slow = segm[1:3] # for slow models ==> only 3 replications
 
 #-
@@ -198,9 +200,9 @@ plotxy(vec(pred), ytest; resolution = (500, 400),
 
 #-
 #### LWPLSR 
-nlvdis = [10; 15; 25] ; metric = ["mahal"] 
-h = [1; 2; 6; Inf] ; k = [50; 100; 150]  
-nlv = 0:20
+nlvdis = [10; 15] ; metric = ["mahal"] 
+h = [1; 2; 5; Inf] ; k = [30; 50; 100]  
+nlv = 0:15
 pars = mpar(nlvdis = nlvdis, metric = metric, 
     h = h, k = k) 
 length(pars[1])
@@ -209,9 +211,9 @@ res = gridcvlv(Xtrain, ytrain; segm = segm,
     pars = pars, verbose = false).res 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-group = string.("nvldis=", res.nlvdis, " h=", res.h, 
-    " k=", res.k)
-plotgrid(res.nlv, res.y1, group;
+group = string.("nvldis=", res.nlvdis, ",h=", res.h, 
+    ",k=", res.k)
+plotgrid(res.nlv, res.y1, group; step = 2,
     xlabel ="Nb. LVs", ylabel = "RMSEP").f
 fm = lwplsr(Xtrain, ytrain; nlvdis = res.nlvdis[u],
     metric = res.metric[u], h = res.h[u], k = res.k[u], 
@@ -224,11 +226,11 @@ plotxy(vec(pred), ytest; resolution = (500, 400),
 
 #-
 #### LWPLSR-AVG
-nlvdis = [10; 15; 25] ; metric = ["mahal"] 
-h = [1; 2; 6; Inf] ; k = [50; 100; 150]  
-nlv = ["0:10"; "0:20"; "0:30"]
-pars = mpar(nlvdis = nlvdis, metric = metric, h = h, 
-    k = k, nlv = nlv) 
+nlvdis = [10; 15] ; metric = ["mahal"] 
+h = [1; 2; 5; Inf] ; k = [30; 50; 100]  
+nlv = ["1:5", "1:10"]
+pars = mpar(nlvdis = nlvdis, metric = metric, 
+    h = h, k = k, nlv = nlv) 
 length(pars[1])
 res = gridcv(Xtrain, ytrain; segm = segm_slow,
     score = rmsep, fun = lwplsravg, pars = pars, 
@@ -246,9 +248,9 @@ plotxy(vec(pred), ytest; resolution = (500, 400),
 
 #-
 #### LWPLSR-S
-nlv0 = [15; 20; 30; 40]
+nlv0 = [10; 15; 20; 30]
 metric = ["eucl"; "mahal"] 
-h = [1; 2; 6] ; k = [50; 100; 150]  
+h = [1; 2; 5] ; k = [30; 50; 100]  
 nlv = 0:15
 pars = mpar(nlv0 = nlv0, metric = metric, 
     h = h, k = k) 
@@ -260,7 +262,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 group = string.("nvl0=", res.nlv0, " metric =", res.metric, 
     " h=", res.h, " k=", res.k)
-plotgrid(res.nlv, res.y1, group;
+plotgrid(res.nlv, res.y1, group; step = 2,
     xlabel ="Nb. LVs", ylabel = "RMSEP").f
 fm = lwplsr_s(Xtrain, ytrain; nlv0 = res.nlv0[u], 
     metric = res.metric[u], h = res.h[u], 
@@ -272,13 +274,14 @@ plotxy(vec(pred), ytest; resolution = (500, 400),
     xlabel = "Prediction", ylabel = "Observed (Test)").f   
 
 #-
-## Working in a KPLS score space
-nlv0 = [15; 20; 30; 40]
-reduc = ["dkpls"] ; gamma = 10.0.^(-3:3) 
+## Working in a DKPLS score space
+reduc = ["dkpls"]
+nlv0 = [10; 15; 20; 30]
+gamma = 10.0.^(-3:3) 
 metric = ["mahal"] 
-h = [1; 2; 6] ; k = [50; 100; 150]  
+h = [1; 2; 5] ; k = [30; 50; 100]  
 nlv = 0:15
-pars = mpar(nlv0 = nlv0, reduc = reduc, gamma = gamma, 
+pars = mpar(reduc = reduc, nlv0 = nlv0, gamma = gamma, 
     metric = metric, h = h, k = k) 
 length(pars[1])
 res = gridcvlv(Xtrain, ytrain; segm = segm_slow,
@@ -288,10 +291,10 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 group = string.("nvl0=", res.nlv0, ", gamma=", res.gamma,
     ", h=", res.h, " k=", res.k)
-plotgrid(res.nlv, res.y1, group; leg = false,
+plotgrid(res.nlv, res.y1, group; step = 2, leg = false,
     xlabel ="Nb. LVs", ylabel = "RMSEP").f
-fm = lwplsr_s(Xtrain, ytrain; nlv0 = res.nlv0[u],
-    reduc = res.reduc[u], gamma = res.gamma[u], 
+fm = lwplsr_s(Xtrain, ytrain; reduc = res.reduc[u], 
+    nlv0 = res.nlv0[u], gamma = res.gamma[u], 
     metric = res.metric[u], h = res.h[u], 
     k = res.k[u], nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 

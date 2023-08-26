@@ -82,12 +82,12 @@ f
 
 #-
 ## LWMLR-S with a PCA-score space = "LWR" (Naes et al.1990)
+reduc = ["pca"] 
+nlv = Int64.(LinRange(5, 20, 4))
 metric = ["eucl", "mahal"]
 h = [1; 2; 6] ; k = [50; 100; 150]  
-nlv = Int64.(LinRange(5, 20, 4))
-reduc = ["pca"] 
-pars = mpar(metric = metric, h = h, k = k, 
-    nlv = nlv, reduc = reduc) 
+pars = mpar(reduc = reduc, nlv = nlv, 
+    metric = metric, h = h, k = k) 
 length(pars[1])
 
 #-
@@ -100,9 +100,9 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 #-
-fm = lwmlr_s(Xtrain, ytrain; metric = res.metric[u], 
-    h = res.h[u], k = res.k[u], nlv = res.nlv[u], 
-    reduc = res.reduc[u]) ;
+fm = lwmlr_s(Xtrain, ytrain; reduc = res.reduc[u], 
+    nlv = res.nlv[u], metric = res.metric[u], 
+    h = res.h[u], k = res.k[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
 @show rmsep(pred, ytest)
 mse(pred, ytest)
@@ -114,12 +114,12 @@ plotxy(vec(pred), ytest; color = (:red, .5),
 
 #-
 ## LWMLR-S with a PLS-score space
+reduc = ["pls"] 
+nlv = Int64.(LinRange(5, 20, 4))
 metric = ["eucl", "mahal"]
 h = [1; 2; 6] ; k = [50; 100; 150]  
-nlv = Int64.(LinRange(5, 20, 4))
-reduc = ["pls"] 
-pars = mpar(metric = metric, h = h, k = k, 
-    nlv = nlv, reduc = reduc) 
+pars = mpar(reduc = reduc, nlv = nlv, 
+    metric = metric, h = h, k = k) 
 length(pars[1])
 
 #-
@@ -132,9 +132,9 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 #-
-fm = lwmlr_s(Xtrain, ytrain; metric = res.metric[u], 
-    h = res.h[u], k = res.k[u], nlv = res.nlv[u], 
-    reduc = res.reduc[u]) ;
+fm = lwmlr_s(Xtrain, ytrain; reduc = res.reduc[u], 
+    nlv = res.nlv[u], metric = res.metric[u], 
+    h = res.h[u], k = res.k[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
 @show rmsep(pred, ytest)
 mse(pred, ytest)
@@ -146,13 +146,13 @@ plotxy(vec(pred), ytest; color = (:red, .5),
 
 #-
 ## LWMLR-S with a DKPLS-score space
+reduc = ["dkpls"] 
+nlv = Int64.(LinRange(5, 20, 4))
 metric = ["eucl", "mahal"]
 h = [1; 2; 6] ; k = [50; 100; 150]  
-nlv = Int64.(LinRange(5, 20, 4))
 gamma = 10.0.^(-2:3)
-reduc = ["dkpls"] 
-pars = mpar(metric = metric, h = h, k = k, 
-    nlv = nlv, gamma = gamma, reduc = reduc) 
+pars = mpar(reduc = reduc, nlv = nlv, metric = metric, 
+    h = h, k = k, gamma = gamma, ) 
 length(pars[1])
 
 #-
@@ -165,9 +165,9 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 #-
-fm = lwmlr_s(Xtrain, ytrain; metric = res.metric[u], 
-    h = res.h[u], k = res.k[u], nlv = res.nlv[u], 
-    gamma = res.gamma[u], reduc = res.reduc[u]) ;
+fm = lwmlr_s(Xtrain, ytrain; reduc = res.reduc[u],
+    metric = res.metric[u], nlv = res.nlv[u], 
+    h = res.h[u], k = res.k[u], gamma = res.gamma[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
 @show rmsep(pred, ytest)
 mse(pred, ytest)

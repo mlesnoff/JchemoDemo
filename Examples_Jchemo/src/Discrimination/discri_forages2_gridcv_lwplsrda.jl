@@ -44,7 +44,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 group = string.("metric=", res.metric, res.nlvdis, " h=", res.h, " k=", res.k)
-plotgrid(res.nlv, res.y1, group; step = 2,
+plotgrid(res.nlv, res.y1, group; step = 2, step = 2,
     xlabel = "Nb. LVs", ylabel = "ERR").f
 
 fm = lwplsrda(Xtrain, ytrain; nlvdis = res.nlvdis[u], 

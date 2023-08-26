@@ -76,7 +76,7 @@ res = gridscorelv(Xcal, ycal, Xval, yval;
     score = rmsep, fun = plskern, nlv = nlv, 
     pars = pars) 
 group = string.(res.scal) 
-plotgrid(res.nlv, res.y1, group;
+plotgrid(res.nlv, res.y1, group; step = 2,
     xlabel ="Nb. LVs", ylabel = "RMSEP").f
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :] 
@@ -213,7 +213,7 @@ res = gridscorelv(Xcal, ycal, Xval, yval;
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 group = string.(res.nlvdis, "-", res.h, "-", res.k) 
-plotgrid(res.nlv, res.y1, group;
+plotgrid(res.nlv, res.y1, group; step = 2,
     xlabel ="Nb. LVs", ylabel = "RMSEP").f
 fm = lwplsr(Xtrain, ytrain; nlvdis = res.nlvdis[u],
     metric = res.metric[u], h = res.h[u], k = res.k[u], 
@@ -277,7 +277,7 @@ res = gridscorelv(Xcal, ycal, Xval, yval;
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 group = string.(res.nlv0, "-", res.metric, "-", res.h, "-", res.k) 
-plotgrid(res.nlv, res.y1, group;
+plotgrid(res.nlv, res.y1, group; step = 2,
     xlabel ="Nb. LVs", ylabel = "RMSEP").f
 fm = lwplsr_s(Xtrain, ytrain; nlv0 = res.nlv0[u], 
     metric = res.metric[u], h = res.h[u], 
@@ -286,15 +286,15 @@ pred = Jchemo.predict(fm, Xtest).pred
 rmsep(pred, ytest)
 
 #-
-## Working in a KPLS score space
-nlv0 = [20 ; 30 ; 50]
+## Working in a DKPLS score space
+reduc = ["dkpls"] ; nlv0 = [20 ; 30 ; 50]
 metric = ["eucl"; "mahal"] 
-reduc = ["dkpls"] ; gamma = 10.0.^(-3:3) 
+gamma = 10.0.^(-3:3) 
 h = [1; 2] ; k = [150; 200; 350]  
 nlv = 1:20 
 psamp = [.30]
-pars = mpar(nlv0 = nlv0, metric = metric, 
-    reduc = reduc, gamma = gamma, h = h, k = k,
+pars = mpar(reduc = reduc, nlv0 = nlv0, 
+    metric = metric, gamma = gamma, h = h, k = k,
     psamp = psamp)
 length(pars[1])
 res = gridscorelv(Xcal, ycal, Xval, yval;
@@ -302,8 +302,8 @@ res = gridscorelv(Xcal, ycal, Xval, yval;
     verbose = false) 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-fm = lwplsr_s(Xtrain, ytrain; nlv0 = res.nlv0[u],
-    reduc = res.reduc[u], gamma = res.gamma[u], 
+fm = lwplsr_s(Xtrain, ytrain; reduc = res.reduc[u], 
+    nlv0 = res.nlv0[u], gamma = res.gamma[u], 
     metric = res.metric[u], h = res.h[u], 
     k = res.k[u], nlv = res.nlv[u],
     psamp = res.psamp[u]) ;
@@ -333,7 +333,6 @@ fm = cplsravg(Xtrain, ytrain; ncla = 10,
     nlv_da = 14, nlv = "5:20") ;
 pred = Jchemo.predict(fm, Xtest).pred 
 rmsep(pred, ytest)
-
 
 #-
 #### KNNR
