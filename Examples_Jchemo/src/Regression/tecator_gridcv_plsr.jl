@@ -102,7 +102,7 @@ segm[i][k]   # segment 'k' of replication 'i'
 nlv = 0:20
 rescv = gridcvlv(Xtrain, ytrain; segm = segm, 
     score = rmsep, fun = plskern, nlv = nlv, 
-    verbose = true) ;
+    verbose = false) ;
 pnames(rescv)
 
 #-
@@ -183,7 +183,7 @@ nlv = 0:20
 pars = mpar(nlv = nlv)
 res = gridcv(Xtrain, ytrain; segm = segm, 
     score = rmsep, fun = plskern, pars = pars, 
-    verbose = true).res
+    verbose = false).res
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 

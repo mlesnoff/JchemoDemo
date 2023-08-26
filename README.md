@@ -6,8 +6,8 @@ This project can be used for instance for building **training sessions**.
 **What is provided:**
 
 1. [**Examples with Jchemo.jl**](https://github.com/mlesnoff/JchemoDemo/tree/main/Examples_Jchemo)
-    - [**Scripts .jl**](https://github.com/mlesnoff/JchemoDemo/tree/main/Examples_Jchemo/src) (*)
     - [**Notebooks .ipynb**](https://github.com/mlesnoff/JchemoDemo/tree/main/Examples_Jchemo/ipynb)
+    - [**Scripts .jl**](https://github.com/mlesnoff/JchemoDemo/tree/main/Examples_Jchemo/src) (*)
 
 2. [**Tips to start with Julia**](https://github.com/mlesnoff/JchemoDemo/blob/main/src/Misc/config.md)
 

@@ -93,7 +93,7 @@ length(pars[1])
 #-
 res = gridscore(Xcal, ycal, Xval, yval; 
     score = rmsep, fun = lwmlr_s, pars = pars,
-    verbose = true) 
+    verbose = false) 
 
 #-
 u = findall(res.y1 .== minimum(res.y1))[1] 
@@ -125,7 +125,7 @@ length(pars[1])
 #-
 res = gridscore(Xcal, ycal, Xval, yval; 
     score = rmsep, fun = lwmlr_s, pars = pars,
-    verbose = true) 
+    verbose = false) 
 
 #-
 u = findall(res.y1 .== minimum(res.y1))[1] 
@@ -158,7 +158,7 @@ length(pars[1])
 #-
 res = gridscore(Xcal, ycal, Xval, yval; 
     score = rmsep, fun = lwmlr_s, pars = pars,
-    verbose = true) 
+    verbose = false) 
 
 #-
 u = findall(res.y1 .== minimum(res.y1))[1] 

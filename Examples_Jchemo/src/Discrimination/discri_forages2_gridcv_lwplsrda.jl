@@ -39,7 +39,7 @@ length(pars[1])
 nlv = 0:15
 res = gridcvlv(Xtrain, ytrain; segm = segm, 
     score = err, fun = lwplsrda, nlv = nlv, pars = pars, 
-    verbose = true).res
+    verbose = false).res
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 
@@ -49,7 +49,7 @@ plotgrid(res.nlv, res.y1, group; step = 2,
 
 fm = lwplsrda(Xtrain, ytrain; nlvdis = res.nlvdis[u], 
     metric = res.metric[u], h = res.h[u], k = res.k[u], 
-    nlv = res.nlv[u], verbose = true) ;
+    nlv = res.nlv[u], verbose = false) ;
 pred = Jchemo.predict(fm, Xtest).pred
 err(pred, ytest)
 

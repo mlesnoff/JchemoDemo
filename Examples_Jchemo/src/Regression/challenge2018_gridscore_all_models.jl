@@ -105,7 +105,7 @@ pars = mpar(nlv = nlv, typf = typf)
 length(pars[1])
 res = gridscore(Xcal, ycal, Xval, yval;
     score = rmsep, fun = plsravg, pars = pars,
-    verbose = true) 
+    verbose = false) 
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :] 
 fm = plsravg(Xtrain, ytrain; nlv = res.nlv[u], 
@@ -134,7 +134,7 @@ nlv = [10; 20; 30; 40]
 pars = mpar(nlv = nlv)
 res = gridscore(Xcal, ycal, Xval, yval;
     score = rmsep, fun = covselr, pars = pars, 
-    verbose = true)
+    verbose = false)
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 fm = covselr(Xtrain, ytrain; nlv = res.nlv[u]) ;
@@ -156,7 +156,7 @@ zycal = ycal[s]
 ## End
 res = gridscorelb(zXcal, zycal, Xval, yval;
     score = rmsep, fun = krr, lb = lb, pars = pars, 
-    verbose = true)
+    verbose = false)
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 fm = krr(Xtrain, ytrain; lb = res.lb[u], 
@@ -182,7 +182,7 @@ zycal = ycal[s]
 ## End
 res = gridscorelv(zXcal, zycal, Xval, yval;
     score = rmsep, fun = kplsr, nlv = nlv, pars = pars, 
-    verbose = true) 
+    verbose = false) 
 u = findall(res.y1 .== minimum(res.y1))[1] ;
 res[u, :]
 fm = kplsr(Xtrain, ytrain; nlv = res.nlv[u], 
@@ -198,7 +198,7 @@ pars = mpar(gamma = gamma)
 length(pars[1])
 res = gridscorelv(Xcal, ycal, Xval, yval;
     score = rmsep, fun = dkplsr, nlv = nlv, pars = pars, 
-    verbose = true) ;
+    verbose = false) ;
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 fm = dkplsr(Xtrain, ytrain; nlv = res.nlv[u], 
@@ -217,7 +217,7 @@ pars = mpar(nlvdis = nlvdis, metric = metric,
 length(pars[1])
 res = gridscorelv(Xcal, ycal, Xval, yval;
     score = rmsep, fun = lwplsr, nlv = nlv, pars = pars, 
-    verbose = true) 
+    verbose = false) 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 group = string.(res.nlvdis, "-", res.h, "-", res.k) 
@@ -249,7 +249,7 @@ pars = mpar(nlv = nlv, nlvdis = nlvdis,
 length(pars[1])
 res = gridscore(Xcal, ycal, Xval, yval;
     score = rmsep, fun = lwplsravg, pars = pars, 
-    verbose = true) 
+    verbose = false) 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 fm = lwplsravg(Xtrain, ytrain; nlvdis = res.nlvdis[u],
@@ -281,7 +281,7 @@ pars = mpar(nlv0 = nlv0, metric = metric, h = h,
 length(pars[1])
 res = gridscorelv(Xcal, ycal, Xval, yval;
     score = msep, fun = lwplsr_s, nlv = nlv, pars = pars, 
-    verbose = true) 
+    verbose = false) 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 group = string.(res.nlv0, "-", res.metric, "-", res.h, "-", res.k) 
@@ -307,7 +307,7 @@ pars = mpar(nlv0 = nlv0, metric = metric,
 length(pars[1])
 res = gridscorelv(Xcal, ycal, Xval, yval;
     score = msep, fun = lwplsr_s, nlv = nlv, pars = pars, 
-    verbose = true) 
+    verbose = false) 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 fm = lwplsr_s(Xtrain, ytrain; nlv0 = res.nlv0[u],
@@ -328,7 +328,7 @@ pars = mpar(ncla = ncla, nlv_da = nlv_da,
 length(pars[1])
 res = gridscore(Xcal, ycal, Xval, yval;
     score = rmsep, fun = cplsravg, pars = pars, 
-    verbose = true)
+    verbose = false)
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 fm = cplsravg(Xtrain, ytrain; ncla = res.ncla[u],
@@ -353,7 +353,7 @@ pars = mpar(nlvdis = nlvdis, metric = metric,
 length(pars[1])
 res = gridscore(Xcal, ycal, Xval, yval;
     score = rmsep, fun = knnr, pars = pars, 
-    verbose = true) 
+    verbose = false) 
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 fm = knnr(Xtrain, ytrain; nlvdis = res.nlvdis[u], 
@@ -371,7 +371,7 @@ pars = mpar(n_trees = n_trees, n_subfeatures = n_subfeatures,
 length(pars[1])
 res = gridscore(Xcal, ycal, Xval, yval;
     score = rmsep, fun = rfr_dt, pars = pars, 
-    verbose = true) ;
+    verbose = false) ;
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 fm = rfr_dt(Xtrain, ytrain; n_trees = res.n_trees[u], 

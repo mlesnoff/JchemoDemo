@@ -1,3 +1,6 @@
+## Benchmark for computaion time 
+## on PLSR
+
 #-
 using Jchemo
 
@@ -11,7 +14,8 @@ q = 10
 X = rand(n, p)
 Y = rand(n, q) 
 y = Y[:, 1]
-w = rand(n) 
+w = rand(n) ;
+(n = n, p)
 
 #-
 nlv = 25 

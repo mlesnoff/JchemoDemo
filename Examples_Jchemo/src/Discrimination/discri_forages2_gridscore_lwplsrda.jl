@@ -45,7 +45,7 @@ length(pars[1])
 nlv = 0:15
 res = gridscorelv(Xcal, ycal, Xval, yval;
     score = err, fun = lwplsrda, nlv = nlv, pars = pars, 
-    verbose = true)
+    verbose = false)
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 group = string.("metric=", res.metric, res.nlvdis, " h=", res.h, 
@@ -54,7 +54,7 @@ plotgrid(res.nlv, res.y1, group; step = 2,
     xlabel = "Nb. LVs", ylabel = "ERR").f
 fm = lwplsrda(Xtrain, ytrain; nlvdis = res.nlvdis[u], 
     metric = res.metric[u], h = res.h[u], k = res.k[u], 
-    nlv = res.nlv[u], verbose = true) ;
+    nlv = res.nlv[u], verbose = false) ;
 pred = Jchemo.predict(fm, Xtest).pred
 err(pred, ytest)
 

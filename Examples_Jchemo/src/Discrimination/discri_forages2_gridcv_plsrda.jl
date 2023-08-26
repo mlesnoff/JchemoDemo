@@ -32,7 +32,7 @@ K = 3 ; segm = segmkf(ntrain, K; rep = 10)         # K-fold CV
 
 nlv = 0:50
 res = gridcvlv(Xtrain, ytrain; segm = segm, 
-    score = err, fun = plsrda, nlv = nlv, verbose = true).res
+    score = err, fun = plsrda, nlv = nlv, verbose = false).res
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 plotgrid(res.nlv, res.y1; step = 5,
@@ -50,7 +50,7 @@ plotconf(cf).f
 ## PLSLDA
 nlv = 1:50  ## !!: Does not start from nlv=0 (since LDA on scores)
 res = gridcvlv(Xtrain, ytrain; segm = segm, 
-    score = err, fun = plslda, nlv = nlv, verbose = true).res
+    score = err, fun = plslda, nlv = nlv, verbose = false).res
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 plotgrid(res.nlv, res.y1; step = 5,
