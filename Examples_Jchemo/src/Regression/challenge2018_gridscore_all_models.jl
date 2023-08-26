@@ -241,11 +241,11 @@ rmsep(pred, ytest)
 
 #-
 #### LWPLSR-AVG 
-nlv = ["0:20"; "5:20"; "0:30"; "5:30"] 
 nlvdis = [15; 25] ; metric = ["mahal"] 
 h = [1; 2.5; 5] ; k = [150; 200; 350; 500]  
-pars = mpar(nlv = nlv, nlvdis = nlvdis, 
-    metric = metric, h = h, k = k) 
+nlv = ["0:20"; "5:20"; "0:30"; "5:30"] 
+pars = mpar(nlvdis = nlvdis, metric = metric, 
+    h = h, k = k, nlv = nlv) 
 length(pars[1])
 res = gridscore(Xcal, ycal, Xval, yval;
     score = rmsep, fun = lwplsravg, pars = pars, 

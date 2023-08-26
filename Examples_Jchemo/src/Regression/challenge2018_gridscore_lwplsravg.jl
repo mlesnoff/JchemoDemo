@@ -79,18 +79,18 @@ yval = ytrain[s]
 #-
 ## Model tuning
 nlvdis = [15; 25] ; metric = ["mahal"] 
-h = [1; 2; 4; 6; Inf]
-k = [150; 200; 350; 500; 1000]  
+h = [1; 2.5; 5]
+k = [200; 350; 500]  
+nlv = ["0:20"; "5:20"; "0:30"; "5:30"] 
 pars = mpar(nlvdis = nlvdis, metric = metric, 
-    h = h, k = k)
+    h = h, k = k, nlv = nlv) 
 
 #-
 length(pars[1])
 
 #-
-nlv = 1:20 
-res = gridscorelv(Xcal, ycal, Xval, yval;
-    score = rmsep, fun = lwplsr, nlv = nlv, pars = pars, 
+res = gridscore(Xcal, ycal, Xval, yval;
+    score = rmsep, fun = lwplsravg, pars = pars, 
     verbose = false) 
 
 #-
@@ -98,12 +98,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 #-
-group = string.("nlvdis=", res.nlvdis, ",h=", res.h, ",k=", res.k) 
-plotgrid(res.nlv, res.y1, group;
-    xlabel ="Nb. LVs", ylabel = "RMSEP").f
-
-#-
-fm = lwplsr(Xtrain, ytrain; nlvdis = res.nlvdis[u],
+fm = lwplsravg(Xtrain, ytrain; nlvdis = res.nlvdis[u],
     metric = res.metric[u], h = res.h[u], k = res.k[u], 
     nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
