@@ -127,7 +127,7 @@ rmsep(pred, ytest)
 
 #- 
 ## Plotting predictions vs. observed data 
-plotxy(vec(pred), ytest; color = (:red, .5), step = 2,
+plotxy(vec(pred), ytest; color = (:red, .5),
     bisect = true, xlabel = "Prediction", 
     ylabel = "Observed (Test)").f
 
