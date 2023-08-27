@@ -12,7 +12,7 @@ meth = "Exploratory"
 zpath = joinpath(path_src, meth)
 @show f = filter(endswith("jl"), readdir(zpath))
 nf = length(f) 
-for i = 2:2 
+for i = 1:nf 
     @show i
     @show f[i]
     #i = 11
