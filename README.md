@@ -11,9 +11,9 @@ This project can also be used for building **training sessions**.
 
 2. [**Scripts .jl**](https://github.com/mlesnoff/JchemoDemo/tree/main/Misc/src) **displaying some Julia syntax**
 
-3. [**Tips to start with Julia**](https://github.com/mlesnoff/JchemoDemo/blob/main/Misc/src/config.md)
+3. [**Tips**](https://github.com/mlesnoff/JchemoDemo/blob/main/Misc/src/config.md) **to start with Julia**
 
-4. [**Some methodological materials**](https://github.com/mlesnoff/JchemoDemo/tree/main/Misc/annexes)
+4. **Some methodological** [**materials**](https://github.com/mlesnoff/JchemoDemo/tree/main/Misc/annexes)
 
 The **datasets** used as examples in **JchemoDemo** are stored in package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl) (already installed in the [environment](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)).
 
