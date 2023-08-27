@@ -5,17 +5,17 @@ This project can be used for instance for building **training sessions**.
 
 **What is provided:**
 
-1. [**Examples with Jchemo.jl**](https://github.com/mlesnoff/JchemoDemo/tree/main/Examples_Jchemo)
+1. **Examples with Jchemo.jl**
     - [**Notebooks .ipynb**](https://github.com/mlesnoff/JchemoDemo/tree/main/Examples_Jchemo/ipynb)
     - [**Scripts .jl**](https://github.com/mlesnoff/JchemoDemo/tree/main/Examples_Jchemo/src) (*)
 
-2. [**Tips to start with Julia**](https://github.com/mlesnoff/JchemoDemo/blob/main/src/Misc/config.md)
+2. [**Scripts .jl displaying some Julia syntax**](https://github.com/mlesnoff/JchemoDemo/tree/main/src/Misc/src)
 
-3. [**Scripts .jl demonstrating some Julia syntax**](https://github.com/mlesnoff/JchemoDemo/tree/main/src/Misc/src)
+3. [**Tips to start with Julia**](https://github.com/mlesnoff/JchemoDemo/blob/main/src/Misc/config.md)
 
 4. [**Some methodological materials**](https://github.com/mlesnoff/JchemoDemo/tree/main/Misc/annexes)
 
-The **datasets** used in **JchemoDemo** as examples are stored in package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl) (already installed in the [environment](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)).
+The **datasets** used as examples in **JchemoDemo** are stored in package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl) (already installed in the [environment](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)).
 
 (*) When exploring a given script .jl, it is recommended to run the code row by row (or by block) in the REPL to observe the corresponding outputs. 
 

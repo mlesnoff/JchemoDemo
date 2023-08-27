@@ -206,7 +206,7 @@ nlv = 0:15
 pars = mpar(nlvdis = nlvdis, metric = metric, 
     h = h, k = k) 
 length(pars[1])
-res = gridcvlv(Xtrain, ytrain; segm = segm,
+res = gridcvlv(Xtrain, ytrain; segm = segm_slow,
     score = rmsep, fun = lwplsr, nlv = nlv, 
     pars = pars, verbose = false).res 
 u = findall(res.y1 .== minimum(res.y1))[1] 
@@ -248,14 +248,14 @@ plotxy(vec(pred), ytest; resolution = (500, 400),
 
 #-
 #### LWPLSR-S
-nlv0 = [10; 15; 20; 30]
+nlv0 = [10; 15; 20]
 metric = ["eucl"; "mahal"] 
 h = [1; 2; 5] ; k = [30; 50; 100]  
-nlv = 0:15
+nlv = 0:10
 pars = mpar(nlv0 = nlv0, metric = metric, 
     h = h, k = k) 
 length(pars[1])
-res = gridcvlv(Xtrain, ytrain; segm = segm,
+res = gridcvlv(Xtrain, ytrain; segm = segm_slow,
     score = rmsep, fun = lwplsr_s, nlv = nlv, 
     pars = pars, verbose = false).res 
 u = findall(res.y1 .== minimum(res.y1))[1] 
@@ -280,7 +280,7 @@ nlv0 = [10; 15; 20; 30]
 gamma = 10.0.^(-3:3) 
 metric = ["mahal"] 
 h = [1; 2; 5] ; k = [30; 50; 100]  
-nlv = 0:15
+nlv = 0:10
 pars = mpar(reduc = reduc, nlv0 = nlv0, gamma = gamma, 
     metric = metric, h = h, k = k) 
 length(pars[1])
