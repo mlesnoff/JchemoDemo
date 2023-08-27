@@ -11,7 +11,7 @@ This project can also be used to build **training sessions**.
 
 2. [**Scripts .jl**](https://github.com/mlesnoff/JchemoDemo/tree/main/Misc/src) **displaying some Julia syntax**
 
-3. [**Tips**](https://github.com/mlesnoff/JchemoDemo/blob/main/Misc/src/config.md) **to start with Julia**
+3. [**Tips**](https://github.com/mlesnoff/JchemoDemo/blob/main/Misc/config.md) **to start with Julia**
 
 4. **Some methodological** [**materials**](https://github.com/mlesnoff/JchemoDemo/tree/main/Misc/annexes)
 
