@@ -9,9 +9,9 @@ This project can also be used for building **training sessions**.
     - [**Notebooks .ipynb**](https://github.com/mlesnoff/JchemoDemo/tree/main/Examples_Jchemo/ipynb)
     - [**Scripts .jl**](https://github.com/mlesnoff/JchemoDemo/tree/main/Examples_Jchemo/src) (*)
 
-2. [**Scripts .jl displaying some Julia syntax**](https://github.com/mlesnoff/JchemoDemo/tree/main/src/Misc/src)
+2. [**Scripts .jl**](https://github.com/mlesnoff/JchemoDemo/tree/main/Misc/src) **displaying some Julia syntax**
 
-3. [**Tips to start with Julia**](https://github.com/mlesnoff/JchemoDemo/blob/main/src/Misc/config.md)
+3. [**Tips to start with Julia**](https://github.com/mlesnoff/JchemoDemo/blob/main/Misc/src/config.md)
 
 4. [**Some methodological materials**](https://github.com/mlesnoff/JchemoDemo/tree/main/Misc/annexes)
 
