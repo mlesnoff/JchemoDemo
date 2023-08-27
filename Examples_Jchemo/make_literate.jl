@@ -5,11 +5,14 @@ path = "C:/Users/lesnoff/.julia/dev/JchemoDemo"
 path_src = joinpath(path, "Examples_Jchemo/src")
 path_ipynb = joinpath(path, "Examples_Jchemo/ipynb")
 
-meth = "Regression"
+meth = "Exploratory"
+#meth = "Regression"
+#meth = "Discrimination"
+#meth = "Dataset_description"
 zpath = joinpath(path_src, meth)
-f = filter(endswith("jl"), readdir(zpath))
+@show f = filter(endswith("jl"), readdir(zpath))
 nf = length(f) 
-for i = 7:nf 
+for i = 1:nf 
     @show i
     @show f[i]
     #i = 11
