@@ -64,7 +64,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 #-
-plotgrid(res.nlv, res.y1; step = 2,
+plotgrid(res.nlv, res.y1; step = 5,
     xlabel = "Nb. LVs", ylabel = "RMSEP").f
 
 #-
