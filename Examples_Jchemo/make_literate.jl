@@ -9,7 +9,7 @@ meth = "Regression"
 zpath = joinpath(path_src, meth)
 f = filter(endswith("jl"), readdir(zpath))
 nf = length(f) 
-for i = 1:nf 
+for i = 7:nf 
     @show i
     @show f[i]
     #i = 11
