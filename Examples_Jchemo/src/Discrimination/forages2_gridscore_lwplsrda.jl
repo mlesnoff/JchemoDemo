@@ -44,6 +44,7 @@ ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
+#-
 ## Train ==> Cal + Val
 pct = .30
 nval = Int64.(round(pct * ntrain))
@@ -55,29 +56,46 @@ Xval = Xtrain[s, :]
 yval = ytrain[s] 
 (ntot = ntot, ntrain, ncal, nval, ntest)
 
+#-
 nlvdis = [15; 25] ; metric = ["mahal"]
 h = [1; 2; 5] ; k = [100; 200; 300]
+nlv = 0:15
 pars = mpar(nlvdis = nlvdis, metric = metric, 
     h = h, k = k)
+
+#-
 length(pars[1])
-nlv = 0:15
+
+#-
 res = gridscorelv(Xcal, ycal, Xval, yval;
     score = err, fun = lwplsrda, nlv = nlv, pars = pars, 
     verbose = false)
+
+#-
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
+
+#-
 group = string.("metric=", res.metric, res.nlvdis, " h=", res.h, 
     " k=", res.k)
+
+#-
 plotgrid(res.nlv, res.y1, group; step = 2,
     xlabel = "Nb. LVs", ylabel = "ERR").f
+
+#-
 fm = lwplsrda(Xtrain, ytrain; nlvdis = res.nlvdis[u], 
     metric = res.metric[u], h = res.h[u], k = res.k[u], 
     nlv = res.nlv[u], verbose = false) ;
 pred = Jchemo.predict(fm, Xtest).pred
 err(pred, ytest)
 
+#-
 cf = confusion(pred, ytest) ;
 cf.cnt
-cf.pct
-plotconf(cf).f
 
+#-
+cf.pct
+
+#-
+plotconf(cf).f
