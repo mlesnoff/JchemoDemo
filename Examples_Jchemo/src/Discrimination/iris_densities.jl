@@ -93,7 +93,7 @@ for i = 1:nlev
     pred_grid = vec(res.pred)
     ax[i] = Axis(f[1, i]; title = lev[i],
         xlabel = "LV1", ylabel = "LV2")
-    co = contour!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
+    co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
     scatter!(ax[i], zT[:, 1], zT[:, 2],
         color = :red, markersize = 10)
     k = 150
@@ -102,7 +102,7 @@ for i = 1:nlev
     hlines!(ax[i], 0; linestyle = "-", color = :grey)
     vlines!(ax[i], 0; linestyle = "-", color = :grey)
     xlims!(ax[i], -4, 4) ; ylims!(ax[i], -1.7, 1.7)
-    #Colorbar(f[2, i], co; label = "Density", vertical = false)
+    Colorbar(f[2, i], co; label = "Density", vertical = false)
 end
 f
 
@@ -128,7 +128,7 @@ for i = 1:nlev
     pred_grid = vec(res.pred) 
     ax[i] = Axis(f[1, i]; title = lev[i],
         xlabel = "LV1", ylabel = "LV2")
-    co = contour!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
+    co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
     scatter!(ax[i], zT[:, 1], zT[:, 2],
         color = :red, markersize = 10)
     k = 150
@@ -159,7 +159,7 @@ for i = 1:nlev
     pred_grid = vec(res.pred)
     ax[i] = Axis(f[1, i]; title = lev[i],
         xlabel = "LV1", ylabel = "LV2")
-    co = contour!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
+    co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
     scatter!(ax[i], zT[:, 1], zT[:, 2],
         color = :red, markersize = 10)
     k = 150

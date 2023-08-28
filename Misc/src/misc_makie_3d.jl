@@ -19,14 +19,24 @@ contour(z;
 f = Figure(resolution = (500, 400))
 ax = Axis(f[1, 1]; xlabel = "a", ylabel = "b", 
         title = "Cos(a) * Sin(a)")
-contour!(ax, x, y, z; levels = 10)
+contour!(ax, x, y, z; levels = 10, labels = true)
+f
+
+f = Figure(resolution = (500, 400))
+ax = Axis(f[1, 1]; xlabel = "a", ylabel = "b", 
+        title = "Cos(a) * Sin(a)")
+co = contour!(ax, x, y, z; levels = 10)
+#co = contourf!(ax, x, y, z; levels = 10)
+Colorbar(f[2, 1], co; label = "Density", vertical = false)
 f
 
 contourf(z;
     axis = (xlabel = "a", ylabel = "b", 
         title = "Cos(a) * Sin(a)"))
 
-## Contour withi vortex
+
+
+## Contour within vortex
 x = randn(200)
 y = randn(200)
 z = x .* y
@@ -98,13 +108,6 @@ end
 ax.xticklabelrotation = π / 3   # default: 0
 ax.xticklabelalign = (:right, :center)
 f
-
-
-
-
-
-
-
 
 n = 100
 x = range(0, 2π, length = n)
