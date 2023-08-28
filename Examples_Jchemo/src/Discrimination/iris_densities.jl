@@ -88,9 +88,9 @@ for i = 1:nlev
     z = mpar(x1 = x1, x2 = x2)
     grid = reduce(hcat, z)
     m = nro(grid)
-    fm = dmnorm(zT; S = W) ;
-    res = Jchemo.predict(fm, grid) ;
-    pred_grid = vec(res.pred)
+    zfm = dmnorm(zT; S = W) ;
+    zres = Jchemo.predict(zfm, grid) ;
+    pred_grid = vec(zres.pred)
     ax[i] = Axis(f[1, i]; title = lev[i],
         xlabel = "LV1", ylabel = "LV2")
     co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
@@ -123,9 +123,9 @@ for i = 1:nlev
     grid = reduce(hcat, z)
     m = nro(grid)
     S = Wi[i] * ni[i] / (ni[i] - 1)
-    fm = dmnorm(zT; S = S) ;
-    res = Jchemo.predict(fm, grid) ;
-    pred_grid = vec(res.pred) 
+    zfm = dmnorm(zT; S = S) ;
+    zres = Jchemo.predict(zfm, grid) ;
+    pred_grid = vec(zres.pred) 
     ax[i] = Axis(f[1, i]; title = lev[i],
         xlabel = "LV1", ylabel = "LV2")
     co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
@@ -154,9 +154,9 @@ for i = 1:nlev
     z = mpar(x1 = x1, x2 = x2)
     grid = reduce(hcat, z)
     m = nro(grid)
-    fm = dmkern(zT; a = 1) ;
-    res = Jchemo.predict(fm, grid) ;
-    pred_grid = vec(res.pred)
+    zfm = dmkern(zT; a = 1) ;
+    zres = Jchemo.predict(zfm, grid) ;
+    pred_grid = vec(zres.pred)
     ax[i] = Axis(f[1, i]; title = lev[i],
         xlabel = "LV1", ylabel = "LV2")
     co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
