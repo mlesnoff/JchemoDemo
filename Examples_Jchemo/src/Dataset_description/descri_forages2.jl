@@ -1,23 +1,40 @@
-using JLD2, CairoMakie, StatsBase, FreqTables
+using JLD2, CairoMakie
+using StatsBase, FreqTables 
 using Jchemo, JchemoData
 
+#-
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/forages2.jld2") 
 @load db dat
 pnames(dat)
   
-X = dat.X    
+#-
+X = dat.X 
 Y = dat.Y
-typ = Y.typ
-test = Y.test
-wl = names(X)
-wl_num = parse.(Float64, wl)
 ntot = nro(X)
 
-summ(X).res
+#-
+@head X 
 
-freqtable(typ, test)
+#-
+@head Y
 
+#-
+y = Y.typ
+tab(y)
+
+#-
+test = Y.test
+tab(test)
+
+#-
+freqtable(y, test)
+
+#-
+wl = names(X)
+wl_num = parse.(Float64, wl)
+
+#-
 # Tot ==> Train + Test
 s = Bool.(test)
 Xtrain = rmrow(X, s)
@@ -28,47 +45,76 @@ ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
+#-
 ## Spectra X 
 ## (already pre-processed SavGol(Snv; f = 21, p = 3, d=2))
 plotsp(X, wl_num; nsamp = 10,
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
+#-
 #### PCAs on X
 fm = pcasvd(X; nlv = 15) ; 
 pnames(fm)
-T = fm.T
 
+#-
+T = fm.T
+@head T 
+
+#-
 res = summary(fm, X) ;
 pnames(res)
 
+#-
 z = res.explvarx
 plotgrid(z.lv, 100 * z.pvar; step = 1,
     xlabel = "nb. PCs", ylabel = "% variance explained").f
 
+#-
 i = 1
 plotxy(T[:, i:(i + 1)]; color = (:red, .5),
     xlabel = "PC1", ylabel = "PC2").f
 
-plotxy(T[:, i:(i + 1)], typ; ellipse = true,
+#-
+plotxy(T[:, i:(i + 1)], y; ellipse = true,
     xlabel = "PC1", ylabel = "PC2").f
 
+#-
 ## Train vs Test
 fm = pcasvd(Xtrain, nlv = 15) ; 
 Ttrain = fm.T
+@head Ttrain
+
+#-
 Ttest = Jchemo.transform(fm, Xtest)
 
+#-
 zT = vcat(Ttrain, Ttest)
 group = vcat(repeat(["0-Train";], ntrain), repeat(["1-Test";], ntest))
 i = 1
 plotxy(zT[:, i:(i + 1)], group;
     xlabel = "PC1", ylabel = "PC2").f
 
+#-
 res_sd = occsd(fm) ; 
+pnames(res_sd)
+
+#-
 sdtrain = res_sd.d
+
+#-
 sdtest = Jchemo.predict(res_sd, Xtest).d
+
+#-
 res_od = occod(fm, Xtrain) ;
+pnames(res_od)
+
+#-
 odtrain = res_od.d
+
+#-
 odtest = Jchemo.predict(res_od, Xtest).d
+
+#-
 f = Figure(resolution = (500, 400))
 ax = Axis(f, xlabel = "SD", ylabel = "OD")
 scatter!(ax, sdtrain.dstand, odtrain.dstand, label = "Train")
@@ -79,10 +125,15 @@ axislegend(position = :rt)
 f[1, 1] = ax
 f
 
+#-
 zres = res_sd ; nam = "SD"
 #zres = res_od ; nam = "OD"
 sdtrain = zres.d
+
+#-
 sdtest = Jchemo.predict(zres, Xtest).d
+
+#-
 f = Figure(resolution = (500, 400))
 ax = Axis(f, xlabel = nam, ylabel = "Nb. observations")
 hist!(ax, sdtrain.d; bins = 50, label = "Train")
@@ -92,20 +143,28 @@ axislegend(position = :rt)
 f[1, 1] = ax
 f
 
+#-
 ## Variable y
 summ(Y)
+
+#-
 summ(Y, test)
 
+#-
 nam = "ndf"
 #nam = "dm"
 aggstat(Y[:, nam], test; fun = mean).X
+
+#-
 aggstat(Y; vars = nam, groups = :test)
 
-y = Float64.(Y[:, nam])  # To remove type "Missing" 
+#-
+y = Float64.(Y[:, nam])  # To remove type "Missing" for the given variable
 s = Bool.(test)
 ytrain = rmrow(y, s)
 ytest = y[s]
 
+#-
 f = Figure(resolution = (500, 400))
 ax = Axis(f[1, 1], xlabel = "Protein", ylabel = "Nb. observations")
 hist!(ax, ytrain; bins = 50, label = "Train")
@@ -113,6 +172,7 @@ hist!(ax, ytest; bins = 50, label = "Test")
 axislegend(position = :rt)
 f
 
+#-
 f = Figure(resolution = (500, 400))
 offs = [30; 0]
 ax = Axis(f[1, 1], xlabel = "Protein", 
@@ -122,6 +182,7 @@ hist!(ax, ytrain; offset = offs[1], bins = 50)
 hist!(ax, ytest; offset = offs[2], bins = 50)
 f
 
+#-
 f = Figure(resolution = (500, 400))
 ax = Axis(f[1, 1], xlabel = nam, ylabel = "Density")
 density!(ax, ytrain; color = :blue, label = "Train")
@@ -129,6 +190,7 @@ density!(ax, ytest; color = (:red, .5), label = "Test")
 axislegend(position = :rt)
 f
 
+#-
 f = Figure(resolution = (500, 400))
 offs = [.08; 0]
 ax = Axis(f[1, 1], xlabel = nam, ylabel = "Density",
@@ -139,6 +201,7 @@ density!(ax, ytest; offset = offs[2], color = (:slategray, 0.5),
     bandwidth = 0.2)
 f
 
+#-
 f = Figure(resolution = (500, 400))
 ax = Axis(f[1, 1], 
     xticks = (0:1, ["Train", "Test"]),

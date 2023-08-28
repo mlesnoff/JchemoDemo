@@ -21,6 +21,7 @@ wl_num = parse.(Float64, wl)
 tab(year)
 
 #-
+## Tot ==> Train + Test
 s = year .<= 2012
 Xtrain = X[s, :]
 ytrain = y[s]
@@ -43,6 +44,7 @@ plotsp(Xp, wl_num;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 #-
+## Train ==> Cal + Val
 nval = Int64(round(.30 * ntrain))
 s = sampsys(ytrain; k = nval).train
 ytrain[s]
