@@ -1,22 +1,40 @@
 using JLD2, CairoMakie, FreqTables 
 using Jchemo, JchemoData
 
+#-
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/forages2.jld2") 
 @load db dat
 pnames(dat)
   
+#-
 X = dat.X 
 Y = dat.Y
-y = Y.typ
-wl = names(X)
-wl_num = parse.(Float64, wl)
 ntot = nro(X)
 
-plotsp(X, wl_num).f
-summ(Y)
+#-
+@head X 
+
+#-
+@head Y
+
+#-
+y = Y.typ
+tab(y)
+
+#-
 freqtable(y, Y.test)
 
+#-
+wl = names(X)
+wl_num = parse.(Float64, wl)
+
+#-
+## X is already preprocessed
+plotsp(X, wl_num;
+    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+
+#-
 s = Bool.(Y.test)
 Xtrain = rmrow(X, s)
 ytrain = rmrow(y, s)
@@ -25,8 +43,6 @@ ytest = y[s]
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
-
-######## End Data
 
 K = 3 ; segm = segmkf(ntrain, K; rep = 1)       # K-fold CV  
 #m = 100 ; segm = segmts(ntrain, m; rep = 3)    # Test-set CV

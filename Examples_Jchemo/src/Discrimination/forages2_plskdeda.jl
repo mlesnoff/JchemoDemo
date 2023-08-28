@@ -1,32 +1,48 @@
-using JLD2, CairoMakie
-using StatsBase, Jchemo
+using JLD2, CairoMakie, FreqTables 
+using Jchemo, JchemoData
 
-using JchemoData
+#-
 path_jdat = dirname(dirname(pathof(JchemoData)))
-db = joinpath(path_jdat, "data/forages2.jld2")
+db = joinpath(path_jdat, "data/forages2.jld2") 
 @load db dat
 pnames(dat)
-
-X = dat.X
+  
+#-
+X = dat.X 
 Y = dat.Y
-s = Bool.(Y.test)
-Xtrain = rmrow(X, s)
-ytrain = rmrow(Y.typ, s)
-Xtest = X[s, :]
-ytest = Y.typ[s]
+ntot = nro(X)
+
+#-
+@head X 
+
+#-
+@head Y
+
+#-
+y = Y.typ
+tab(y)
+
+#-
+freqtable(y, Y.test)
+
+#-
 wl = names(X)
 wl_num = parse.(Float64, wl)
-ntot = nro(X)
+
+#-
+## X is already preprocessed
+plotsp(X, wl_num;
+    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+
+#-
+s = Bool.(Y.test)
+Xtrain = rmrow(X, s)
+ytrain = rmrow(y, s)
+Xtest = X[s, :]
+ytest = y[s]
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
-
-unique(ytrain)
-tab(ytrain)
-tab(ytest)
-
-plotsp(Xtrain, wl_num; title = "Preprocessed spectra",
-    xlabel = "Wawelength (nm)", ylabel = "Absorbance").f 
 
 K = 3
 segm = segmkf(ntrain, K; rep = 10)
