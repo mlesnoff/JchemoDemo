@@ -840,7 +840,7 @@ uuid = "fbca9394-dd0a-4d1c-b066-ae75f6ef1ad5"
 version = "0.2.2"
 
 [[deps.JchemoData]]
-git-tree-sha1 = "9607b4c0c31f65cb05afe9d955bc244644cc80fc"
+git-tree-sha1 = "670c968efc5ce1a7678a97dd0ca7736b8e6eed7c"
 repo-rev = "main"
 repo-url = "https://github.com/mlesnoff/JchemoData.jl.git"
 uuid = "3440f217-e3fb-4eda-bd77-d99cfb805e7c"
@@ -1324,17 +1324,19 @@ version = "0.1.2"
 
 [[deps.Polynomials]]
 deps = ["LinearAlgebra", "RecipesBase", "Setfield"]
-git-tree-sha1 = "6ded5b759921314670b726dc6ce479675046bc04"
+git-tree-sha1 = "af8c8b863adb84abacb9a87822a778a3982901e1"
 uuid = "f27b6e38-b328-58d1-80ce-0feddd5e7a45"
-version = "4.0.1"
+version = "4.0.2"
 
     [deps.Polynomials.extensions]
     PolynomialsChainRulesCoreExt = "ChainRulesCore"
+    PolynomialsFFTWExt = "FFTW"
     PolynomialsMakieCoreExt = "MakieCore"
     PolynomialsMutableArithmeticsExt = "MutableArithmetics"
 
     [deps.Polynomials.weakdeps]
     ChainRulesCore = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
+    FFTW = "7a1cc6ca-52ef-59f5-83cd-3a7055c09341"
     MakieCore = "20f20a25-4f0e-4fdf-b5d1-57303727442b"
     MutableArithmetics = "d8a4904e-b15c-11e9-3269-09a3773c0cb0"
 
@@ -1380,9 +1382,9 @@ uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 
 [[deps.ProgressMeter]]
 deps = ["Distributed", "Printf"]
-git-tree-sha1 = "d7a7aef8f8f2d537104f170139553b14dfe39fe9"
+git-tree-sha1 = "ae36206463b2395804f2787ffe172f44452b538d"
 uuid = "92933f4c-e287-5a05-a399-4b506db050ca"
-version = "1.7.2"
+version = "1.8.0"
 
 [[deps.QOI]]
 deps = ["ColorTypes", "FileIO", "FixedPointNumbers"]

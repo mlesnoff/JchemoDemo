@@ -1,8 +1,7 @@
 using JLD2, CairoMakie
-using Jchemo
+using Jchemo, JchemoData
 
 #-
-using JchemoData
 mypath = dirname(dirname(pathof(JchemoData)))
 db = joinpath(mypath, "data", "iris.jld2") 
 @load db dat
@@ -41,7 +40,6 @@ fm = plskern(X, Ydummy; nlv = nlv) ;
 #-
 T = fm.T
 @head T
-head(T)
 
 #-
 i = 1
@@ -104,7 +102,7 @@ for i = 1:nlev
     hlines!(ax[i], 0; linestyle = "-", color = :grey)
     vlines!(ax[i], 0; linestyle = "-", color = :grey)
     xlims!(ax[i], -4, 4) ; ylims!(ax[i], -1.7, 1.7)
-    Colorbar(f[2, i], co; label = "Density", vertical = false)
+    #Colorbar(f[2, i], co; label = "Density", vertical = false)
 end
 f
 
