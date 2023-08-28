@@ -1,4 +1,5 @@
-using JLD2, CairoMakie, FreqTables 
+using JLD2, CairoMakie
+using StatsBase, FreqTables 
 using Jchemo, JchemoData
 
 #-
