@@ -2,8 +2,8 @@ using JLD2, CairoMakie
 using Jchemo, JchemoData
 
 #-
-mypath = dirname(dirname(pathof(JchemoData)))
-db = joinpath(mypath, "data", "iris.jld2") 
+path_jdat = dirname(dirname(pathof(JchemoData)))
+db = joinpath(path_jdat, "data", "iris.jld2") 
 @load db dat
 
 #-

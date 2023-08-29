@@ -1,38 +1,62 @@
-using JLD2, CairoMakie, GLMakie
+using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
 using FreqTables
-CairoMakie.activate!() 
 
+#-
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/challenge2018.jld2") 
 @load db dat
 pnames(dat)
 
-X = dat.X    
+#-
+X = dat.X 
 Y = dat.Y
+ntot, p = size(X)
+
+#-
+@head X
+
+#-
+@head Y
+
+#-
+summ(Y)
+
+#-
+y = Y.conc
+typ = Y.typ
+label = Y.label 
+test = Y.test
+tab(test)
+
+#-
 wl = names(X)
 wl_num = parse.(Float64, wl)
-ntot = nro(X)
-summ(Y)
-typ = Y.typ
-test = Y.test
 
-z = string.(typ, "-", Y.label)
-tab(z)
-freqtable(z)
+#-
+freqtable(string.(typ, "-", Y.label))
+
+#-
 freqtable(typ, test)
 
-## Preprocesssing
-f = 21 ; pol = 3 ; d = 2
-Xp = savgol(snv(X); f = f, pol = pol, d = d) 
+#-
+plotsp(X, wl_num; nsamp = 30).f
 
+#-
+## Preprocesssing
+f = 21 ; pol = 3 ; d = 2 
+Xp = savgol(snv(X); f = f, pol = pol, d = d) ;
+
+plotsp(Xp, wl_num; nsamp = 30).f
+
+#-
 ## Splitting: Tot = Train + Test
 ## The PCA is fitted on Train, and Test will be 
 ## the supplementary observations.
 ## Here the splitting is provided by the dataset
-## (= variable "typ"), but data Tot could be splitted 
-## a posteriori (e.g. random sampling, systematic 
-## sampling, etc.) 
+## (= variable 'typ'), but Tot could be splitted 
+## a posteriori using various methods (e.g. random sampling, 
+## systematic sampling, etc.) 
 s = Bool.(test)
 ## or: s = test .== 1
 Xtrain = rmrow(Xp, s)
@@ -43,16 +67,23 @@ ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
+#-
 ## Model fitting on Train
 nlv = 15
 fm = pcasvd(Xtrain, nlv = nlv) ; 
+
+#-
 res = summary(fm, Xtrain).explvarx
+
+#-
 plotgrid(res.lv, res.pvar; step = 2,
     xlabel = "PC", 
     ylabel = "Prop. variance explained").f
 
+#-
 Ttrain = fm.T
 
+#-
 ## Projection of Test in the Train score space
 ## Below function 'transform' has to be qualified
 ## since both packages Jchemo and DataFrames export 
@@ -61,6 +92,7 @@ Ttrain = fm.T
 ## such as 'predict', 'coef', etc.
 Ttest = Jchemo.transform(fm, Xtest)
 
+#-
 T = vcat(Ttrain, Ttest)
 group = vcat(repeat(["0-Train";], ntrain), 
     repeat(["1-Test";], ntest))
@@ -70,13 +102,19 @@ plotxy(T[:, i:(i + 1)], group; color = colm,
     xlabel = string("PC", i), 
     ylabel = string("PC", i + 1)).f
 
+#-
 ## SD and OD distances
 res = occsdod(fm, Xtrain) ; 
 pnames(res)
+
+#-
 dtrain = res.d
+
+#-
 ## Values for Test
 dtest = Jchemo.predict(res, Xtest).d
 
+#-
 f = Figure(resolution = (500, 400))
 ax = Axis(f[1, 1], xlabel = "SD", ylabel = "OD")
 scatter!(ax, dtrain.dstand_sd, dtrain.dstand_od, label = "Train")
@@ -87,7 +125,8 @@ vlines!(ax, 1; color = :grey, linestyle = "-")
 axislegend(position = :rt)
 f
 
-## Same with plotxy
+#-
+## Same with plotxy:
 d = vcat(dtrain, dtest)
 group = vcat(repeat(["0-Train";], ntrain), 
     repeat(["1-Test";], ntest))
@@ -95,6 +134,7 @@ colm = [:blue, (:red, .5)]
 plotxy(d.dstand_sd, d.dstand_od, group; color = colm,
     xlabel = "Stand. SD", ylabel = "Stand. OD").f
 
+#-
 ## Composite distance SD-OD
 f = Figure(resolution = (500, 400))
 ax = Axis(f[1, 1], xlabel = "Standardized distance", 
