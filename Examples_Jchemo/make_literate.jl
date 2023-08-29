@@ -7,8 +7,8 @@ path_ipynb = joinpath(path, "Examples_Jchemo/ipynb")
 
 #meth = "Exploratory"
 #meth = "Regression"
-meth = "Discrimination"
-#meth = "Dataset_description"
+#meth = "Discrimination"
+meth = "Dataset_description"
 zpath = joinpath(path_src, meth)
 @show f = filter(endswith("jl"), readdir(zpath))
 nf = length(f) 
