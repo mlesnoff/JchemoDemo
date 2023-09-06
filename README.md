@@ -5,7 +5,7 @@ This project can also be used to build **training sessions**.
 
 **What is provided:**
 
-1. **Examples with Jchemo.jl**
+1. **Examples** with Jchemo.jl
     - [**Scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Ex/src) (*)
     - [**Html**](https://mlesnoff.github.io/JchemoDemo/build/) examples of data analyses 
 
