@@ -2,31 +2,25 @@ using JLD2, CairoMakie, GLMakie
 using Jchemo, JchemoData
 CairoMakie.activate!()  
 
-```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/octane.jld2") 
 @load db dat
 pnames(dat)
   
-```julia
 X = dat.X 
 n = nro(X)
 
-```julia term = true
 @head X
 
-```julia
 wl = names(X)
 wl_num = parse.(Float64, wl)
 
-```julia
 ## Six of the samples of the dataset contain 
 ## added alcohol  (= 25, 26, and 36-39)
 plotsp(X, wl_num;
     xlabel ="Wavelength (nm)", ylabel = "Absorbance",
     title = "Octane data").f
 
-```julia
 ## Model fitting
 fm = pcasvd(X; nlv = 6) ; 
 ## For robust PCA:
@@ -37,18 +31,15 @@ pnames(fm)
 T = fm.T ;
 @head T
 
-```julia
 ## 2-D Score space 
 plotxy(T[:, 1], T[:, 2]; zeros = true,
     xlabel = "PC1", ylabel = "PC2").f
 
-```julia
 i = 1
 plotxy(T[:, i:(i + 1)]; color = (:red, .5),
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
     zeros = true, markersize = 15).f
 
-```julia
 f = Figure(resolution = (600, 400))     
 ax = list(4)
 l = reshape(1:4, 2, 2)
@@ -63,7 +54,6 @@ for j = 1:2
 end
 f    
 
-```julia
 ## 3-D Score space
 CairoMakie.activate!()  
 #GLMakie.activate!() 
@@ -76,7 +66,6 @@ scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2],
     markersize = 15)
 f
 
-```julia
 CairoMakie.activate!()  
 #GLMakie.activate!() 
 i = 1

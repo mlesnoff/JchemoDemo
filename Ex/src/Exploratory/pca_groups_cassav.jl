@@ -4,62 +4,48 @@ using Jchemo, JchemoData
 CairoMakie.activate!()
 #GLMakie.activate!() 
 
-```julia
 using JchemoData, JLD2, CairoMakie
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/cassav.jld2")
 @load db dat
 pnames(dat)
 
-```julia
 X = dat.X
 Y = dat.Y
 ntot = nro(X)
 
-```julia term = true
 @head X
 @head Y
 
-```julia
 y = dat.Y.tbc
 year = dat.Y.year
 
-```julia
 wl = names(X)
 wl_num = parse.(Float64, wl) 
 
-```julia
 tab(year)
 
-```julia
 lev = sort(unique(year))
 
-```julia
 nlev = length(lev)
 
-```julia
 group_num = recodcat2int(year)
 
-```julia
 fm = pcasvd(X; nlv = 6) ; 
 
-```julia
 T = fm.T
 
-```julia
 ## 2-D Score space
 i = 1
 plotxy(T[:, i:(i + 1)]; color = (:red, .5),
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
     zeros = true, markersize = 15).f
 
-```julia
 i = 1
 plotxy(T[:, i:(i + 1)], year;
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
     zeros = true, ellipse = true).f
 
-```julia
 i = 1
 colm = cgrad(:Dark2_5, nlev; categorical = true, alpha = .8)
 plotxy(T[:, i:(i + 1)], year; 
@@ -67,7 +53,6 @@ plotxy(T[:, i:(i + 1)], year;
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
     zeros = true, ellipse = true).f
 
-```julia
 ## 3-D Score space 
 CairoMakie.activate!()  
 #GLMakie.activate!() 
@@ -80,7 +65,6 @@ scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2];
     markersize = 15, color = (:red, .5))
 f
 
-```julia
 i = 1
 f = Figure(resolution = (700, 500))
 colsh = :Dark2_5 #:default, :tab10

@@ -1,18 +1,14 @@
 using JLD2, CairoMakie
 using Jchemo, JchemoData
 
-```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data", "iris.jld2") 
 @load db dat
 
-```julia
 pnames(dat)
 
-```julia
 summ(dat.X)
 
-```julia
 X = dat.X[:, 1:4] 
 y = dat.X[:, 5]
 n = nro(X)
@@ -20,35 +16,28 @@ n = nro(X)
 ```julia term = true
 @head X
 
-```julia
 tab(y)
 
-```julia
 lev = unique(y)
 
-```julia
 nlev = length(lev)
  
 ```julia term = true
 Ydummy = dummy(y).Y ;
 @head Ydummy
 
-```julia
 nlv = 2
 fm = plskern(X, Ydummy; nlv = nlv) ; 
 
-```julia term = true
 T = fm.T ;
 @head T
 
-```julia
 i = 1
 plotxy(T[:, i:(i + 1)], y;
     title = "PLS2 space", 
     xlabel = string("LV", i), ylabel = string("LV", i + 1),
     zeros = true, ellipse = false).f
 
-```julia
 #### Scatters  
 f = Figure(resolution = (900, 300))
 ax = list(nlev) 
@@ -70,7 +59,6 @@ for i = 1:nlev
 end
 f
 
-```julia
 #### LDA
 res = matW(T, y)
 W = res.W * n / (n - nlev)
@@ -106,7 +94,6 @@ for i = 1:nlev
 end
 f
 
-```julia
 #### QDA
 res = matW(T, y)
 Wi = res.Wi
@@ -141,7 +128,6 @@ for i = 1:nlev
 end
 f
 
-```julia
 #### Non-parametric
 npoints = 2^7
 x1 = LinRange(-4, 4, npoints)
