@@ -1,5 +1,14 @@
+---
+title: pca_groups_cassav.jl
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  #out_width: "50%"   # default
+---
+
 ```julia
-using JLD2, CairoMakie, StatsBase
+using JLD2, CairoMakie, GLMakie, StatsBase
 using Jchemo, JchemoData
 ```
 
@@ -8,6 +17,8 @@ CairoMakie.activate!()
 #GLMakie.activate!() 
 ```
 
+#### Data importation
+
 ```julia
 using JchemoData, JLD2, CairoMakie
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -15,6 +26,8 @@ db = joinpath(path_jdat, "data/cassav.jld2")
 @load db dat
 pnames(dat)
 ```
+
+#### Data preparation and short description
 
 ```julia
 X = dat.X
@@ -54,20 +67,42 @@ group_num = recodcat2int(year)
 ```
 
 ```julia
-fm = pcasvd(X; nlv = 6) ; 
+plotsp(X, wl_num;
+    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+```
+
+#### Preprocessing
+
+```julia
+f = 15 ; pol = 3 ; d = 2 
+Xp = savgol(snv(X); f = f, pol = pol, d = d) 
+```
+
+```julia
+plotsp(Xp, wl_num;
+    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+```
+
+#### PCA
+
+```julia
+fm = pcasvd(Xp; nlv = 6) ; 
 ```
 
 ```julia
 T = fm.T
 ```
 
+## 2-D score space
+
 ```julia
-## 2-D Score space
 i = 1
 plotxy(T[:, i], T[:, i + 1]; color = (:red, .5),
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
     zeros = true, markersize = 15).f
 ```
+
+**With groups:**
 
 ```julia
 i = 1
@@ -85,8 +120,9 @@ plotxy(T[:, i], T[:, i + 1], year;
     zeros = true, ellipse = true).f
 ```
 
+#### 3-D score space 
+
 ```julia
-## 3-D Score space 
 CairoMakie.activate!()  
 #GLMakie.activate!() 
 i = 1
@@ -98,6 +134,8 @@ scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2];
     markersize = 15, color = (:red, .5))
 f
 ```
+
+**With groups:**
 
 ```julia
 i = 1

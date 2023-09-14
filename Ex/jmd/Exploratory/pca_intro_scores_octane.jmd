@@ -1,8 +1,23 @@
+---
+title: pca_intro_scores_octane.jl
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  #out_width: "50%"   # default
+---
+
 ```julia
 using JLD2, CairoMakie, GLMakie
 using Jchemo, JchemoData
-CairoMakie.activate!()  
 ```
+
+```julia
+CairoMakie.activate!()
+#GLMakie.activate!() 
+```
+
+#### Data importation
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -10,7 +25,9 @@ db = joinpath(path_jdat, "data/octane.jld2")
 @load db dat
 pnames(dat)
 ```
-  
+
+#### Data preparation and short description
+
 ```julia
 X = dat.X 
 n = nro(X)
@@ -25,29 +42,33 @@ wl = names(X)
 wl_num = parse.(Float64, wl)
 ```
 
+Six of the samples of the dataset contain added alcohol  (= 25, 26, and 36-39).
+
 ```julia
-## Six of the samples of the dataset contain 
-## added alcohol  (= 25, 26, and 36-39)
 plotsp(X, wl_num;
     xlabel ="Wavelength (nm)", ylabel = "Absorbance",
     title = "Octane data").f
 ```
 
+#### PCA model fitting
+
 ```julia
-## Model fitting
 fm = pcasvd(X; nlv = 6) ; 
-## For robust PCA:
+## For robust spherical PCA, do:
 #fm = pcasph(X; nlv = 6) ;  
 pnames(fm)
 ```
+
+**Scores:**
 
 ```julia term = true
 T = fm.T ;
 @head T
 ```
 
+**2-D score space** 
+
 ```julia
-## 2-D Score space 
 plotxy(T[:, 1], T[:, 2]; zeros = true,
     xlabel = "PC1", ylabel = "PC2").f
 ```
@@ -75,10 +96,14 @@ end
 f    
 ```
 
+**3-D score space** 
+
 ```julia
-## 3-D Score space
 CairoMakie.activate!()  
 #GLMakie.activate!() 
+```
+
+```julia
 i = 1
 f = Figure(resolution = (700, 500))
 ax = Axis3(f[1, 1]; perspectiveness = 0.2,
@@ -92,6 +117,9 @@ f
 ```julia
 CairoMakie.activate!()  
 #GLMakie.activate!() 
+```
+
+```julia
 i = 1
 f = Figure(resolution = (700, 500))
 ax = Axis3(f[1, 1]; perspectiveness = 0.2,

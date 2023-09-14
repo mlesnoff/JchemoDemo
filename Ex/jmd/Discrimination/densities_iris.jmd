@@ -76,7 +76,7 @@ plotxy(T[:, i], T[:, i + 1], y;
     zeros = true, ellipse = false).f
 ```
 
-#### Projected observations in the scores space 
+#### Projected observations in the score space 
 
 ```julia
 f = Figure(resolution = (900, 300))
@@ -100,7 +100,7 @@ end
 f
 ```
 
-#### Density estimates in the scores space
+#### Density estimates in the score space
 
 **By LDA**
 

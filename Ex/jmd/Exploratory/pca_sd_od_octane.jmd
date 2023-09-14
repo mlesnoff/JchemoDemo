@@ -1,8 +1,23 @@
+---
+title: pca_sd_od_octane.jl
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  #out_width: "50%"   # default
+---
+
 ```julia
 using JLD2, CairoMakie, GLMakie
 using Jchemo, JchemoData
-CairoMakie.activate!()  
 ```
+
+```julia
+CairoMakie.activate!()
+#GLMakie.activate!() 
+```
+
+#### Data importation
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -10,7 +25,9 @@ db = joinpath(path_jdat, "data/octane.jld2")
 @load db dat
 pnames(dat)
 ```
- 
+
+#### Data preparation and short description
+
 ```julia
 X = dat.X 
 n = nro(X)
@@ -25,24 +42,33 @@ wl = names(X)
 wl_num = parse.(Float64, wl)
 ```
 
+Six of the samples of the dataset contain added alcohol  (= 25, 26, and 36-39).
+
 ```julia
-## Six of the samples of the dataset contain 
-## added alcohol  (= 25, 26, and 36-39)
 plotsp(X, wl_num;
     xlabel ="Wavelength (nm)", ylabel = "Absorbance",
     title = "Octane data").f
 ```
 
+#### PCA model fitting
+
 ```julia
-## Model fitting
 fm = pcasvd(X; nlv = 6) ; 
-## For robust PCA:
+## For robust spherical PCA, do:
 #fm = pcasph(X; nlv = 6) ;  
 pnames(fm)
 ```
 
+**Scores:**
+
+```julia term = true
+T = fm.T ;
+@head T
+```
+
+#### Score distance (SD)
+
 ```julia
-## Score distance (SD)
 res = occsd(fm) ;
 pnames(res)
 ```
@@ -59,8 +85,9 @@ hist!(d.dstand; bins = 20)
 f
 ```
 
+#### Orthogonal distance (OD)
+
 ```julia
-## Orthogonal distance (OD)
 res = occod(fm, X) ;
 pnames(res)
 ```
@@ -77,8 +104,9 @@ hist!(d.dstand; bins = 20)
 f
 ```
 
+#### SD-OD
+
 ```julia
-## SD-OD
 sd = occsd(fm).d
 od = occod(fm, X).d
 f, ax = plotxy(sd.dstand, od.dstand;
@@ -102,8 +130,9 @@ vlines!(ax, 1)
 f
 ```
 
+#### Direct computation of a composite SD-OD
+
 ```julia
-## Direct computation of a composite SD-OD
 res = occsdod(fm, X) ;
 pnames(res)
 ```

@@ -1,5 +1,18 @@
+---
+title: lwmlr_s_cassav.jl
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  #out_width: "50%"   # default
+---
+
+```julia
 using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
+```
+
+#### Data importation
 
 ```julia
 using JchemoData, JLD2, CairoMakie
@@ -7,29 +20,60 @@ path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/cassav.jld2")
 @load db dat
 pnames(dat)
+```
+
+#### Data preparation and short description
 
 ```julia
 X = dat.X
 Y = dat.Y
 ntot = nro(X)
+```
 
 ```julia term = true
 @head X
 @head Y
+```
 
 ```julia
 y = dat.Y.tbc
 year = dat.Y.year
+```
+
+```julia
+tab(year)
+```
 
 ```julia
 wl = names(X)
 wl_num = parse.(Float64, wl) 
+```
 
 ```julia
-tab(year)
+plotsp(X, wl_num;
+    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+```
+
+#### Preprocessing
 
 ```julia
-## Tot ==> Train + Test
+f = 15 ; pol = 3 ; d = 2 
+Xp = savgol(snv(X); f = f, pol = pol, d = d) 
+```
+
+```julia
+plotsp(Xp, wl_num;
+    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+```
+
+#### Split Tot ==> Train + Test
+
+The model is fitted on **Train**, and the generalization error is estimated on **Test**.
+Here the split of **Tot** is already provided inside the dataset (= variable `year`), 
+but **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic 
+or any other designs). 
+
+```julia
 s = year .<= 2012
 Xtrain = X[s, :]
 ytrain = y[s]
@@ -39,20 +83,20 @@ ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 ntot = ntrain + ntest
 (ntot = ntot, ntrain, ntest)
+```
 
 ```julia
 plotsp(X, wl_num;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+```
+
+#### Split Train ==> Cal + Val
+
+The validation error (used for the grid-search tuning) is computed 
+on **Val**. The split can be built from different sampling designs,
+as below (other designs are possible).
 
 ```julia
-f = 15 ; pol = 3 ; d = 2 
-Xp = savgol(snv(X); f = f, pol = pol, d = d) 
-
-plotsp(Xp, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
-
-```julia
-## Train ==> Cal + Val
 nval = Int64(round(.30 * ntrain))
 s = sampsys(ytrain; k = nval).train
 ytrain[s]
@@ -62,26 +106,32 @@ Xval = Xtrain[s, :]
 yval = ytrain[s, :]
 ncal = ntrain - nval
 (ntot = ntot, ntrain, ntest, ncal, nval)
+```
+
+#### Benchmark with PLSR
 
 ```julia
-## PLSR
 nlv = 0:40
 res = gridscorelv(Xcal, ycal, Xval, yval; 
     score = rmsep, fun = plskern, nlv = nlv) 
-
-```julia
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
+```
 
 ```julia
 plotgrid(res.nlv, res.y1; step = 5,
     xlabel = "Nb. LVs", ylabel = "RMSEP").f
+```
+
+```julia
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
+```
 
 ```julia
 fm = plskern(Xtrain, ytrain; nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred ;
-@show rmsep(pred, ytest)
+rmsep(pred, ytest)
 mse(pred, ytest)
+```
 
 ```julia
 f, ax = plotxy(pred, ytest; color = (:red, .5),
@@ -89,9 +139,11 @@ f, ax = plotxy(pred, ytest; color = (:red, .5),
     resolution = (450, 350))
 ablines!(ax, 0, 1)
 f 
+```
+
+## LWMLR-S with a PCA-score space = "LWR algorithm" of Naes et al. 1990
 
 ```julia
-## LWMLR-S with a PCA-score space = "LWR" (Naes et al.1990)
 reduc = ["pca"] 
 nlv = Int64.(LinRange(5, 20, 4))
 metric = ["eucl", "mahal"]
@@ -99,15 +151,18 @@ h = [1; 2; 6] ; k = [50; 100; 150]
 pars = mpar(reduc = reduc, nlv = nlv, 
     metric = metric, h = h, k = k) 
 length(pars[1])
+```
 
 ```julia
 res = gridscore(Xcal, ycal, Xval, yval; 
     score = rmsep, fun = lwmlr_s, pars = pars,
     verbose = false) 
+```
 
 ```julia
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
+```
 
 ```julia
 fm = lwmlr_s(Xtrain, ytrain; reduc = res.reduc[u], 
@@ -116,14 +171,17 @@ fm = lwmlr_s(Xtrain, ytrain; reduc = res.reduc[u],
 pred = Jchemo.predict(fm, Xtest).pred
 @show rmsep(pred, ytest)
 mse(pred, ytest)
+```
 
 ```julia
 plotxy(pred, ytest; color = (:red, .5),
     bisect = true, xlabel = "Prediction",
     ylabel = "Observed (Test)").f
+```
+
+#### LWMLR-S with a PLS-score space
 
 ```julia
-## LWMLR-S with a PLS-score space
 reduc = ["pls"] 
 nlv = Int64.(LinRange(5, 20, 4))
 metric = ["eucl", "mahal"]
@@ -131,15 +189,18 @@ h = [1; 2; 6] ; k = [50; 100; 150]
 pars = mpar(reduc = reduc, nlv = nlv, 
     metric = metric, h = h, k = k) 
 length(pars[1])
+```
 
 ```julia
 res = gridscore(Xcal, ycal, Xval, yval; 
     score = rmsep, fun = lwmlr_s, pars = pars,
     verbose = false) 
+```
 
 ```julia
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
+```
 
 ```julia
 fm = lwmlr_s(Xtrain, ytrain; reduc = res.reduc[u], 
@@ -148,14 +209,17 @@ fm = lwmlr_s(Xtrain, ytrain; reduc = res.reduc[u],
 pred = Jchemo.predict(fm, Xtest).pred
 @show rmsep(pred, ytest)
 mse(pred, ytest)
+```
 
 ```julia
 plotxy(pred, ytest; color = (:red, .5),
     bisect = true, xlabel = "Prediction",
     ylabel = "Observed (Test)").f
+```
+
+#### LWMLR-S with a DKPLS-score space
 
 ```julia
-## LWMLR-S with a DKPLS-score space
 reduc = ["dkpls"] 
 nlv = Int64.(LinRange(5, 20, 4))
 metric = ["eucl", "mahal"]
@@ -164,15 +228,18 @@ gamma = 10.0.^(-2:3)
 pars = mpar(reduc = reduc, nlv = nlv, metric = metric, 
     h = h, k = k, gamma = gamma, ) 
 length(pars[1])
+```
 
 ```julia
 res = gridscore(Xcal, ycal, Xval, yval; 
     score = rmsep, fun = lwmlr_s, pars = pars,
     verbose = false) 
+```
 
 ```julia
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
+```
 
 ```julia
 fm = lwmlr_s(Xtrain, ytrain; reduc = res.reduc[u],
@@ -181,10 +248,10 @@ fm = lwmlr_s(Xtrain, ytrain; reduc = res.reduc[u],
 pred = Jchemo.predict(fm, Xtest).pred
 @show rmsep(pred, ytest)
 mse(pred, ytest)
+```
 
 ```julia
 plotxy(pred, ytest; color = (:red, .5),
     bisect = true, xlabel = "Prediction",
     ylabel = "Observed (Test)").f
-
-
+```

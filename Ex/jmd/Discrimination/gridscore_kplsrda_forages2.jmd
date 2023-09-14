@@ -57,7 +57,7 @@ plotsp(X, wl_num;
 
 #### Split Tot ==> Train + Test
 
-The model is fitted on **Train**, and the generalization error is estimated on **Test**.
+The model is tuned on **Train**, and the generalization error is estimated on **Test**.
 Here the split of **Tot** is already provided inside the dataset (= variable `test`), 
 but **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic 
 or any other designs). 

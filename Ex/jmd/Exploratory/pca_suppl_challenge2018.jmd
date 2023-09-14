@@ -1,8 +1,19 @@
+---
+title: pca_suppl_challenge2018.jl
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  #out_width: "50%"   # default
+---
+
 ```julia
 using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
 using FreqTables
 ```
+
+#### Data importation
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -10,6 +21,8 @@ db = joinpath(path_jdat, "data/challenge2018.jld2")
 @load db dat
 pnames(dat)
 ```
+
+#### Data preparation and short description
 
 ```julia
 X = dat.X 
@@ -24,6 +37,7 @@ ntot, p = size(X)
 
 ```julia
 summ(Y)
+```
 
 ```julia
 y = Y.conc
@@ -31,47 +45,57 @@ typ = Y.typ
 label = Y.label 
 test = Y.test
 tab(test)
+```
 
 ```julia
 wl = names(X)
 wl_num = parse.(Float64, wl)
+```
 
 ```julia
 freqtable(string.(typ, "-", Y.label))
+```
 
 ```julia
 freqtable(typ, test)
+```
 
 ```julia
 plotsp(X, wl_num; nsamp = 30).f
+```
+
+#### Preprocessing
 
 ```julia
-## Preprocesssing
 f = 21 ; pol = 3 ; d = 2 
 Xp = savgol(snv(X); f = f, pol = pol, d = d) ;
+```
 
+``` julia
 plotsp(Xp, wl_num; nsamp = 30).f
+```
+
+#### Split Tot ==> Train + Test
+
+The model is tuned on **Train**, and the generalization error is estimated on **Test**.
+Here the split of **Tot** is already provided inside the dataset (= variable `test`), 
+but **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic 
+or any other designs). 
 
 ```julia
-## Splitting: Tot = Train + Test
-## The PCA is fitted on Train, and Test will be 
-## the supplementary observations.
-## Here the splitting is provided by the dataset
-## (= variable `typ`), but Tot could be splitted 
-## a posteriori using various methods (e.g. random sampling, 
-## systematic sampling, etc.) 
 s = Bool.(test)
-## or: s = test .== 1
 Xtrain = rmrow(Xp, s)
-Ytrain = rmrow(Y, s)
+ytrain = rmrow(y, s)
 Xtest = Xp[s, :]
-Ytest = Y[s, :]
+ytest = y[s]
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
+```
+
+#### PCA on Xtrain
 
 ```julia
-## Model fitting on Train
 nlv = 15
 fm = pcasvd(Xtrain, nlv = nlv) ; 
 
@@ -86,16 +110,17 @@ plotgrid(res.lv, res.pvar; step = 2,
 ```julia term = true
 Ttrain = fm.T ;
 @head Ttrain
+```
+#### Projection of Xtest
+
+Below function `transform` has to be qualified since both packages Jchemo 
+and DataFrames export a function `transform`. This will be the same with 
+common function names such as `predict`, `coef`, etc.
 
 ```julia term = true
-## Projection of Test in the Train score space
-## Below function 'transform' has to be qualified
-## since both packages Jchemo and DataFrames export 
-## a function 'transform'.
-## This will be the same with common function names
-## such as 'predict', 'coef', etc.
 Ttest = Jchemo.transform(fm, Xtest)
 @head Ttest
+```
 
 ```julia
 T = vcat(Ttrain, Ttest)
@@ -106,18 +131,24 @@ i = 3
 plotxy(T[:, i], T[:, i + 1], group; color = colm,
     xlabel = string("PC", i), 
     ylabel = string("PC", i + 1)).f
+```
+
+#### SD and OD distances
 
 ```julia
-## SD and OD distances
 res = occsdod(fm, Xtrain) ; 
 pnames(res)
+```
 
 ```julia
 dtrain = res.d
+```
+
+**Values for Xtest**
 
 ```julia
-## Values for Test
 dtest = Jchemo.predict(res, Xtest).d
+```
 
 ```julia
 f = Figure(resolution = (500, 400))
@@ -129,18 +160,22 @@ hlines!(ax, 1; color = :grey, linestyle = "-")
 vlines!(ax, 1; color = :grey, linestyle = "-")
 axislegend(position = :rt)
 f
+```
+
+**Same using plotxy:**
 
 ```julia
-## Same with plotxy:
 d = vcat(dtrain, dtest)
 group = vcat(repeat(["0-Train";], ntrain), 
     repeat(["1-Test";], ntest))
 colm = [:blue, (:red, .5)]
 plotxy(d.dstand_sd, d.dstand_od, group; color = colm,
     xlabel = "Stand. SD", ylabel = "Stand. OD").f
+```
+
+#### Composite distance SD-OD
 
 ```julia
-## Composite distance SD-OD
 f = Figure(resolution = (500, 400))
 ax = Axis(f[1, 1], xlabel = "Standardized distance", 
     ylabel = "Nb. observations")
@@ -149,4 +184,4 @@ hist!(ax, dtest.dstand; bins = 50, label = "Test")
 vlines!(ax, 1; color = :grey, linestyle = "-")
 axislegend(position = :rt, framevisible = false)
 f
-
+```

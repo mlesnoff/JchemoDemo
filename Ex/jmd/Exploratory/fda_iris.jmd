@@ -1,17 +1,27 @@
+---
+title: fda_iris.jl
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  #out_width: "50%"   # default
+---
+
 ```julia
 using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
 ```
 
+#### Data importation
+
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data", "iris.jld2") 
 @load db dat
-```
-
-```julia
 pnames(dat)
 ```
+
+#### Data preparation and short description
 
 ```julia
 summ(dat.X)
@@ -32,6 +42,21 @@ tab(y)
 ```
 
 ```julia
+lev = unique(y)
+```
+
+```julia
+nlev = length(lev)
+```
+
+#### Split Tot ==> Train + Test
+
+The model is fitted on **Train**, and the generalization error is estimated on **Test**.
+Here the split of **Tot** is already provided inside the dataset (= variable `test`), 
+but **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic 
+or any other designs). 
+
+```julia
 ntrain = 120
 s = sample(1:n, ntrain; replace = false)
 Xtrain = X[s, :]
@@ -48,9 +73,11 @@ tab(ytrain)
 tab(ytest)
 ```
 
+#### Model fitting
+
 ```julia
 fm = fda(Xtrain, ytrain; nlv = 2) ;
-#fm = fdasvd(Xtrain, ytrain; nlv = 2) ;
+#fm = fdasvd(Xtrain, ytrain; nlv = 2) ; # alternative algorithm (same result)
 pnames(fm)
 ```
 
@@ -62,12 +89,15 @@ lev = fm.lev
 nlev = length(lev)
 ```
 
+**FDA scores**
+
 ```julia term = true
 @head fm.T
 ```
 
+**Class centers projected on the score space**
+
 ```julia
-## Class centers projected on the score space
 ct = fm.Tcenters
 ```
 
@@ -79,21 +109,27 @@ scatter!(ax, ct[:, 1], ct[:, 2],
 f
 ```
 
+#### Projection of Xtest to the score space
+
 ```julia
-## Projection of Xtest to the score space
 Ttest = Jchemo.transform(fm, Xtest)
 ```
 
+#### X-loadings matrix
+
+Columns of matrix `P` = coefficients of the linear discriminant function 
+= "LD" of function lda of the R package MASS.
+
 ```julia
-## X-loadings matrix
-## Columns of P = coefficients of the linear discriminant function
-## = "LD" of function lda of package MASS
 fm.P
 ```
 
 ```julia
 fm.P' * fm.P    # not orthogonal
 ```
+
+
+#### Explained variance 
 
 ```julia
 fm.eig
@@ -103,9 +139,10 @@ fm.eig
 fm.sstot
 ```
 
+Explained variance is computed from the PCA of the class centers 
+in the transformed scale.
+
 ```julia
-## Explained variance by PCA of the class centers
-## in transformed scale
 summary(fm)
 ```
 

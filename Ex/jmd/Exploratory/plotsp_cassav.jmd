@@ -1,5 +1,18 @@
+---
+title: plotsp_cassav.jl
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  #out_width: "50%"   # default
+---
+
+```julia
 using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
+```
+
+#### Data importation
 
 ```julia
 using JchemoData, JLD2, CairoMakie
@@ -8,6 +21,8 @@ db = joinpath(path_jdat, "data/cassav.jld2")
 @load db dat
 pnames(dat)
 ```
+
+#### Data preparation and short description
 
 ```julia
 X = dat.X
@@ -33,6 +48,8 @@ wl_num = parse.(Float64, wl)
 ```julia
 tab(year)
 ```
+
+#### Plotting spectra
 
 ```julia
 plotsp(X).f

@@ -144,7 +144,7 @@ Ttrain = fm.T
 @head Ttrain
 ```
 
-Xtest is projected on the Xtrain scores space.
+Xtest is projected on the Xtrain score space.
 
 ```julia term = true
 Ttest = Jchemo.transform(fm, Xtest)
