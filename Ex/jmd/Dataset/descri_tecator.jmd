@@ -94,16 +94,16 @@ T = fm.T
 
 ```julia
 i = 1
-plotxy(T[:, i:(i + 1)]; color = (:red, .5),
+plotxy(T[:, i], T[:, i + 1]; color = (:red, .5),
     xlabel = "PC1", ylabel = "PC2").f
 ```
 
 ```julia
-plotxy(T[:, i:(i + 1)], typ; 
+plotxy(T[:, i], T[:, i + 1], typ; 
     xlabel = "PC1", ylabel = "PC2").f
 ```
 
-#### Y-Variables
+#### Y-variables
 
 ```julia
 summ(Y[:, namy]).res

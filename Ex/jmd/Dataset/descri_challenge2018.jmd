@@ -203,7 +203,7 @@ axislegend(position = :rt)
 f
 ```
 
-#### Y-Variables
+#### Y-variables
 
 ```julia
 summ(y)

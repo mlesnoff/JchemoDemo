@@ -73,6 +73,8 @@ Xpmp5 = fpreproc(Xmp5)
 Xpmp6 = fpreproc(Xmp6)
 ```
 
+#### PCA
+
 ```julia
 zX = vcat(Xpm5, Xpmp5, Xpmp6)
 fm = pcasvd(zX; nlv = 10) ;
@@ -89,7 +91,7 @@ scatter(res.lv, res.pvar)
 
 ```julia
 i = 1
-plotxy(T[:, i:(i + 1)], typ;
+plotxy(T[:, i], T[:, i + 1], typ;
     xlabel = string("PC", i), ylabel = string("PC", i + 1)).f
 ```
 

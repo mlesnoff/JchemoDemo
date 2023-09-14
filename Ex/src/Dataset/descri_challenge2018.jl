@@ -65,11 +65,11 @@ plotgrid(z.lv, 100 * z.pvar; step = 1,
     xlabel = "nb. PCs", ylabel = "% variance explained").f
 
 i = 1
-plotxy(T[:, i:(i + 1)]; color = (:red, .5),
+plotxy(T[:, i], T[:, i + 1]; color = (:red, .5),
     xlabel = string("PC", i), ylabel = string("PC", i + 1)).f
 
 colm = cgrad(:Dark2_5, nlev; categorical = true)
-plotxy(T[:, i:(i + 1)], typ; color = colm,
+plotxy(T[:, i], T[:, i + 1], typ; color = colm,
     xlabel = string("PC", i), ylabel = string("PC", i + 1)).f
 
 ## Train vs Test
@@ -86,7 +86,7 @@ group = vcat(repeat(["0-Train";], ntrain),
     repeat(["1-Test";], ntest))
 colm = [:blue, (:red, .5)]
 i = 1
-plotxy(zT[:, i:(i + 1)], group; color = colm,
+plotxy(zT[:, i], T[:, i + 1], group; color = colm,
     xlabel = "PC1", ylabel = "PC2").f
 
 res_sd = occsd(fm) ; 

@@ -103,7 +103,7 @@ group = vcat(repeat(["0-Train";], ntrain),
     repeat(["1-Test";], ntest))
 colm = [:blue, (:red, .5)]
 i = 3
-plotxy(T[:, i:(i + 1)], group; color = colm,
+plotxy(T[:, i], T[:, i + 1], group; color = colm,
     xlabel = string("PC", i), 
     ylabel = string("PC", i + 1)).f
 

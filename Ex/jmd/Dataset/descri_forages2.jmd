@@ -54,8 +54,13 @@ wl = names(X)
 wl_num = parse.(Float64, wl)
 ```
 
+#### Split Tot ==> Train + Test
+
+Here the split of **Tot** is already provided inside the dataset (= variable `test`), 
+but **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic 
+or any other designs). 
+
 ```julia
-# Tot ==> Train + Test
 s = Bool.(test)
 Xtrain = rmrow(X, s)
 Ytrain = rmrow(Y, s)
@@ -66,16 +71,18 @@ ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 ```
 
-## Spectra X 
-## (already pre-processed SavGol(Snv; f = 21, p = 3, d=2))
+#### Spectra X 
+
+Spectra are already pre-processed with savgol(snv; f = 21, p = 3, d = 2)).
 
 ```julia
 plotsp(X, wl_num; nsamp = 10,
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
+#### PCA on X
+
 ```julia
-#### PCAs on X
 fm = pcasvd(X; nlv = 15) ; 
 pnames(fm)
 ```
@@ -98,14 +105,16 @@ plotgrid(z.lv, 100 * z.pvar; step = 1,
 
 ```julia
 i = 1
-plotxy(T[:, i:(i + 1)]; color = (:red, .5),
+plotxy(T[:, i], T[:, i + 1]; color = (:red, .5),
     xlabel = "PC1", ylabel = "PC2").f
 ```
 
 ```julia
-plotxy(T[:, i:(i + 1)], y; ellipse = true,
+plotxy(T[:, i], T[:, i + 1], y; ellipse = true,
     xlabel = "PC1", ylabel = "PC2").f
 ```
+
+#### PCA on Xtrain and projection of Xtest
 
 ```julia term = true
 ## Train vs Test
@@ -113,6 +122,8 @@ fm = pcasvd(Xtrain, nlv = 15) ;
 Ttrain = fm.T
 @head Ttrain
 ```
+
+Xtest is projected on the Xtrain scores space.
 
 ```julia
 Ttest = Jchemo.transform(fm, Xtest)
@@ -122,9 +133,11 @@ Ttest = Jchemo.transform(fm, Xtest)
 zT = vcat(Ttrain, Ttest)
 group = vcat(repeat(["0-Train";], ntrain), repeat(["1-Test";], ntest))
 i = 1
-plotxy(zT[:, i:(i + 1)], group;
+plotxy(zT[:, i], T[:, i + 1], group;
     xlabel = "PC1", ylabel = "PC2").f
 ```
+
+**Score (SD) and orthogonal (OD) distances**
 
 ```julia
 res_sd = occsd(fm) ; 
@@ -185,8 +198,9 @@ f[1, 1] = ax
 f
 ```
 
+#### Y-variables
+
 ```julia
-## Variable y
 summ(Y)
 ```
 

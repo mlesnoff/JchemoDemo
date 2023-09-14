@@ -37,18 +37,18 @@ T = fm.T
 
 ## 2-D Score space
 i = 1
-plotxy(T[:, i:(i + 1)]; color = (:red, .5),
+plotxy(T[:, i], T[:, i + 1]; color = (:red, .5),
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
     zeros = true, markersize = 15).f
 
 i = 1
-plotxy(T[:, i:(i + 1)], year;
+plotxy(T[:, i], T[:, i + 1], year;
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
     zeros = true, ellipse = true).f
 
 i = 1
 colm = cgrad(:Dark2_5, nlev; categorical = true, alpha = .8)
-plotxy(T[:, i:(i + 1)], year; 
+plotxy(T[:, i], T[:, i + 1], year; 
     color = colm,
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
     zeros = true, ellipse = true).f

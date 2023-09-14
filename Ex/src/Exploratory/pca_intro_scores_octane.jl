@@ -36,7 +36,7 @@ plotxy(T[:, 1], T[:, 2]; zeros = true,
     xlabel = "PC1", ylabel = "PC2").f
 
 i = 1
-plotxy(T[:, i:(i + 1)]; color = (:red, .5),
+plotxy(T[:, i], T[:, i + 1]; color = (:red, .5),
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
     zeros = true, markersize = 15).f
 

@@ -55,10 +55,10 @@ plotgrid(z.lv, 100 * z.pvar; step = 1,
     xlabel = "nb. PCs", ylabel = "% variance explained").f
 
 i = 1
-plotxy(T[:, i:(i + 1)]; color = (:red, .5),
+plotxy(T[:, i], T[:, i + 1]; color = (:red, .5),
     xlabel = "PC1", ylabel = "PC2").f
 
-plotxy(T[:, i:(i + 1)], y; ellipse = true,
+plotxy(T[:, i], T[:, i + 1], y; ellipse = true,
     xlabel = "PC1", ylabel = "PC2").f
 
 ## Train vs Test
@@ -71,7 +71,7 @@ Ttest = Jchemo.transform(fm, Xtest)
 zT = vcat(Ttrain, Ttest)
 group = vcat(repeat(["0-Train";], ntrain), repeat(["1-Test";], ntest))
 i = 1
-plotxy(zT[:, i:(i + 1)], group;
+plotxy(zT[:, i], T[:, i + 1], group;
     xlabel = "PC1", ylabel = "PC2").f
 
 res_sd = occsd(fm) ; 

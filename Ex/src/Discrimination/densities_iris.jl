@@ -33,7 +33,7 @@ T = fm.T ;
 @head T
 
 i = 1
-plotxy(T[:, i:(i + 1)], y;
+plotxy(T[:, i], T[:, i + 1], y;
     title = "PLS2 space", 
     xlabel = string("LV", i), ylabel = string("LV", i + 1),
     zeros = true, ellipse = false).f

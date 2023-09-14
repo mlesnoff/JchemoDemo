@@ -47,7 +47,7 @@ res = summary(fm, zX).explvarx
 scatter(res.lv, res.pvar)
 
 i = 1
-plotxy(T[:, i:(i + 1)], typ;
+plotxy(T[:, i], T[:, i + 1], typ;
     xlabel = string("PC", i), ylabel = string("PC", i + 1)).f
 
 CairoMakie.activate!()
