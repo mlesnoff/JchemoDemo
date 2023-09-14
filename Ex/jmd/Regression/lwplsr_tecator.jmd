@@ -1,0 +1,174 @@
+---
+title: lwplsr_tecator.jl
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  #out_width: "50%"   # default
+---
+
+```julia
+using JLD2, CairoMakie
+using Jchemo, JchemoData
+using Loess
+```
+
+#### Data importation
+
+```julia
+path_jdat = dirname(dirname(pathof(JchemoData)))
+db = joinpath(path_jdat, "data/tecator.jld2") 
+@load db dat
+pnames(dat)
+```
+
+#### Data preparation and short description
+
+```julia
+X = dat.X
+Y = dat.Y 
+ntot = nro(X)
+```
+
+```julia term = true
+@head X 
+@head Y
+```
+
+```julia
+summ(Y)
+```
+
+```julia
+namy = names(Y)[1:3]
+```
+
+```julia
+typ = Y.typ
+tab(typ)
+```
+
+```julia
+wl = names(X)
+wl_num = parse.(Float64, wl) 
+```
+
+```julia
+plotsp(X, wl_num;
+    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+```
+
+#### Preprocessing
+
+```julia
+f = 15 ; pol = 3 ; d = 2 
+Xp = savgol(snv(X); f = f, pol = pol, d = d) 
+```
+
+```julia
+plotsp(Xp, wl_num;
+    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+```
+
+#### Split Tot ==> Train + Test
+
+The model is tuned on **Train**, and the generalization error is estimated on **Test**.
+Here the split of **Tot** is already provided inside the dataset (= variable `typ`), 
+but **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic 
+or any other designs). 
+
+```julia
+s = typ .== "train"
+Xtrain = Xp[s, :]
+Ytrain = Y[s, namy]
+Xtest = rmrow(Xp, s)
+Ytest = rmrow(Y[:, namy], s)
+ntrain = nro(Xtrain)
+ntest = nro(Xtest)
+ntot = ntrain + ntest
+(ntot = ntot, ntrain, ntest)
+```
+Work on the second y-variable: 
+
+```julia
+j = 2  
+nam = namy[j]    # y-variable
+ytrain = Ytrain[:, nam]
+ytest = Ytest[:, nam]
+```
+#### Model fitting
+
+```julia
+nlvdis = 10 ; metric = "mahal"
+h = 3 ; k = 30 
+nlv = 4
+fm = lwplsr(Xtrain, ytrain; nlvdis = nlvdis,
+    metric = metric, h = h, k = k, 
+    nlv = nlv) ;
+pnames(fm)
+```
+
+#### Predictions
+
+```julia
+pred = Jchemo.predict(fm, Xtest).pred
+```
+
+```julia
+rmsep(pred, ytest)
+```
+
+```julia
+bias(pred, ytest)
+```
+
+```julia
+mse(pred, ytest)
+```
+
+```julia
+r = residreg(pred, ytest) # residuals
+```
+
+#### Plotting predictions vs. observed data
+
+```julia 
+plotxy(pred, ytest; resolution = (500, 400),
+    color = (:red, .5), bisect = true, 
+    xlabel = "Prediction", ylabel = "Observed (Test)").f   
+```
+
+**Residuals:**
+
+```julia
+plotxy(ytest, r; resolution = (500, 400),
+    color = (:red, .5), zeros = true, 
+    xlabel = "Observed (Test)", ylabel = "Residuals").f   
+```
+
+##### Adding a smoothing
+
+```julia
+f, ax = plotxy(pred, ytest;
+    xlabel = "Predicted", ylabel = "Observed",
+    resolution = (500, 400))
+zpred = vec(pred)
+zfm = loess(zpred, ytest; span = 2/3) ;
+pred_loess = Loess.predict(zfm, sort(zpred))
+lines!(ax, sort(zpred), pred_loess; color = :red)
+ablines!(ax, 0, 1; color = :grey)
+f    
+```
+
+**Residuals:**
+
+```julia
+f, ax = plotxy(ytest, r; color = (:blue, .5), 
+    resolution = (500, 400), 
+    xlabel = "Observed (Test)", ylabel = "Residuals") 
+zfm = loess(ytest, vec(r); span = 2/3) ;
+pred_loess = Loess.predict(zfm, sort(ytest))
+lines!(ax, sort(ytest), pred_loess; color = :red)
+hlines!(ax, 0; color = :grey, linestyle = :dashdot)
+f   
+```

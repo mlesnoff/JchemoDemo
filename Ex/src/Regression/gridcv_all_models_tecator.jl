@@ -1,47 +1,47 @@
 using JLD2, CairoMakie
 using Jchemo, JchemoData
 
-#+
+```julia
 path_pack = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_pack, "data/tecator.jld2") 
 @load db dat
 pnames(dat)
 
-#+
+```julia
 X = dat.X
 Y = dat.Y 
 ntot, p = size(X)
 
-#+ term = true
+```julia term = true
 @head X
 @head Y
 
-#+
+```julia
 summ(Y)
 
-#+
+```julia
 namy = names(Y)[1:3]
 
-#+
+```julia
 typ = Y.typ
 tab(typ)
 
-#+
+```julia
 wl = names(X)
 wl_num = parse.(Float64, wl) 
 
-#+
+```julia
 plotsp(X, wl_num;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
-#+
+```julia
 f = 15 ; pol = 3 ; d = 2 
 Xp = savgol(snv(X); f = f, pol = pol, d = d) 
 
 plotsp(Xp, wl_num;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
-#+
+```julia
 s = typ .== "train"
 Xtrain = Xp[s, :]
 Ytrain = Y[s, namy]
@@ -52,7 +52,7 @@ ntest = nro(Xtest)
 ntot = ntrain + ntest
 (ntot = ntot, ntrain, ntest)
 
-#+
+```julia
 j = 2  
 nam = namy[j]    # y-variable
 ytrain = Ytrain[:, nam]
@@ -60,10 +60,10 @@ ytest = Ytest[:, nam]
 
 segm = segmkf(ntrain, 4; rep = 20)
 
-#+
+```julia
 segm_slow = segm[1:3] # for slow models ==> only 3 replications
 
-#+
+```julia
 #### PLSR
 nlv = 0:40
 res = gridcvlv(Xtrain, ytrain; segm = segm, 
@@ -75,11 +75,11 @@ res[u, :]
 fm = plskern(Xtrain, ytrain; nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred ;
 @show rmsep(pred, ytest)
-plotxy(vec(pred), ytest; resolution = (500, 400),
+plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-#+
+```julia
 #### PLSR-AVG
 nlv = ["0:10"; "0:20"; "0:30"; "0:50"]
 typf = ["unif"]
@@ -93,11 +93,11 @@ fm = plsravg(Xtrain, ytrain; nlv = res.nlv[u],
     typf = res.typf[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
 @show rmsep(pred, ytest)
-plotxy(vec(pred), ytest; resolution = (500, 400),
+plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-#+
+```julia
 #### RR 
 lb = 10.0.^(-15:.1:3) 
 res = gridcvlb(Xtrain, ytrain; segm = segm,
@@ -111,11 +111,11 @@ plotgrid(zlb, zres.y1; step = .5,
 fm = rr(Xtrain, ytrain; lb = res.lb[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
 @show rmsep(pred, ytest)
-plotxy(vec(pred), ytest; resolution = (500, 400),
+plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-#+
+```julia
 #### COVSELR
 nlv = [5; 10; 15; 20; 30]
 pars = mpar(nlv = nlv)
@@ -127,11 +127,11 @@ res[u, :]
 fm = covselr(Xtrain, ytrain; nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
 @show rmsep(pred, ytest)
-plotxy(vec(pred), ytest; resolution = (500, 400),
+plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-#+
+```julia
 #### KRR 
 lb = 10.0.^(-15:5) 
 gamma = 10.0.^(-3:5) 
@@ -146,11 +146,11 @@ fm = krr(Xtrain, ytrain; lb = res.lb[u],
     gamma = res.gamma[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
 @show rmsep(pred, ytest)
-plotxy(vec(pred), ytest; resolution = (500, 400),
+plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-#+
+```julia
 #### KPLSR
 nlv = 0:50
 gamma = 10.0.^(-3:5) 
@@ -169,11 +169,11 @@ fm = kplsr(Xtrain, ytrain; nlv = res.nlv[u],
     gamma = res.gamma[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
 @show rmsep(pred, ytest)
-plotxy(vec(pred), ytest; resolution = (500, 400),
+plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-#+
+```julia
 #### DKPLSR
 nlv = 0:50
 gamma = 10.0.^(-3:5) 
@@ -192,11 +192,11 @@ fm = dkplsr(Xtrain, ytrain; nlv = res.nlv[u],
     gamma = res.gamma[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
 @show rmsep(pred, ytest)
-plotxy(vec(pred), ytest; resolution = (500, 400),
+plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-#+
+```julia
 #### LWPLSR 
 nlvdis = [10; 15] ; metric = ["mahal"] 
 h = [1; 2; 5; Inf] ; k = [30; 50; 100]  
@@ -218,11 +218,11 @@ fm = lwplsr(Xtrain, ytrain; nlvdis = res.nlvdis[u],
     nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
 @show rmsep(pred, ytest)
-plotxy(vec(pred), ytest; resolution = (500, 400),
+plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-#+
+```julia
 #### LWPLSR-AVG
 nlvdis = [10; 15] ; metric = ["mahal"] 
 h = [1; 2; 5; Inf] ; k = [30; 50; 100]  
@@ -240,11 +240,11 @@ fm = lwplsravg(Xtrain, ytrain; nlvdis = res.nlvdis[u],
     nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
 @show rmsep(pred, ytest)
-plotxy(vec(pred), ytest; resolution = (500, 400),
+plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-#+
+```julia
 #### LWPLSR-S
 nlv0 = [10; 15; 20]
 metric = ["eucl"; "mahal"] 
@@ -267,11 +267,11 @@ fm = lwplsr_s(Xtrain, ytrain; nlv0 = res.nlv0[u],
     k = res.k[u], nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
 @show rmsep(pred, ytest)
-plotxy(vec(pred), ytest; resolution = (500, 400),
+plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f   
 
-#+
+```julia
 ## Working in a DKPLS score space
 reduc = ["dkpls"]
 nlv0 = [10; 15; 20; 30]
@@ -297,11 +297,11 @@ fm = lwplsr_s(Xtrain, ytrain; reduc = res.reduc[u],
     k = res.k[u], nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
 @show rmsep(pred, ytest)
-plotxy(vec(pred), ytest; resolution = (500, 400),
+plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-#+
+```julia
 #### CPLSR-AVG
 ncla = 2:5 ; nlv_da = 1:5
 nlv = ["0:10"; "0:15"; "0:20"; 
@@ -318,11 +318,11 @@ fm = cplsravg(Xtrain, ytrain; ncla = res.ncla[u],
     nlv_da = res.nlv_da[u], nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
 @show rmsep(pred, ytest)
-plotxy(vec(pred), ytest; resolution = (500, 400),
+plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-#+
+```julia
 #### KNNR
 nlvdis = [15; 20]  ; metric = ["eucl"; "mahal"] 
 h = [1; 2; 4; Inf] ;
@@ -339,11 +339,11 @@ fm = knnr(Xtrain, ytrain; nlvdis = res.nlvdis[u],
     metric = res.metric[u], h = res.h[u], k = res.k[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred ;
 @show rmsep(pred, ytest)
-plotxy(vec(pred), ytest; resolution = (500, 400),
+plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-#+
+```julia
 #### RFR 
 n_trees = [50]
 n_subfeatures = LinRange(10, p, 5)
@@ -361,7 +361,7 @@ fm = rfr_dt(Xtrain, ytrain; n_trees = res.n_trees[u],
     max_depth = res.max_depth[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
 @show rmsep(pred, ytest)
-plotxy(vec(pred), ytest; resolution = (500, 400),
+plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 

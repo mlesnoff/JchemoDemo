@@ -145,7 +145,7 @@ res[u, :]
 fm = plskern(zXtrain, zytrain; nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, zXtest).pred
 println(rmsep(pred, zytest))
-plotxy(vec(pred), zytest;
+plotxy(pred, zytest;
     bisect = true, xlabel = "Prediction",
     ylabel = "Observed").f
 
@@ -190,7 +190,7 @@ nlv = 7   # compromise between machines, for the given y-variable (here j = 1)
 fm = plskern(zXtrain, zytrain; nlv = nlv) ;
 pred = Jchemo.predict(fm, zXtest).pred    # test predictions on corrected spectra
 println(rmsep(pred, zytest))
-plotxy(vec(pred), zytest;
+plotxy(pred, zytest;
     bisect = true, xlabel = "Prediction",
     ylabel = "Observed").f
 
