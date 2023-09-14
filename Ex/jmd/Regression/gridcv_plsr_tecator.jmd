@@ -157,12 +157,12 @@ plotgrid(res_rep.nlv, res_rep.y1, group; step = 2,
 res = rescv.res
 ```
 
+**Selection of the best parameters combination:**
+
 ```julia
 plotgrid(res.nlv, res.y1; step = 2,
     xlabel = "Nb. LVs", ylabel = "RMSEP").f
 ```
-
-**Selection of the best parameters combination:**
 
 ```julia
 u = findall(res.y1 .== minimum(res.y1))[1] 
@@ -230,7 +230,7 @@ Function "gridcv" is generic for all the functions.
 Here, it could be used instead of "gridcvlv" 
 but this is not time-efficient for LV-based methods.
 Commands below return the same results as 
-with 'gridcvlv', but in a slower way
+with 'gridcvlv', but in a slower way.
 
 ```julia
 nlv = 0:20

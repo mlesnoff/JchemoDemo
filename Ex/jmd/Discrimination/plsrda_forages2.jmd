@@ -1,5 +1,5 @@
 ---
-title: plsr_tecator.jl
+title: plsrda_forages2.jl
 weave_options:
   error: true
   wrap: true
@@ -12,36 +12,55 @@ using JLD2, CairoMakie, FreqTables
 using Jchemo, JchemoData
 ```
 
+#### Data importation
+
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/forages2.jld2") 
 @load db dat
 pnames(dat)
+```
   
+#### Data preparation and short description
+
 ```julia
 X = dat.X 
 Y = dat.Y
 ntot = nro(X)
+```
 
 ```julia term = true
 @head X
 @head Y
+```
 
 ```julia
 y = Y.typ
 tab(y)
+```
 
 ```julia
 freqtable(y, Y.test)
+```
 
 ```julia
 wl = names(X)
 wl_num = parse.(Float64, wl)
+```
+
+**Note:**: X-data are already preprocessed (SNV + Savitsky-Golay).
 
 ```julia
-## X is already preprocessed
 plotsp(X, wl_num;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+```
+
+#### Split Tot ==> Train + Test
+
+The model is fitted on **Train**, and the generalization error is estimated on **Test**.
+Here the split of **Tot** is already provided inside the dataset (= variable `test`), 
+but **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic 
+or any other designs). 
 
 ```julia
 s = Bool.(Y.test)
@@ -52,59 +71,86 @@ ytest = y[s]
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
+```
 
-```julia
-## "PLSDA" gathers different methods 
+#### Model fitting
+
+The term "PLSDA" can represent different methods, e.g. PLSR-DA, PLS-LDA and PLS-QDA. 
+
+```julia 
 nlv = 15
 fm = plsrda(Xtrain, ytrain; nlv = nlv) ;
 #fm = plslda(Xtrain, ytrain; nlv = nlv) ;
 #fm = plsqda(Xtrain, ytrain; nlv = nlv) ;
 #fm = plsqda(Xtrain, ytrain; nlv = nlv, prior = "prop") ;
+```
 
-## Ridge (RR-DA) 
+An alternative to PLS is the ridge regularization (RR-DA):
+
+```julia
 #fm = rrda(Xtrain, ytrain; lb = 1e-5) ;
+```
 
 ```julia
 pnames(fm)
+```
 
 ```julia
 pnames(fm.fm)
+```
+
+#### Predictions
 
 ```julia
 res = Jchemo.predict(fm, Xtest) ;
 pnames(res)
+```
 
 ```julia
 pred = res.pred
+```
 
 ```julia
 res.posterior   # prediction of the dummy table
+```
 
 ```julia
 err(pred, ytest)
+```
+
+#### Confusion matrix
 
 ```julia
 freqtable(ytest, vec(pred))
+```
 
 ```julia
 cf = confusion(pred, ytest) ;
 pnames(cf)
+```
 
 ```julia
 cf.cnt
+```
 
 ```julia
 cf.pct
+```
 
 ```julia
 cf.accuracy 
+```
 
 ```julia
 plotconf(cf).f
+```
+
+#### Example of PLSR-DA averaging
 
 ```julia
-## PLSDA with averaging
 nlv = "0:20"
 fm = plsrdaavg(Xtrain, ytrain; nlv = nlv) ;
 pred = Jchemo.predict(fm, Xtest).pred
 err(pred, ytest)
+```
+

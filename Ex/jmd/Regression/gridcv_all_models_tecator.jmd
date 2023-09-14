@@ -180,15 +180,15 @@ res = gridcvlb(Xtrain, ytrain; segm = segm,
 ```
 
 ```julia
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-```
-
-```julia
 zres = res[res.y1 .< 3, :]
 zlb = round.(log.(10, zres.lb), digits = 3)
 plotgrid(zlb, zres.y1; step = .5,
     xlabel ="Lambda", ylabel = "RMSEP").f
+```
+
+```julia
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
 ```
 
 ```julia
@@ -288,15 +288,15 @@ res = gridcvlv(Xtrain, ytrain; segm = segm,
 ```
 
 ```julia
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-```
-
-```julia
 zres = res[res.y1 .< 20, :]
 group = string.("gamma=", round.(log.(10, zres.gamma)))
 plotgrid(zres.nlv, zres.y1, group;
     xlabel ="Nb. LVs", ylabel = "RMSEP").f
+```
+
+```julia
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
 ```
 
 ```julia
@@ -334,15 +334,15 @@ res = gridcvlv(Xtrain, ytrain; segm = segm,
 ```
 
 ```julia
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-```
-
-```julia
 zres = res[res.y1 .< 20, :]
 group = string.("gamma=", round.(log.(10, zres.gamma)))
 plotgrid(zres.nlv, zres.y1, group;
     xlabel ="Nb. LVs", ylabel = "RMSEP").f
+```
+
+```julia
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
 ```
 
 ```julia
@@ -379,15 +379,15 @@ res = gridcvlv(Xtrain, ytrain; segm = segm_slow,
 ```
 
 ```julia
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-```
-
-```julia
 group = string.("nvldis=", res.nlvdis, ",h=", res.h, 
     ",k=", res.k)
 plotgrid(res.nlv, res.y1, group; step = 2,
     xlabel ="Nb. LVs", ylabel = "RMSEP").f
+```
+
+```julia
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
 ```
 
 ```julia
@@ -465,15 +465,15 @@ res = gridcvlv(Xtrain, ytrain; segm = segm_slow,
 ```
 
 ```julia
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-```
-
-```julia
 group = string.("nvl0=", res.nlv0, " metric =", res.metric, 
     " h=", res.h, " k=", res.k)
 plotgrid(res.nlv, res.y1, group; step = 2,
     xlabel ="Nb. LVs", ylabel = "RMSEP").f
+```
+
+```julia
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
 ```
 
 ```julia
@@ -514,15 +514,15 @@ res = gridcvlv(Xtrain, ytrain; segm = segm_slow,
 ```
 
 ```julia
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-```
-
-```julia
 group = string.("nvl0=", res.nlv0, ", gamma=", res.gamma,
     ", h=", res.h, " k=", res.k)
 plotgrid(res.nlv, res.y1, group; step = 2, leg = false,
     xlabel ="Nb. LVs", ylabel = "RMSEP").f
+```
+
+```julia
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
 ```
 
 ```julia

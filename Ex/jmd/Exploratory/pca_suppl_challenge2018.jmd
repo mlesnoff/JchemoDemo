@@ -52,7 +52,7 @@ plotsp(Xp, wl_num; nsamp = 30).f
 ## The PCA is fitted on Train, and Test will be 
 ## the supplementary observations.
 ## Here the splitting is provided by the dataset
-## (= variable 'typ'), but Tot could be splitted 
+## (= variable `typ`), but Tot could be splitted 
 ## a posteriori using various methods (e.g. random sampling, 
 ## systematic sampling, etc.) 
 s = Bool.(test)

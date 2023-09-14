@@ -97,7 +97,7 @@ ntest = nro(Xtest)
 
 The validation error (used for the grid-search tuning) is computed 
 on **Val**. Here the split is built from random sampling 
-(oher designs are possible).
+(other designs are possible).
 
 ```julia
 nval = 300 
@@ -157,12 +157,12 @@ rmsep(pred, ytest)
 lb = 10.0.^(-15:.1:3) 
 res = gridscorelb(Xcal, ycal, Xval, yval;
     score = rmsep, fun = rr, lb = lb) 
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
 zres = res[res.y1 .< 2, :]
 zlb = round.(log.(10, zres.lb), digits = 3)
 plotgrid(zlb, zres.y1; step = 2,
     xlabel ="Lambda", ylabel = "RMSEP").f
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
 fm = rr(Xtrain, ytrain; lb = res.lb[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
 rmsep(pred, ytest)
@@ -267,11 +267,11 @@ length(pars[1])
 res = gridscorelv(Xcal, ycal, Xval, yval;
     score = rmsep, fun = lwplsr, nlv = nlv, pars = pars, 
     verbose = false) 
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
 group = string.(res.nlvdis, "-", res.h, "-", res.k) 
 plotgrid(res.nlv, res.y1, group; step = 2,
     xlabel ="Nb. LVs", ylabel = "RMSEP").f
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
 fm = lwplsr(Xtrain, ytrain; nlvdis = res.nlvdis[u],
     metric = res.metric[u], h = res.h[u], k = res.k[u], 
     nlv = res.nlv[u]) ;
@@ -337,11 +337,11 @@ length(pars[1])
 res = gridscorelv(Xcal, ycal, Xval, yval;
     score = msep, fun = lwplsr_s, nlv = nlv, pars = pars, 
     verbose = false) 
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
 group = string.(res.nlv0, "-", res.metric, "-", res.h, "-", res.k) 
 plotgrid(res.nlv, res.y1, group; step = 2,
     xlabel ="Nb. LVs", ylabel = "RMSEP").f
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
 fm = lwplsr_s(Xtrain, ytrain; nlv0 = res.nlv0[u], 
     metric = res.metric[u], h = res.h[u], 
     k = res.k[u], nlv = res.nlv[u]) ;

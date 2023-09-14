@@ -128,15 +128,15 @@ res = gridcvlv(Xtrain, ytrain; segm = segm,
 **Selection of the best parameters combination:**
 
 ```julia
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-```
-
-```julia
 group = string.("nvldis=", res.nlvdis, " h=", res.h, 
     " k=", res.k)
 plotgrid(res.nlv, res.y1, group; step = 2,
     xlabel ="Nb. LVs", ylabel = "RMSEP").f
+```
+
+```julia
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
 ```
 
 #### Final prediction (Test) using the optimal model

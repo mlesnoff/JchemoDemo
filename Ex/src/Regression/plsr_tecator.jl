@@ -38,7 +38,7 @@ plotsp(Xp, wl_num;
 ## The model is tuned on Train, and
 ## the generalization error is estimated on Test.
 ## Here the split of Tot is provided by the dataset
-## (= variable 'typ'), but Tot could be split 
+## (= variable `typ`), but Tot could be split 
 ## a posteriori (e.g. random sampling, systematic 
 ## sampling, etc.) 
 s = typ .== "train"

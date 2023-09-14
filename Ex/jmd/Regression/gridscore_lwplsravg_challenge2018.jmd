@@ -97,7 +97,7 @@ ntest = nro(Xtest)
 
 The validation error (used for the grid-search tuning) is computed 
 on **Val**. Here the split is built from random sampling 
-(oher designs are possible).
+(other designs are possible).
 
 ```julia
 nval = 300 

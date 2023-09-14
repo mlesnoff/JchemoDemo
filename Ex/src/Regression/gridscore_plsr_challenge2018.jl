@@ -41,7 +41,7 @@ plotsp(Xp, wl_num; nsamp = 30).f
 ## The model is tuned on Train, and
 ## the generalization error is estimated on Test.
 ## Here the split of Tot is provided by the dataset
-## (= variable 'test'), but Tot could be split 
+## (= variable `test`), but Tot could be split 
 ## a posteriori (e.g. random sampling, systematic 
 ## sampling, etc.) 
 s = Bool.(test)
@@ -67,7 +67,7 @@ s = sample(1:ntrain, nval; replace = false)
 
 ## (2) Or Kennard-Stone sampling
 ## Output 'train' contains higher variability
-## than output 'test'
+## than output `test`
 #res = sampks(Xtrain; k = nval)
 #s = res.train
 

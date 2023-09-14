@@ -1,37 +1,66 @@
-using JLD2, CairoMakie
-using StatsBase, FreqTables 
+---
+title: gridscore_kplsrda_forages2.jl
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  #out_width: "50%"   # default
+---
+
+```julia
+using JLD2, CairoMakie, FreqTables 
 using Jchemo, JchemoData
+```
+
+#### Data importation
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/forages2.jld2") 
 @load db dat
 pnames(dat)
+```
   
+#### Data preparation and short description
+
 ```julia
 X = dat.X 
 Y = dat.Y
 ntot = nro(X)
+```
 
 ```julia term = true
 @head X
 @head Y
+```
 
 ```julia
 y = Y.typ
 tab(y)
+```
 
 ```julia
 freqtable(y, Y.test)
+```
 
 ```julia
 wl = names(X)
 wl_num = parse.(Float64, wl)
+```
+
+**Note:**: X-data are already preprocessed (SNV + Savitsky-Golay).
 
 ```julia
-## X is already preprocessed
 plotsp(X, wl_num;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+```
+
+#### Split Tot ==> Train + Test
+
+The model is fitted on **Train**, and the generalization error is estimated on **Test**.
+Here the split of **Tot** is already provided inside the dataset (= variable `test`), 
+but **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic 
+or any other designs). 
 
 ```julia
 s = Bool.(Y.test)
@@ -42,6 +71,9 @@ ytest = y[s]
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
+```
+
+#### Model fitting
 
 ```julia
 ## Train ==> Cal + Val
@@ -54,39 +86,64 @@ ycal = rmrow(ytrain, s)
 Xval = Xtrain[s, :] 
 yval = ytrain[s] 
 (ntot = ntot, ntrain, ncal, nval, ntest)
+```
 
 ```julia
 nlv = 0:50
 gamma = 10.0.^(-5:3)
 pars = mpar(gamma = gamma)
+```
 
 ```julia
 length(pars[1])
+```
 
 ```julia
 res = gridscorelv(Xcal, ycal, Xval, yval; 
     score = err, fun = kplsrda, pars = pars, nlv = nlv)
+```
 
 ```julia
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
+```
 
 ```julia
 plotgrid(res.nlv, res.y1, res.gamma; step = 5,
     xlabel = "Nb. LVs", ylabel = "ERR").f
+```
 
 ```julia
 fm = kplsrda(Xtrain, ytrain; nlv = res.nlv[u],
     gamma = res.gamma[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
+```
+
+#### Generalization error
+
+```julia
 err(pred, ytest)
+```
+
+#### Confusion matrix
 
 ```julia
 cf = confusion(pred, ytest) ;
+pnames(cf)
+```
+
+```julia
 cf.cnt
+```
 
 ```julia
 cf.pct
+```
+
+```julia
+cf.accuracy 
+```
 
 ```julia
 plotconf(cf).f
+```

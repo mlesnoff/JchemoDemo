@@ -1,36 +1,66 @@
+---
+title: kplsrda_forages2.jl
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  #out_width: "50%"   # default
+---
+
+```julia
 using JLD2, CairoMakie, FreqTables 
 using Jchemo, JchemoData
+```
+
+#### Data importation
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/forages2.jld2") 
 @load db dat
 pnames(dat)
+```
   
+#### Data preparation and short description
+
 ```julia
 X = dat.X 
 Y = dat.Y
 ntot = nro(X)
+```
 
 ```julia term = true
 @head X
 @head Y
+```
 
 ```julia
 y = Y.typ
 tab(y)
+```
 
 ```julia
 freqtable(y, Y.test)
+```
 
 ```julia
 wl = names(X)
 wl_num = parse.(Float64, wl)
+```
+
+**Note:**: X-data are already preprocessed (SNV + Savitsky-Golay).
 
 ```julia
-## X is already preprocessed
 plotsp(X, wl_num;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+```
+
+#### Split Tot ==> Train + Test
+
+The model is fitted on **Train**, and the generalization error is estimated on **Test**.
+Here the split of **Tot** is already provided inside the dataset (= variable `test`), 
+but **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic 
+or any other designs). 
 
 ```julia
 s = Bool.(Y.test)
@@ -41,39 +71,56 @@ ytest = y[s]
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
+```
+
+#### Model fitting
 
 ```julia
 gamma = .001
 fm = kplsrda(Xtrain, ytrain; nlv = 15, 
     gamma = gamma, scal = true) ;
 pnames(fm)
+```
 
 ```julia
 pnames(fm.fm)
+```
 
 ```julia
 typeof(fm.fm)
+```
+
+#### Predictions
 
 ```julia
 res = Jchemo.predict(fm, Xtest)
 pnames(res)
+```
 
 ```julia
 pred = res.pred
+```
 
 ```julia
 res.posterior
+```
 
 ```julia
 err(pred, ytest)
+```
+
+#### Confusion matrix
 
 ```julia
 cf = confusion(pred, ytest) ;
 cf.cnt
+```
 
 ```julia
 cf.pct
+```
 
 ```julia
 plotconf(cf).f
+```
 

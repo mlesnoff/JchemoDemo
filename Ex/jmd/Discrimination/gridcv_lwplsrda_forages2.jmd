@@ -1,36 +1,66 @@
+---
+title: gridcv_lwplsrda_forages2.jl
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  #out_width: "50%"   # default
+---
+
+```julia
 using JLD2, CairoMakie, FreqTables 
 using Jchemo, JchemoData
+```
+
+#### Data importation
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/forages2.jld2") 
 @load db dat
 pnames(dat)
+```
   
+#### Data preparation and short description
+
 ```julia
 X = dat.X 
 Y = dat.Y
 ntot = nro(X)
+```
 
 ```julia term = true
 @head X
 @head Y
+```
 
 ```julia
 y = Y.typ
 tab(y)
+```
 
 ```julia
 freqtable(y, Y.test)
+```
 
 ```julia
 wl = names(X)
 wl_num = parse.(Float64, wl)
+```
+
+**Note:**: X-data are already preprocessed (SNV + Savitsky-Golay).
 
 ```julia
-## X is already preprocessed
 plotsp(X, wl_num;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+```
+
+#### Split Tot ==> Train + Test
+
+The model is fitted on **Train**, and the generalization error is estimated on **Test**.
+Here the split of **Tot** is already provided inside the dataset (= variable `test`), 
+but **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic 
+or any other designs). 
 
 ```julia
 s = Bool.(Y.test)
@@ -41,10 +71,16 @@ ytest = y[s]
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
+```
+
+#### CV-Segments
 
 ```julia
 K = 3 ; segm = segmkf(ntrain, K; rep = 1)       # K-fold CV  
 #m = 100 ; segm = segmts(ntrain, m; rep = 3)    # Test-set CV
+```
+
+#### Grid
 
 ```julia
 nlvdis = [25] ; metric = ["mahal"]
@@ -55,20 +91,30 @@ pars = mpar(nlvdis = nlvdis, metric = metric, h = h,
 
 ```julia
 length(pars[1])
+```
+
+#### Grid-search by CV
 
 ```julia
 res = gridcvlv(Xtrain, ytrain; segm = segm, 
     score = err, fun = lwplsrda, nlv = nlv, pars = pars, 
     verbose = false).res
+```
+
+**Selection of the best parameters combination:**
 
 ```julia
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
+```
 
 ```julia
 group = string.("metric=", res.metric, res.nlvdis, " h=", res.h, " k=", res.k)
 plotgrid(res.nlv, res.y1, group; step = 2,
     xlabel = "Nb. LVs", ylabel = "ERR").f
+```
+
+#### Final prediction (Test) using the optimal model
 
 ```julia
 fm = lwplsrda(Xtrain, ytrain; nlvdis = res.nlvdis[u], 
@@ -76,14 +122,20 @@ fm = lwplsrda(Xtrain, ytrain; nlvdis = res.nlvdis[u],
     nlv = res.nlv[u], verbose = false) ;
 pred = Jchemo.predict(fm, Xtest).pred
 err(pred, ytest)
+```
+
+#### Confusion matrix
 
 ```julia
 cf = confusion(pred, ytest) ;
 cf.cnt
+```
 
 ```julia
 cf.pct
+```
 
 ```julia
 plotconf(cf).f
+```
 
