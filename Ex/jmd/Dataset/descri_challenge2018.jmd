@@ -1,8 +1,19 @@
+---
+title: descri_challenge2018.jl
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  #out_width: "50%"   # default
+---
+
 ```julia
 using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
 using FreqTables
 ```
+
+#### Data importation
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -10,6 +21,8 @@ db = joinpath(path_jdat, "data/challenge2018.jld2")
 @load db dat
 pnames(dat)
 ```
+
+#### Data preparation and short description
 
 ```julia
 X = dat.X 
@@ -56,6 +69,8 @@ freqtable(typ, test)
 plotsp(X, wl_num; nsamp = 30).f
 ```
 
+#### Preprocessing
+
 ```julia
 f = 21 ; pol = 3 ; d = 2 
 Xp = savgol(snv(X); f = f, pol = pol, d = d) ;
@@ -65,8 +80,13 @@ Xp = savgol(snv(X); f = f, pol = pol, d = d) ;
 plotsp(Xp, wl_num; nsamp = 30).f
 ```
 
+#### Split Tot ==> Train + Test
+
+Here the split of **Tot** is already provided inside the dataset (= variable `test`), 
+but **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic 
+or any other designs). 
+
 ```julia
-## Tot = Train + Test
 s = Bool.(test)
 Xtrain = rmrow(Xp, s)
 Ytrain = rmrow(Y, s)
@@ -79,8 +99,9 @@ ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 ```
 
+#### PCA on Xp
+
 ```julia
-## PCAs on X
 fm = pcasvd(Xp, nlv = 15) ; 
 pnames(fm)
 T = fm.T
@@ -102,18 +123,19 @@ plotgrid(z.lv, 100 * z.pvar; step = 1,
 
 ```julia
 i = 1
-plotxy(T[:, i:(i + 1)]; color = (:red, .5),
+plotxy(T[:, i], T[:, i + 1]; color = (:red, .5),
     xlabel = string("PC", i), ylabel = string("PC", i + 1)).f
 ```
 
 ```julia
 colm = cgrad(:Dark2_5, nlev; categorical = true)
-plotxy(T[:, i:(i + 1)], typ; color = colm,
+plotxy(T[:, i], T[:, i + 1], typ; color = colm,
     xlabel = string("PC", i), ylabel = string("PC", i + 1)).f
 ```
 
+#### PCA on Xtrain and projection of Xtest
+
 ```julia
-## Train vs Test
 fm = pcasvd(Xtrain, nlv = 15) ; 
 ```
 
@@ -121,6 +143,8 @@ fm = pcasvd(Xtrain, nlv = 15) ;
 Ttrain = fm.T
 @head Ttrain
 ```
+
+Xtest is projected on the Xtrain scores space.
 
 ```julia term = true
 Ttest = Jchemo.transform(fm, Xtest)
@@ -133,9 +157,11 @@ group = vcat(repeat(["0-Train";], ntrain),
     repeat(["1-Test";], ntest))
 colm = [:blue, (:red, .5)]
 i = 1
-plotxy(zT[:, i:(i + 1)], group; color = colm,
+plotxy(zT[:, i], T[:, i + 1], group; color = colm,
     xlabel = "PC1", ylabel = "PC2").f
 ```
+
+**Score (SD) and orthogonal (OD) distances**
 
 ```julia
 res_sd = occsd(fm) ; 
@@ -177,8 +203,9 @@ axislegend(position = :rt)
 f
 ```
 
+#### Y-Variables
+
 ```julia
-## Variable y
 summ(y)
 ```
 

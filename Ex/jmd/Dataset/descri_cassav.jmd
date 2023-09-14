@@ -1,7 +1,18 @@
+---
+title: descri_cassav.jl
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  #out_width: "50%"   # default
+---
+
 ```julia
 using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
 ```
+
+#### Data importation
 
 ```julia
 using JchemoData, JLD2, CairoMakie
@@ -10,6 +21,8 @@ db = joinpath(path_jdat, "data/cassav.jld2")
 @load db dat
 pnames(dat)
 ```
+
+#### Data preparation and short description
 
 ```julia
 X = dat.X
@@ -49,6 +62,8 @@ tab(year)
 plotsp(X, wl_num;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
+
+#### Preprocessing
 
 ```julia
 f = 15 ; pol = 3 ; d = 2 

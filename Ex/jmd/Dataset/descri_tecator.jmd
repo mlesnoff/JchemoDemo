@@ -1,7 +1,18 @@
+---
+title: descri_tecator.jl
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  #out_width: "50%"   # default
+---
+
 ```julia
 using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
 ```
+
+#### Data importation
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -9,6 +20,8 @@ db = joinpath(path_jdat, "data/tecator.jld2")
 @load db dat
 pnames(dat)
 ```
+
+#### Data preparation and short description
 
 ```julia
 X = dat.X
@@ -44,8 +57,9 @@ plotsp(X, wl_num;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
+#### Preprocessing
+
 ```julia
-## Preprocessing
 f = 15 ; pol = 3 ; d = 2 
 Xp = savgol(snv(X); f = f, pol = pol, d = d) 
 ```
@@ -55,8 +69,9 @@ plotsp(Xp, wl_num;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
-```julia
 #### PCA
+
+```julia
 fm = pcasvd(Xp, nlv = 10) ; 
 pnames(fm)
 ```
@@ -88,8 +103,9 @@ plotxy(T[:, i:(i + 1)], typ;
     xlabel = "PC1", ylabel = "PC2").f
 ```
 
+#### Y-Variables
+
 ```julia
-## Variables y
 summ(Y[:, namy]).res
 ```
 
