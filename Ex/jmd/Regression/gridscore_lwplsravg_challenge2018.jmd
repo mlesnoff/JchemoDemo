@@ -1,24 +1,43 @@
+---
+title: gridscore_lwplsravg_challenge2018.jl
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  #out_width: "50%"   # default
+---
+
+```julia
 using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
 using FreqTables
+```
+
+#### Data importation
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/challenge2018.jld2") 
 @load db dat
 pnames(dat)
+```
+
+#### Data preparation and short description
 
 ```julia
 X = dat.X 
 Y = dat.Y
 ntot, p = size(X)
+```
 
 ```julia term = true
 @head X
 @head Y
+```
 
 ```julia
 summ(Y)
+```
 
 ```julia
 y = Y.conc
@@ -26,25 +45,42 @@ typ = Y.typ
 label = Y.label 
 test = Y.test
 tab(test)
+```
 
 ```julia
 wl = names(X)
 wl_num = parse.(Float64, wl)
+```
 
 ```julia
 freqtable(string.(typ, "-", Y.label))
+```
 
 ```julia
 freqtable(typ, test)
+```
 
 ```julia
 plotsp(X, wl_num; nsamp = 30).f
+```
+
+#### Preprocessing
 
 ```julia
 f = 21 ; pol = 3 ; d = 2 
 Xp = savgol(snv(X); f = f, pol = pol, d = d) ;
+```
 
+``` julia
 plotsp(Xp, wl_num; nsamp = 30).f
+```
+
+#### Split Tot ==> Train + Test
+
+The model is tuned on **Train**, and the generalization error is estimated on **Test**.
+Here the split of **Tot** is already provided inside the dataset (= variable `test`), 
+but **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic 
+or any other designs). 
 
 ```julia
 s = Bool.(test)
@@ -55,6 +91,13 @@ ytest = y[s]
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
+```
+
+#### Split Train ==> Cal + Val
+
+The validation error (used for the grid-search tuning) is computed 
+on **Val**. Here the split is built from random sampling 
+(oher designs are possible).
 
 ```julia
 nval = 300 
@@ -65,6 +108,9 @@ ycal = rmrow(ytrain, s)
 Xval = Xtrain[s, :] 
 yval = ytrain[s] 
 (ntot = ntot, ntrain, ntest, ncal, nval)
+```
+
+#### Grid
 
 ```julia
 nlvdis = [15; 25] ; metric = ["mahal"] 
@@ -73,31 +119,40 @@ k = [200; 350; 500]
 nlv = ["0:20"; "5:20"; "0:30"; "5:30"] 
 pars = mpar(nlvdis = nlvdis, metric = metric, 
     h = h, k = k, nlv = nlv) 
+```
 
 ```julia
 length(pars[1])
+```
+
+#### Grid-search
 
 ```julia
 res = gridscore(Xcal, ycal, Xval, yval;
     score = rmsep, fun = lwplsravg, pars = pars, 
     verbose = false) 
+```
+
+**Selection of the best parameters combination:**
 
 ```julia
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
+```
+
+#### Final prediction (Test) using the optimal model
 
 ```julia
 fm = lwplsravg(Xtrain, ytrain; nlvdis = res.nlvdis[u],
     metric = res.metric[u], h = res.h[u], k = res.k[u], 
     nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred 
-@show rmsep(pred, ytest)
+rmsep(pred, ytest)
+```
 
 ```julia
 plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
-
-
-
+```
 

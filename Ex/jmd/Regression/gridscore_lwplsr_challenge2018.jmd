@@ -1,5 +1,5 @@
 ---
-title: gridcv_all_models_tecator.jl
+title: gridscore_lwplsr_challenge2018.jl
 weave_options:
   error: true
   wrap: true
