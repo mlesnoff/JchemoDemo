@@ -2,51 +2,41 @@ using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
 using FreqTables
 
-```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/challenge2018.jld2") 
 @load db dat
 pnames(dat)
 
-```julia
 X = dat.X 
 Y = dat.Y
 ntot = nro(X)
 
-```julia term = true
+
 @head X
 @head Y
 
-```julia
 summ(Y)
 
-```julia
 y = Y.conc
 typ = Y.typ
 label = Y.label 
 test = Y.test
 tab(test)
 
-```julia
 wl = names(X)
 wl_num = parse.(Float64, wl)
 
-```julia
 freqtable(string.(typ, "-", Y.label))
 
-```julia
 freqtable(typ, test)
 
-```julia
 plotsp(X, wl_num; nsamp = 30).f
 
-```julia
 f = 21 ; pol = 3 ; d = 2 
 Xp = savgol(snv(X); f = f, pol = pol, d = d) ;
 
 plotsp(Xp, wl_num; nsamp = 30).f
 
-```julia
 ## Split Tot = Train + Test
 ## The model is tuned on Train, and
 ## the generalization error is estimated on Test.
@@ -63,7 +53,6 @@ ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
-```julia
 ## Build the split Train = Cal + Val
 ## The model will be fitted on cal and 
 ## optimized on Val
@@ -72,7 +61,6 @@ nval = 300
 #pct = .20
 #nval = Int64(round(pct * ntrain))    
 
-```julia
 ## Different methods can be used to select Val
 ## (1) Random sampling
 s = sample(1:ntrain, nval; replace = false)
@@ -91,7 +79,6 @@ s = sample(1:ntrain, nval; replace = false)
 #res = sampsys(ytrain; k = nval)
 #s = res.train
 
-```julia
 Xcal = rmrow(Xtrain, s)
 ycal = rmrow(ytrain, s)
 Xval = Xtrain[s, :]
@@ -99,27 +86,22 @@ yval = ytrain[s, :]
 ncal = ntrain - nval 
 (ntot = ntot, ntrain, ntest, ncal, nval)
 
-```julia
 ## Model tuning
 nlv = 0:50
 res = gridscorelv(Xcal, ycal, Xval, yval; 
     score = rmsep, fun = plskern, nlv = nlv) 
 
-```julia
 plotgrid(res.nlv, res.y1; step = 5,
     xlabel = "Nb. LVs", ylabel = "RMSEP").f
 
-```julia
 ## Find the minimal prediction error
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 
-```julia
 ## Final prediction (Test) using the optimal model
 fm = plskern(Xtrain, ytrain; nlv = res.nlv[u]) ;
 pred = Jchemo.predict(fm, Xtest).pred
 
-```julia
 ## Generalization error
 rmsep(pred, ytest)
 
@@ -129,29 +111,23 @@ plotxy(pred, ytest; color = (:red, .5),
     bisect = true, xlabel = "Prediction", 
     ylabel = "Observed (Test)").f
 
-```julia
 ## A parcimony approach
 ## Wold's criterion
 res_sel = selwold(res.nlv, res.y1; smooth = true, 
     alpha = .025, f = 10, step = 5, graph = true) ;
 pnames(res)
 
-```julia
 res_sel.f       # plots
 
-```julia
 res_sel.opt     # nb. LVs correponding to the minimal error rate
 
-```julia
 res_sel.sel     # nb. LVs selected with the Wold's criterion
 
-```julia
 ## Final prediction with the parcimonious model
 fm = plskern(Xtrain, ytrain; nlv = res_sel.sel) ;
 pred = Jchemo.predict(fm, Xtest).pred
 @show rmsep(pred, ytest)
 
-```julia
 ## !!! Remark
 ## Function "gridscore" is generic for all the functions.
 ## Here, it could be used instead of "gridscorelv" 

@@ -1,47 +1,37 @@
 using JLD2, CairoMakie
 using Jchemo, JchemoData
 
-```julia
 path_pack = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_pack, "data/tecator.jld2") 
 @load db dat
 pnames(dat)
 
-```julia
 X = dat.X
 Y = dat.Y 
 ntot, p = size(X)
 
-```julia term = true
 @head X
 @head Y
 
-```julia
 summ(Y)
 
-```julia
 namy = names(Y)[1:3]
 
-```julia
 typ = Y.typ
 tab(typ)
 
-```julia
 wl = names(X)
 wl_num = parse.(Float64, wl) 
 
-```julia
 plotsp(X, wl_num;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
-```julia
 f = 15 ; pol = 3 ; d = 2 
 Xp = savgol(snv(X); f = f, pol = pol, d = d) 
 
 plotsp(Xp, wl_num;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
-```julia
 s = typ .== "train"
 Xtrain = Xp[s, :]
 Ytrain = Y[s, namy]
@@ -52,7 +42,6 @@ ntest = nro(Xtest)
 ntot = ntrain + ntest
 (ntot = ntot, ntrain, ntest)
 
-```julia
 j = 2  
 nam = namy[j]    # y-variable
 ytrain = Ytrain[:, nam]
@@ -60,10 +49,8 @@ ytest = Ytest[:, nam]
 
 segm = segmkf(ntrain, 4; rep = 20)
 
-```julia
 segm_slow = segm[1:3] # for slow models ==> only 3 replications
 
-```julia
 #### PLSR
 nlv = 0:40
 res = gridcvlv(Xtrain, ytrain; segm = segm, 
@@ -79,7 +66,6 @@ plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-```julia
 #### PLSR-AVG
 nlv = ["0:10"; "0:20"; "0:30"; "0:50"]
 typf = ["unif"]
@@ -97,7 +83,6 @@ plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-```julia
 #### RR 
 lb = 10.0.^(-15:.1:3) 
 res = gridcvlb(Xtrain, ytrain; segm = segm,
@@ -115,7 +100,6 @@ plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-```julia
 #### COVSELR
 nlv = [5; 10; 15; 20; 30]
 pars = mpar(nlv = nlv)
@@ -131,7 +115,6 @@ plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-```julia
 #### KRR 
 lb = 10.0.^(-15:5) 
 gamma = 10.0.^(-3:5) 
@@ -150,7 +133,6 @@ plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-```julia
 #### KPLSR
 nlv = 0:50
 gamma = 10.0.^(-3:5) 
@@ -173,7 +155,6 @@ plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-```julia
 #### DKPLSR
 nlv = 0:50
 gamma = 10.0.^(-3:5) 
@@ -196,7 +177,6 @@ plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-```julia
 #### LWPLSR 
 nlvdis = [10; 15] ; metric = ["mahal"] 
 h = [1; 2; 5; Inf] ; k = [30; 50; 100]  
@@ -222,7 +202,6 @@ plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-```julia
 #### LWPLSR-AVG
 nlvdis = [10; 15] ; metric = ["mahal"] 
 h = [1; 2; 5; Inf] ; k = [30; 50; 100]  
@@ -244,7 +223,6 @@ plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-```julia
 #### LWPLSR-S
 nlv0 = [10; 15; 20]
 metric = ["eucl"; "mahal"] 
@@ -271,7 +249,6 @@ plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f   
 
-```julia
 ## Working in a DKPLS score space
 reduc = ["dkpls"]
 nlv0 = [10; 15; 20; 30]
@@ -301,7 +278,6 @@ plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-```julia
 #### CPLSR-AVG
 ncla = 2:5 ; nlv_da = 1:5
 nlv = ["0:10"; "0:15"; "0:20"; 
@@ -322,7 +298,6 @@ plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-```julia
 #### KNNR
 nlvdis = [15; 20]  ; metric = ["eucl"; "mahal"] 
 h = [1; 2; 4; Inf] ;
@@ -343,7 +318,6 @@ plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 
-```julia
 #### RFR 
 n_trees = [50]
 n_subfeatures = LinRange(10, p, 5)

@@ -1,5 +1,16 @@
+---
+title: plsr_tecator.jl
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  #out_width: "50%"   # default
+---
+
+```julia
 using JLD2, CairoMakie, FreqTables 
 using Jchemo, JchemoData
+```
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
