@@ -88,6 +88,7 @@ h = [1; 2; 5] ; k = [100; 250; 500]
 nlv = 0:15
 pars = mpar(nlvdis = nlvdis, metric = metric, h = h, 
     k = k)
+```
 
 ```julia
 length(pars[1])

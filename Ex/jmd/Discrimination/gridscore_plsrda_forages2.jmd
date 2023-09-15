@@ -8,7 +8,7 @@ weave_options:
 ---
 
 ```julia
-using JLD2, CairoMakie, FreqTables 
+using JLD2, CairoMakie, FreqTables, StatsBase 
 using Jchemo, JchemoData
 ```
 

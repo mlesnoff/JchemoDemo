@@ -57,7 +57,7 @@ Ttrain = fm.T
 lev = fm.lev
 nlev = length(lev)
 
-plotxy(Ttrain[:, 1:2], ytrain;
+plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
     resolution = (800, 400), ellipse = true, 
     title = "FDA").f
 
@@ -78,7 +78,7 @@ ct = fm.Tcenters
 
 Ttrain = fm.T
 
-f, ax = plotxy(Ttrain[:, 1:2], ytrain;
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
     title = "FDA", ellipse = true)
 scatter!(ax, ct[:, 1], ct[:, 2],
     markersize = 10, color = :red)
@@ -88,7 +88,7 @@ f
 Ttest = Jchemo.transform(fm, Xtest)
 
 i = 1  # class 
-f, ax = plotxy(Ttrain[:, 1:2], ytrain;
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
     title = "FDA")
 scatter!(ax, ct[:, 1], ct[:, 2],
     markersize = 10, color = :red)

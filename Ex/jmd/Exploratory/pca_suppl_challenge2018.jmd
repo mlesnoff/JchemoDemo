@@ -98,14 +98,17 @@ ntest = nro(Xtest)
 ```julia
 nlv = 15
 fm = pcasvd(Xtrain, nlv = nlv) ; 
+```
 
 ```julia
 res = summary(fm, Xtrain).explvarx
+```
 
 ```julia
 plotgrid(res.lv, res.pvar; step = 2,
     xlabel = "PC", 
     ylabel = "Prop. variance explained").f
+```
 
 ```julia term = true
 Ttrain = fm.T ;

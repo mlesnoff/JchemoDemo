@@ -8,7 +8,7 @@ weave_options:
 ---
 
 ```julia
-using JLD2, CairoMakie, FreqTables 
+using JLD2, CairoMakie, FreqTables, StatsBase 
 using Jchemo, JchemoData
 ```
 
@@ -73,10 +73,13 @@ ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 ```
 
-#### Model fitting
+#### Split Train ==> Cal + Val
+
+The validation error (used for the grid-search tuning) is computed 
+on **Val**. Below the split is built from a random sampling 
+(other designs are possible).
 
 ```julia
-## Train ==> Cal + Val
 pct = .30
 nval = Int64.(round(pct * ntrain))
 ncal = ntrain - nval 
@@ -87,6 +90,8 @@ Xval = Xtrain[s, :]
 yval = ytrain[s] 
 (ntot = ntot, ntrain, ncal, nval, ntest)
 ```
+
+#### Grid
 
 ```julia
 nlvdis = [15; 25] ; metric = ["mahal"]
@@ -100,10 +105,21 @@ pars = mpar(nlvdis = nlvdis, metric = metric,
 length(pars[1])
 ```
 
+#### Grid-search
+
 ```julia
 res = gridscorelv(Xcal, ycal, Xval, yval;
     score = err, fun = lwplsrda, nlv = nlv, pars = pars, 
     verbose = false)
+```
+
+**Selection of the best parameters combination:**
+
+```julia
+group = string.("metric=", res.metric, res.nlvdis, " h=", res.h, 
+    " k=", res.k)
+plotgrid(res.nlv, res.y1, group; step = 2,
+    xlabel = "Nb. LVs", ylabel = "ERR").f
 ```
 
 ```julia
@@ -111,14 +127,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 ```
 
-```julia
-group = string.("metric=", res.metric, res.nlvdis, " h=", res.h, 
-    " k=", res.k)
-
-```julia
-plotgrid(res.nlv, res.y1, group; step = 2,
-    xlabel = "Nb. LVs", ylabel = "ERR").f
-```
+#### Final prediction (Test) using the optimal model
 
 ```julia
 fm = lwplsrda(Xtrain, ytrain; nlvdis = res.nlvdis[u], 

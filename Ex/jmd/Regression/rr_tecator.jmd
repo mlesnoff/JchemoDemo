@@ -115,7 +115,7 @@ Alternative RR algorithm (same results, but longer computaion time to tune):
 
 ```julia
 pred = Jchemo.predict(fm, Xtest).pred
-```julia
+```
 
 ```julia
 Jchemo.predict(fm, Xtest; lb = 1e-2).pred

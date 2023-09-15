@@ -27,7 +27,7 @@ pnames(dat)
 ```julia
 X = dat.X
 Y = dat.Y 
-ntot = nro(X)
+ntot, p = size(X)
 ```
 
 ```julia term = true
@@ -116,14 +116,6 @@ pnames(fm)
 
 ```julia
 pred = Jchemo.predict(fm, Xtest).pred
-```
-
-```julia
-Jchemo.predict(fm, Xtest; nlv = 2).pred
-```
-
-```julia
-Jchemo.predict(fm, Xtest; nlv = 0:2).pred
 ```
 
 ```julia

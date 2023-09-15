@@ -27,7 +27,7 @@ pnames(dat)
 ```julia
 X = dat.X
 Y = dat.Y 
-ntot = nro(X)
+ntot, p = size(X)
 ```
 
 ```julia term = true
@@ -214,7 +214,7 @@ pars = mpar(nlv = nlv)
 res = gridcv(Xtrain, ytrain; segm = segm,
     score = rmsep, fun = covselr, pars = pars, 
     verbose = false).res
-```julia
+```
 
 ```julia
 u = findall(res.y1 .== minimum(res.y1))[1] 
@@ -576,6 +576,7 @@ rmsep(pred, ytest)
 plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
+```
 
 #### KNNR
 
@@ -627,6 +628,9 @@ pars = mpar(n_trees = n_trees, n_subfeatures = n_subfeatures,
 
 ```julia
 length(pars[1])
+```
+
+```julia
 res = gridcv(Xtrain, ytrain; segm = segm,
     score = rmsep, fun = rfr_dt, pars = pars, 
     verbose = false).res ;

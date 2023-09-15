@@ -102,7 +102,7 @@ ct = fm.Tcenters
 ```
 
 ```julia
-f, ax = plotxy(fm.T[:, 1:2], ytrain;
+f, ax = plotxy(fm.T[:, 1], fm.T[:, 2], ytrain;
     ellipse = true, title = "FDA", zeros = true)
 scatter!(ax, ct[:, 1], ct[:, 2],
     markersize = 10, color = :red)

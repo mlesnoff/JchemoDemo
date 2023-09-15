@@ -5,14 +5,14 @@ path = "C:/Users/lesnoff/.julia/dev"
 path_jmd = joinpath(path, "JchemoDemo/Ex/jmd")
 path_html = joinpath(path, "JchemoDemo/docs/src/assets/html")
 
-#meth = "Dataset"
+meth = "Datasets"
 #meth = "Exploratory"
-meth = "Regression"
+#meth = "Regression"
 #meth = "Discrimination"
 zpath = joinpath(path_jmd, meth)
 @show f = filter(endswith("jmd"), readdir(zpath))
 nf = length(f) 
-for i = 5:5 #nf 
+for i = 1:nf 
     @show i
     @show f[i]
     #i = 11
