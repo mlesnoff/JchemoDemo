@@ -1,37 +1,49 @@
+
 using JLD2, CairoMakie
 using Jchemo, JchemoData
 using Loess
+
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/tecator.jld2") 
 @load db dat
 pnames(dat)
 
+
 X = dat.X
 Y = dat.Y 
 ntot, p = size(X)
 
-@head X
+
+@head X 
 @head Y
+
 
 summ(Y)
 
+
 namy = names(Y)[1:3]
+
 
 typ = Y.typ
 tab(typ)
 
+
 wl = names(X)
-wl_num = parse.(Float64, wl) 
+wl_num = parse.(Float64, wl)
+
 
 plotsp(X, wl_num;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
+
 f = 15 ; pol = 3 ; d = 2 
-Xp = savgol(snv(X); f = f, pol = pol, d = d) 
+Xp = savgol(snv(X); f = f, pol = pol, d = d)
+
 
 plotsp(Xp, wl_num;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+
 
 s = typ .== "train"
 Xtrain = Xp[s, :]
@@ -43,12 +55,13 @@ ntest = nro(Xtest)
 ntot = ntrain + ntest
 (ntot = ntot, ntrain, ntest)
 
+
 j = 2  
 nam = namy[j]    # y-variable
 ytrain = Ytrain[:, nam]
 ytest = Ytest[:, nam]
 
-```julia 
+
 n_trees = 100
 partial_sampling = .7
 n_subfeatures = p / 3
@@ -60,40 +73,53 @@ fm = rfr_dt(Xtrain, ytrain;
     max_depth = max_depth) ;
 pnames(fm)
 
-```julia 
+
 pred = Jchemo.predict(fm, Xtest).pred
+
 
 rmsep(pred, ytest)
 
+
 bias(pred, ytest)
+
 
 mse(pred, ytest)
 
+
 r = residreg(pred, ytest) # residuals
 
-```julia 
-zpred = vec(pred)
-f, ax = plotxy(zpred, ytest;
+
+plotxy(pred, ytest; resolution = (500, 400),
+    color = (:red, .5), bisect = true, 
+    xlabel = "Prediction", ylabel = "Observed (Test)").f
+
+
+plotxy(ytest, r; resolution = (500, 400),
+    color = (:red, .5), zeros = true, 
+    xlabel = "Observed (Test)", ylabel = "Residuals").f
+
+
+f, ax = plotxy(pred, ytest;
     xlabel = "Predicted", ylabel = "Observed",
     resolution = (500, 400))
+zpred = vec(pred)
 zfm = loess(zpred, ytest; span = 2/3) ;
 pred_loess = Loess.predict(zfm, sort(zpred))
 lines!(ax, sort(zpred), pred_loess; color = :red)
 ablines!(ax, 0, 1; color = :grey)
-f    
+f
 
-zr = vec(r)
-f, ax = plotxy(ytest, zr; color = (:blue, .5), 
+
+f, ax = plotxy(ytest, r; color = (:blue, .5), 
     resolution = (500, 400), 
-    xlabel = "Observed (Test)", ylabel = "Residual") 
-zfm = loess(ytest, zr; span = 2/3) ;
+    xlabel = "Observed (Test)", ylabel = "Residuals") 
+zfm = loess(ytest, vec(r); span = 2/3) ;
 pred_loess = Loess.predict(zfm, sort(ytest))
 lines!(ax, sort(ytest), pred_loess; color = :red)
 hlines!(ax, 0; color = :grey, linestyle = :dashdot)
-f    
+f
 
-```julia 
-## RFR With function baggr
+
 rep = 100
 rowsamp = .7
 n_subfeatures = p / 3
@@ -105,13 +131,12 @@ fm = baggr(Xtrain, ytrain; rep = 100,
     max_depth = max_depth) ;
 pnames(fm)
 
-```julia 
-pred = Jchemo.predict(fm, Xtest).pred
 
-```julia 
+pred = Jchemo.predict(fm, Xtest).pred
 rmsep(pred, ytest)
 
-```julia 
+
 plotxy(pred, ytest; resolution = (500, 400),
     color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f   
+    xlabel = "Prediction", ylabel = "Observed (Test)").f
+
