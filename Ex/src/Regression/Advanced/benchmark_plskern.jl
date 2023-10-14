@@ -1,4 +1,4 @@
-## Benchmark for computaion time 
+## Benchmark for computation time 
 ## on PLSR
 
 using Jchemo
