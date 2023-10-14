@@ -14,19 +14,21 @@ wl_num = parse.(Float64, wl)
 ntot, p = size(X)
 namy = names(Y)[1:3]
 
-## Assume that the objective is to build 
+## Assume a dataset {X (n x p), Y (n x q)}, possibly with missing 
+## data in Y, and that the objective is to build 
 ## a splitting Tot = Train + Test, by random sampling.
-## If there are missing data in Y,
-## the sampling must be done independently for each y-variable
-## (y-column), removing each time the missing values.
+## Due to the possible missing data in Y,
+## the sampling has to be done independently for each 
+## variable y (= Y-column) to removing, for each given variable,
+## the missing values.
 
 ## This script presents 
-## 1) and approach "by-hand" for a given y-variable,
+## 1) and approach "by-hand" for a given variable y,
 ## 2) a more performant approach with function 'mtest'
 ## that build splitting for all the y-variables 
-## and that can be re-used in other workin sesssions.  
+## and that can be re-used in other working sesssions.  
 ## Note that the size of {Train, Test} can differ 
-## between y-variables if Y contains missing data.
+## between variables y if Y contains missing data.
 
 ## NB.: Data tecator do not contain missing data.
 
