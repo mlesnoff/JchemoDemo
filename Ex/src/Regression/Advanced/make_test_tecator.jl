@@ -33,7 +33,7 @@ namy = names(Y)[1:3]
 ## NB.: Data tecator do not contain missing data.
 
 ## 1) Approach "by-hand" 
-j = 2    # y-variable
+j = 2    # variable y
 y = Y[:, j]
 ## Select observations without missing data for y
 ## ==> zX, zy
@@ -42,51 +42,42 @@ zX = X[s, :]
 zy = y[s]
 ## Build a test set representing 
 ## a proportion pct of data zX, zy
-n = nro(zX)  # different from ntot if there are missing data
+## ==> This gives {Xtrain, ytrain, Xtest, ytest} 
+## for variable y
+ntot = nro(zX)  # different from ntot if there are missing data
 pct = 1 / 3
-ntest = Int64(round(pct * n)) # or: ntest = 80
-s = sample(1:n, ntest; replace = false)
-Xtrain = rmrow(zX, s)
-ytrain = rmrow(zy, s)
-Xtest = zX[s, :]
-ytest = zy[s, :]
-## ==> This gives Xtrain, ytrain, 
-## Xtest, ytest for variable y
+ntest = round(pct * ntot) # or: ntest = 80
+ntrain = n - ntest
+res = samprand(n, ntrain)
+strain = res.train
+stest = res.test
+Xtrain = zX[strain, :]
+ytrain = zy[strain]
+Xtest = zX[stest, :]
+ytest = zy[stest]
+(ntot = ntot, ntrain, ntest)
 
 ## 2) Function 'mtest' 
 ## This is a more efficient alternative.
-## Function 'mtest' does automatically for each 
-## y-variable what is described in point 1),
-## and allows replications.
-pct = 1 / 3
-ids = mtest(Y[:, namy]; 
-    test = pct, # proportion of Test
-    rep = 10    # nb. replications of the spliiting for each y-variable
-    ) ;
+## Function 'mtest' does the split automatically 
+## for each variable y
+ntest = 60
+ids = mtest(Y[:, namy]; ntest = ntest)
 pnames(ids)
-## IDs of the observations
 ids.test
 ids.train
 ids.nam 
 ## Example
-j = 1 # y-variable
-k = 2 # replication
+j = 2 # variable y
 ids.train[j]
 ids.test[j]
-ids.train[j][k]
-ids.test[j][k]
-
-## If the objective is to get a consistent 
-## value ntest
-ntest = 60  # Must be Int64
-ids = mtest(Y[:, 1:3]; 
-    test = ntest, rep = 10) ;
-ids.test[j][k]
+ids.nam[j]
 
 ## The output of 'mtest' can be saved and 
 ## re-used in next sessions
 path_out = "D:/Mes Donnees/Tmp/"
 db = joinpath(path_out, "ids_tecator.jld2") 
-#jldsave(db; ids)   
-## Re-use 
+#jldsave(db; ids) 
+  
+## Re-use the ids: 
 #@load db ids
