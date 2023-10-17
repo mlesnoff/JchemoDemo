@@ -19,7 +19,7 @@ namy = names(Y)[1:3]
 ## a splitting Tot = Train + Test, by random sampling.
 ## Due to the possible missing data in Y,
 ## the sampling has to be done independently for each 
-## variable y (= Y-column) to removing, for each given variable,
+## variable y (= Y-column) to remove for each given variable
 ## the missing values.
 
 ## This script presents 
@@ -78,6 +78,6 @@ ids.nam[j]
 path_out = "D:/Mes Donnees/Tmp/"
 db = joinpath(path_out, "ids_tecator.jld2") 
 #jldsave(db; ids) 
-  
+
 ## Re-use the ids: 
 #@load db ids

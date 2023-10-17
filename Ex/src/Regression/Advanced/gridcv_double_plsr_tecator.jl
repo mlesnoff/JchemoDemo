@@ -23,45 +23,43 @@ Xp = savgol(snv(X); f = f, pol = pol, d = d)
 plotsp(Xp, wl_num;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
-## The objective of this script is to do a double 
-## replicated cross-validation
-## ==> Computation of
+## Double replicated cross-validation
+## with two objectives:
 ## a) the model selection 
-## b) the generalization error.
+## b) the generalization error
+
 ## The steps are
 ## - 1) Replication of the splitting {Train, Test}
 ## - 2) Replicated CV within each Train
 ## - 3) Performance on each Test
 
-## Replicated splitting Train+Test
+## Replicated splitting Train/Test
 ## using funcion 'mtest'
 rep = 100
-pct = .40
-ids = mtest(Y[:, namy]; test = pct, 
-    rep = rep) ;
-pnames(ids)
-j = 1 # y-variable
-k = 2 # replication
-ids.train[j]
-ids.test[j]
-ids.train[j][k]
-ids.test[j][k]
+ntest = 60
+ids = [mtest(Y[:, namy]; ntest = 60) for i = 1:rep]
+length(ids)
+i = 1    # replication
+ids[i]
+ids[i].train 
+ids[i].test
+j = 1    # variable y  
+ids[i].train[j]
+ids[i].test[j]
+ids[i].nam[j]
 
-idtrain = ids.train
-idtest = ids.test
-
-## CV within each Train of each replication,
-## for each y-variable 
-rescv = list(nvar)
-zres = list(rep)
+## CV within each replication and Train,
+## for each variable y
+rescv = list(nvar, DataFrame)
+res = list(rep)
 for j = 1:nvar
     nam = namy[j]  # y-variable
     println("")
     println(j, "----- ", nam)
     y = Y[:, nam]
-    for k = 1:rep  # replication
-        print(k, " ")
-        strain = idtrain[j][k] 
+    for i = 1:rep  # replication
+        print(i, " ")
+        strain = ids[i].train[j] 
         Xtrain = Xp[strain, :] 
         ytrain = y[strain] 
         ntrain = length(ytrain)
@@ -73,42 +71,42 @@ for j = 1:nvar
         #m = pct * ntot
         #segm = segmts(ntrain, m; rep = 30)
         nlv = 0:25
-        z = gridcvlv(Xtrain, ytrain; segm = segm, 
+        zres = gridcvlv(Xtrain, ytrain; segm = segm, 
             score = rmsep, fun = plskern, nlv = nlv, 
             verbose = false).res
         ## Index of the best model within the replication
         ## (facultative)
-        u = findall(z.y1 .== minimum(z.y1))[1]
-        n = nro(z)
-        z.opt = [if k == u 1 else 0 end ; for k = 1:n]
+        u = findall(zres.y1 .== minimum(zres.y1))[1]
+        n = nro(zres)
+        zres.opt = [if k == u 1 else 0 end ; for k = 1:n]
         ## End
-        z.repl = repeat([k], n)
-        z.nam = repeat([nam], n)
-        zres[k] = z
+        zres.repl = repeat([i], n)
+        zres.nam = repeat([nam], n)
+        res[i] = zres
     end
-    rescv[j] = reduce(vcat, zres)
+    rescv[j] = reduce(vcat, res)
 end
 length(rescv) 
-rescv[1] # y-variable
+rescv[1] # variable y
 
 ## If exportation of the results
-root = "D:/Mes Donnees/Tmp/"
-db = string(root, "rescv_tecator.jld2") 
+path_out = "D:/Mes Donnees/Tmp"
+db = joinpath(path_out, "rescv_tecator.jld2") 
 #@save db rescv
 ## End
 
-## Variability of RMSECV
-## between the replications {Train, Test},
+## Variability of RMSEP-CV
+## between the replications Train,
 ## for a given y-variable
-j = 1  # y-variable
+j = 1  # variable y
 namy[j]
-## RMSECV
-zres = rescv[j] 
-plotgrid(zres.nlv, zres.y1, zres.repl; title = namy[j],
-    xlabel = "Nb. LVs", ylabel = "RMSEP (Test)",
+## RMSEP-CV
+res = rescv[j] 
+plotgrid(res.nlv, res.y1, res.repl; title = namy[j],
+    xlabel = "Nb. LVs", ylabel = "RMSEP-CV",
     leg = false).f
 ## Most occurent best models
-z = zres[zres.opt .== 1, :]
+z = res[res.opt .== 1, :]
 ztab = tab(z.nlv)
 lev = ztab.keys 
 ni = ztab.vals
@@ -119,16 +117,15 @@ ax = Axis(f[1, 1], title = namy[j],
 barplot!(ax, lev, ni)
 f
 
-## One question is to estimate 
-## the performance (= generalization or Test error) 
-## of *PLSR* over the full dataset X,y
-## (this is a relevant approach to compare the performance
+## Estimate the overall performance (= generalization or 
+## Test error) of PLSR over the full dataset {X, y}
+## (relevant approach to compare the performance
 ## of different types of models). 
-## For each replication Train+Test, the indicator is 
-## the generalization error of the *best* model 
-## selected by CV on the given Train for the replication. 
-## Below, the distribution of this indicator over the replications
-## is computed, for each y-variable
+## For each replication Train/Test, the indicator is 
+## the generalization error (= RMSEP-Test) of the 
+## *best* model selected by CV on Train for the replication. 
+## Below, the distribution of this indicator over the 
+## replications is computed, for each y-variable
 res_mse = list(nvar, DataFrame)
 for j = 1:nvar
     nam = namy[j]  # y-variable
@@ -145,15 +142,15 @@ for j = 1:nvar
         ntest = length(ytest)
         ntot = ntrain + ntest
         (ntot = ntot, ntrain, ntest)
-        ## Selection of the best model within 
-        ## the replication
+        ## Selection of the best model 
+        ## within the replication
         z = rescv[j]
-        zres = z[z.repl .== k, :]
-        u = findall(zres.opt .== 1)[1]
+        res = z[z.repl .== k, :]
+        u = findall(res.opt .== 1)[1]
         ## If opt does not exist
-        #u = findall(zres.y1 .== minimum(zres.y1))[1]
+        #u = findall(res.y1 .== minimum(res.y1))[1]
         ## Prediction of Test (generalization error)
-        fm = plskern(Xtrain, ytrain; nlv = zres.nlv[u]) ;
+        fm = plskern(Xtrain, ytrain; nlv = res.nlv[u]) ;
         pred = Jchemo.predict(fm, Xtest).pred
         z = mse(pred, ytest)
         z.namy = [nam]
@@ -165,13 +162,13 @@ res_mse[1]  # y-variable
 ## for a given y-variable
 j = 1  # y-variable
 namy[j]
-zres = res_mse[j] 
-summ(zres)
-mean(zres.rmsep)  # mean RMSEP_Test 
+res = res_mse[j] 
+summ(res)
+mean(res.rmsep)  # mean RMSEP_Test 
 f = Figure(resolution = (500, 400))
 ax = Axis(f[1, 1], title = namy[j],
     xlabel = "RMSEP", ylabel = "Nb. occurences")
-hist!(ax, zres.rmsep; bins = 30)
+hist!(ax, res.rmsep; bins = 30)
 f
 
 ## Another question is to select a unique 
@@ -186,16 +183,16 @@ y = Y[:, nam]
 res = rescv[j] 
 ## Find the best model over the replications
 ## a) in average
-zres = aggstat(res; vars = :y1, groups = :nlv,
+res = aggstat(res; vars = :y1, groups = :nlv,
     fun = mean)
-plotgrid(zres.nlv, zres.y1;
+plotgrid(res.nlv, res.y1;
     xlabel = "Nb. LVs", ylabel = "RMSEP").f
-u = findall(zres.y1 .== minimum(zres.y1))[1]
-zres[u, :]
-nlv = zres.nlv[u]  # final model
+u = findall(res.y1 .== minimum(res.y1))[1]
+res[u, :]
+nlv = res.nlv[u]  # final model
 ## b) or the most occurent
-zres = res[res.opt .== 1, :]
-ztab = tab(zres.nlv)
+res = res[res.opt .== 1, :]
+ztab = tab(res.nlv)
 lev = ztab.keys 
 ni = ztab.vals
 u = findall(ni .== maximum(ni))[1]
