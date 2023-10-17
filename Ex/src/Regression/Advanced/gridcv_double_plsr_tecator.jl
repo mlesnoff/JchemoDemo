@@ -51,7 +51,7 @@ ids[i].nam[j]
 ## CV within each replication and Train,
 ## for each variable y
 rescv = list(nvar, DataFrame)
-res = list(rep)
+res = list(rep, DataFrame)
 for j = 1:nvar
     nam = namy[j]  # y-variable
     println("")
@@ -117,22 +117,22 @@ ax = Axis(f[1, 1], title = namy[j],
 barplot!(ax, lev, ni)
 f
 
-## Estimate the overall performance (= generalization or 
-## Test error) of PLSR over the full dataset {X, y}
+## Estimate the overall performance (= generalization, or 
+## Test, error) of PLSR over the full dataset {X, y}
 ## (relevant approach to compare the performance
-## of different types of models). 
+## of different types of models, e.g. linear vs. nonlinear)). 
 ## For each replication Train/Test, the indicator is 
 ## the generalization error (= RMSEP-Test) of the 
 ## *best* model selected by CV on Train for the replication. 
 ## Below, the distribution of this indicator over the 
 ## replications is computed, for each y-variable
-res_mse = list(nvar, DataFrame)
+resmse = list(nvar, DataFrame)
 for j = 1:nvar
     nam = namy[j]  # y-variable
     y = Y[:, nam]
-    for k = 1:rep  # replication
-        strain = idtrain[j][k]
-        stest = idtest[j][k]  
+    for i = 1:rep  # replication
+        strain = ids[i].train[j]
+        stest = ids[i].test[j]
         Xtrain = Xp[strain, :] 
         ytrain = y[strain] 
         Xtest = Xp[stest, :] 
@@ -145,51 +145,52 @@ for j = 1:nvar
         ## Selection of the best model 
         ## within the replication
         z = rescv[j]
-        res = z[z.repl .== k, :]
-        u = findall(res.opt .== 1)[1]
-        ## If opt does not exist
+        res = z[z.repl .== i, :]
+        u = findall(res.opt .== 1)[1]    # if ex-aequos, first elt is taken
+        ## If opt has not been computed before:
         #u = findall(res.y1 .== minimum(res.y1))[1]
         ## Prediction of Test (generalization error)
         fm = plskern(Xtrain, ytrain; nlv = res.nlv[u]) ;
         pred = Jchemo.predict(fm, Xtest).pred
         z = mse(pred, ytest)
         z.namy = [nam]
-        k == 1 ? res_mse[j] = z : res_mse[j] = vcat(res_mse[j], z)
+        i == 1 ? resmse[j] = z : resmse[j] = vcat(resmse[j], z)
     end
 end
-res_mse[1]  # y-variable
-## Description of the distribution of RMSEP_Test,
+resmse[1]  # variable y
+## Distribution of RMSEP-Test,
 ## for a given y-variable
-j = 1  # y-variable
+j = 1  # variable y
 namy[j]
-res = res_mse[j] 
+res = resmse[j] 
 summ(res)
-mean(res.rmsep)  # mean RMSEP_Test 
+mean(res.rmsep)  # mean RMSEP-Test = overall performance of PLSR
 f = Figure(resolution = (500, 400))
 ax = Axis(f[1, 1], title = namy[j],
     xlabel = "RMSEP", ylabel = "Nb. occurences")
 hist!(ax, res.rmsep; bins = 30)
 f
 
-## Another question is to select a unique 
-## best model over the replications,
-## and to estimate its average generalization error.
-## Below, the best model over the replications is selected 
-## and its generalization error is estimated,
-## for a given y-variable
-j = 1  # y-variable
+## Another question is to select 
+## the best model in average (or in occurence) over 
+## the replications, and to estimate its average 
+## generalization error.
+## Below, the best model over the replications 
+## is selected and its generalization error is estimated,
+## for a given variable y
+j = 1  # variable y
 nam = namy[j]
 y = Y[:, nam]
 res = rescv[j] 
 ## Find the best model over the replications
 ## a) in average
-res = aggstat(res; vars = :y1, groups = :nlv,
+zres = aggstat(res; vars = :y1, groups = :nlv,
     fun = mean)
-plotgrid(res.nlv, res.y1;
+plotgrid(zres.nlv, zres.y1;
     xlabel = "Nb. LVs", ylabel = "RMSEP").f
-u = findall(res.y1 .== minimum(res.y1))[1]
-res[u, :]
-nlv = res.nlv[u]  # final model
+u = findall(zres.y1 .== minimum(zres.y1))[1]
+zres[u, :]
+nlv = zres.nlv[u]    # final model
 ## b) or the most occurent
 res = res[res.opt .== 1, :]
 ztab = tab(res.nlv)
@@ -197,12 +198,12 @@ lev = ztab.keys
 ni = ztab.vals
 u = findall(ni .== maximum(ni))[1]
 nlv = lev[u]  # final model
-## Prediction of Test by the final model
-## and generalization  error
-res_mse_avg = nothing
-for k = 1:rep  # replication
-    strain = idtrain[j][k] 
-    stest = idtest[j][k]  
+## Prediction of the Test replications 
+## by the final model and generalization  error
+resmse_avg = nothing
+for i = 1:rep  # replication
+    strain = ids[i].train[j]
+    stest = ids[i].test[j]
     Xtrain = Xp[strain, :] 
     ytrain = y[strain] 
     Xtest = Xp[stest, :] 
@@ -211,14 +212,14 @@ for k = 1:rep  # replication
     pred = Jchemo.predict(fm, Xtest).pred
     z = mse(pred, ytest)
     z.namy = [nam]
-    k == 1 ? res_mse_avg = z : res_mse_avg = vcat(res_mse_avg, z)
+    i == 1 ? resmse_avg = z : resmse_avg = vcat(resmse_avg, z)
 end
-res_mse_avg
-## Description of the distribution of RMSEP_Test
-summ(res_mse_avg)
+resmse_avg
+## Distribution of RMSEP-Test
+summ(resmse_avg)
 f = Figure(resolution = (500, 400))
 ax = Axis(f[1, 1], title = namy[j],
     xlabel = "RMSEP", ylabel = "Nb. occurences")
-hist!(ax, res_mse_avg.rmsep; bins = 30)
+hist!(ax, resmse_avg.rmsep; bins = 30)
 f
 
