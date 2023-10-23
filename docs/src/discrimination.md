@@ -1,5 +1,11 @@
 # Discrimination
 
+## Class probability density estimation
+
+```@raw html
+    <p><a href="../assets/html/Discrimination/densities_iris.html">densities_iris.jl</a></p>
+```
+
 ## Model fitting - Linear
 
 ```@raw html
