@@ -15,7 +15,7 @@ res = getknn(T, T[i:i, :]; k = k, metric = "mahal")
 s = res.ind[1]
 CairoMakie.activate!() ;  
 #GLMakie.activate!() ;  
-f = Figure(resolution = (600, 500))
+f = Figure(size = (600, 500))
 mks = 15 ; tsp = .5
 ax = Axis3(f[1, 1],
     xlabel = "PC1", ylabel = "PC2", zlabel = "PC3", 

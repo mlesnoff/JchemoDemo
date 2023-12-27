@@ -11,14 +11,14 @@ x = rand(n) ; y = rand(n)
 z = vcat(repeat(["B"], m), repeat(["A"], n - m))
 group = recodcat2int(z)
 
-f = Figure(resolution = (500, 300))
+f = Figure(size = (500, 300))
 ax = Axis(f[1, 1])
 scatter!(ax, x, y; color = group)
 f
 
 colm = [:red; :blue]
 #colm = [(:red, .5); (:blue, .5)]
-f = Figure(resolution = (500, 300))
+f = Figure(size = (500, 300))
 ax = Axis(f[1, 1])
 scatter!(ax, x, y; color = group, 
     colormap = colm)
@@ -45,7 +45,7 @@ cgrad(:Dark2_5, 2; categorical = true)
 nlev = 2
 colm = cgrad(:Dark2_5; categorical = true, alpha = .8)[1:nlev]
 #colm = cgrad(:Dark2_5, 2; categorical = true, alpha = .8)
-f = Figure(resolution = (500, 300))
+f = Figure(size = (500, 300))
 ax = Axis(f[1, 1])
 scatter!(ax, x, y; color = group, 
     colormap = colm)
@@ -56,7 +56,7 @@ lev = sort(unique(z))
 nlev = length(lev)
 colm = cgrad(:Dark2_5; categorical = true,
     alpha = .8)[1:nlev]
-f = Figure(resolution = (500, 300))
+f = Figure(size = (500, 300))
 ax = Axis(f[1, 1])
 scatter!(ax, x, y; color = group, 
     colormap = colm)
@@ -69,7 +69,7 @@ f
 
 colm = cgrad(:Accent_5, nlev; categorical = true,
     alpha = .8)
-f = Figure(resolution = (500, 300))
+f = Figure(size = (500, 300))
 ax = Axis(f[1, 1])
 scatter!(ax, x, y; color = group, 
     colormap = colm)

@@ -13,7 +13,7 @@ lines!(ax, x, y2; color = :green, label = "cos")
 axislegend()
 f
 
-f = Figure(resolution = (500, 300))
+f = Figure(size = (500, 300))
 ax = Axis(f[1, 1]) 
 lines!(ax, x, y1; color = :red, label = "sin")
 lines!(ax, x, y2; color = :green, label = "cos")
@@ -26,7 +26,7 @@ typ = rand(1:3, n)
 lev = sort(unique(typ))
 nlev = length(lev)
 colm = (:red, :blue, :orange)
-f = Figure(resolution = (500, 300))
+f = Figure(size = (500, 300))
 ax = Axis(f[1, 1], xlabel = "x")
 for i = 1:nlev
     s = typ .== lev[i]
@@ -44,7 +44,7 @@ elt2 = MarkerElement(color = "blue", marker = 'o', markersize = 15)
 Legend(f[1, 2], [elt1, elt2], ["A", "B"], rowgap = 10)
 f
 
-f = Figure(resolution = (500, 300))
+f = Figure(size = (500, 300))
 ax = Axis(f[1, 1], xlabel = "x")
 for i = 1:nlev
     s = typ .== lev[i]
@@ -54,7 +54,7 @@ end
 f[1, 2] = Legend(f, ax, "Type", framevisible = false)
 f
 
-f = Figure(resolution = (800, 300))
+f = Figure(size = (800, 300))
 ax = Vector{Any}(nothing, 3)
 y = [5.82; 4.00; 1.60; 4.23; 2.20; 1.63; 6.10; 6.30; 6.13]
 z = [5.26; 3.65; 1.69; 4.35; 2.12; 1.40; 4.60; 6.96; 5.18]
@@ -92,7 +92,7 @@ lev = sort(unique(typ))
 nlev = length(lev)
 group = recodcat2int(typ)
 colsh = :Dark2_5
-f = Figure(resolution = (500, 300))
+f = Figure(size = (500, 300))
 colm = cgrad(colsh; categorical = true, alpha = .7)[1:nlev] 
 ax = Axis(f, xlabel = "x", ylabel = "y")
 scatter!(ax, x, y;
@@ -109,7 +109,7 @@ x = [ones(3); 2 * ones(3)]
 y = rand(6)
 grp = repeat(1:3, 2)
 colors = Makie.wong_colors()
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1], yticks = (1:2, ["hays"; "legumes"]),
         title = "Error rate")
 barplot!(ax, x, y; direction = :x, 
@@ -120,7 +120,7 @@ title = "Model"
 Legend(f[1, 2], elt, lab, title)
 f
 
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1], yticks = (1:2, ["hays"; "legumes"]),
         title = "Error rate")
 barplot!(ax, x, y; direction = :x, 

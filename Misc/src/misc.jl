@@ -257,7 +257,7 @@ parse(Float64, "1.2e-3")
 wl = string.(1:10)
 parse.(Int64, wl) 
 Meta.parse.(wl)
-parse.(Float64, wl) 
+parse.(Float64, wlstr) 
 
 eval(Meta.parse("1:5"))
 

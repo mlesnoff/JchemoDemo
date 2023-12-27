@@ -59,7 +59,7 @@ g2(x, y, -2, -3)
 f1(x, y; a, b) = a * x + b * y
 
 f2 = function(x, y; kwargs...)
-  f1(x, y; kwargs...)
+  f1(x, y; par)
 end
 
 x = [1.0 ; 2.0 ; 3.0]

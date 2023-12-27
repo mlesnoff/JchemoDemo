@@ -16,32 +16,42 @@ contour(z;
     axis = (xlabel = "a", ylabel = "b", 
         title = "Cos(a) * Sin(a)"))
 
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1]; xlabel = "a", ylabel = "b", 
         title = "Cos(a) * Sin(a)")
 contour!(ax, x, y, z; levels = 10, labels = true)
 f
 
-f = Figure(resolution = (500, 400))
+## Does not work anymore
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1]; xlabel = "a", ylabel = "b", 
         title = "Cos(a) * Sin(a)")
 co = contour!(ax, x, y, z; levels = 10)
-#co = contourf!(ax, x, y, z; levels = 10)
-Colorbar(f[2, 1], co; label = "Density", vertical = false)
+Colorbar(f[2, 1], co; label = "Density",     # this worked before
+    vertical = false)
 f
+## End
 
+## Contourf
 contourf(z;
     axis = (xlabel = "a", ylabel = "b", 
         title = "Cos(a) * Sin(a)"))
 
-
+f = Figure(size = (500, 400))
+ax = Axis(f[1, 1]; xlabel = "a", ylabel = "b", 
+        title = "Cos(a) * Sin(a)")
+co = contourf!(ax, x, y, z; levels = 10)
+Colorbar(f[2, 1], co; label = "Density", 
+    vertical = false)
+f
 
 ## Contour within vortex
 x = randn(200)
 y = randn(200)
 z = x .* y
 f, ax, tr = tricontourf(x, y, z, colormap = :batlow)
-scatter!(x, y, color = z, colormap = :batlow, strokewidth = 1, strokecolor = :black)
+scatter!(x, y, color = z, colormap = :batlow, 
+    strokewidth = 1, strokecolor = :black)
 Colorbar(f[1, 2], tr)
 f
 
@@ -62,7 +72,7 @@ levx = unique(x)
 nlevx = length(levx)
 levy = unique(y) 
 nlevy = length(levy)
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1], xlabel = "x", ylabel = "y", 
     xticks = (1:nlevx, string.(levx)), 
     yticks = (1:nlevy, string.(levy)))
@@ -93,7 +103,7 @@ f, ax, hm = heatmap(zA)
 Colorbar(f[:, end + 1], hm)
 f
 
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1], xlabel = "pred", ylabel = "y", 
     xticks = (1:p, string.(1:p)), 
     yticks = (1:n, string.(n:-1:1)))
@@ -179,14 +189,14 @@ scatter(x, y, z,
     axis = (type = Axis3, xlabel = "Axis 1", ylabel = "Axis 2", 
         zlabel = "Axis 3", title = "3D"))
 
-f = Figure(resolution = (700, 500))
+f = Figure(size = (700, 500))
 mks = 15
 ax = Axis3(f[1, 1]; aspect = (1, 1, 1), perspectiveness = 0.2)
 scatter!(ax, x, y, z,
     markersize = mks, color = group_num, colormap = (:Dark2_5, .7))
 f
 
-f = Figure(resolution = (700, 500))
+f = Figure(size = (700, 500))
 mks = 15
 colsh = :default #:tab10
 colm = cgrad(colsh, nlev; alpha = .7, categorical = true) 
@@ -214,7 +224,7 @@ f
 ## End
 
 ## Function axislegend does not work
-f = Figure(resolution = (800, 500))
+f = Figure(size = (800, 500))
 colsh = :default #:tab10
 colm = cgrad(colsh, nlev; alpha = .7, categorical = true) 
 mks = 10 ; i = 1
@@ -232,7 +242,7 @@ f
 ## https://juliadatascience.io/glmakie
 n = 10
 x, y, z = randn(n), randn(n), randn(n)
-f = Figure(resolution = (1200, 400))
+f = Figure(size = (1200, 400))
 ax1 = Axis3(f[1, 1]; aspect = (1, 1, 1), perspectiveness = 0.5)
 ax2 = Axis3(f[1, 2]; aspect = (1, 1, 1), perspectiveness = 0.5)
 ax3 = Axis3(f[1, 3]; aspect = :data, perspectiveness = 0.5)
@@ -258,7 +268,7 @@ surface(z,
     axis = (type = Axis3, xlabel = "a", ylabel = "b", zlabel = "",
         title = "Cos(a) * Sin(a)", perspectiveness = 0))
 
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis3(f[1, 1]; xlabel = "a", ylabel = "b", zlabel = "", 
         title = "Cos(a) * Sin(a)")
 surface!(ax, x, y, z)
@@ -274,7 +284,7 @@ function peaks(; n = 49)
     return (x, y, a .- b .- c)
 end
 x, y, z = peaks()
-f = Figure(resolution = (1200, 400))
+f = Figure(size = (1200, 400))
 ax = [Axis3(f[1, i]) for i = 1:3]
 hm = heatmap!(ax[1], x, y, z)
 contour!(ax[2], x, y, z; levelt=20)

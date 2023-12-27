@@ -56,7 +56,7 @@ barplot(x, y;
     axis = (xticks = (stk, string.("v", stk)),
         xlabel = "x-value"))
 
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1],
     xticks = (stk, string.("v", stk)), 
     xlabel = "x-value")
@@ -122,7 +122,7 @@ boxplot(x, y;
         title = "Dodged bars"))
 
 colm = Makie.wong_colors()
-f = Figure(resolution = (500, 300))
+f = Figure(size = (500, 300))
 ax = Axis(f[1, 1],
     xticks = (1:3, ["A", "B", "C"]), title = "Dodged bars")
 boxplot!(ax, x, y; 
@@ -140,7 +140,7 @@ n = 500
 x = rand(n)
 y = randn(n)
 
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1]; xlabel = "Value", ylabel = "Cumulated probabilty")
 ecdfplot!(ax, x; label = "Uniform")
 ecdfplot!(ax, y; label = "Normal")
@@ -212,7 +212,7 @@ n = 300
 y = rand(n) ; year = sample(2000:2002, n)
 years = sort(unique(year))
 
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 Axis(f[1, 1], xlabel = "Y", ylabel = "Density")
 for i in 1:lastindex(years)
     s = year .== years[i]
@@ -221,7 +221,7 @@ end
 axislegend(position = :rt)
 f
 
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 offs = [0.; 1.5; 3]
 Axis(f[1, 1], xlabel = "Y", ylabel = "Density",
     yticks = (offs, string.(years)))
@@ -232,7 +232,7 @@ for i in 1:lastindex(years)
 end
 f
 
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f, xlabel = "Y", ylabel = "Nb. observations")
 s = year .== years[1]
 hist!(ax, y[s]; bins = 50, label = string(years[1]))
@@ -278,7 +278,7 @@ lines(f[1, 2], x, y, color = :blue)
 lines(f[2, 1:2], x, y, color = :green)
 f
 
-f = Figure(resolution = (700, 400))
+f = Figure(size = (700, 400))
 k = 1
 n = 20
 for i = 1:2, j = 1:3
@@ -296,7 +296,7 @@ let
     ## https://discourse.julialang.org/t/beautiful-makie-gallery/62523/31
     n = 200
     x, y, color = randn(n) / 2, randn(n), randn(n)
-    f = Figure(resolution = (700, 700))
+    f = Figure(size = (700, 700))
     ax1 = Axis(f, xgridstyle = :dash, ygridstyle = :dash, xtickalign = 1, ytickalign = 1)
     ax2 = Axis(f, xgridstyle = :dash, ygridstyle = :dash, xtickalign = 1, ytickalign = 1)
     ax3 = Axis(f, xgridstyle = :dash, ygridstyle = :dash, xtickalign = 1, ytickalign = 1)
@@ -373,7 +373,7 @@ for (indx, i) in enumerate(p)
     end
 end
 colm = cgrad(:Dark2_5, LinRange(0, 1, length(p)))
-f = Figure(resolution = (700, 450), font =:sans, fontsize = 18)
+f = Figure(size = (700, 450), font =:sans, fontsize = 18)
 ax = Axis(f, aspect = 1, xlabel = "x", ylabel = "xᵖ")
 lins = [lines!( x, Y[:, v], color = colm[v]) for v in 1:length(p)]
 leg = Legend(f, lins, string.(p), "p", nbanks = 2, labelsize = 12,
@@ -427,7 +427,7 @@ n = 500
 x = rand(Uniform(-1, 1), n)
 y = randn(n)
 
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1]; xlabel = "x", ylabel = "y")
 qqplot!(ax, x, y; label = "Uniform")
 ablines!(0, 1; color = :red)
@@ -460,7 +460,7 @@ x, y, color = rand(n), rand(n), rand(n)
 colms = [:cool, :viridis, :plasma, :inferno, :thermal, :leonardo, :winter, :spring, :ice] 
 markers = [:+, :diamond, :star4, :rtriangle, :rect, :circle, :pentagon, :cross,:star5] 
 function FigGridScatters()
-    f = Figure(resolution = (1200, 800))
+    f = Figure(size = (1200, 800))
     c = 1
     for i in 1:2, j in 1:2:5
         ax = Axis(f[i, j],aspect = 1, xgridstyle = :dash, ygridstyle = :dash,
