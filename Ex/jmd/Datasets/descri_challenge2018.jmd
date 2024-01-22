@@ -121,7 +121,7 @@ z = res.explvarx
 ```
 
 ```julia
-plotgrid(z.lv, 100 * z.pvar; step = 1,
+plotgrid(z.nlv, 100 * z.pvar; step = 1,
     xlabel = "nb. PCs", ylabel = "% variance explained").f
 ```
 
@@ -186,8 +186,7 @@ odtest = predict(mod_od, Xtest).d
 ```julia
 f = Figure(size = (500, 400))
 ax = Axis(f, xlabel = "SD", ylabel = "OD")
-scatter!(ax, sdtrain.dstand, odtrain.dstand, 
-    label = "Train")
+scatter!(ax, sdtrain.dstand, odtrain.dstand, label = "Train")
 scatter!(ax, sdtest.dstand, odtest.dstand, 
     color = (:red, .5), label = "Test")
 hlines!(ax, 1; color = :grey, linestyle = :dash)

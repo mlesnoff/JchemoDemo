@@ -8,8 +8,8 @@ weave_options:
 ---
 
 ```julia
-using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
+using JLD2, CairoMakie
 ```
 
 #### Data importation
@@ -53,42 +53,47 @@ wl = parse.(Float64, wlst)
 ```
 
 ```julia
-plotsp(X, wl;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", 
+    ylabel = "Absorbance").f
 ```
 
 #### Preprocessing
 
 ```julia
-f = 15 ; pol = 3 ; d = 2 
-Xp = savgol(snv(X); f = f, pol = pol, d = d) 
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 15, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X) 
 ```
 
 ```julia
-plotsp(Xp, wl;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(Xp, wl; xlabel = "Wavelength (nm)", 
+    ylabel = "Absorbance").f
 ```
 
 #### PCA
 
 ```julia
-fm = pcasvd(Xp, nlv = 10) ; 
-pnames(fm)
+mod = pcasvd(nlv = 10)
+fit!(mod, X)
+pnames(mod)
+pnames(mod.fm)
 ```
 
 ```julia
-res = summary(fm, Xp) ;
+res = summary(mod, Xp) ;
 pnames(res)
 ```
 
 ```julia
 z = res.explvarx
-plotgrid(z.lv, 100 * z.pvar; step = 1,
+plotgrid(z.nlv, 100 * z.pvar; step = 1,
     xlabel = "Nb. PCs", ylabel = "% variance explained").f
 ```
 
 ```julia term = true
-T = fm.T
+T = mod.fm.T
 @head T
 ```
 
@@ -99,8 +104,8 @@ plotxy(T[:, i], T[:, i + 1]; color = (:red, .5),
 ```
 
 ```julia
-plotxy(T[:, i], T[:, i + 1], typ; 
-    xlabel = "PC1", ylabel = "PC2").f
+plotxy(T[:, i], T[:, i + 1], typ; xlabel = "PC1", 
+    ylabel = "PC2").f
 ```
 
 #### Y-variables
@@ -119,7 +124,7 @@ nam = namy[2]  # y-variable
 ```
 
 ```julia
-y = Y[:, 2]
+y = Y[:, nam]
 ```
 
 ```julia
