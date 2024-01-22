@@ -1,5 +1,5 @@
-using DataFrames
 using JchemoData
+using DataFrames
  
 path_jdat = dirname(dirname(pathof(JchemoData)))
 path_out = "D:/Mes Donnees/Tmp"
@@ -14,8 +14,7 @@ db = joinpath(path_jdat, "data/dat_2021.csv")
 ## Same as: 
 #db = string(path_jdat, "\\data\\dat_2021.csv")
 
-df = CSV.read(db, DataFrame; header = 1, decimal = '.', 
-    delim = ';') 
+df = CSV.read(db, DataFrame; header = 1, decimal = '.', delim = ';') 
 ## Same as:
 #df = CSV.File(db; header = 1, delim = ';') |> DataFrame 
 #df = DataFrame(CSV.File(db, header = 1, delim = ';'))
