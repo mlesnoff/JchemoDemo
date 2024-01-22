@@ -1,19 +1,17 @@
-using JLD2, CSV, DataFrames
 using Jchemo, JchemoData
+using JLD2, CSV, DataFrames
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
 path_out = "D:/Mes Donnees/Tmp"
 
 ## X
 db = joinpath(path_jdat, "data/datspir_X.csv")  
-df = CSV.read(db, DataFrame; header = 1, decimal = ',', 
-    delim = ';') 
+df = CSV.read(db, DataFrame; header = 1, decimal = ',', delim = ';') 
 X = df[:, 2:end]
 id = df.ID
 ## Y
 db = joinpath(path_jdat, "data", "datspir_Y.csv")  
-df = CSV.read(db, DataFrame; header = 1, decimal = ',', 
-    delim = ';') 
+df = CSV.read(db, DataFrame; header = 1, decimal = ',', delim = ';') 
 Y = df[:, 2:end]
 id_Y = df.ID
 ## To make sure that Y has lowercase names
@@ -33,8 +31,7 @@ end
 Y
 ## M
 db = joinpath(path_jdat, "data/datspir_M.csv")  
-df = CSV.read(db, DataFrame; header = 1, decimal = ',', 
-    delim = ';') 
+df = CSV.read(db, DataFrame; header = 1, decimal = ',', delim = ';') 
 M = df[:, 2:end]
 id_M = df.ID
 ## To make sure that M has lowercase names
@@ -51,9 +48,9 @@ DataFrame((id_X = id[s], id_M = id_Y[s]))
 tabdupl(id) 
 ## Check duplicated rows 
 u = 1:50:nco(X)
-checkdupl(X[:, u])
-checkdupl(Y)
-checkdupl(hcat(X[:, u], Y))
+dupl(X[:, u])
+dupl(Y)
+dupl(hcat(X[:, u], Y))
 ## End
 
 dat = (X = X, Y, M, id) 
