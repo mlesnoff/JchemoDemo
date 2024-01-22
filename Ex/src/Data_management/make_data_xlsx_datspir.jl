@@ -1,5 +1,5 @@
-using JLD2, XLSX, DataFrames
 using Jchemo, JchemoData
+using JLD2, XLSX, DataFrames
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
 path_out = "D:/Mes Donnees/Tmp"
@@ -45,9 +45,9 @@ DataFrame((id_X = id[s], id_M = id_Y[s]))
 tabdupl(id)
 ## Check duplicated rows 
 u = 1:50:nco(X)
-checkdupl(X[:, u])
-checkdupl(Y)
-checkdupl(hcat(X[:, u], Y))
+dupl(X[:, u])
+dupl(Y)
+dupl(hcat(X[:, u], Y))
 ## End
 
 dat = (X = X, Y, M, id) 
