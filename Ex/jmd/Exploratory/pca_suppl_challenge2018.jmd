@@ -48,8 +48,8 @@ tab(test)
 ```
 
 ```julia
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst) 
 ```
 
 ```julia
@@ -61,7 +61,7 @@ freqtable(typ, test)
 ```
 
 ```julia
-plotsp(X, wl_num; nsamp = 30).f
+plotsp(X, wl; nsamp = 30).f
 ```
 
 #### Preprocessing
@@ -72,7 +72,7 @@ Xp = savgol(snv(X); f = f, pol = pol, d = d) ;
 ```
 
 ``` julia
-plotsp(Xp, wl_num; nsamp = 30).f
+plotsp(Xp, wl; nsamp = 30).f
 ```
 
 #### Split Tot ==> Train + Test

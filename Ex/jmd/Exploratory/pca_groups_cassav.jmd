@@ -46,8 +46,8 @@ year = dat.Y.year
 ```
 
 ```julia
-wl = names(X)
-wl_num = parse.(Float64, wl) 
+wlst = names(X)
+wl = parse.(Float64, wlst) 
 ```
 
 ```julia
@@ -67,8 +67,8 @@ group_num = recodcat2int(year)
 ```
 
 ```julia
-plotsp(X, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", 
+    ylabel = "Absorbance").f
 ```
 
 #### Preprocessing
@@ -79,7 +79,7 @@ Xp = savgol(snv(X); f = f, pol = pol, d = d)
 ```
 
 ```julia
-plotsp(Xp, wl_num;
+plotsp(Xp, wl;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 

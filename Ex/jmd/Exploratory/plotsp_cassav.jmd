@@ -41,8 +41,8 @@ year = dat.Y.year
 ```
 
 ```julia
-wl = names(X)
-wl_num = parse.(Float64, wl) 
+wlst = names(X)
+wl = parse.(Float64, wlst) 
 ```
 
 ```julia
@@ -56,38 +56,37 @@ plotsp(X).f
 ```
 
 ```julia
-plotsp(X, wl_num;
-    xlabel ="Wavelength (nm)", ylabel = "Absorbance",
-    title = "Cassava data").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", 
+    ylabel = "Absorbance", title = "Cassava data").f
 ```
 
 ```julia
-plotsp(X, wl_num;
+plotsp(X, wl;
     color = (:red, .3),
     xlabel ="Wavelength (nm)", ylabel = "Absorbance",
     title = "Cassava data").f
 ```
 
 ```julia
-plotsp(X, wl_num; nsamp = 10, 
+plotsp(X, wl; nsamp = 10, 
     xlabel ="Wavelength (nm)", ylabel = "Absorbance",
     title = "Cassava data").f
 ```
 
 ```julia
 i = 1
-plotsp(X[i:i, :], wl_num;
+plotsp(X[i:i, :], wl;
     color = :blue,
     xlabel ="Wavelength (nm)", ylabel = "Absorbance",
     title = "Cassava data").f
 ```
 
 ```julia
-f, ax = plotsp(X, wl_num;
+f, ax = plotsp(X, wl;
     color = (:grey70, .5),
     xlabel ="Wavelength (nm)", ylabel = "Absorbance",
     title = "Cassava data")
-lines!(ax, wl_num, colmean(X); color = :red,
+lines!(ax, wl, colmean(X); color = :red,
     linewidth = 2)
 f
 ```
