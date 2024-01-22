@@ -56,8 +56,8 @@ plotsp(X).f
 ```
 
 ```julia
-plotsp(X, wl; xlabel = "Wavelength (nm)", 
-    ylabel = "Absorbance", title = "Cassava data").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance", 
+    title = "Cassava data").f
 ```
 
 ```julia

@@ -79,7 +79,7 @@ z = res.explvarx
 ```
 
 ```julia
-plotgrid(z.lv, 100 * z.pvar; step = 1,
+plotgrid(z.lv, 100 * z.pvar; step = 1, 
     xlabel = "nb. PCs", ylabel = "% variance explained").f
 ```
 

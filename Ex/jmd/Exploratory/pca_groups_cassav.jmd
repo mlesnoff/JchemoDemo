@@ -67,8 +67,7 @@ group_num = recodcat2int(year)
 ```
 
 ```julia
-plotsp(X, wl; xlabel = "Wavelength (nm)", 
-    ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
 #### Preprocessing
