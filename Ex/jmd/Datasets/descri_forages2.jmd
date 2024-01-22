@@ -50,8 +50,8 @@ freqtable(y, test)
 ```
 
 ```julia
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst)
 ```
 
 #### Split Tot ==> Train + Test
@@ -76,7 +76,7 @@ ntest = nro(Xtest)
 Spectra are already pre-processed with savgol(snv; f = 21, p = 3, d = 2)).
 
 ```julia
-plotsp(X, wl_num; nsamp = 10,
+plotsp(X, wl; nsamp = 10,
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
@@ -166,7 +166,7 @@ odtest = Jchemo.predict(res_od, Xtest).d
 ```
 
 ```julia
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f, xlabel = "SD", ylabel = "OD")
 scatter!(ax, sdtrain.dstand, odtrain.dstand, label = "Train")
 scatter!(ax, sdtest.dstand, odtest.dstand, color = (:red, .5), label = "Test")
@@ -188,7 +188,7 @@ sdtest = Jchemo.predict(zres, Xtest).d
 ```
 
 ```julia
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f, xlabel = nam, ylabel = "Nb. observations")
 hist!(ax, sdtrain.d; bins = 50, label = "Train")
 hist!(ax, sdtest.d; bins = 50, label = "Test")
@@ -226,7 +226,7 @@ ytest = y[s]
 ```
 
 ```julia
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1], xlabel = "Protein", ylabel = "Nb. observations")
 hist!(ax, ytrain; bins = 50, label = "Train")
 hist!(ax, ytest; bins = 50, label = "Test")
@@ -235,7 +235,7 @@ f
 ```
 
 ```julia
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 offs = [30; 0]
 ax = Axis(f[1, 1], xlabel = "Protein", 
     ylabel = "Nb. observations",
@@ -246,7 +246,7 @@ f
 ```
 
 ```julia
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1], xlabel = nam, ylabel = "Density")
 density!(ax, ytrain; color = :blue, label = "Train")
 density!(ax, ytest; color = (:red, .5), label = "Test")
@@ -255,7 +255,7 @@ f
 ```
 
 ```julia
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 offs = [.08; 0]
 ax = Axis(f[1, 1], xlabel = nam, ylabel = "Density",
     yticks = (offs, ["Train" ; "Test"]))
@@ -267,7 +267,7 @@ f
 ```
 
 ```julia
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1], 
     xticks = (0:1, ["Train", "Test"]),
     xlabel = "Group", ylabel = nam)

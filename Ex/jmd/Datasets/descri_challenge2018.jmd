@@ -8,8 +8,8 @@ weave_options:
 ---
 
 ```julia
-using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
+using JLD2, CairoMakie
 using FreqTables
 ```
 
@@ -48,8 +48,8 @@ tab(test)
 ```
 
 ```julia
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst)
 ```
 
 ```julia
@@ -66,18 +66,21 @@ freqtable(typ, test)
 ```
 
 ```julia
-plotsp(X, wl_num; nsamp = 30).f
+plotsp(X, wl; nsamp = 30).f
 ```
 
 #### Preprocessing
 
 ```julia
-f = 21 ; pol = 3 ; d = 2 
-Xp = savgol(snv(X); f = f, pol = pol, d = d) ;
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 15, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X) 
 ```
 
 ```julia
-plotsp(Xp, wl_num; nsamp = 30).f
+plotsp(Xp, wl; nsamp = 30).f
 ```
 
 #### Split Tot ==> Train + Test
@@ -102,13 +105,14 @@ ntest = nro(Xtest)
 #### PCA on Xp
 
 ```julia
-fm = pcasvd(Xp, nlv = 15) ; 
-pnames(fm)
-T = fm.T
+mod = pcasvd(nlv = 10)
+fit!(mod, Xp)
+pnames(mod)
+pnames(mod.fm)
 ```
 
 ```julia
-res = summary(fm, Xp) ;
+res = summary(mod, Xp) ;
 pnames(res)
 ```
 
@@ -136,25 +140,25 @@ plotxy(T[:, i], T[:, i + 1], typ; color = colm,
 #### PCA on Xtrain and projection of Xtest
 
 ```julia
-fm = pcasvd(Xtrain, nlv = 15) ; 
+mod = pcasvd(nlv = 15)
+fit!(mod, Xtrain)
 ```
 
 ```julia term = true
-Ttrain = fm.T
+Ttrain = mod.fm.T
 @head Ttrain
 ```
 
 Xtest is projected on the Xtrain score space.
 
 ```julia term = true
-Ttest = Jchemo.transform(fm, Xtest)
+Ttest = transf(mod, Xtest)
 @head Ttest 
 ```
 
 ```julia
 zT = vcat(Ttrain, Ttest)
-group = vcat(repeat(["0-Train";], ntrain), 
-    repeat(["1-Test";], ntest))
+group = vcat(repeat(["0-Train";], ntrain), repeat(["1-Test";], ntest))
 colm = [:blue, (:red, .5)]
 i = 1
 plotxy(zT[:, i], T[:, i + 1], group; color = colm,
@@ -164,41 +168,46 @@ plotxy(zT[:, i], T[:, i + 1], group; color = colm,
 **Score (SD) and orthogonal (OD) distances**
 
 ```julia
-res_sd = occsd(fm) ; 
-sdtrain = res_sd.d
-sdtest = Jchemo.predict(res_sd, Xtest).d
+mod_sd = occsd() 
+fit!(mod_sd, mod.fm)
+pnames(mod_sd)
+sdtrain = mod_sd.fm.d
+sdtest = predict(mod_sd, Xtest).d
 ```
 
 ```julia
-res_od = occod(fm, Xtrain) ;
-odtrain = res_od.d
-odtest = Jchemo.predict(res_od, Xtest).d
+mod_od = occod() 
+fit!(mod_od, mod.fm, Xtrain)
+pnames(mod_od)
+odtrain = mod_od.fm.d
+odtest = predict(mod_od, Xtest).d
 ```
 
 ```julia
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f, xlabel = "SD", ylabel = "OD")
 scatter!(ax, sdtrain.dstand, odtrain.dstand, 
     label = "Train")
 scatter!(ax, sdtest.dstand, odtest.dstand, 
     color = (:red, .5), label = "Test")
-hlines!(ax, 1; color = :grey, linestyle = "-")
-vlines!(ax, 1; color = :grey, linestyle = "-")
+hlines!(ax, 1; color = :grey, linestyle = :dash)
+vlines!(ax, 1; color = :grey, linestyle = :dash)
 axislegend(position = :rt)
 f[1, 1] = ax
 f
 ```
 
 ```julia
-zres = res_sd ; nam = "SD"
-#zres = res_od ; nam = "OD"
-sdtrain = zres.d
-sdtest = Jchemo.predict(zres, Xtest).d
-f = Figure(resolution = (500, 400))
+zres = mod_sd ; nam = "SD"
+#zres = mod_od ; nam = "OD"
+pnames(zres.fm)
+sdtrain = zres.fm.d
+sdtest = predict(zres, Xtest).d
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1], xlabel = nam, ylabel = "Nb. observations")
 hist!(ax, sdtrain.d; bins = 50, label = "Train")
 hist!(ax, sdtest.d; bins = 50, label = "Test")
-vlines!(ax, zres.cutoff; color = :grey, linestyle = "-")
+vlines!(ax, zres.fm.cutoff; color = :grey, linestyle = :dash)
 axislegend(position = :rt)
 f
 ```
@@ -222,7 +231,7 @@ aggstat(Y; vars = :conc, groups = :test)
 ```
 
 ```julia
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1], xlabel = "Protein", ylabel = "Nb. observations")
 hist!(ax, ytrain; bins = 50, label = "Train")
 hist!(ax, ytest; bins = 50, label = "Test")
@@ -231,18 +240,17 @@ f
 ```
 
 ```julia
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 offs = [100; 0]
-ax = Axis(f[1, 1], xlabel = "Protein", 
-    ylabel = "Nb. observations",
-    yticks = (offs, ["Train" ; "Test"]))
+ax = Axis(f[1, 1], xlabel = "Protein",  
+    ylabel = "Nb. observations", yticks = (offs, ["Train" ; "Test"]))
 hist!(ax, ytrain; offset = offs[1], bins = 50)
 hist!(ax, ytest; offset = offs[2], bins = 50)
 f
 ```
 
 ```julia
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1], xlabel = "Protein", ylabel = "Density")
 density!(ax, ytrain; color = :blue, label = "Train")
 density!(ax, ytest; color = (:red, .5), label = "Test")
@@ -251,7 +259,7 @@ f
 ```
 
 ```julia
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 offs = [.1; 0]
 ax = Axis(f[1, 1], xlabel = "Protein", ylabel = "Density",
     yticks = (offs, ["Train" ; "Test"]))
@@ -263,12 +271,10 @@ f
 ```
 
 ```julia
-f = Figure(resolution = (500, 400))
-ax = Axis(f[1, 1], 
-    xticks = (0:1, ["Train", "Test"]),
+f = Figure(size = (500, 400))
+ax = Axis(f[1, 1], xticks = (0:1, ["Train", "Test"]),
     xlabel = "Group", ylabel = "Protein")
-boxplot!(ax, test, y; width = .3, 
-    show_notch = true)
+boxplot!(ax, test, y; width = .3, show_notch = true)
 f
 ```
 

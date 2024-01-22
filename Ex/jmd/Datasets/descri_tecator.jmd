@@ -48,12 +48,12 @@ tab(typ)
 ```
 
 ```julia
-wl = names(X)
-wl_num = parse.(Float64, wl) 
+wlst = names(X)
+wl = parse.(Float64, wlst) 
 ```
 
 ```julia
-plotsp(X, wl_num;
+plotsp(X, wl;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
@@ -65,7 +65,7 @@ Xp = savgol(snv(X); f = f, pol = pol, d = d)
 ```
 
 ```julia
-plotsp(Xp, wl_num;
+plotsp(Xp, wl;
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
@@ -132,7 +132,7 @@ tab(string.(ztyp, "-", typ))
 ```
 
 ```julia
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1], 
     xticks = (1:3, mlev(typ)),
     xlabel = "Group", ylabel = nam)
