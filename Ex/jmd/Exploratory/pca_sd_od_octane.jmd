@@ -52,28 +52,32 @@ plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance",
 #### PCA model fitting
 
 ```julia
-fm = pcasvd(X; nlv = 6) ; 
+mod = pcasvd(nlv = 6) 
 ## For robust spherical PCA, do:
-#fm = pcasph(X; nlv = 6) ;  
-pnames(fm)
+#mod = pcasph(nlv = 6)
+fit!(mod, X)  
+pnames(mod)
+pnames(mod.fm)
+fm = mod.fm
 ```
 
 **Scores:**
 
 ```julia term = true
-T = fm.T ;
-@head T
+@head T = mod.fm.T 
 ```
 
 #### Score distance (SD)
 
 ```julia
-res = occsd(fm) ;
-pnames(res)
+mod = occsd()
+fit!(mod, fm)
+pnames(mod)
+pnames(mod.fm)
 ```
 
 ```julia
-d = res.d
+d = mod.fm.d
 ```
 
 ```julia
@@ -87,12 +91,14 @@ f
 #### Orthogonal distance (OD)
 
 ```julia
-res = occod(fm, X) ;
-pnames(res)
+mod = occod() 
+fit!(mod, fm, X)
+pnames(mod)
+pnames(mod.fm)
 ```
 
 ```julia
-d = res.d
+d = mod.fm.d
 ```
 
 ```julia
@@ -106,24 +112,23 @@ f
 #### SD-OD
 
 ```julia
-sd = occsd(fm).d
-od = occod(fm, X).d
-f, ax = plotxy(sd.dstand, od.dstand;
-    xlabel = "Standardized SD", ylabel = "Standardized OD")
+mod = occsd()
+fit!(mod, fm)
+d_sd = mod.fm.d
+mod = occod()
+fit!(mod, fm, X)
+d_od = mod.fm.d
+f, ax = plotxy(d_sd.dstand, d_od.dstand; xlabel = "Standardized SD", 
+    ylabel = "Standardized OD")
 hlines!(ax, 1)
 vlines!(ax, 1)
 f
 ```
 
 ```julia
-CairoMakie.activate!()  
-#GLMakie.activate!() 
-sd = occsd(fm).d
-od = occod(fm, X).d
-f, ax = plotxy(sd.dstand, od.dstand;
-    xlabel = "Standardized SD", ylabel = "Standardized OD")
-text!(ax, sd.dstand, od.dstand; text = string.(1:n), 
-    fontsize = 15)
+f, ax = plotxy(d_sd.dstand, d_od.dstand; xlabel = "Standardized SD", 
+    ylabel = "Standardized OD")
+text!(ax, d_sd.dstand, d_od.dstand; text = string.(1:n), fontsize = 15)
 hlines!(ax, 1)
 vlines!(ax, 1)
 f
@@ -132,20 +137,20 @@ f
 #### Direct computation of a composite SD-OD
 
 ```julia
-res = occsdod(fm, X) ;
-pnames(res)
+mod = occsdod() 
+fit!(mod, fm, X)
+pnames(mod)
+pnames(mod.fm)
 ```
 
 ```julia
-d = res.d
+d = mod.fm.d
 ```
 
 ```julia
-f, ax = plotxy(1:n, d.dstand;
-    xlabel = "Observation", 
+f, ax = plotxy(1:n, d.dstand; xlabel = "Observation", 
     ylabel = "Standardized SD-OD distance")
-text!(ax, 1:n, d.dstand; text = string.(1:n), 
-    fontsize = 15)
+text!(ax, 1:n, d.dstand; text = string.(1:n), fontsize = 15)
 hlines!(ax, 1)
 f
 ```

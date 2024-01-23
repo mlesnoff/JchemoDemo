@@ -52,24 +52,25 @@ plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance",
 #### PCA model fitting
 
 ```julia
-fm = pcasvd(X; nlv = 6) ; 
+mod = pcasvd(nlv = 6) 
 ## For robust spherical PCA, do:
-#fm = pcasph(X; nlv = 6) ;  
-pnames(fm)
+#mod = pcasph(nlv = 6)
+fit!(mod, X)  
+pnames(mod)
+pnames(mod.fm)
 ```
 
 **Scores:**
 
 ```julia term = true
-T = fm.T ;
-@head T
+@head T = mod.fm.T 
 ```
 
 **2-D score space** 
 
 ```julia
-plotxy(T[:, 1], T[:, 2]; zeros = true,
-    xlabel = "PC1", ylabel = "PC2").f
+plotxy(T[:, 1], T[:, 2]; zeros = true, xlabel = "PC1", 
+    ylabel = "PC2").f
 ```
 
 ```julia

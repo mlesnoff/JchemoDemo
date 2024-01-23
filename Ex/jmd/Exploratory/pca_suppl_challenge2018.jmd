@@ -67,8 +67,11 @@ plotsp(X, wl; nsamp = 30).f
 #### Preprocessing
 
 ```julia
-f = 21 ; pol = 3 ; d = 2 
-Xp = savgol(snv(X); f = f, pol = pol, d = d) ;
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 21, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X) 
 ```
 
 ``` julia
@@ -97,22 +100,21 @@ ntest = nro(Xtest)
 
 ```julia
 nlv = 15
-fm = pcasvd(Xtrain, nlv = nlv) ; 
+mod = pcasvd(; nlv)
+fit!(mod, Xtrain)
 ```
 
 ```julia
-res = summary(fm, Xtrain).explvarx
+res = summary(mod, Xtrain).explvarx
 ```
 
 ```julia
-plotgrid(res.lv, res.pvar; step = 2,
-    xlabel = "PC", 
+plotgrid(res.nlv, res.pvar; step = 2, xlabel = "PC", 
     ylabel = "Prop. variance explained").f
 ```
 
 ```julia term = true
-Ttrain = fm.T ;
-@head Ttrain
+@head Ttrain = mod.fm.T
 ```
 #### Projection of Xtest
 
@@ -121,46 +123,45 @@ and DataFrames export a function `transform`. This will be the same with
 common function names such as `predict`, `coef`, etc.
 
 ```julia term = true
-Ttest = transf(fm, Xtest)
-@head Ttest
+@head Ttest = transf(mod, Xtest)
 ```
 
 ```julia
 T = vcat(Ttrain, Ttest)
-group = vcat(repeat(["0-Train";], ntrain), 
-    repeat(["1-Test";], ntest))
+group = vcat(repeat(["0-Train";], ntrain), repeat(["1-Test";], ntest))
 colm = [:blue, (:red, .5)]
 i = 3
-plotxy(T[:, i], T[:, i + 1], group; color = colm,
-    xlabel = string("PC", i), 
+plotxy(T[:, i], T[:, i + 1], group; color = colm, xlabel = string("PC", i), 
     ylabel = string("PC", i + 1)).f
 ```
 
 #### SD and OD distances
 
 ```julia
-res = occsdod(fm, Xtrain) ; 
-pnames(res)
+mod_d = occsdod() 
+fit!(mod_d, mod.fm, Xtrain)
+pnames(mod_d)
+pnames(mod_d.fm)
 ```
 
 ```julia
-dtrain = res.d
+dtrain = mod_d.fm.d
 ```
 
 **Values for Xtest**
 
 ```julia
-dtest = Jchemo.predict(res, Xtest).d
+dtest = predict(mod_d, Xtest).d
 ```
 
 ```julia
 f = Figure(size = (500, 400))
 ax = Axis(f[1, 1], xlabel = "SD", ylabel = "OD")
 scatter!(ax, dtrain.dstand_sd, dtrain.dstand_od, label = "Train")
-scatter!(ax, dtest.dstand_sd, dtest.dstand_od, 
-    color = (:red, .5), label = "Test")
-hlines!(ax, 1; color = :grey, linestyle = "-")
-vlines!(ax, 1; color = :grey, linestyle = "-")
+scatter!(ax, dtest.dstand_sd, dtest.dstand_od, color = (:red, .5), 
+    label = "Test")
+hlines!(ax, 1; color = :grey, linestyle = :dash)
+vlines!(ax, 1; color = :grey, linestyle = :dash)
 axislegend(position = :rt)
 f
 ```
@@ -169,8 +170,7 @@ f
 
 ```julia
 d = vcat(dtrain, dtest)
-group = vcat(repeat(["0-Train";], ntrain), 
-    repeat(["1-Test";], ntest))
+group = vcat(repeat(["0-Train";], ntrain), repeat(["1-Test";], ntest))
 colm = [:blue, (:red, .5)]
 plotxy(d.dstand_sd, d.dstand_od, group; color = colm,
     xlabel = "Stand. SD", ylabel = "Stand. OD").f
@@ -184,7 +184,7 @@ ax = Axis(f[1, 1], xlabel = "Standardized distance",
     ylabel = "Nb. observations")
 hist!(ax, dtrain.dstand; bins = 50, label = "Train")
 hist!(ax, dtest.dstand; bins = 50, label = "Test")
-vlines!(ax, 1; color = :grey, linestyle = "-")
+vlines!(ax, 1; color = :grey, linestyle = :dash)
 axislegend(position = :rt, framevisible = false)
 f
 ```
