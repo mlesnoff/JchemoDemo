@@ -121,7 +121,7 @@ and DataFrames export a function `transform`. This will be the same with
 common function names such as `predict`, `coef`, etc.
 
 ```julia term = true
-Ttest = Jchemo.transform(fm, Xtest)
+Ttest = transf(fm, Xtest)
 @head Ttest
 ```
 

@@ -51,8 +51,7 @@ wl = parse.(Float64, wlst)
 **Note:**: X-data are already preprocessed (SNV + Savitsky-Golay).
 
 ```julia
-plotsp(X, wl; xlabel = "Wavelength (nm)", 
-    ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
 #### Split Tot ==> Train + Test
@@ -83,22 +82,26 @@ for the FDA, for instance:
 #### 1) FDA on PCA scores
 
 ```julia
-fm0 = pcasvd(Xtrain; nlv = 10) ;
-pnames(fm0)
+mod0 = pcasvd(nlv = 10)
+fit!(mod0, Xtrain)
+pnames(mod0)
+pnames(mod0.fm)
 ```
 
 ```julia
-Ttrain_pca = fm0.T 
+Ttrain_pca = mod0.fm.T 
 ```
 
 ```julia
-fm = fda(Ttrain_pca, ytrain; nlv = 2) ;
-#fm = fdasvd(Ttrain_pca, ytrain; nlv = 2) ; # alternative algorithm (same result)
+mod = fda(nlv = 2)
+#mod = fdasvd(nlv = 2)     # alternative algorithm (same result)
+fit!(mod, Ttrain_pca, ytrain) 
+fm = mod.fm 
 pnames(fm)
 ```
 
 ```julia
-Ttrain = fm.T
+Ttrain = mod.fm.T
 ```
 
 ```julia
@@ -111,47 +114,46 @@ ct = fm.Tcenters
 ```
 
 ```julia
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; 
     title = "FDA", ellipse = true)
-scatter!(ax, ct[:, 1], ct[:, 2],
-    markersize = 10, color = :red)
+scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, 
+    color = :red)
 f
 ```
 
 **Projection of Xtest**
 
 ```julia
-Ttest_pca = Jchemo.transform(fm0, Xtest) 
+Ttest_pca = transf(mod0, Xtest) 
 ```
 
 ```julia
-Ttest = Jchemo.transform(fm, Ttest_pca)
+Ttest = transf(mod, Ttest_pca)
 ```
 
 ```julia
 i = 1  # class 
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; 
     title = "FDA")
-scatter!(ax, ct[:, 1], ct[:, 2],
-    markersize = 10, color = :red)
+scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
 s = ytest .== lev[i]
 zT = Ttest[s, :]
-scatter!(ax, zT[:, 1], zT[:, 2],
-    markersize = 10, color = (:purple, .8))
+scatter!(ax, zT[:, 1], zT[:, 2], markersize = 10, 
+    color = (:purple, .8))
 f
 ```
 
 #### 2) FDA directly on X but using a ridge regularization 
 
-**Remark:** If the ridge parameter `lb` is too small (e.g. here from 
+**Note:** If the ridge parameter `lb` is too small (e.g. here from 
 around 1e-10), the model can be overfitted and the discrimination 
 of new observations is misleading.
 
 ```julia
 lb = 1e-5
-fm = fda(Xtrain, ytrain; nlv = 2, lb = lb) ;
-#fm = fdasvd(Xtrain, ytrain; nlv = 2, lb = lb) ;
-pnames(fm)
+mod = fda(; nlv = 2, lb)
+#mod = fdasvd(; nlv = 2, lb)
+fit!(mod,Xtrain, ytrain)
 ```
 
 ```julia
@@ -170,15 +172,15 @@ Ttrain = fm.T
 ```julia
 f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
     title = "FDA", ellipse = true)
-scatter!(ax, ct[:, 1], ct[:, 2],
-    markersize = 10, color = :red)
+scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, 
+    color = :red)
 f
 ```
 
 **Projection of Xtest**
 
 ```julia
-Ttest = Jchemo.transform(fm, Xtest)
+Ttest = transf(mod, Xtest)
 ```
 
 ```julia

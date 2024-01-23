@@ -112,7 +112,7 @@ f
 #### Projection of Xtest to the score space
 
 ```julia
-Ttest = Jchemo.transform(fm, Xtest)
+Ttest = transf(fm, Xtest)
 ```
 
 #### X-loadings matrix
