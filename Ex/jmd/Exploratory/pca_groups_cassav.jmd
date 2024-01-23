@@ -8,8 +8,8 @@ weave_options:
 ---
 
 ```julia
-using JLD2, CairoMakie, GLMakie, StatsBase
 using Jchemo, JchemoData
+using JLD2, CairoMakie, GLMakie
 ```
 
 ```julia
@@ -63,7 +63,7 @@ nlev = length(lev)
 ```
 
 ```julia
-group_num = recodcat2int(year)
+groupnum = recodcat2int(year)
 ```
 
 ```julia
@@ -73,23 +73,26 @@ plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 #### Preprocessing
 
 ```julia
-f = 15 ; pol = 3 ; d = 2 
-Xp = savgol(snv(X); f = f, pol = pol, d = d) 
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 15, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X) 
 ```
 
 ```julia
-plotsp(Xp, wl;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
 #### PCA
 
 ```julia
-fm = pcasvd(Xp; nlv = 6) ; 
+mod = pcasvd(nlv = 6)
+fit!(mod, Xp) 
 ```
 
 ```julia
-T = fm.T
+T = mod.fm.T
 ```
 
 ## 2-D score space
@@ -113,8 +116,7 @@ plotxy(T[:, i], T[:, i + 1], year;
 ```julia
 i = 1
 colm = cgrad(:Dark2_5, nlev; categorical = true, alpha = .8)
-plotxy(T[:, i], T[:, i + 1], year; 
-    color = colm,
+plotxy(T[:, i], T[:, i + 1], year;  color = colm,
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
     zeros = true, ellipse = true).f
 ```
@@ -125,7 +127,7 @@ plotxy(T[:, i], T[:, i + 1], year;
 CairoMakie.activate!()  
 #GLMakie.activate!() 
 i = 1
-f = Figure(resolution = (600, 400))
+f = Figure(size = (600, 400))
 ax = Axis3(f[1, 1]; perspectiveness = 0.2,
     xlabel = string("PC", i), ylabel = string("PC", i + 1), 
     zlabel = string("PC", i + 2), title = "PCA score space")
@@ -138,7 +140,7 @@ f
 
 ```julia
 i = 1
-f = Figure(resolution = (700, 500))
+f = Figure(size = (700, 500))
 colsh = :Dark2_5 #:default, :tab10
 colm = cgrad(colsh, nlev; alpha = .7, categorical = true) 
 ax = Axis3(f[1, 1]; perspectiveness = 0.2,
@@ -146,7 +148,7 @@ ax = Axis3(f[1, 1]; perspectiveness = 0.2,
     zlabel = string("PC", i + 2), 
     title = "PCA score space") 
 scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2], 
-    markersize = 15, color = group_num, colormap = colm)
+    markersize = 15, color = groupnum, colormap = colm)
 lab = string.(lev)
 elt = [MarkerElement(color = colm[i], marker = '●', markersize = 10) for i in 1:nlev]
 title = "Year"

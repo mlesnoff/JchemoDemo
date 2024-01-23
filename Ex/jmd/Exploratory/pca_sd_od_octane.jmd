@@ -8,8 +8,8 @@ weave_options:
 ---
 
 ```julia
-using JLD2, CairoMakie, GLMakie
 using Jchemo, JchemoData
+using JLD2, CairoMakie, GLMakie
 ```
 
 ```julia
@@ -77,7 +77,7 @@ d = res.d
 ```
 
 ```julia
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 Axis(f[1, 1]; xlabel = "Standardized score distance", 
     ylabel = "Nb. observations")
 hist!(d.dstand; bins = 20)
@@ -96,7 +96,7 @@ d = res.d
 ```
 
 ```julia
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 Axis(f[1, 1]; xlabel = "Standardized orthogonal distance", 
     ylabel = "Nb. observations")
 hist!(d.dstand; bins = 20)

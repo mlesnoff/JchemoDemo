@@ -8,8 +8,8 @@ weave_options:
 ---
 
 ```julia
-using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
+using JLD2, CairoMakie
 ```
 
 #### Data importation
@@ -57,12 +57,12 @@ but **Tot** could also be split *a posteriori*, for instance by sampling (random
 or any other designs). 
 
 ```julia
-ntrain = 120
-s = sample(1:n, ntrain; replace = false)
-Xtrain = X[s, :]
-ytrain = y[s]
-Xtest = rmrow(X, s)
-ytest = rmrow(y, s)
+ntest = 30
+s = samprand(n, ntest)
+Xtrain = X[s.train, :]
+ytrain = y[s.train]
+Xtest = X[s.test, :]
+ytest = y[s.test]
 ```
 
 ```julia
@@ -76,8 +76,10 @@ tab(ytest)
 #### Model fitting
 
 ```julia
-fm = fda(Xtrain, ytrain; nlv = 2) ;
-#fm = fdasvd(Xtrain, ytrain; nlv = 2) ; # alternative algorithm (same result)
+mod = fda(nlv = 2)
+#mod = fdasvd(nlv = 2)     # alternative algorithm (same result)
+fit!(mod, Xtrain, ytrain) 
+fm = mod.fm 
 pnames(fm)
 ```
 
@@ -92,17 +94,17 @@ nlev = length(lev)
 **FDA scores**
 
 ```julia term = true
-@head fm.T
+@head Ttrain = mod.fm.T
 ```
 
 **Class centers projected on the score space**
 
 ```julia
-ct = fm.Tcenters
+ct = mod.fm.Tcenters
 ```
 
 ```julia
-f, ax = plotxy(fm.T[:, 1], fm.T[:, 2], ytrain;
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
     ellipse = true, title = "FDA", zeros = true)
 scatter!(ax, ct[:, 1], ct[:, 2],
     markersize = 10, color = :red)
@@ -112,7 +114,7 @@ f
 #### Projection of Xtest to the score space
 
 ```julia
-Ttest = transf(fm, Xtest)
+@head Ttest = transf(mod, Xtest)
 ```
 
 #### X-loadings matrix
@@ -121,28 +123,28 @@ Columns of matrix `P` = coefficients of the linear discriminant function
 = "LD" of function lda of the R package MASS.
 
 ```julia
-fm.P
+P = mod.fm.P
 ```
 
 ```julia
-fm.P' * fm.P    # not orthogonal
+P' * P    # not orthogonal
 ```
 
 
 #### Explained variance 
 
 ```julia
-fm.eig
+mod.fm.eig
 ```
 
 ```julia
-fm.sstot
+mod.fm.sstot
 ```
 
 Explained variance is computed from the PCA of the class centers 
 in the transformed scale.
 
 ```julia
-summary(fm)
+summary(mod)
 ```
 

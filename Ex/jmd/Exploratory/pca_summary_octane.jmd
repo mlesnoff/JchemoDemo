@@ -8,8 +8,8 @@ weave_options:
 ---
 
 ```julia
-using JLD2, CairoMakie, GLMakie
 using Jchemo, JchemoData
+using JLD2, CairoMakie, GLMakie
 ```
 
 ```julia
@@ -123,7 +123,7 @@ z = res.cor_circle
 
 ```julia
 i = 1
-plotxy(z[:, i], z[:, (i + 1)]; resolution = (400, 400),
+plotxy(z[:, i], z[:, (i + 1)]; size = (400, 400),
     circle = true, zeros = true,
     xlabel = string("PC", i), 
     ylabel = string("PC", i + 1)).f

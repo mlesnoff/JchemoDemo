@@ -8,8 +8,8 @@ weave_options:
 ---
 
 ```julia
-using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
+using JLD2, CairoMakie
 using FreqTables
 ```
 
@@ -154,7 +154,7 @@ dtest = Jchemo.predict(res, Xtest).d
 ```
 
 ```julia
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1], xlabel = "SD", ylabel = "OD")
 scatter!(ax, dtrain.dstand_sd, dtrain.dstand_od, label = "Train")
 scatter!(ax, dtest.dstand_sd, dtest.dstand_od, 
@@ -179,7 +179,7 @@ plotxy(d.dstand_sd, d.dstand_od, group; color = colm,
 #### Composite distance SD-OD
 
 ```julia
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1], xlabel = "Standardized distance", 
     ylabel = "Nb. observations")
 hist!(ax, dtrain.dstand; bins = 50, label = "Train")
