@@ -8,8 +8,8 @@ weave_options:
 ---
 
 ```julia
-using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
+using JLD2, CairoMakie
 using FreqTables
 ```
 
@@ -48,8 +48,8 @@ tab(test)
 ```
 
 ```julia
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst) 
 ```
 
 ```julia
@@ -61,18 +61,21 @@ freqtable(typ, test)
 ```
 
 ```julia
-plotsp(X, wl_num; nsamp = 30).f
+plotsp(X, wl; nsamp = 30).f
 ```
 
 #### Preprocessing
 
 ```julia
-f = 21 ; pol = 3 ; d = 2 
-Xp = savgol(snv(X); f = f, pol = pol, d = d) ;
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 21, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X) 
 ```
 
 ``` julia
-plotsp(Xp, wl_num; nsamp = 30).f
+plotsp(Xp, wl; nsamp = 30).f
 ```
 
 #### Split Tot ==> Train + Test
@@ -100,13 +103,13 @@ on **Val**. Here the split is built from random sampling
 (other designs are possible).
 
 ```julia
-nval = 300 
+nval = 300
+s = samprand(ntrain, nval)
+Xcal = Xtrain[s.train, :]
+ycal = ytrain[s.train]
+Xval = Xtrain[s.test, :]
+yval = ytrain[s.test]
 ncal = ntrain - nval 
-s = sample(1:ntrain, nval; replace = false)
-Xcal = rmrow(Xtrain, s) 
-ycal = rmrow(ytrain, s) 
-Xval = Xtrain[s, :] 
-yval = ytrain[s] 
 (ntot = ntot, ntrain, ntest, ncal, nval)
 ```
 
@@ -151,7 +154,7 @@ rmsep(pred, ytest)
 ```
 
 ```julia
-plotxy(pred, ytest; resolution = (500, 400),
+plotxy(pred, ytest; size = (500, 400),
     color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 ```
