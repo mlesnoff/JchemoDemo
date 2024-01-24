@@ -148,15 +148,15 @@ ncal = ntrain - nval
 ```julia
 mod = plskern()
 nlv = 0:50
-res = gridscore(mod, Xcal, ycal, Xval, yval; 
-    score = rmsep, fun = plskern, nlv = nlv) 
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
+    nlv) 
 ```
 
 **Selection of the best parameters combination:**
 
 ```julia
-plotgrid(res.nlv, res.y1; step = 5,
-    xlabel = "Nb. LVs", ylabel = "RMSEP").f
+plotgrid(res.nlv, res.y1; step = 5, xlabel = "Nb. LVs", 
+    ylabel = "RMSEP").f
 ```
 
 ```julia
@@ -167,8 +167,9 @@ res[u, :]
 #### Final prediction (Test) using the optimal model
 
 ```julia
-fm = plskern(Xtrain, ytrain; nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred
+mod = plskern(nlv = res.nlv[u])
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred
 ```
 
 #### Generalization error
@@ -178,16 +179,15 @@ rmsep(pred, ytest)
 ```
 
 ```julia 
-plotxy(pred, ytest; color = (:red, .5),
-    bisect = true, xlabel = "Prediction", 
-    ylabel = "Observed (Test)").f
+plotxy(pred, ytest; color = (:red, .5), bisect = true, 
+    xlabel = "Prediction", ylabel = "Observed (Test)").f
 ```
 
 #### A parcimony approach Wold's criterion
 
 ```julia
-res_sel = selwold(res.nlv, res.y1; smooth = false, 
-    alpha = .05, graph = true) ;
+res_sel = selwold(res.nlv, res.y1; smooth = true, alpha = .05, 
+    graph = true) ;
 pnames(res)
 ```
 
@@ -206,26 +206,9 @@ res_sel.sel     # nb. LVs selected with the Wold's criterion
 **Final prediction with the parcimonious model:**
 
 ```julia
-fm = plskern(Xtrain, ytrain; nlv = res_sel.sel) ;
-pred = Jchemo.predict(fm, Xtest).pred
+mod = plskern(nlv = res_sel.sel)
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred
 rmsep(pred, ytest)
 ```
-
-#### Remark
-
-Function "gridscore" is generic for all the functions.
-Here, it could be used instead of "gridscorelv" 
-but this is not time-efficient for LV-based methods.
-Commands below return the same results as 
-with 'gridscorelv', but in a slower way.
-
-```julia
-nlv = 0:50
-pars = mpar(nlv = nlv)
-res = gridscore(Xcal, ycal, Xval, yval;  
-    score = rmsep, fun = plskern, pars = pars) 
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-```
-
 

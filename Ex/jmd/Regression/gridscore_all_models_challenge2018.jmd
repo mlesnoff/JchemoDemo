@@ -118,20 +118,19 @@ ncal = ntrain - nval
 ```julia term = true
 nlv = 0:50
 pars = mpar(scal = [false; true])
-res = gridscorelv(Xcal, ycal, Xval, yval;
-    score = rmsep, fun = plskern, nlv = nlv, 
-    pars = pars) 
+mod = plskern()  
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
+    pars, nlv) 
 group = string.(res.scal) 
-plotgrid(res.nlv, res.y1, group; step = 2,
-    xlabel ="Nb. LVs", ylabel = "RMSEP").f
+plotgrid(res.nlv, res.y1, group; step = 2, xlabel ="Nb. LVs", 
+    ylabel = "RMSEP").f
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :] 
-fm = plskern(Xtrain, ytrain; nlv = res.nlv[u],
-    scal = res.scal[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
+mod = plskern(nlv = res.nlv[u], scal = res.scal[u])
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred 
 rmsep(pred, ytest)
-plotxy(pred, ytest; size = (500, 400),
-    color = (:red, .5), bisect = true, 
+plotxy(pred, ytest; color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 ```
 
@@ -150,7 +149,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :] 
 fm = plsravg(Xtrain, ytrain; nlv = res.nlv[u], 
     typf = res.typf[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
+pred = Jchemo.predict(mod, Xtest).pred 
 rmsep(pred, ytest)
 ```
 
@@ -167,7 +166,7 @@ plotgrid(zlb, zres.y1; step = 2,
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 fm = rr(Xtrain, ytrain; lb = res.lb[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred
+pred = Jchemo.predict(mod, Xtest).pred
 rmsep(pred, ytest)
 ```
 
@@ -182,7 +181,7 @@ res = gridscore(Xcal, ycal, Xval, yval;
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 fm = covselr(Xtrain, ytrain; nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
+pred = Jchemo.predict(mod, Xtest).pred 
 rmsep(pred, ytest)
 ```
 
@@ -207,7 +206,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 fm = krr(Xtrain, ytrain; lb = res.lb[u], 
     gamma = res.gamma[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
+pred = Jchemo.predict(mod, Xtest).pred 
 rmsep(pred, ytest)
 plotxy(pred, ytest; size = (500, 400),
     color = (:red, .5), bisect = true, 
@@ -235,7 +234,7 @@ u = findall(res.y1 .== minimum(res.y1))[1] ;
 res[u, :]
 fm = kplsr(Xtrain, ytrain; nlv = res.nlv[u], 
     gamma = res.gamma[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred ;
+pred = Jchemo.predict(mod, Xtest).pred ;
 rmsep(pred, ytest)
 ```
 
@@ -253,7 +252,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 fm = dkplsr(Xtrain, ytrain; nlv = res.nlv[u], 
     gamma = res.gamma[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
+pred = Jchemo.predict(mod, Xtest).pred 
 rmsep(pred, ytest)
 ```
 
@@ -278,7 +277,7 @@ res[u, :]
 fm = lwplsr(Xtrain, ytrain; nlvdis = res.nlvdis[u],
     metric = res.metric[u], h = res.h[u], k = res.k[u], 
     nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
+pred = Jchemo.predict(mod, Xtest).pred 
 rmsep(pred, ytest)
 plotxy(pred, ytest; size = (500, 400),
     color = (:red, .5), bisect = true, 
@@ -289,7 +288,7 @@ plotxy(pred, ytest; size = (500, 400),
 ## A performant model 
 fm = lwplsr(Xtrain, ytrain; nlvdis = 15,
     metric = "mahal", h = 2, k = 200, nlv = 15) ;
-pred = Jchemo.predict(fm, Xtest).pred ;
+pred = Jchemo.predict(mod, Xtest).pred ;
 rmsep(pred, ytest)
 ```
 
@@ -310,7 +309,7 @@ res[u, :]
 fm = lwplsravg(Xtrain, ytrain; nlvdis = res.nlvdis[u],
     metric = res.metric[u], h = res.h[u], k = res.k[u], 
     nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
+pred = Jchemo.predict(mod, Xtest).pred 
 rmsep(pred, ytest)
 ```
 
@@ -323,7 +322,7 @@ nlv = "5:20" ; typf = "unif"
 fm = lwplsravg(Xtrain, ytrain; nlvdis = nlvdis, 
     metric = metric, h = h, k = k, nlv = nlv, 
     typf = typf) ;
-@time pred = Jchemo.predict(fm, Xtest).pred ;
+@time pred = Jchemo.predict(mod, Xtest).pred ;
 rmsep(pred, ytest)
 ```
 
@@ -348,7 +347,7 @@ res[u, :]
 fm = lwplsr_s(Xtrain, ytrain; nlv0 = res.nlv0[u], 
     metric = res.metric[u], h = res.h[u], 
     k = res.k[u], nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
+pred = Jchemo.predict(mod, Xtest).pred 
 rmsep(pred, ytest)
 ```
 
@@ -374,7 +373,7 @@ fm = lwplsr_s(Xtrain, ytrain; reduc = res.reduc[u],
     metric = res.metric[u], h = res.h[u], 
     k = res.k[u], nlv = res.nlv[u],
     psamp = res.psamp[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
+pred = Jchemo.predict(mod, Xtest).pred 
 rmsep(pred, ytest)
 ```
 
@@ -394,14 +393,14 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 fm = cplsravg(Xtrain, ytrain; ncla = res.ncla[u],
     nlv_da = res.nlv_da[u], nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
+pred = Jchemo.predict(mod, Xtest).pred 
 rmsep(pred, ytest)
 ```
 
 ```julia term = true
 fm = cplsravg(Xtrain, ytrain; ncla = 10,
     nlv_da = 14, nlv = "5:20") ;
-pred = Jchemo.predict(fm, Xtest).pred 
+pred = Jchemo.predict(mod, Xtest).pred 
 rmsep(pred, ytest)
 ```
 
@@ -421,7 +420,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 fm = knnr(Xtrain, ytrain; nlvdis = res.nlvdis[u], 
     metric = res.metric[u], h = res.h[u], k = res.k[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred ;
+pred = Jchemo.predict(mod, Xtest).pred ;
 rmsep(pred, ytest)
 ```
 
@@ -442,7 +441,7 @@ res[u, :]
 fm = rfr_dt(Xtrain, ytrain; n_trees = res.n_trees[u], 
     n_subfeatures = res.n_subfeatures[u], 
     max_depth = res.max_depth[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred
+pred = Jchemo.predict(mod, Xtest).pred
 rmsep(pred, ytest)
 ```
 

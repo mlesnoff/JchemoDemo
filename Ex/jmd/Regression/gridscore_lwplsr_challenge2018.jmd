@@ -159,7 +159,7 @@ rmsep(pred, ytest)
 ```
 
 ```julia
-plotxy(pred, ytest; size = (500, 400), color = (:red, .5), 
-    bisect = true, xlabel = "Prediction", ylabel = "Observed (Test)").f  
+plotxy(pred, ytest; color = (:red, .5), bisect = true, 
+    xlabel = "Prediction", ylabel = "Observed (Test)").f  
 ```
 
