@@ -8,8 +8,8 @@ weave_options:
 ---
 
 ```julia
-using JLD2, CairoMakie, FreqTables 
 using Jchemo, JchemoData
+using JLD2, CairoMakie, FreqTables 
 ```
 
 #### Data importation
@@ -44,15 +44,14 @@ freqtable(y, Y.test)
 ```
 
 ```julia
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst) 
 ```
 
 **Note:**: X-data are already preprocessed (SNV + Savitsky-Golay).
 
 ```julia
-plotsp(X, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
 #### Split Tot ==> Train + Test
@@ -76,37 +75,35 @@ ntest = nro(Xtest)
 #### Model fitting
 
 ```julia
+nlv = 15
 gamma = .001
-fm = kplsrda(Xtrain, ytrain; nlv = 15, 
-    gamma = gamma, scal = true) ;
-pnames(fm)
+mod = kplsrda(; nlv, gamma, scal = true) 
+fit!(mod, Xtrain, ytrain)
+pnames(mod) 
+pnames(mod.fm)
 ```
 
 ```julia
-pnames(fm.fm)
-```
-
-```julia
-typeof(fm.fm)
+typeof(mod.fm.fm)
 ```
 
 #### Predictions
 
 ```julia
-res = Jchemo.predict(fm, Xtest)
+res = predict(mod, Xtest)
 pnames(res)
 ```
 
 ```julia
-pred = res.pred
+@head pred = res.pred
 ```
 
 ```julia
-res.posterior
+@head res.posterior
 ```
 
 ```julia
-err(pred, ytest)
+errp(pred, ytest)
 ```
 
 #### Confusion matrix

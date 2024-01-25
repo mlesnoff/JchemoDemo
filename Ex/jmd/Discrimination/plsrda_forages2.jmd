@@ -8,8 +8,8 @@ weave_options:
 ---
 
 ```julia
-using JLD2, CairoMakie, FreqTables 
 using Jchemo, JchemoData
+using JLD2, CairoMakie, FreqTables 
 ```
 
 #### Data importation
@@ -44,15 +44,14 @@ freqtable(y, Y.test)
 ```
 
 ```julia
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst) 
 ```
 
 **Note:**: X-data are already preprocessed (SNV + Savitsky-Golay).
 
 ```julia
-plotsp(X, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
 #### Split Tot ==> Train + Test
@@ -79,43 +78,41 @@ The term "PLSDA" can represent different methods, e.g. PLSR-DA, PLS-LDA and PLS-
 
 ```julia 
 nlv = 15
-fm = plsrda(Xtrain, ytrain; nlv = nlv) ;
-#fm = plslda(Xtrain, ytrain; nlv = nlv) ;
-#fm = plsqda(Xtrain, ytrain; nlv = nlv) ;
-#fm = plsqda(Xtrain, ytrain; nlv = nlv, prior = "prop") ;
+mod = plsrda(; nlv) 
+#mod = plslda(; nlv) 
+#mod = plsqda(; nlv) 
+#mod = plsqda(; nlv, prior = :prop) 
 ```
 
 An alternative to PLS is the ridge regularization (RR-DA):
 
 ```julia
-#fm = rrda(Xtrain, ytrain; lb = 1e-5) ;
+#mod = rrda(lb = 1e-5)
 ```
 
 ```julia
-pnames(fm)
-```
-
-```julia
-pnames(fm.fm)
+fit!(mod, Xtrain, ytrain)
+pnames(mod) 
+pnames(mod.fm)
 ```
 
 #### Predictions
 
 ```julia
-res = Jchemo.predict(fm, Xtest) ;
+res = predict(mod, Xtest) ;
 pnames(res)
 ```
 
 ```julia
-pred = res.pred
+@head pred = res.pred
 ```
 
 ```julia
-res.posterior   # prediction of the dummy table
+@head res.posterior   # prediction of the dummy table
 ```
 
 ```julia
-err(pred, ytest)
+errp(pred, ytest)
 ```
 
 #### Confusion matrix
@@ -145,12 +142,4 @@ cf.accuracy
 plotconf(cf).f
 ```
 
-#### Example of PLSR-DA averaging
-
-```julia
-nlv = "0:20"
-fm = plsrdaavg(Xtrain, ytrain; nlv = nlv) ;
-pred = Jchemo.predict(fm, Xtest).pred
-err(pred, ytest)
-```
 
