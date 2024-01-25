@@ -6,8 +6,8 @@ This project can also be used to build **training sessions**.
 **What is provided:**
 
 1. **Examples** with Jchemo.jl
-    - [**Scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Ex/src) (*)
     - [**Html**](https://mlesnoff.github.io/JchemoDemo/docs/build/) examples of data analyses 
+    - [**Scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Ex/src) (*)
 
 2. [**Scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Misc/src) displaying some general Julia syntax
 
