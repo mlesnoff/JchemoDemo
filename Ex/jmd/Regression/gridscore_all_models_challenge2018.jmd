@@ -113,11 +113,12 @@ ncal = ntrain - nval
 (ntot = ntot, ntrain, ntest, ncal, nval)
 ```
 
-#### PLSR
+#### Plsr
 
 ```julia term = true
 nlv = 0:50
 pars = mpar(scal = [false; true])
+length(pars[1])
 mod = plskern()  
 res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
     pars, nlv) 
@@ -129,63 +130,65 @@ res[u, :]
 mod = plskern(nlv = res.nlv[u], scal = res.scal[u])
 fit!(mod, Xtrain, ytrain) 
 pred = predict(mod, Xtest).pred 
-rmsep(pred, ytest)
+@show rmsep(pred, ytest)
 plotxy(pred, ytest; color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 ```
 
-#### PLSRAVG 
+#### Plsr-avg
 
 ```julia term = true
-nlv = ["0:30"; "0:50"; "0:70"; "0:100"]
-typf = ["unif"]
-#typf = ["unif"; "aic"; "cv"; "stack"]
-pars = mpar(nlv = nlv, typf = typf)
+nlv = [0:30, 0:50, 0:70, 0:100]
+pars = mpar(nlv = nlv)
 length(pars[1])
-res = gridscore(Xcal, ycal, Xval, yval;
-    score = rmsep, fun = plsravg, pars = pars,
-    verbose = false) 
+mod = plsravg()
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
+    pars, verbose = false) 
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :] 
-fm = plsravg(Xtrain, ytrain; nlv = res.nlv[u], 
-    typf = res.typf[u]) ;
-pred = Jchemo.predict(mod, Xtest).pred 
-rmsep(pred, ytest)
+mod = plsravg(nlv = res.nlv[u])
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred 
+@show rmsep(pred, ytest)
 ```
 
-#### RR 
+#### Rr 
 
 ```julia term = true
-lb = 10.0.^(-15:.1:3) 
-res = gridscorelb(Xcal, ycal, Xval, yval;
-    score = rmsep, fun = rr, lb = lb) 
+lb = 10.0.^(-15:.1:3)
+mod = rr()
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
+    lb) 
 zres = res[res.y1 .< 2, :]
 zlb = round.(log.(10, zres.lb), digits = 3)
 plotgrid(zlb, zres.y1; step = 2,
     xlabel ="Lambda", ylabel = "RMSEP").f
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-fm = rr(Xtrain, ytrain; lb = res.lb[u]) ;
-pred = Jchemo.predict(mod, Xtest).pred
-rmsep(pred, ytest)
+mod = rr(lb = res.lb[u]) ;
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred 
+@show rmsep(pred, ytest)
 ```
 
-#### COVSELR
+#### Covselr
 
 ```julia term = true
-nlv = [10; 20; 30; 40]
-pars = mpar(nlv = nlv)
-res = gridscore(Xcal, ycal, Xval, yval;
-    score = rmsep, fun = covselr, pars = pars, 
-    verbose = false)
+nlv = 0:40
+pars = mpar(msparse = [:hard], nvar = [1])
+mod = splskern()
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
+    pars, nlv, verbose = false)
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-fm = covselr(Xtrain, ytrain; nlv = res.nlv[u]) ;
-pred = Jchemo.predict(mod, Xtest).pred 
-rmsep(pred, ytest)
+mod = splskern(msparse = res.msparse[u], nvar = res.nvar[u], 
+    nlv = res.nlv[u])
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred 
+@show rmsep(pred, ytest)
 ```
 
-#### KRR
+#### Krr
 
 ```julia term = true
 lb = 10.0.^(-15:3) 
@@ -195,25 +198,24 @@ length(pars[1])
 ## To decrease the computation time, 
 ## sampling in Cal
 m = 1000
-s = sample(1:ncal, m; replace = false)
-zXcal = Xcal[s, :]
-zycal = ycal[s]
+s = samprand(ncal, m)
+zXcal = Xcal[s.test, :]
+zycal = ycal[s.test]
 ## End
-res = gridscorelb(zXcal, zycal, Xval, yval;
-    score = rmsep, fun = krr, lb = lb, pars = pars, 
-    verbose = false)
+mod = krr()
+res = gridscore(mod, zXcal, zycal, Xval, yval; score = rmsep, 
+    pars, lb, verbose = false)
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-fm = krr(Xtrain, ytrain; lb = res.lb[u], 
-    gamma = res.gamma[u]) ;
-pred = Jchemo.predict(mod, Xtest).pred 
-rmsep(pred, ytest)
-plotxy(pred, ytest; size = (500, 400),
-    color = (:red, .5), bisect = true, 
+mod = krr(lb = res.lb[u], gamma = res.gamma[u]) 
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred 
+@show rmsep(pred, ytest)
+plotxy(pred, ytest; color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 ```
 
-#### KPLSR
+#### Kplsr
 
 ```julia term = true
 nlv = 0:100 
@@ -223,225 +225,170 @@ length(pars[1])
 ## To decrease the computation time 
 ## Sampling in Cal
 m = 1000
-s = sample(1:ncal, m; replace = false)
-zXcal = Xcal[s, :]
-zycal = ycal[s]
+s = samprand(ncal, m)
+zXcal = Xcal[s.test, :]
+zycal = ycal[s.test]
 ## End
-res = gridscorelv(zXcal, zycal, Xval, yval;
-    score = rmsep, fun = kplsr, nlv = nlv, pars = pars, 
-    verbose = false) 
+mod = kplsr()
+res = gridscore(mod, zXcal, zycal, Xval, yval; score = rmsep,
+    pars, nlv, verbose = false) 
 u = findall(res.y1 .== minimum(res.y1))[1] ;
 res[u, :]
-fm = kplsr(Xtrain, ytrain; nlv = res.nlv[u], 
-    gamma = res.gamma[u]) ;
-pred = Jchemo.predict(mod, Xtest).pred ;
-rmsep(pred, ytest)
+mod = kplsr(nlv = res.nlv[u], gamma = res.gamma[u])
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred 
+@show rmsep(pred, ytest)
 ```
 
-#### DKPLSR
+#### Dkplsr
 
 ```julia term = true
 nlv = 0:100 
 gamma = 10.0.^(-3:5)
 pars = mpar(gamma = gamma)
 length(pars[1])
-res = gridscorelv(Xcal, ycal, Xval, yval;
-    score = rmsep, fun = dkplsr, nlv = nlv, pars = pars, 
-    verbose = false) ;
-u = findall(res.y1 .== minimum(res.y1))[1] 
+mod = dkplsr()
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep,
+    pars, nlv, verbose = false) 
+u = findall(res.y1 .== minimum(res.y1))[1] ;
 res[u, :]
-fm = dkplsr(Xtrain, ytrain; nlv = res.nlv[u], 
-    gamma = res.gamma[u]) ;
-pred = Jchemo.predict(mod, Xtest).pred 
-rmsep(pred, ytest)
+mod = dkplsr(nlv = res.nlv[u], gamma = res.gamma[u])
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred 
+@show rmsep(pred, ytest)
 ```
 
-#### LWPLSR 
+#### Lwplsr
 
 ```julia term = true
-nlvdis = [15; 25] ; metric = ["mahal"] 
+nlvdis = [15; 25] ; metric = [:mah] 
 h = [1; 2; 4; 6; Inf]
 k = [150; 200; 350; 500; 1000]  
-nlv = 1:20 
+nlv = 0:20 
 pars = mpar(nlvdis = nlvdis, metric = metric, 
     h = h, k = k)
 length(pars[1])
-res = gridscorelv(Xcal, ycal, Xval, yval;
-    score = rmsep, fun = lwplsr, nlv = nlv, pars = pars, 
-    verbose = false) 
-group = string.(res.nlvdis, "-", res.h, "-", res.k) 
-plotgrid(res.nlv, res.y1, group; step = 2,
-    xlabel ="Nb. LVs", ylabel = "RMSEP").f
+mod = lwplsr()
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
+    pars, nlv, verbose = true) 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-fm = lwplsr(Xtrain, ytrain; nlvdis = res.nlvdis[u],
-    metric = res.metric[u], h = res.h[u], k = res.k[u], 
-    nlv = res.nlv[u]) ;
+group = string.(res.nlvdis, "-", res.h, "-", res.k) 
+plotgrid(res.nlv, res.y1, group;
+    xlabel ="Nb. LVs", ylabel = "RMSEP").f
+mod = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], 
+    h = res.h[u], k = res.k[u], nlv = res.nlv[u]) ;
+fit!(mod, Xtrain, ytrain)
 pred = Jchemo.predict(mod, Xtest).pred 
-rmsep(pred, ytest)
-plotxy(pred, ytest; size = (500, 400),
-    color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f  
+@show rmsep(pred, ytest)
 ```
 
 ```julia term = true
 ## A performant model 
-fm = lwplsr(Xtrain, ytrain; nlvdis = 15,
-    metric = "mahal", h = 2, k = 200, nlv = 15) ;
-pred = Jchemo.predict(mod, Xtest).pred ;
+mod = lwplsr(nlvdis = 15, metric = :mah, 
+    h = 2, k = 200, nlv = 15) ;
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred 
 rmsep(pred, ytest)
 ```
 
-#### LWPLSR-AVG 
+#### Lwplsr-avg 
 
 ```julia term = true
-nlvdis = [15; 25] ; metric = ["mahal"] 
-h = [1; 2.5; 5] ; k = [150; 200; 350; 500]  
-nlv = ["0:20"; "5:20"; "0:30"; "5:30"] 
-pars = mpar(nlvdis = nlvdis, metric = metric, 
-    h = h, k = k, nlv = nlv) 
+nlv = [0:20, 5:20, 10:20]
+nlvdis = [15; 25] ; metric = [:mah] 
+h = [1; 2; 4] ; k = [150; 200; 350; 500; 1000]  
+pars = mpar(nlv = nlv, nlvdis = nlvdis, 
+    metric = metric, h = h, k = k) 
 length(pars[1])
-res = gridscore(Xcal, ycal, Xval, yval;
-    score = rmsep, fun = lwplsravg, pars = pars, 
-    verbose = false) 
+mod = lwplsravg() 
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
+    pars, verbose = true) 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-fm = lwplsravg(Xtrain, ytrain; nlvdis = res.nlvdis[u],
-    metric = res.metric[u], h = res.h[u], k = res.k[u], 
-    nlv = res.nlv[u]) ;
-pred = Jchemo.predict(mod, Xtest).pred 
+mod = lwplsravg(nlvdis = res.nlvdis[u], metric = res.metric[u], 
+    h = res.h[u], k = res.k[u], nlv = res.nlv[u]) ;
+fit!(mod, Xtrain, ytrain)
+pred = Jchemo.predict(mod, Xtest).pred ;
 rmsep(pred, ytest)
 ```
 
 ```julia term = true
 ## A performant model
-nlvdis = 15 ; metric = "mahal"  
+nlvdis = 15 ; metric = :mah  
 h = 2 ; k = 200 
-nlv = "5:20" ; typf = "unif"
-#nlv = "0:20" ; typf = "aic"   # ==> Best
-fm = lwplsravg(Xtrain, ytrain; nlvdis = nlvdis, 
-    metric = metric, h = h, k = k, nlv = nlv, 
-    typf = typf) ;
-@time pred = Jchemo.predict(mod, Xtest).pred ;
+nlv = 5:20
+mod = lwplsravg(; nlvdis, metric, h, k, nlv)
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred 
 rmsep(pred, ytest)
 ```
 
-#### LWPLSR-S
+#### Lwplsr on preliminary PLS scores 
+## (Pipeline: only the last model is tuned)
 
 ```julia term = true
-nlv0 = [20 ; 30 ; 50]
-metric = ["eucl"; "mahal"] 
-h = [1; 2; 4; 5] ; k = [150; 200; 350; 500]  
-nlv = 1:20 
-pars = mpar(nlv0 = nlv0, metric = metric, h = h, 
-    k = k)
+mod1 = plskern(nlv = 30)
+nlvdis = [0; 15; 25] ; metric = [:eucl, :mah] 
+h = [1; 2; 4; 6; Inf]
+k = [150; 200; 350; 500; 1000]  
+nlv = 0:20 
+pars = mpar(nlvdis = nlvdis, metric = metric, 
+    h = h, k = k)
 length(pars[1])
-res = gridscorelv(Xcal, ycal, Xval, yval;
-    score = msep, fun = lwplsr_s, nlv = nlv, pars = pars, 
-    verbose = false) 
-group = string.(res.nlv0, "-", res.metric, "-", res.h, "-", res.k) 
-plotgrid(res.nlv, res.y1, group; step = 2,
-    xlabel ="Nb. LVs", ylabel = "RMSEP").f
+mod2 = lwplsr()
+mod = pip(mod1, mod2)
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
+    pars, nlv, verbose = true) 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-fm = lwplsr_s(Xtrain, ytrain; nlv0 = res.nlv0[u], 
-    metric = res.metric[u], h = res.h[u], 
-    k = res.k[u], nlv = res.nlv[u]) ;
-pred = Jchemo.predict(mod, Xtest).pred 
-rmsep(pred, ytest)
-```
-
-```julia term = true
-## Working in a DKPLS score space
-reduc = ["dkpls"] ; nlv0 = [20 ; 30 ; 50]
-metric = ["eucl"; "mahal"] 
-gamma = 10.0.^(-3:3) 
-h = [1; 2] ; k = [150; 200; 350]  
-nlv = 1:20 
-psamp = [.30]
-pars = mpar(reduc = reduc, nlv0 = nlv0, 
-    metric = metric, gamma = gamma, h = h, k = k,
-    psamp = psamp)
-length(pars[1])
-res = gridscorelv(Xcal, ycal, Xval, yval;
-    score = msep, fun = lwplsr_s, nlv = nlv, pars = pars, 
-    verbose = false) 
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-fm = lwplsr_s(Xtrain, ytrain; reduc = res.reduc[u], 
-    nlv0 = res.nlv0[u], gamma = res.gamma[u], 
-    metric = res.metric[u], h = res.h[u], 
-    k = res.k[u], nlv = res.nlv[u],
-    psamp = res.psamp[u]) ;
-pred = Jchemo.predict(mod, Xtest).pred 
-rmsep(pred, ytest)
-```
-
-#### CPLSR-AVG 
-
-```julia term = true
-ncla = 5:10 ; nlv_da = 1:20
-nlv = ["0:10"; "0:15"; "0:20"; 
-    "5:15"; "5:20"]
-pars = mpar(ncla = ncla, nlv_da = nlv_da, 
-    nlv = nlv) 
-length(pars[1])
-res = gridscore(Xcal, ycal, Xval, yval;
-    score = rmsep, fun = cplsravg, pars = pars, 
-    verbose = false)
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-fm = cplsravg(Xtrain, ytrain; ncla = res.ncla[u],
-    nlv_da = res.nlv_da[u], nlv = res.nlv[u]) ;
-pred = Jchemo.predict(mod, Xtest).pred 
-rmsep(pred, ytest)
-```
-
-```julia term = true
-fm = cplsravg(Xtrain, ytrain; ncla = 10,
-    nlv_da = 14, nlv = "5:20") ;
-pred = Jchemo.predict(mod, Xtest).pred 
+mod2 = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], 
+    h = res.h[u], k = res.k[u], nlv = res.nlv[u])
+mod = pip(mod1, mod2)
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred 
 rmsep(pred, ytest)
 ```
 
 #### KNNR
 
 ```julia term = true
-nlvdis = [15; 20]  ; metric = ["mahal"] 
-h = [1; 2; 4; 6; Inf] ;
+nlvdis = [15; 20]  ; metric = [:mah] 
+h = [1; 2; 4; 6; Inf] 
 k = [1; collect(5:10:100)] 
-pars = mpar(nlvdis = nlvdis, metric = metric, 
-    h = h, k = k) 
+pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k) 
 length(pars[1])
-res = gridscore(Xcal, ycal, Xval, yval;
-    score = rmsep, fun = knnr, pars = pars, 
-    verbose = false) 
+mod = knnr()
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
+    pars, verbose = false) 
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
-fm = knnr(Xtrain, ytrain; nlvdis = res.nlvdis[u], 
-    metric = res.metric[u], h = res.h[u], k = res.k[u]) ;
-pred = Jchemo.predict(mod, Xtest).pred ;
+mod = knnr(nlvdis = res.nlvdis[u], metric = res.metric[u], 
+    h = res.h[u], k = res.k[u])
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred 
 rmsep(pred, ytest)
 ```
 
 #### RFR
 
 ```julia term = true
-n_trees = [50]
+n_trees = [100]
 n_subfeatures = LinRange(5, p / 2, 5)
 max_depth = [6; 10; 20; 2000]
 pars = mpar(n_trees = n_trees, n_subfeatures = n_subfeatures, 
     max_depth = max_depth)
 length(pars[1])
-res = gridscore(Xcal, ycal, Xval, yval;
-    score = rmsep, fun = rfr_dt, pars = pars, 
-    verbose = false) ;
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
+    pars, verbose = false) 
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
-fm = rfr_dt(Xtrain, ytrain; n_trees = res.n_trees[u], 
-    n_subfeatures = res.n_subfeatures[u], 
-    max_depth = res.max_depth[u]) ;
-pred = Jchemo.predict(mod, Xtest).pred
-rmsep(pred, ytest)
+mod = rfr_dt(n_trees = res.n_trees[u], n_subfeatures = res.n_subfeatures[u], 
+    max_depth = res.max_depth[u])
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred 
+@show rmsep(pred, ytest)
+plotxy(pred, ytest; color = (:red, .5), bisect = true, 
+    xlabel = "Prediction", ylabel = "Observed (Test)").f  
 ```
 

@@ -119,7 +119,7 @@ ncal = ntrain - nval
 nlvdis = [15; 25] ; metric = [:mah] 
 h = [1; 2; 4; 6; Inf]
 k = [150; 200; 350; 500; 1000]  
-nlv = 1:20 
+nlv = 0:20 
 pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k)
 ```
 
