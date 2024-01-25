@@ -16,19 +16,21 @@ Xmp5 = dat.Xmp5
 Xmp6 = dat.Xmp6
 Y = dat.Y 
 ntot = nro(Xm5)
-wl = names(dat.Xm5)
-wl_num = parse.(Float64, wl)
+wlst = names(dat.Xm5)
+wl = parse.(Float64, wlst)
 namy = names(Y)
 
 summ(Y).res
 
-plotsp(Xm5, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Reflectance").f
+plotsp(Xm5, wl; xlabel = "Wavelength (nm)", ylabel = "Reflectance").f
 
-fpreproc(X) = savgol(snv(X); f = 11, d = 2, pol = 3) 
-Xpm5 = fpreproc(Xm5)
-Xpmp5 = fpreproc(Xmp5)
-Xpmp6 = fpreproc(Xmp6)
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 11, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, Xm5)
+Xpm5 = transf(mod, Xm5)
+Xpmp5 = transf(mod, Xmp5)
+Xpmp6 = transf(mod, Xmp6)
 
 X1 = copy(Xpm5)
 X2 = copy(Xpmp6)
@@ -39,19 +41,19 @@ n2 = nro(X2)
 
 ## Before transfert
 i = 40
-f = Figure(resolution = (500, 300))
+f = Figure(size = (500, 300))
 ax = Axis(f[1, 1])
 lines!(X1[i, :]; label = "x1")
 lines!(ax, X2[i, :]; label = "x2")
 axislegend(position = :rb, framevisible = false)
 f
 ## After transfert
-res = Jchemo.difmean(X1, X2) ;
+res = difmean(X1, X2) ;
 fm0 = eposvd(res.D; nlv = 1) ;
 M = fm0.M    # orthogonalization matrix
 X1c = X1 * M
 X2c = X2 * M
-f = Figure(resolution = (500, 300))
+f = Figure(size = (500, 300))
 ax = Axis(f[1, 1])
 lines!(X1c[i, :]; label = "x1_correct")
 lines!(ax, X2c[i, :]; label = "x2_correct")
@@ -61,26 +63,28 @@ f
 #### Plotting spectral spaces
 
 ## Before transfert
-fm = pcasvd(X1; nlv = 10) ;
-T1 = fm.T
-T2 = Jchemo.transform(fm, X2)
+mod = pcasvd(nlv = 10)
+fit!(mod, X1)
+T1 = mod.fm.T
+T2 = transf(mod, X2)
 i = 1
-f, ax = plotxy(T1[:, i:(i + 1)];
-    xlabel = string("PC", i), ylabel = string("PC", i + 1))
-scatter!(ax, T2[:, i:(i + 1)])
+f, ax = plotxy(T1[:, i], T1[:, i + 1]; xlabel = string("PC", i), 
+    ylabel = string("PC", i + 1))
+scatter!(ax, T2[:, i], T2[:, i + 1])
 f
 ## After transfert
-res = Jchemo.difmean(X1, X2) ;
+res = difmean(X1, X2) ;
 fm0 = eposvd(res.D; nlv = 1) ;
 X1c = X1 * fm0.M
 X2c = X2 * fm0.M
-fm = pcasvd(X1c; nlv = 10) ;
-T1 = fm.T
-T2 = Jchemo.transform(fm, X2c)
+mod = pcasvd(nlv = 10)
+fit!(mod, X1c)
+T1 = mod.fm.T
+T2 = transf(mod, X2c)
 i = 1
-f, ax = plotxy(T1[:, i:(i + 1)];
-    xlabel = string("PC", i), ylabel = string("PC", i + 1))
-scatter!(ax, T2[:, i:(i + 1)])
+f, ax = plotxy(T1[:, i], T1[:, i + 1]; xlabel = string("PC", i), 
+    ylabel = string("PC", i + 1))
+scatter!(ax, T2[:, i], T2[:, i + 1])
 f
 
 #### Predictions
@@ -88,22 +92,18 @@ f
 ## Build of training and test sets 
 ## Switch of the train and test observations between
 ## the two machines since corn data contains actually standards
-m = n1 / 2
-res = sampdp(hcat(X1, X2); k = m) ;
-pnames(res)
-res.train
-res.test
-s = res.train
+m = Int(round(n1 / 2))
+s = sampdp(hcat(X1, X2), m) 
 ## Machine 1
-X1train = X1[s, :]
-Y1train = Y[s, :]
-X1test = rmrow(X1, s)
-Y1test = rmrow(Y, s)
+X1train = X1[s.train, :]
+Y1train = Y[s.train, :]
+X1test = X1[s.test, :]
+Y1test = Y[s.test, :]
 ## Machine 2
-X2test = X2[s, :]
-Y2test = Y[s, :]
-X2train = rmrow(X2, s)
-Y2train = rmrow(Y, s)
+X2train = X2[s.train, :]
+Y2train = Y[s.train, :]
+X2test = X2[s.test, :]
+Y2test = Y[s.test, :]
 ## End
 n1train = nro(X1train)
 n1test = nro(X1test)
@@ -137,20 +137,21 @@ zytest = copy(y1test)
 K = 5
 segm = segmkf(zn, K; rep = 20)
 nlv = 0:15
-res = gridcvlv(zXtrain, zytrain; segm = segm,
-    score = rmsep, fun = plskern, nlv = nlv).res
+mod = plskern()
+res = gridcv(mod, zXtrain, zytrain; segm, score = rmsep, 
+    nlv).res
 plotgrid(res.nlv, res.y1; step = 1).f
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
-fm = plskern(zXtrain, zytrain; nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, zXtest).pred
-println(rmsep(pred, zytest))
-plotxy(pred, zytest;
-    bisect = true, xlabel = "Prediction",
+mod = plskern(nlv = res.nlv[u])
+fit!(mod, zXtrain, zytrain)
+pred = predict(mod, zXtest).pred
+@show rmsep(pred, zytest)
+plotxy(pred, zytest; bisect = true, xlabel = "Prediction",
     ylabel = "Observed").f
 
 ## Model tuning after transfert, within each machine
-D = Jchemo.difmean(X1train, X2train).D
+D = difmean(X1train, X2train).D
 M = eposvd(D; nlv = 1).M
 ## On machine 1
 zXtrain = X1train * M 
@@ -164,9 +165,10 @@ zn = copy(n1train)
 K = 5
 segm = segmkf(zn, K; rep = 20)
 nlv = 0:15
-res = gridcvlv(zXtrain, zytrain; segm = segm,
-    score = rmsep, fun = plskern, nlv = nlv).res
-plotgrid(res.nlv, res.y1).f
+mod = plskern()
+res = gridcv(mod, zXtrain, zytrain; segm, score = rmsep, 
+    nlv).res
+plotgrid(res.nlv, res.y1; step = 1).f
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
@@ -187,9 +189,10 @@ zytest = copy(y1test)
 #zytest = copy(y2test)
 ## End
 nlv = 7   # compromise between machines, for the given y-variable (here j = 1)
-fm = plskern(zXtrain, zytrain; nlv = nlv) ;
-pred = Jchemo.predict(fm, zXtest).pred    # test predictions on corrected spectra
-println(rmsep(pred, zytest))
+mod = plskern(; nlv)
+fit!(mod, zXtrain, zytrain)
+pred = predict(mod, zXtest).pred    # test predictions on corrected spectra
+@show rmsep(pred, zytest)
 plotxy(pred, zytest;
     bisect = true, xlabel = "Prediction",
     ylabel = "Observed").f
