@@ -8,8 +8,8 @@ weave_options:
 ---
 
 ```julia
-using JLD2, CairoMakie, FreqTables 
 using Jchemo, JchemoData
+using JLD2, CairoMakie, FreqTables 
 ```
 
 #### Data importation
@@ -44,20 +44,19 @@ freqtable(y, Y.test)
 ```
 
 ```julia
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst) 
 ```
 
 **Note:**: X-data are already preprocessed (SNV + Savitsky-Golay).
 
 ```julia
-plotsp(X, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
 #### Split Tot ==> Train + Test
 
-The model is tuned on **Train**, and the generalization error is estimated on **Test**.
+The model is fitted on **Train**, and the generalization error is estimated on **Test**.
 Here the split of **Tot** is already provided inside the dataset (= variable `test`), 
 but **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic 
 or any other designs). 
@@ -82,11 +81,11 @@ K = 3 ; segm = segmkf(ntrain, K; rep = 10)         # K-fold CV
 
 #### Grid-search by CV 
 
-
 ```julia
-nlv = 0:50
-res = gridcvlv(Xtrain, ytrain; segm = segm, 
-    score = err, fun = plsrda, nlv = nlv, verbose = false).res
+nlv = 0:40
+mod = plsrda()
+res = gridcv(mod, Xtrain, ytrain; segm, score = errp, 
+    nlv, verbose = false).res
 ```
 
 **Selection of the best parameters combination:**
@@ -97,21 +96,22 @@ res[u, :]
 ```
 
 ```julia
-plotgrid(res.nlv, res.y1; step = 5,
-    xlabel = "Nb. LVs", ylabel = "ERR").f
+plotgrid(res.nlv, res.y1; step = 5, xlabel = "Nb. LVs", 
+    ylabel = "ERR").f
 ```
 
 #### Final prediction (Test) using the optimal model
 
 ```julia
-fm = plsrda(Xtrain, ytrain; nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred
+mod = plsrda(nlv = res.nlv[u])
+fit!(mod, Xtrain, ytrain)
+pred = predict(mod, Xtest).pred
 ```
 
 **Generalization error:**
 
 ```julia
-err(pred, ytest)
+errp(pred, ytest)
 ```
 
 #### Confusion matrix
@@ -132,9 +132,15 @@ plotconf(cf).f
 #### Example with PLSLDA
 
 ```julia
-nlv = 1:50  ## !!: Does not start from nlv = 0 (since the method runs an LDA on PLS scores)
-res = gridcvlv(Xtrain, ytrain; segm = segm, 
-    score = err, fun = plslda, nlv = nlv, verbose = false).res
+nlv = 1:40  ## !!: Does not start from nlv = 0 (since the method runs an LDA on PLS scores)
+mod = plslda()
+res = gridcv(mod, Xtrain, ytrain; segm, score = errp, 
+    nlv, verbose = false).res
+```
+
+```julia
+plotgrid(res.nlv, res.y1; step = 5, xlabel = "Nb. LVs", 
+    ylabel = "Err-CV").f
 ```
 
 ```julia
@@ -143,13 +149,9 @@ res[u, :]
 ```
 
 ```julia
-plotgrid(res.nlv, res.y1; step = 5,
-    xlabel = "Nb. LVs", ylabel = "ERR").f
-```
-
-```julia
-fm = plslda(Xtrain, ytrain; nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred
-err(pred, ytest)
+mod = plslda(nlv = res.nlv[u])
+fit!(mod, Xtrain, ytrain)
+pred = predict(mod, Xtest).pred
+errp(pred, ytest)
 ```
 
