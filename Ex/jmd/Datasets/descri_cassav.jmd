@@ -8,8 +8,8 @@ weave_options:
 ---
 
 ```julia
-using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
+using JLD2, CairoMakie
 ```
 
 #### Data importation
@@ -74,8 +74,7 @@ Xp = transf(mod, X)
 ```
 
 ```julia
-plotsp(Xp, wl; xlabel = "Wavelength (nm)", 
-    ylabel = "Absorbance").f
+plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
 #### PCA
@@ -102,19 +101,19 @@ z = res.explvarx
 ```
 
 ```julia
-plotgrid(z.nlv, 100 * z.pvar; step = 1,
-    xlabel = "Nb. PCs", ylabel = "% variance explained").f
+plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "Nb. PCs", 
+    ylabel = "% variance explained").f
 ```
 
 ```julia
 i = 1
-plotxy(T[:, i], T[:, i + 1]; color = (:red, .5),
-    xlabel = "PC1", ylabel = "PC2").f
+plotxy(T[:, i], T[:, i + 1]; color = (:red, .5), xlabel = "PC1", 
+    ylabel = "PC2").f
 ```
 
 ```julia
-plotxy(T[:, i], T[:, i + 1], year; ellipse = true,
-    xlabel = "PC1", ylabel = "PC2").f
+plotxy(T[:, i], T[:, i + 1], year; ellipse = true, xlabel = "PC1", 
+    ylabel = "PC2").f
 ```
 
 #### Y-variables

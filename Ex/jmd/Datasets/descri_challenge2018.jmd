@@ -111,6 +111,11 @@ pnames(mod)
 pnames(mod.fm)
 ```
 
+```julia term = true
+T = mod.fm.T
+@head T
+```
+
 ```julia
 res = summary(mod, Xp) ;
 pnames(res)
@@ -157,12 +162,12 @@ Ttest = transf(mod, Xtest)
 ```
 
 ```julia
-zT = vcat(Ttrain, Ttest)
+T = vcat(Ttrain, Ttest)
 group = vcat(repeat(["0-Train";], ntrain), repeat(["1-Test";], ntest))
 colm = [:blue, (:red, .5)]
 i = 1
-plotxy(zT[:, i], T[:, i + 1], group; color = colm,
-    xlabel = "PC1", ylabel = "PC2").f
+plotxy(T[:, i], T[:, i + 1], group; color = colm, xlabel = "PC1", 
+    ylabel = "PC2").f
 ```
 
 **Score (SD) and orthogonal (OD) distances**
