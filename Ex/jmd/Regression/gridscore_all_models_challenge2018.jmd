@@ -271,16 +271,16 @@ length(pars[1])
 mod = lwplsr()
 res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
     pars, nlv, verbose = true) 
+group = string.(res.nlvdis, "-", res.h, "-", res.k) 
+plotgrid(res.nlv, res.y1, group; xlabel ="Nb. LVs", 
+    ylabel = "RMSEP").f
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-group = string.(res.nlvdis, "-", res.h, "-", res.k) 
-plotgrid(res.nlv, res.y1, group;
-    xlabel ="Nb. LVs", ylabel = "RMSEP").f
 mod = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], 
-    h = res.h[u], k = res.k[u], nlv = res.nlv[u]) ;
+    h = res.h[u], k = res.k[u], nlv = res.nlv[u]) 
 fit!(mod, Xtrain, ytrain)
 pred = Jchemo.predict(mod, Xtest).pred 
-@show rmsep(pred, ytest)
+rmsep(pred, ytest)
 ```
 
 ```julia term = true
@@ -303,7 +303,7 @@ pars = mpar(nlv = nlv, nlvdis = nlvdis,
 length(pars[1])
 mod = lwplsravg() 
 res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
-    pars, verbose = true) 
+    pars, verbose = false) 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 mod = lwplsravg(nlvdis = res.nlvdis[u], metric = res.metric[u], 
@@ -350,7 +350,7 @@ pred = predict(mod, Xtest).pred
 rmsep(pred, ytest)
 ```
 
-#### KNNR
+#### Knnr
 
 ```julia term = true
 nlvdis = [15; 20]  ; metric = [:mah] 
@@ -370,7 +370,7 @@ pred = predict(mod, Xtest).pred
 rmsep(pred, ytest)
 ```
 
-#### RFR
+#### Rfr
 
 ```julia term = true
 n_trees = [100]

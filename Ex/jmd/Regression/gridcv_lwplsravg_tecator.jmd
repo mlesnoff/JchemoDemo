@@ -49,25 +49,26 @@ tab(typ)
 ```
 
 ```julia
-wl = names(X)
-wl_num = parse.(Float64, wl) 
+wlst = names(X)
+wl = parse.(Float64, wlst) 
 ```
 
 ```julia
-plotsp(X, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
 #### Preprocessing
 
 ```julia
-f = 15 ; pol = 3 ; d = 2 
-Xp = savgol(snv(X); f = f, pol = pol, d = d) 
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 15, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X) 
 ```
 
 ```julia
-plotsp(Xp, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
 #### Split Tot ==> Train + Test
@@ -106,9 +107,9 @@ segm = segmkf(ntrain, 4; rep = 5)
 #### Grid
 
 ```julia
-nlvdis = [10; 15] ; metric = ["mahal"] 
+nlvdis = [10; 15] ; metric = [:mah] 
 h = [1; 2; 5; Inf] ; k = [30; 50; 100]  
-nlv = ["1:5", "1:10"]
+nlv = [0:5, 0:10, 1:5, 1:10]
 pars = mpar(nlvdis = nlvdis, metric = metric, 
     h = h, k = k, nlv = nlv) 
 ```
@@ -120,9 +121,9 @@ length(pars[1])
 #### Grid-search by CV
 
 ```julia
-res = gridcv(Xtrain, ytrain; segm = segm,
-    score = rmsep, fun = lwplsravg, 
-    pars = pars, verbose = false).res 
+mod = lwplsravg()
+res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, 
+    pars, verbose = false).res 
 ```
 
 **Selection of the best parameters combination:**
@@ -135,16 +136,15 @@ res[u, :]
 #### Final prediction (Test) using the optimal model
 
 ```julia
-fm = lwplsravg(Xtrain, ytrain; nlvdis = res.nlvdis[u],
-    metric = res.metric[u], h = res.h[u], k = res.k[u], 
-    nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
+mod = lwplsravg(nlvdis = res.nlvdis[u], metric = res.metric[u], 
+    h = res.h[u], k = res.k[u], nlv = res.nlv[u])
+fit!(mod, Xtrain, ytrain)
+pred = predict(mod, Xtest).pred
 rmsep(pred, ytest)
 ```
 
 ```julia
-plotxy(pred, ytest; resolution = (500, 400),
-    color = (:red, .5), bisect = true, 
+plotxy(pred, ytest; color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f  
 ```
     
