@@ -8,8 +8,8 @@ weave_options:
 ---
 
 ```julia
-using JLD2, CairoMakie
 using Jchemo, JchemoData
+using JLD2, CairoMakie
 using Loess
 ```
 
