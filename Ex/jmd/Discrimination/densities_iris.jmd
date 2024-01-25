@@ -108,6 +108,8 @@ W = res.W * n / (n - nlev)
 npoints = 2^7
 x1 = LinRange(-4, 4, npoints)
 x2 = LinRange(-2, 2, npoints)
+z = mpar(x1 = x1, x2 = x2)
+grid = reduce(hcat, z)
 f = Figure(size = (900, 400))
 ax = list(nlev) 
 for i = 1:nlev 
@@ -116,11 +118,8 @@ for i = 1:nlev
     #lims = [[minimum(zT[:, j]) ; maximum(zT[:, j])] for j = 1:nlv]
     #x1 = LinRange(lims[1][1], lims[1][2], npoints)
     #x2 = LinRange(lims[2][1], lims[2][2], npoints)
-    z = mpar(x1 = x1, x2 = x2)
-    grid = reduce(hcat, z)
-    m = nro(grid)
     zfm = dmnorm(zT; S = W) ;
-    zres = Jchemo.predict(zfm, grid) ;
+    zres = predict(zfm, grid) ;
     pred_grid = vec(zres.pred)
     ax[i] = Axis(f[1, i]; title = lev[i], xlabel = "LV1", ylabel = "LV2")
     co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
@@ -146,17 +145,18 @@ ni = res.ni
 npoints = 2^7
 x1 = LinRange(-4, 4, npoints)
 x2 = LinRange(-2, 2, npoints)
+z = mpar(x1 = x1, x2 = x2)
+grid = reduce(hcat, z)
+z = mpar(x1 = x1, x2 = x2)
+grid = reduce(hcat, z)
 f = Figure(size = (900, 400))
 ax = list(nlev) 
 for i = 1:nlev 
     s = y .== lev[i]
     zT = T[s, :]
-    z = mpar(x1 = x1, x2 = x2)
-    grid = reduce(hcat, z)
-    m = nro(grid)
     S = Wi[i] * ni[i] / (ni[i] - 1)
     zfm = dmnorm(zT; S = S) ;
-    zres = Jchemo.predict(zfm, grid) ;
+    zres = predict(zfm, grid) ;
     pred_grid = vec(zres.pred) 
     ax[i] = Axis(f[1, i]; title = lev[i], xlabel = "LV1", ylabel = "LV2")
     co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
@@ -178,14 +178,13 @@ f
 npoints = 2^7
 x1 = LinRange(-4, 4, npoints)
 x2 = LinRange(-2, 2, npoints)
+z = mpar(x1 = x1, x2 = x2)
+grid = reduce(hcat, z)
 f = Figure(size = (900, 400))
 ax = list(nlev) 
 for i = 1:nlev 
     s = y .== lev[i]
     zT = T[s, :]
-    z = mpar(x1 = x1, x2 = x2)
-    grid = reduce(hcat, z)
-    m = nro(grid)
     zfm = dmkern(zT; a_kde = 1) 
     zres = predict(zfm, grid) ;
     pred_grid = vec(zres.pred)
