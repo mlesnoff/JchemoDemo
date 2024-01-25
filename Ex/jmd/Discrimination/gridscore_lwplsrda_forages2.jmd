@@ -8,8 +8,8 @@ weave_options:
 ---
 
 ```julia
-using JLD2, CairoMakie, FreqTables, StatsBase 
 using Jchemo, JchemoData
+using JLD2, CairoMakie, FreqTables
 ```
 
 #### Data importation
@@ -44,20 +44,19 @@ freqtable(y, Y.test)
 ```
 
 ```julia
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst) 
 ```
 
 **Note:**: X-data are already preprocessed (SNV + Savitsky-Golay).
 
 ```julia
-plotsp(X, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
 #### Split Tot ==> Train + Test
 
-The model is tuned on **Train**, and the generalization error is estimated on **Test**.
+The model is fitted on **Train**, and the generalization error is estimated on **Test**.
 Here the split of **Tot** is already provided inside the dataset (= variable `test`), 
 but **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic 
 or any other designs). 
@@ -109,7 +108,7 @@ length(pars[1])
 
 ```julia
 res = gridscorelv(Xcal, ycal, Xval, yval;
-    score = err, fun = lwplsrda, nlv = nlv, pars = pars, 
+    score = errp, fun = lwplsrda, nlv = nlv, pars = pars, 
     verbose = false)
 ```
 
@@ -139,7 +138,7 @@ pred = Jchemo.predict(fm, Xtest).pred
 #### Generalization error
 
 ```julia
-err(pred, ytest)
+errp(pred, ytest)
 ```
 
 #### Confusion matrix

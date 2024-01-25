@@ -8,8 +8,8 @@ weave_options:
 ---
 
 ```julia
-using JLD2, CairoMakie, FreqTables, StatsBase 
 using Jchemo, JchemoData
+using JLD2, CairoMakie, FreqTables
 ```
 
 #### Data importation
@@ -44,20 +44,19 @@ freqtable(y, Y.test)
 ```
 
 ```julia
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst) 
 ```
 
 **Note:**: X-data are already preprocessed (SNV + Savitsky-Golay).
 
 ```julia
-plotsp(X, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
 #### Split Tot ==> Train + Test
 
-The model is tuned on **Train**, and the generalization error is estimated on **Test**.
+The model is fitted on **Train**, and the generalization error is estimated on **Test**.
 Here the split of **Tot** is already provided inside the dataset (= variable `test`), 
 but **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic 
 or any other designs). 
@@ -82,12 +81,12 @@ on **Val**. Below the split is built from a random sampling
 ```julia
 pct = .30
 nval = Int64.(round(pct * ntrain))
+s = samprand(ntrain, nval)
+Xcal = Xtrain[s.train, :]
+ycal = ytrain[s.train]
+Xval = Xtrain[s.test, :]
+yval = ytrain[s.test]
 ncal = ntrain - nval 
-s = sample(1:ntrain, nval; replace = false)
-Xcal = rmrow(Xtrain, s) 
-ycal = rmrow(ytrain, s) 
-Xval = Xtrain[s, :] 
-yval = ytrain[s] 
 (ntot = ntot, ntrain, ntest, ncal, nval)
 ```
 
@@ -95,15 +94,16 @@ yval = ytrain[s]
 
 ```julia
 nlv = 0:50
-res = gridscorelv(Xcal, ycal, Xval, yval; 
-    score = err, fun = plsrda, nlv = nlv)
+mod = plsrda()
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = errp, 
+    nlv)
 ```
 
 **Selection of the best parameters combination:**
 
 ```julia
-plotgrid(res.nlv, res.y1; step = 5,
-    xlabel = "Nb. LVs", ylabel = "ERR").f
+plotgrid(res.nlv, res.y1; step = 5, xlabel = "Nb. LVs", 
+    ylabel = "ERR").f
 ```
 
 ```julia
@@ -114,14 +114,15 @@ res[u, :]
 #### Final prediction (Test) using the optimal model
 
 ```julia
-fm = plsrda(Xtrain, ytrain; nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred
+mod = plsrda(nlv = res.nlv[u])
+fit!(mod, Xtrain, ytrain)
+pred = predict(mod, Xtest).pred
 ```
 
 #### Generalization error
 
 ```julia
-err(pred, ytest)
+errp(pred, ytest)
 ```
 
 #### Confusion matrix
