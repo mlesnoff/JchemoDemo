@@ -15,7 +15,7 @@ This project can also be used to build **training sessions**.
 
 4. Some methodological [**materials**](https://github.com/mlesnoff/JchemoDemo/tree/main/Misc/annexes)
 
-The **datasets** used as examples are stored in package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl), already installed in the [environment](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml) of JchemoDemo.
+The **datasets** used as examples are stored in package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl), already installed in the [**environmen**t](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml) of JchemoDemo.
 
 (*) When exploring a given script, it is recommended to run the code row by row (or by block) in the REPL to observe the corresponding outputs. 
 
