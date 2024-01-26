@@ -1,6 +1,6 @@
 
-using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
+using JLD2, CairoMakie
 using FreqTables
 
 
@@ -29,8 +29,8 @@ test = Y.test
 tab(test)
 
 
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst)
 
 
 freqtable(string.(typ, "-", Y.label))
@@ -39,11 +39,14 @@ freqtable(string.(typ, "-", Y.label))
 freqtable(typ, test)
 
 
-plotsp(X, wl_num; nsamp = 30).f
+plotsp(X, wl; nsamp = 30).f
 
 
-f = 21 ; pol = 3 ; d = 2 
-Xp = savgol(snv(X); f = f, pol = pol, d = d) ;
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 21, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X)
 
 
 s = Bool.(test)
@@ -56,20 +59,19 @@ ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
 
-nval = 300 
+nval = 300
+s = samprand(ntrain, nval)
+Xcal = Xtrain[s.train, :]
+ycal = ytrain[s.train]
+Xval = Xtrain[s.test, :]
+yval = ytrain[s.test]
 ncal = ntrain - nval 
-s = sample(1:ntrain, nval; replace = false)
-Xcal = rmrow(Xtrain, s) 
-ycal = rmrow(ytrain, s) 
-Xval = Xtrain[s, :] 
-yval = ytrain[s] 
 (ntot = ntot, ntrain, ntest, ncal, nval)
 
 
-nlvdis = [15; 25] ; metric = ["mahal"] 
-h = [1; 2.5; 5]
-k = [200; 350; 500]  
-nlv = ["0:20"; "5:20"; "0:30"; "5:30"] 
+nlvdis = [15; 25] ; metric = [:mah] 
+h = [1; 2; 4] ; k = [150; 200; 350; 500]  
+nlv = [0:20, 5:20, 10:20]
 pars = mpar(nlvdis = nlvdis, metric = metric, 
     h = h, k = k, nlv = nlv)
 
@@ -77,23 +79,22 @@ pars = mpar(nlvdis = nlvdis, metric = metric,
 length(pars[1])
 
 
-res = gridscore(Xcal, ycal, Xval, yval;
-    score = rmsep, fun = lwplsravg, pars = pars, 
-    verbose = false)
+mod = lwplsravg()
+res = gridscore(mod, Xcal, ycal, Xval, yval;
+    score = rmsep, pars, verbose = false)
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 
 
-fm = lwplsravg(Xtrain, ytrain; nlvdis = res.nlvdis[u],
-    metric = res.metric[u], h = res.h[u], k = res.k[u], 
-    nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
+mod = lwplsravg(nlvdis = res.nlvdis[u], metric = res.metric[u], 
+    h = res.h[u], k = res.k[u], nlv = res.nlv[u]) ;
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred 
 rmsep(pred, ytest)
 
 
-plotxy(pred, ytest; resolution = (500, 400),
-    color = (:red, .5), bisect = true, 
+plotxy(pred, ytest; color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f
 

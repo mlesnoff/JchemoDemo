@@ -31,10 +31,10 @@ summ(vec(Xtest)).res
 plotsp(Xtest; nsamp = 1).f
 
 
-nlv = 25
-fm = plsqda(Xtrain, ytrain; nlv = nlv) ;
-pred = Jchemo.predict(fm, Xtest).pred
-err(pred, ytest)
+mod = plsqda(nlv = 25)
+fit!(mod, Xtrain, ytrain)
+pred = predict(mod, Xtest).pred
+errp(pred, ytest)
 
 
 freqtable(ytest, vec(pred))

@@ -1,7 +1,6 @@
 
-using JLD2, CairoMakie
 using Jchemo, JchemoData
-using Loess
+using JLD2, CairoMakie
 
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -29,20 +28,21 @@ typ = Y.typ
 tab(typ)
 
 
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst)
 
 
-plotsp(X, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-f = 15 ; pol = 3 ; d = 2 
-Xp = savgol(snv(X); f = f, pol = pol, d = d)
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 15, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X)
 
 
-plotsp(Xp, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
 s = typ .== "train"
@@ -68,434 +68,187 @@ segm = segmkf(ntrain, 4; rep = 20)
 segm_slow = segm[1:3]
 
 
-nlv = 0:40
-res = gridcvlv(Xtrain, ytrain; segm = segm, 
-    score = rmsep, fun = plskern, nlv = nlv).res
-
-
-plotgrid(res.nlv, res.y1;
-    xlabel ="Nb. LVs", ylabel = "RMSEP").f
-
-
+nlv = 0:50
+pars = mpar(scal = [false; true])
+length(pars[1])
+mod = plskern()  
+res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, 
+    pars, nlv).res 
+group = string.(res.scal) 
+plotgrid(res.nlv, res.y1, group; step = 2, xlabel ="Nb. LVs", 
+    ylabel = "RMSEP").f
 u = findall(res.y1 .== minimum(res.y1))[1]
-res[u, :]
-
-
-fm = plskern(Xtrain, ytrain; nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred ;
-rmsep(pred, ytest)
-
-
-plotxy(pred, ytest; resolution = (500, 400),
-    color = (:red, .5), bisect = true, 
+res[u, :] 
+mod = plskern(nlv = res.nlv[u], scal = res.scal[u])
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred 
+@show rmsep(pred, ytest)
+plotxy(pred, ytest; color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f
 
 
-nlv = ["0:10"; "0:20"; "0:30"; "0:50"]
-typf = ["unif"]
-#typf = ["unif"; "aic"; "stack"]
-pars = mpar(nlv = nlv, typf = typf)
-
-
-res = gridcv(Xtrain, ytrain; segm = segm,
-    score = rmsep, fun = plsravg, pars = pars).res
-
-
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-
-
-fm = plsravg(Xtrain, ytrain; nlv = res.nlv[u],
-    typf = res.typf[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
-rmsep(pred, ytest)
-
-
-plotxy(pred, ytest; resolution = (500, 400),
-    color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f
-
-
-lb = 10.0.^(-15:.1:3) 
-res = gridcvlb(Xtrain, ytrain; segm = segm,
-    score = rmsep, fun = rr, lb = lb, verbose = false).res
-
-
-zres = res[res.y1 .< 3, :]
-zlb = round.(log.(10, zres.lb), digits = 3)
-plotgrid(zlb, zres.y1; step = .5,
-    xlabel ="Lambda", ylabel = "RMSEP").f
-
-
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-
-
-fm = rr(Xtrain, ytrain; lb = res.lb[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred
-rmsep(pred, ytest)
-
-
-plotxy(pred, ytest; resolution = (500, 400),
-    color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f
-
-
-nlv = [5; 10; 15; 20; 30]
+nlv = [0:10, 0:20, 0:50]
 pars = mpar(nlv = nlv)
+length(pars[1])
+mod = plsravg()
+res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, 
+    pars).res 
+u = findall(res.y1 .== minimum(res.y1))[1]
+res[u, :] 
+mod = plsravg(nlv = res.nlv[u])
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred 
+@show rmsep(pred, ytest)
 
 
-res = gridcv(Xtrain, ytrain; segm = segm,
-    score = rmsep, fun = covselr, pars = pars, 
-    verbose = false).res
-
-
+lb = 10.0.^(-15:.1:3)
+mod = rr()
+res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, 
+    lb).res 
+zlb = round.(log.(10, res.lb), digits = 3)
+plotgrid(zlb, res.y1; step = 2, xlabel ="Lambda", 
+    ylabel = "RMSEP").f
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
+mod = rr(lb = res.lb[u]) ;
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred 
+@show rmsep(pred, ytest)
 
 
-fm = covselr(Xtrain, ytrain; nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
-rmsep(pred, ytest)
-
-
-plotxy(pred, ytest; resolution = (500, 400),
-    color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f
+nlv = 0:20
+pars = mpar(msparse = [:hard], nvar = [1])
+mod = splskern()
+res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, 
+    pars, nlv, verbose = false).res
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
+mod = splskern(msparse = res.msparse[u], nvar = res.nvar[u], 
+    nlv = res.nlv[u])
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred 
+@show rmsep(pred, ytest)
 
 
 lb = 10.0.^(-15:5) 
 gamma = 10.0.^(-3:5) 
-pars = mpar(gamma = gamma)
-
-
+pars = mpar(gamma = gamma) 
 length(pars[1])
+mod = krr()
+res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, 
+    pars, lb, verbose = false).res
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
+mod = krr(lb = res.lb[u], gamma = res.gamma[u]) 
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred 
+@show rmsep(pred, ytest)
+plotxy(pred, ytest; color = (:red, .5), bisect = true, 
+    xlabel = "Prediction", ylabel = "Observed (Test)").f
 
 
-res = gridcvlb(Xtrain, ytrain; segm = segm,
-    score = rmsep, fun = krr, lb = lb, pars = pars,
-    verbose = false).res
+nlv = 0:30 
+gamma = 10.0.^(-3:5)
+pars = mpar(gamma = gamma)
+length(pars[1])
+mod = kplsr()
+res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, 
+    pars, nlv, verbose = false).res
+u = findall(res.y1 .== minimum(res.y1))[1] ;
+res[u, :]
+mod = kplsr(nlv = res.nlv[u], gamma = res.gamma[u])
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred 
+rmsep(pred, ytest)
 
 
+nlv = 0:30 
+gamma = 10.0.^(-3:5)
+pars = mpar(gamma = gamma)
+length(pars[1])
+mod = dkplsr()
+res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, 
+    pars, nlv, verbose = false).res
+u = findall(res.y1 .== minimum(res.y1))[1] ;
+res[u, :]
+mod = dkplsr(nlv = res.nlv[u], gamma = res.gamma[u])
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred 
+rmsep(pred, ytest)
+
+
+nlvdis = [10; 15] ; metric = [:mah] 
+h = [1; 2; 4; 6; Inf]
+k = [30; 50; 100]  
+nlv = 0:15 
+pars = mpar(nlvdis = nlvdis, metric = metric, 
+    h = h, k = k)
+length(pars[1])
+mod = lwplsr()
+res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, 
+    pars, nlv, verbose = true).res 
+group = string.(res.nlvdis, "-", res.h, "-", res.k) 
+plotgrid(res.nlv, res.y1, group; xlabel ="Nb. LVs", 
+    ylabel = "RMSEP").f
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
+mod = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], 
+    h = res.h[u], k = res.k[u], nlv = res.nlv[u])
+fit!(mod, Xtrain, ytrain)
+pred = Jchemo.predict(mod, Xtest).pred 
+rmsep(pred, ytest)
+
+
+nlvdis = [10; 15] ; metric = [:mah] 
+h = [1; 2; 5; Inf] ; k = [30; 50; 100]  
+nlv = [0:5, 0:10, 1:5, 1:10]
+pars = mpar(nlv = nlv, nlvdis = nlvdis, metric = metric, 
+    h = h, k = k) 
+length(pars[1])
+mod = lwplsravg() 
+res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, 
+    pars, verbose = true).res
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
+mod = lwplsravg(nlvdis = res.nlvdis[u], metric = res.metric[u], 
+    h = res.h[u], k = res.k[u], nlv = res.nlv[u]) ;
+fit!(mod, Xtrain, ytrain)
+pred = Jchemo.predict(mod, Xtest).pred ;
+rmsep(pred, ytest)
+
+
+nlvdis = [15; 20]  ; metric = [:eucl, :mah] 
+h = [1; 2; 4; 6; Inf] 
+k = [1; collect(5:10:50)] 
+pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k) 
+length(pars[1])
+mod = knnr()
+res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, 
+    pars).res
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
-
-
-fm = krr(Xtrain, ytrain; lb = res.lb[u], 
-    gamma = res.gamma[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred
+mod = knnr(nlvdis = res.nlvdis[u], metric = res.metric[u], 
+    h = res.h[u], k = res.k[u])
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred 
 rmsep(pred, ytest)
 
 
-plotxy(pred, ytest; resolution = (500, 400),
-    color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f
-
-
-nlv = 0:50
-gamma = 10.0.^(-3:5) 
-pars = mpar(gamma = gamma)
-
-
-length(pars[1])
-
-
-res = gridcvlv(Xtrain, ytrain; segm = segm,
-    score = rmsep, fun = kplsr, nlv = nlv, pars = pars,
-    verbose = false).res
-
-
-zres = res[res.y1 .< 20, :]
-group = string.("gamma=", round.(log.(10, zres.gamma)))
-plotgrid(zres.nlv, zres.y1, group;
-    xlabel ="Nb. LVs", ylabel = "RMSEP").f
-
-
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-
-
-fm = kplsr(Xtrain, ytrain; nlv = res.nlv[u], 
-    gamma = res.gamma[u]) ;
-
-
-pred = Jchemo.predict(fm, Xtest).pred 
-rmsep(pred, ytest)
-
-
-plotxy(pred, ytest; resolution = (500, 400),
-    color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f
-
-
-nlv = 0:50
-gamma = 10.0.^(-3:5) 
-pars = mpar(gamma = gamma)
-
-
-length(pars[1])
-
-
-res = gridcvlv(Xtrain, ytrain; segm = segm,
-    score = rmsep, fun = dkplsr, nlv = nlv, pars = pars,
-    verbose = false).res
-
-
-zres = res[res.y1 .< 20, :]
-group = string.("gamma=", round.(log.(10, zres.gamma)))
-plotgrid(zres.nlv, zres.y1, group;
-    xlabel ="Nb. LVs", ylabel = "RMSEP").f
-
-
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-
-
-fm = dkplsr(Xtrain, ytrain; nlv = res.nlv[u], 
-    gamma = res.gamma[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
-rmsep(pred, ytest)
-
-
-plotxy(pred, ytest; resolution = (500, 400),
-    color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f
-
-
-nlvdis = [10; 15] ; metric = ["mahal"] 
-h = [1; 2; 5; Inf] ; k = [30; 50; 100]  
-nlv = 0:15
-pars = mpar(nlvdis = nlvdis, metric = metric, 
-    h = h, k = k)
-
-
-length(pars[1])
-
-
-res = gridcvlv(Xtrain, ytrain; segm = segm_slow,
-    score = rmsep, fun = lwplsr, nlv = nlv, 
-    pars = pars, verbose = false).res
-
-
-group = string.("nvldis=", res.nlvdis, ",h=", res.h, 
-    ",k=", res.k)
-plotgrid(res.nlv, res.y1, group; step = 2,
-    xlabel ="Nb. LVs", ylabel = "RMSEP").f
-
-
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-
-
-fm = lwplsr(Xtrain, ytrain; nlvdis = res.nlvdis[u],
-    metric = res.metric[u], h = res.h[u], k = res.k[u], 
-    nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
-rmsep(pred, ytest)
-
-
-plotxy(pred, ytest; resolution = (500, 400),
-    color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f
-
-
-nlvdis = [10; 15] ; metric = ["mahal"] 
-h = [1; 2; 5; Inf] ; k = [30; 50; 100]  
-nlv = ["1:5", "1:10"]
-pars = mpar(nlvdis = nlvdis, metric = metric, 
-    h = h, k = k, nlv = nlv)
-
-
-length(pars[1])
-
-
-res = gridcv(Xtrain, ytrain; segm = segm_slow,
-    score = rmsep, fun = lwplsravg, pars = pars, 
-    verbose = false).res
-
-
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-
-
-fm = lwplsravg(Xtrain, ytrain; nlvdis = res.nlvdis[u],
-    metric = res.metric[u], h = res.h[u], k = res.k[u], 
-    nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
-rmsep(pred, ytest)
-
-
-plotxy(pred, ytest; resolution = (500, 400),
-    color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f
-
-
-nlv0 = [10; 15; 20]
-metric = ["eucl"; "mahal"] 
-h = [1; 2; 5] ; k = [30; 50; 100]  
-nlv = 0:10
-pars = mpar(nlv0 = nlv0, metric = metric, 
-    h = h, k = k)
-
-
-length(pars[1])
-
-
-res = gridcvlv(Xtrain, ytrain; segm = segm_slow,
-    score = rmsep, fun = lwplsr_s, nlv = nlv, 
-    pars = pars, verbose = false).res
-
-
-group = string.("nvl0=", res.nlv0, " metric =", res.metric, 
-    " h=", res.h, " k=", res.k)
-plotgrid(res.nlv, res.y1, group; step = 2,
-    xlabel ="Nb. LVs", ylabel = "RMSEP").f
-
-
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-
-
-fm = lwplsr_s(Xtrain, ytrain; nlv0 = res.nlv0[u], 
-    metric = res.metric[u], h = res.h[u], 
-    k = res.k[u], nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
-rmsep(pred, ytest)
-
-
-plotxy(pred, ytest; resolution = (500, 400),
-    color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f
-
-
-reduc = ["dkpls"]
-nlv0 = [10; 15; 20; 30]
-gamma = 10.0.^(-3:3) 
-metric = ["mahal"] 
-h = [1; 2; 5] ; k = [30; 50; 100]  
-nlv = 0:10
-pars = mpar(reduc = reduc, nlv0 = nlv0, gamma = gamma, 
-    metric = metric, h = h, k = k)
-
-
-length(pars[1])
-
-
-res = gridcvlv(Xtrain, ytrain; segm = segm_slow,
-    score = rmsep, fun = lwplsr_s, nlv = nlv, 
-    pars = pars, verbose = false).res
-
-
-group = string.("nvl0=", res.nlv0, ", gamma=", res.gamma,
-    ", h=", res.h, " k=", res.k)
-plotgrid(res.nlv, res.y1, group; step = 2, leg = false,
-    xlabel ="Nb. LVs", ylabel = "RMSEP").f
-
-
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-
-
-fm = lwplsr_s(Xtrain, ytrain; reduc = res.reduc[u], 
-    nlv0 = res.nlv0[u], gamma = res.gamma[u], 
-    metric = res.metric[u], h = res.h[u], 
-    k = res.k[u], nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
-rmsep(pred, ytest)
-
-
-plotxy(pred, ytest; resolution = (500, 400),
-    color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f
-
-
-ncla = 2:5 ; nlv_da = 1:5
-nlv = ["0:10"; "0:15"; "0:20"; 
-    "5:15"; "5:20"]
-pars = mpar(ncla = ncla, nlv_da = nlv_da, 
-    nlv = nlv)
-
-
-length(pars[1])
-
-
-res = gridcv(Xtrain, ytrain; segm = segm,
-    score = rmsep, fun = cplsravg, pars = pars, 
-    verbose = false).res
-
-
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-
-
-fm = cplsravg(Xtrain, ytrain; ncla = res.ncla[u],
-    nlv_da = res.nlv_da[u], nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
-rmsep(pred, ytest)
-
-
-plotxy(pred, ytest; resolution = (500, 400),
-    color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f
-
-
-nlvdis = [15; 20]  ; metric = ["eucl"; "mahal"] 
-h = [1; 2; 4; Inf] ;
-k = [1; collect(5:10:100)] 
-pars = mpar(nlvdis = nlvdis, metric = metric, 
-    h = h, k = k)
-
-
-length(pars[1])
-
-
-res = gridcv(Xtrain, ytrain; segm = segm,
-    score = rmsep, fun = knnr, pars = pars, 
-    verbose = false).res ;
-
-
-u = findall(res.y1 .== minimum(res.y1))[1]
-res[u, :]
-
-
-fm = knnr(Xtrain, ytrain; nlvdis = res.nlvdis[u], 
-    metric = res.metric[u], h = res.h[u], k = res.k[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred ;
-rmsep(pred, ytest)
-
-
-plotxy(pred, ytest; resolution = (500, 400),
-    color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f
-
-
-n_trees = [50]
-n_subfeatures = LinRange(10, p, 5)
-max_depth = [6; 10; 20; 2000]
+n_trees = [200]
+n_subfeatures = LinRange(10, p, 10)
+max_depth = [6; 10; 20; 50; 2000]
 pars = mpar(n_trees = n_trees, n_subfeatures = n_subfeatures, 
     max_depth = max_depth)
-
-
 length(pars[1])
-
-
-res = gridcv(Xtrain, ytrain; segm = segm,
-    score = rmsep, fun = rfr_dt, pars = pars, 
-    verbose = false).res ;
-
-
+res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, 
+    pars).res 
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
-
-
-fm = rfr_dt(Xtrain, ytrain; n_trees = res.n_trees[u], 
-    n_subfeatures = res.n_subfeatures[u], 
-    max_depth = res.max_depth[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred
-rmsep(pred, ytest)
-
-
-plotxy(pred, ytest; resolution = (500, 400),
-    color = (:red, .5), bisect = true, 
+mod = rfr_dt(n_trees = res.n_trees[u], n_subfeatures = res.n_subfeatures[u], 
+    max_depth = res.max_depth[u])
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred 
+@show rmsep(pred, ytest)
+plotxy(pred, ytest; color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f
 

@@ -1,6 +1,6 @@
 
-using JLD2, CairoMakie, FreqTables 
 using Jchemo, JchemoData
+using JLD2, CairoMakie, FreqTables
 
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -25,12 +25,11 @@ tab(y)
 freqtable(y, Y.test)
 
 
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst)
 
 
-plotsp(X, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
 s = Bool.(Y.test)
@@ -43,29 +42,28 @@ ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
 
+nlv = 15
 gamma = .001
-fm = kplsrda(Xtrain, ytrain; nlv = 15, 
-    gamma = gamma, scal = true) ;
-pnames(fm)
+mod = kplsrda(; nlv, gamma, scal = true) 
+fit!(mod, Xtrain, ytrain)
+pnames(mod) 
+pnames(mod.fm)
 
 
-pnames(fm.fm)
+typeof(mod.fm.fm)
 
 
-typeof(fm.fm)
-
-
-res = Jchemo.predict(fm, Xtest)
+res = predict(mod, Xtest)
 pnames(res)
 
 
-pred = res.pred
+@head pred = res.pred
 
 
-res.posterior
+@head res.posterior
 
 
-err(pred, ytest)
+errp(pred, ytest)
 
 
 cf = confusion(pred, ytest) ;

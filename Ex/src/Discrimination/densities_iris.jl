@@ -1,6 +1,6 @@
 
-using JLD2, CairoMakie
 using Jchemo, JchemoData
+using JLD2, CairoMakie
 
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -34,47 +34,47 @@ Ydummy = dummy(y).Y ;
 
 
 nlv = 2
-fm = plskern(X, Ydummy; nlv = nlv) ;
+mod = plskern(; nlv)
+fit!(mod, X, Ydummy)
 
 
-T = fm.T ;
-@head T
+@head T = mod.fm.T
 
 
 i = 1
-plotxy(T[:, i], T[:, i + 1], y;
-    title = "PLS2 space", 
+plotxy(T[:, i], T[:, i + 1], y; title = "PLS2 space", 
     xlabel = string("LV", i), ylabel = string("LV", i + 1),
     zeros = true, ellipse = false).f
 
 
-f = Figure(resolution = (900, 300))
+f = Figure(size = (900, 300))
 ax = list(nlev) 
 for i = 1:nlev 
     s = y .== lev[i]
     zT = T[s, :]
-    ax[i] = Axis(f[1, i]; title = lev[i],
-        xlabel = "LV1", ylabel = "LV2")
-    scatter!(ax[i], zT[:, 1], zT[:, 2],
-        color = :red, markersize = 10)
+    ax[i] = Axis(f[1, i]; title = lev[i], xlabel = "LV1", ylabel = "LV2")
+    scatter!(ax[i], zT[:, 1], zT[:, 2], color = :red, markersize = 10)
     ## Fictive "new" point to predict
     k = 150
-    scatter!(ax[i], T[k, 1], T[k, 2],
-        color = :blue, marker = :star5, markersize = 15)
+    scatter!(ax[i], T[k, 1], T[k, 2], color = :blue, marker = :star5, 
+        markersize = 15)
     ## End
-    hlines!(ax[i], 0; linestyle = "-", color = :grey)
-    vlines!(ax[i], 0; linestyle = "-", color = :grey)
+    hlines!(ax[i], 0; linestyle = :dash, color = :grey)
+    vlines!(ax[i], 0; linestyle = :dash, color = :grey)
     xlims!(ax[i], -4, 4) ; ylims!(ax[i], -1.7, 1.7)
 end
 f
 
 
-res = matW(T, y)
+weights = mweight(ones(n))
+res = matW(T, y, weights)
 W = res.W * n / (n - nlev)
 npoints = 2^7
 x1 = LinRange(-4, 4, npoints)
 x2 = LinRange(-2, 2, npoints)
-f = Figure(resolution = (900, 400))
+z = mpar(x1 = x1, x2 = x2)
+grid = reduce(hcat, z)
+f = Figure(size = (900, 400))
 ax = list(nlev) 
 for i = 1:nlev 
     s = y .== lev[i]
@@ -82,56 +82,51 @@ for i = 1:nlev
     #lims = [[minimum(zT[:, j]) ; maximum(zT[:, j])] for j = 1:nlv]
     #x1 = LinRange(lims[1][1], lims[1][2], npoints)
     #x2 = LinRange(lims[2][1], lims[2][2], npoints)
-    z = mpar(x1 = x1, x2 = x2)
-    grid = reduce(hcat, z)
-    m = nro(grid)
     zfm = dmnorm(zT; S = W) ;
-    zres = Jchemo.predict(zfm, grid) ;
+    zres = predict(zfm, grid) ;
     pred_grid = vec(zres.pred)
-    ax[i] = Axis(f[1, i]; title = lev[i],
-        xlabel = "LV1", ylabel = "LV2")
+    ax[i] = Axis(f[1, i]; title = lev[i], xlabel = "LV1", ylabel = "LV2")
     co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
     scatter!(ax[i], zT[:, 1], zT[:, 2],
         color = :red, markersize = 10)
     k = 150
-    scatter!(ax[i], T[k, 1], T[k, 2],
-        color = :blue, marker = :star5, markersize = 15)
-    hlines!(ax[i], 0; linestyle = "-", color = :grey)
-    vlines!(ax[i], 0; linestyle = "-", color = :grey)
+    scatter!(ax[i], T[k, 1], T[k, 2], color = :blue, marker = :star5, 
+        markersize = 15)
+    hlines!(ax[i], 0; linestyle = :dash, color = :grey)
+    vlines!(ax[i], 0; linestyle = :dash, color = :grey)
     xlims!(ax[i], -4, 4) ; ylims!(ax[i], -1.7, 1.7)
     Colorbar(f[2, i], co; label = "Density", vertical = false)
 end
 f
 
 
-res = matW(T, y)
+res = matW(T, y, weights)
 Wi = res.Wi
 ni = res.ni
 npoints = 2^7
 x1 = LinRange(-4, 4, npoints)
 x2 = LinRange(-2, 2, npoints)
-f = Figure(resolution = (900, 400))
+z = mpar(x1 = x1, x2 = x2)
+grid = reduce(hcat, z)
+z = mpar(x1 = x1, x2 = x2)
+grid = reduce(hcat, z)
+f = Figure(size = (900, 400))
 ax = list(nlev) 
 for i = 1:nlev 
     s = y .== lev[i]
     zT = T[s, :]
-    z = mpar(x1 = x1, x2 = x2)
-    grid = reduce(hcat, z)
-    m = nro(grid)
     S = Wi[i] * ni[i] / (ni[i] - 1)
     zfm = dmnorm(zT; S = S) ;
-    zres = Jchemo.predict(zfm, grid) ;
+    zres = predict(zfm, grid) ;
     pred_grid = vec(zres.pred) 
-    ax[i] = Axis(f[1, i]; title = lev[i],
-        xlabel = "LV1", ylabel = "LV2")
+    ax[i] = Axis(f[1, i]; title = lev[i], xlabel = "LV1", ylabel = "LV2")
     co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
-    scatter!(ax[i], zT[:, 1], zT[:, 2],
-        color = :red, markersize = 10)
+    scatter!(ax[i], zT[:, 1], zT[:, 2], color = :red, markersize = 10)
     k = 150
     scatter!(ax[i], T[k, 1], T[k, 2],
         color = :blue, marker = :star5, markersize = 15)
-    hlines!(ax[i], 0; linestyle = "-", color = :grey)
-    vlines!(ax[i], 0; linestyle = "-", color = :grey)
+    hlines!(ax[i], 0; linestyle = :dash, color = :grey)
+    vlines!(ax[i], 0; linestyle = :dash, color = :grey)
     xlims!(ax[i], -4, 4) ; ylims!(ax[i], -1.7, 1.7)
     Colorbar(f[2, i], co; label = "Density", vertical = false)
 end
@@ -141,27 +136,25 @@ f
 npoints = 2^7
 x1 = LinRange(-4, 4, npoints)
 x2 = LinRange(-2, 2, npoints)
-f = Figure(resolution = (900, 400))
+z = mpar(x1 = x1, x2 = x2)
+grid = reduce(hcat, z)
+f = Figure(size = (900, 400))
 ax = list(nlev) 
 for i = 1:nlev 
     s = y .== lev[i]
     zT = T[s, :]
-    z = mpar(x1 = x1, x2 = x2)
-    grid = reduce(hcat, z)
-    m = nro(grid)
-    zfm = dmkern(zT; a = 1) ;
-    zres = Jchemo.predict(zfm, grid) ;
+    zfm = dmkern(zT; a_kde = 1) 
+    zres = predict(zfm, grid) ;
     pred_grid = vec(zres.pred)
-    ax[i] = Axis(f[1, i]; title = lev[i],
-        xlabel = "LV1", ylabel = "LV2")
+    ax[i] = Axis(f[1, i]; title = lev[i], xlabel = "LV1", ylabel = "LV2")
     co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
     scatter!(ax[i], zT[:, 1], zT[:, 2],
         color = :red, markersize = 10)
     k = 150
-    scatter!(ax[i], T[k, 1], T[k, 2],
-        color = :blue, marker = :star5, markersize = 15)
-    hlines!(ax[i], 0; linestyle = "-", color = :grey)
-    vlines!(ax[i], 0; linestyle = "-", color = :grey)
+    scatter!(ax[i], T[k, 1], T[k, 2], color = :blue, marker = :star5, 
+        markersize = 15)
+    hlines!(ax[i], 0; linestyle = :dash, color = :grey)
+    vlines!(ax[i], 0; linestyle = :dash, color = :grey)
     xlims!(ax[i], -4, 4) ; ylims!(ax[i], -1.7, 1.7)
     Colorbar(f[2, i], co; label = "Density", vertical = false)
 end

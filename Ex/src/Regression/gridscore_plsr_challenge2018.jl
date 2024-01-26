@@ -1,6 +1,6 @@
 
-using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
+using JLD2, CairoMakie
 using FreqTables
 
 
@@ -29,8 +29,8 @@ test = Y.test
 tab(test)
 
 
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst)
 
 
 freqtable(string.(typ, "-", Y.label))
@@ -39,11 +39,14 @@ freqtable(string.(typ, "-", Y.label))
 freqtable(typ, test)
 
 
-plotsp(X, wl_num; nsamp = 30).f
+plotsp(X, wl; nsamp = 30).f
 
 
-f = 21 ; pol = 3 ; d = 2 
-Xp = savgol(snv(X); f = f, pol = pol, d = d) ;
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 21, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X)
 
 
 s = Bool.(test)
@@ -62,56 +65,54 @@ nval = 300
 #nval = Int64(round(pct * ntrain))
 
 
-s = sample(1:ntrain, nval; replace = false)
+s = samprand(ntrain, nval)
 
 
-#res = sampks(Xtrain; k = nval)
-#s = res.train
+#s = sampks(Xtrain, nval; metric = :eucl)
 
 
-#res = sampdp(Xtrain; k = nval)
-#s = res.train
+#s = sampdp(Xtrain, nval)
 
 
-#res = sampsys(ytrain; k = nval)
-#s = res.train
+#s = sampsys(ytrain, nval)
 
 
-Xcal = rmrow(Xtrain, s)
-ycal = rmrow(ytrain, s)
-Xval = Xtrain[s, :]
-yval = ytrain[s, :]
+Xcal = Xtrain[s.train, :]
+ycal = ytrain[s.train]
+Xval = Xtrain[s.test, :]
+yval = ytrain[s.test]
 ncal = ntrain - nval 
 (ntot = ntot, ntrain, ntest, ncal, nval)
 
 
+mod = plskern()
 nlv = 0:50
-res = gridscorelv(Xcal, ycal, Xval, yval; 
-    score = rmsep, fun = plskern, nlv = nlv)
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
+    nlv)
 
 
-plotgrid(res.nlv, res.y1; step = 5,
-    xlabel = "Nb. LVs", ylabel = "RMSEP").f
+plotgrid(res.nlv, res.y1; step = 5, xlabel = "Nb. LVs", 
+    ylabel = "RMSEP").f
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 
 
-fm = plskern(Xtrain, ytrain; nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred
+mod = plskern(nlv = res.nlv[u])
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred
 
 
 rmsep(pred, ytest)
 
 
-plotxy(pred, ytest; color = (:red, .5),
-    bisect = true, xlabel = "Prediction", 
-    ylabel = "Observed (Test)").f
+plotxy(pred, ytest; color = (:red, .5), bisect = true, 
+    xlabel = "Prediction", ylabel = "Observed (Test)").f
 
 
-res_sel = selwold(res.nlv, res.y1; smooth = false, 
-    alpha = .05, graph = true) ;
+res_sel = selwold(res.nlv, res.y1; smooth = true, alpha = .05, 
+    graph = true) ;
 pnames(res)
 
 
@@ -124,15 +125,8 @@ res_sel.opt     # nb. LVs correponding to the minimal error rate
 res_sel.sel     # nb. LVs selected with the Wold's criterion
 
 
-fm = plskern(Xtrain, ytrain; nlv = res_sel.sel) ;
-pred = Jchemo.predict(fm, Xtest).pred
+mod = plskern(nlv = res_sel.sel)
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred
 rmsep(pred, ytest)
-
-
-nlv = 0:50
-pars = mpar(nlv = nlv)
-res = gridscore(Xcal, ycal, Xval, yval;  
-    score = rmsep, fun = plskern, pars = pars) 
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
 

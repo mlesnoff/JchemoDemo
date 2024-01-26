@@ -1,6 +1,6 @@
 
-using JLD2, CairoMakie, FreqTables 
 using Jchemo, JchemoData
+using JLD2, CairoMakie, FreqTables
 
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -25,12 +25,11 @@ tab(y)
 freqtable(y, Y.test)
 
 
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst)
 
 
-plotsp(X, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
 s = Bool.(Y.test)
@@ -47,7 +46,7 @@ K = 3 ; segm = segmkf(ntrain, K; rep = 1)       # K-fold CV
 #m = 100 ; segm = segmts(ntrain, m; rep = 3)    # Test-set CV
 
 
-nlvdis = [25] ; metric = ["mahal"]
+nlvdis = [25] ; metric = [:mah]
 h = [1; 2; 5] ; k = [100; 250; 500]
 nlv = 0:15
 pars = mpar(nlvdis = nlvdis, metric = metric, h = h, 
@@ -57,25 +56,25 @@ pars = mpar(nlvdis = nlvdis, metric = metric, h = h,
 length(pars[1])
 
 
-res = gridcvlv(Xtrain, ytrain; segm = segm, 
-    score = err, fun = lwplsrda, nlv = nlv, pars = pars, 
-    verbose = false).res
+mod = lwplsrda()
+res = gridcv(mod, Xtrain, ytrain; segm, score = errp, 
+    nlv, pars, verbose = false).res
+
+
+group = string.("metric=", res.metric, res.nlvdis, " h=", res.h, " k=", res.k)
+plotgrid(res.nlv, res.y1, group; step = 2, xlabel = "Nb. LVs", 
+    ylabel = "Err-CV").f
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 
 
-group = string.("metric=", res.metric, res.nlvdis, " h=", res.h, " k=", res.k)
-plotgrid(res.nlv, res.y1, group; step = 2,
-    xlabel = "Nb. LVs", ylabel = "ERR").f
-
-
-fm = lwplsrda(Xtrain, ytrain; nlvdis = res.nlvdis[u], 
-    metric = res.metric[u], h = res.h[u], k = res.k[u], 
-    nlv = res.nlv[u], verbose = false) ;
-pred = Jchemo.predict(fm, Xtest).pred
-err(pred, ytest)
+mod = lwplsrda(nlvdis = res.nlvdis[u], metric = res.metric[u], 
+    h = res.h[u], k = res.k[u], nlv = res.nlv[u], verbose = false)
+fit!(mod, Xtrain, ytrain)
+pred = predict(mod, Xtest).pred
+errp(pred, ytest)
 
 
 cf = confusion(pred, ytest) ;

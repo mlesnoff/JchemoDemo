@@ -1,6 +1,6 @@
 
-using JLD2, CairoMakie, FreqTables, StatsBase 
 using Jchemo, JchemoData
+using JLD2, CairoMakie, FreqTables
 
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -25,12 +25,11 @@ tab(y)
 freqtable(y, Y.test)
 
 
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst)
 
 
-plotsp(X, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
 s = Bool.(Y.test)
@@ -45,13 +44,13 @@ ntest = nro(Xtest)
 
 pct = .30
 nval = Int64.(round(pct * ntrain))
+s = samprand(ntrain, nval)
+Xcal = Xtrain[s.train, :]
+ycal = ytrain[s.train]
+Xval = Xtrain[s.test, :]
+yval = ytrain[s.test]
 ncal = ntrain - nval 
-s = sample(1:ntrain, nval; replace = false)
-Xcal = rmrow(Xtrain, s) 
-ycal = rmrow(ytrain, s) 
-Xval = Xtrain[s, :] 
-yval = ytrain[s] 
-(ntot = ntot, ntrain, ncal, nval, ntest)
+(ntot = ntot, ntrain, ntest, ncal, nval)
 
 
 nlv = 0:50
@@ -62,24 +61,25 @@ pars = mpar(gamma = gamma)
 length(pars[1])
 
 
-res = gridscorelv(Xcal, ycal, Xval, yval; 
-    score = err, fun = kplsrda, pars = pars, nlv = nlv)
+mod = kplsrda()
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = errp, 
+    pars, nlv)
 
 
-plotgrid(res.nlv, res.y1, res.gamma; step = 5,
-    xlabel = "Nb. LVs", ylabel = "ERR").f
+plotgrid(res.nlv, res.y1, res.gamma; step = 5, xlabel = "Nb. LVs", 
+    ylabel = "ERR").f
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 
 
-fm = kplsrda(Xtrain, ytrain; nlv = res.nlv[u],
-    gamma = res.gamma[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred
+mod = kplsrda(nlv = res.nlv[u], gamma = res.gamma[u])
+fit!(mod, Xtrain, ytrain)
+pred = predict(mod, Xtest).pred
 
 
-err(pred, ytest)
+errp(pred, ytest)
 
 
 cf = confusion(pred, ytest) ;

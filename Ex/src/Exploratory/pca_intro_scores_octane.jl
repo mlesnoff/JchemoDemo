@@ -1,6 +1,6 @@
 
-using JLD2, CairoMakie, GLMakie
 using Jchemo, JchemoData
+using JLD2, CairoMakie, GLMakie
 
 
 CairoMakie.activate!()
@@ -20,27 +20,27 @@ n = nro(X)
 @head X
 
 
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst)
 
 
-plotsp(X, wl_num;
-    xlabel ="Wavelength (nm)", ylabel = "Absorbance",
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance",
     title = "Octane data").f
 
 
-fm = pcasvd(X; nlv = 6) ; 
+mod = pcasvd(nlv = 6) 
 ## For robust spherical PCA, do:
-#fm = pcasph(X; nlv = 6) ;  
-pnames(fm)
+#mod = pcasph(nlv = 6)
+fit!(mod, X)  
+pnames(mod)
+pnames(mod.fm)
 
 
-T = fm.T ;
-@head T
+@head T = mod.fm.T
 
 
-plotxy(T[:, 1], T[:, 2]; zeros = true,
-    xlabel = "PC1", ylabel = "PC2").f
+plotxy(T[:, 1], T[:, 2]; zeros = true, xlabel = "PC1", 
+    ylabel = "PC2").f
 
 
 i = 1
@@ -49,7 +49,7 @@ plotxy(T[:, i], T[:, i + 1]; color = (:red, .5),
     zeros = true, markersize = 15).f
 
 
-f = Figure(resolution = (600, 400))     
+f = Figure(size = (600, 400))     
 ax = list(4)
 l = reshape(1:4, 2, 2)
 for j = 1:2
@@ -69,7 +69,7 @@ CairoMakie.activate!()
 
 
 i = 1
-f = Figure(resolution = (700, 500))
+f = Figure(size = (700, 500))
 ax = Axis3(f[1, 1]; perspectiveness = 0.2,
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
     zlabel = string("PC", i + 2), title = "PCA score space")
@@ -83,7 +83,7 @@ CairoMakie.activate!()
 
 
 i = 1
-f = Figure(resolution = (700, 500))
+f = Figure(size = (700, 500))
 ax = Axis3(f[1, 1]; perspectiveness = 0.2,
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
     zlabel = string("PC", i + 2), title = "PCA score space")

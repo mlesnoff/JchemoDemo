@@ -1,6 +1,6 @@
 
-using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
+using JLD2, CairoMakie
 using FreqTables
 
 
@@ -29,8 +29,8 @@ test = Y.test
 tab(test)
 
 
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst)
 
 
 freqtable(string.(typ, "-", Y.label))
@@ -39,11 +39,14 @@ freqtable(string.(typ, "-", Y.label))
 freqtable(typ, test)
 
 
-plotsp(X, wl_num; nsamp = 30).f
+plotsp(X, wl; nsamp = 30).f
 
 
-f = 21 ; pol = 3 ; d = 2 
-Xp = savgol(snv(X); f = f, pol = pol, d = d) ;
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 21, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X)
 
 
 s = Bool.(test)
@@ -57,70 +60,67 @@ ntest = nro(Xtest)
 
 
 nlv = 15
-fm = pcasvd(Xtrain, nlv = nlv) ;
+mod = pcasvd(; nlv)
+fit!(mod, Xtrain)
 
 
-res = summary(fm, Xtrain).explvarx
+res = summary(mod, Xtrain).explvarx
 
 
-plotgrid(res.lv, res.pvar; step = 2,
-    xlabel = "PC", 
+plotgrid(res.nlv, res.pvar; step = 2, xlabel = "PC", 
     ylabel = "Prop. variance explained").f
 
 
-Ttrain = fm.T ;
-@head Ttrain
+@head Ttrain = mod.fm.T
 
 
-Ttest = Jchemo.transform(fm, Xtest)
-@head Ttest
+@head Ttest = transf(mod, Xtest)
 
 
 T = vcat(Ttrain, Ttest)
-group = vcat(repeat(["0-Train";], ntrain), 
-    repeat(["1-Test";], ntest))
+group = vcat(repeat(["0-Train";], ntrain), repeat(["1-Test";], ntest))
 colm = [:blue, (:red, .5)]
 i = 3
-plotxy(T[:, i], T[:, i + 1], group; color = colm,
-    xlabel = string("PC", i), 
+plotxy(T[:, i], T[:, i + 1], group; color = colm, xlabel = string("PC", i), 
     ylabel = string("PC", i + 1)).f
 
 
-res = occsdod(fm, Xtrain) ; 
-pnames(res)
+mod_d = occsdod() 
+fit!(mod_d, mod.fm, Xtrain)
+pnames(mod_d)
+pnames(mod_d.fm)
 
 
-dtrain = res.d
+dtrain = mod_d.fm.d
 
 
-dtest = Jchemo.predict(res, Xtest).d
+dtest = predict(mod_d, Xtest).d
 
 
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1], xlabel = "SD", ylabel = "OD")
 scatter!(ax, dtrain.dstand_sd, dtrain.dstand_od, label = "Train")
-scatter!(ax, dtest.dstand_sd, dtest.dstand_od, 
-    color = (:red, .5), label = "Test")
-hlines!(ax, 1; color = :grey, linestyle = "-")
-vlines!(ax, 1; color = :grey, linestyle = "-")
+scatter!(ax, dtest.dstand_sd, dtest.dstand_od, color = (:red, .5), 
+    label = "Test")
+hlines!(ax, 1; color = :grey, linestyle = :dash)
+vlines!(ax, 1; color = :grey, linestyle = :dash)
 axislegend(position = :rt)
 f
 
 
 d = vcat(dtrain, dtest)
-group = vcat(repeat(["0-Train";], ntrain), 
-    repeat(["1-Test";], ntest))
+group = vcat(repeat(["0-Train";], ntrain), repeat(["1-Test";], ntest))
 colm = [:blue, (:red, .5)]
 plotxy(d.dstand_sd, d.dstand_od, group; color = colm,
     xlabel = "Stand. SD", ylabel = "Stand. OD").f
 
 
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1], xlabel = "Standardized distance", 
     ylabel = "Nb. observations")
 hist!(ax, dtrain.dstand; bins = 50, label = "Train")
 hist!(ax, dtest.dstand; bins = 50, label = "Test")
-vlines!(ax, 1; color = :grey, linestyle = "-")
+vlines!(ax, 1; color = :grey, linestyle = :dash)
 axislegend(position = :rt, framevisible = false)
 f
 

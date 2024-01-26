@@ -1,6 +1,6 @@
 
-using JLD2, CairoMakie, FreqTables 
 using Jchemo, JchemoData
+using JLD2, CairoMakie, FreqTables
 
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -25,12 +25,11 @@ tab(y)
 freqtable(y, Y.test)
 
 
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst)
 
 
-plotsp(X, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
 s = Bool.(Y.test)
@@ -47,24 +46,26 @@ K = 3 ; segm = segmkf(ntrain, K; rep = 10)         # K-fold CV
 #m = 100 ; segm = segmts(ntrain, m; rep = 30)      # Test-set CV
 
 
-nlv = 0:50
-res = gridcvlv(Xtrain, ytrain; segm = segm, 
-    score = err, fun = plsrda, nlv = nlv, verbose = false).res
+nlv = 0:40
+mod = plsrda()
+res = gridcv(mod, Xtrain, ytrain; segm, score = errp, 
+    nlv, verbose = false).res
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 
 
-plotgrid(res.nlv, res.y1; step = 5,
-    xlabel = "Nb. LVs", ylabel = "ERR").f
+plotgrid(res.nlv, res.y1; step = 5, xlabel = "Nb. LVs", 
+    ylabel = "ERR").f
 
 
-fm = plsrda(Xtrain, ytrain; nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred
+mod = plsrda(nlv = res.nlv[u])
+fit!(mod, Xtrain, ytrain)
+pred = predict(mod, Xtest).pred
 
 
-err(pred, ytest)
+errp(pred, ytest)
 
 
 cf = confusion(pred, ytest) ;
@@ -77,20 +78,22 @@ cf.pct
 plotconf(cf).f
 
 
-nlv = 1:50  ## !!: Does not start from nlv = 0 (since the method runs an LDA on PLS scores)
-res = gridcvlv(Xtrain, ytrain; segm = segm, 
-    score = err, fun = plslda, nlv = nlv, verbose = false).res
+nlv = 1:40  ## !!: Does not start from nlv = 0 (since the method runs an LDA on PLS scores)
+mod = plslda()
+res = gridcv(mod, Xtrain, ytrain; segm, score = errp, 
+    nlv, verbose = false).res
+
+
+plotgrid(res.nlv, res.y1; step = 5, xlabel = "Nb. LVs", 
+    ylabel = "Err-CV").f
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 
 
-plotgrid(res.nlv, res.y1; step = 5,
-    xlabel = "Nb. LVs", ylabel = "ERR").f
-
-
-fm = plslda(Xtrain, ytrain; nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred
-err(pred, ytest)
+mod = plslda(nlv = res.nlv[u])
+fit!(mod, Xtrain, ytrain)
+pred = predict(mod, Xtest).pred
+errp(pred, ytest)
 

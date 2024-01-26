@@ -1,6 +1,6 @@
 
-using JLD2, CairoMakie
 using Jchemo, JchemoData
+using JLD2, CairoMakie
 using Loess
 
 
@@ -29,20 +29,21 @@ typ = Y.typ
 tab(typ)
 
 
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst)
 
 
-plotsp(X, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-f = 15 ; pol = 3 ; d = 2 
-Xp = savgol(snv(X); f = f, pol = pol, d = d)
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 15, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X)
 
 
-plotsp(Xp, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
 s = typ .== "train"
@@ -68,7 +69,7 @@ segm = segmkf(ntrain, K; rep = rep)
 
 
 #pct = .30
-#m = round(pct * ntrain)
+#m = Int(round(pct * ntrain))
 #segm = segmts(ntrain, m; rep = 30)
 
 
@@ -80,17 +81,17 @@ segm[i]      # the K segments of replication 'i'
 segm[i][k]   # segment 'k' of replication 'i'
 
 
+mod = plskern()
 nlv = 0:20
-rescv = gridcvlv(Xtrain, ytrain; segm = segm, 
-    score = rmsep, fun = plskern, nlv = nlv, 
-    verbose = false) ;
+rescv = gridcv(mod, Xtrain, ytrain; segm = segm, score = rmsep, 
+    nlv, verbose = false) ;
 pnames(rescv)
 
 
 res_rep = rescv.res_rep
 
 
-group = string.(res_rep.segm, "-", res_rep.repl)
+group = string.(res_rep.segm, "-", res_rep.rep)
 plotgrid(res_rep.nlv, res_rep.y1, group; step = 2,
     xlabel = "Nb. LVs", ylabel = "RMSEP", leg = false).f
 
@@ -98,24 +99,24 @@ plotgrid(res_rep.nlv, res_rep.y1, group; step = 2,
 res = rescv.res
 
 
-plotgrid(res.nlv, res.y1; step = 2,
-    xlabel = "Nb. LVs", ylabel = "RMSEP").f
+plotgrid(res.nlv, res.y1; step = 2, xlabel = "Nb. LVs", 
+    ylabel = "RMSEP").f
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 
 
-fm = plskern(Xtrain, ytrain; nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred
+mod = plskern(nlv = res.nlv[u])
+fit!(mod, Xtrain, ytrain)
+pred = Jchemo.predict(mod, Xtest).pred
 
 
 rmsep(pred, ytest)
 
 
-f, ax = plotxy(pred, ytest;
-    xlabel = "Predicted", ylabel = "Observed",
-    resolution = (500, 400))
+f, ax = plotxy(pred, ytest; xlabel = "Predicted", 
+    ylabel = "Observed")
 zpred = vec(pred)
 zfm = loess(zpred, ytest; span = 2/3) ;
 pred_loess = Loess.predict(zfm, sort(zpred))
@@ -138,16 +139,8 @@ res_sel.opt     # nb. LVs correponding to the minimal error rate
 res_sel.sel     # nb. LVs selected with the Wold's criterion
 
 
-fm = plskern(Xtrain, ytrain; nlv = res_sel.sel) ;
-pred = Jchemo.predict(fm, Xtest).pred
+mod = plskern(nlv = res_sel.sel) ;
+fit!(mod, Xtrain, ytrain)
+pred = Jchemo.predict(mod, Xtest).pred
 rmsep(pred, ytest)
-
-
-nlv = 0:20
-pars = mpar(nlv = nlv)
-res = gridcv(Xtrain, ytrain; segm = segm, 
-    score = rmsep, fun = plskern, pars = pars, 
-    verbose = false).res
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
 

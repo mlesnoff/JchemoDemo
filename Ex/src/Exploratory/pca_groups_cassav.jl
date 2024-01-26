@@ -1,6 +1,6 @@
 
-using JLD2, CairoMakie, GLMakie, StatsBase
 using Jchemo, JchemoData
+using JLD2, CairoMakie, GLMakie
 
 
 CairoMakie.activate!()
@@ -27,8 +27,8 @@ y = dat.Y.tbc
 year = dat.Y.year
 
 
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst)
 
 
 tab(year)
@@ -40,25 +40,27 @@ lev = sort(unique(year))
 nlev = length(lev)
 
 
-group_num = recodcat2int(year)
+groupnum = recodcat2int(year)
 
 
-plotsp(X, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-f = 15 ; pol = 3 ; d = 2 
-Xp = savgol(snv(X); f = f, pol = pol, d = d)
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 15, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X)
 
 
-plotsp(Xp, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-fm = pcasvd(Xp; nlv = 6) ;
+mod = pcasvd(nlv = 6)
+fit!(mod, Xp)
 
 
-T = fm.T
+T = mod.fm.T
 
 
 i = 1
@@ -75,8 +77,7 @@ plotxy(T[:, i], T[:, i + 1], year;
 
 i = 1
 colm = cgrad(:Dark2_5, nlev; categorical = true, alpha = .8)
-plotxy(T[:, i], T[:, i + 1], year; 
-    color = colm,
+plotxy(T[:, i], T[:, i + 1], year;  color = colm,
     xlabel = string("PC", i), ylabel = string("PC", i + 1),
     zeros = true, ellipse = true).f
 
@@ -84,7 +85,7 @@ plotxy(T[:, i], T[:, i + 1], year;
 CairoMakie.activate!()  
 #GLMakie.activate!() 
 i = 1
-f = Figure(resolution = (600, 400))
+f = Figure(size = (600, 400))
 ax = Axis3(f[1, 1]; perspectiveness = 0.2,
     xlabel = string("PC", i), ylabel = string("PC", i + 1), 
     zlabel = string("PC", i + 2), title = "PCA score space")
@@ -94,7 +95,7 @@ f
 
 
 i = 1
-f = Figure(resolution = (700, 500))
+f = Figure(size = (700, 500))
 colsh = :Dark2_5 #:default, :tab10
 colm = cgrad(colsh, nlev; alpha = .7, categorical = true) 
 ax = Axis3(f[1, 1]; perspectiveness = 0.2,
@@ -102,7 +103,7 @@ ax = Axis3(f[1, 1]; perspectiveness = 0.2,
     zlabel = string("PC", i + 2), 
     title = "PCA score space") 
 scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2], 
-    markersize = 15, color = group_num, colormap = colm)
+    markersize = 15, color = groupnum, colormap = colm)
 lab = string.(lev)
 elt = [MarkerElement(color = colm[i], marker = '●', markersize = 10) for i in 1:nlev]
 title = "Year"

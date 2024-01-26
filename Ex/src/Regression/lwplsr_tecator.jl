@@ -1,6 +1,6 @@
 
-using JLD2, CairoMakie
 using Jchemo, JchemoData
+using JLD2, CairoMakie
 using Loess
 
 
@@ -29,20 +29,21 @@ typ = Y.typ
 tab(typ)
 
 
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst)
 
 
-plotsp(X, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-f = 15 ; pol = 3 ; d = 2 
-Xp = savgol(snv(X); f = f, pol = pol, d = d)
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 15, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X)
 
 
-plotsp(Xp, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
 s = typ .== "train"
@@ -62,16 +63,16 @@ ytrain = Ytrain[:, nam]
 ytest = Ytest[:, nam]
 
 
-nlvdis = 10 ; metric = "mahal"
+nlvdis = 10 ; metric = :mah
 h = 3 ; k = 30 
 nlv = 4
-fm = lwplsr(Xtrain, ytrain; nlvdis = nlvdis,
-    metric = metric, h = h, k = k, 
-    nlv = nlv) ;
-pnames(fm)
+mod = lwplsr(; nlvdis, metric, h, k, nlv) 
+fit!(mod, Xtrain, ytrain)
+pnames(mod)
+pnames(mod.fm)
 
 
-pred = Jchemo.predict(fm, Xtest).pred
+pred = Jchemo.predict(mod, Xtest).pred
 
 
 rmsep(pred, ytest)
@@ -86,19 +87,16 @@ mse(pred, ytest)
 r = residreg(pred, ytest) # residuals
 
 
-plotxy(pred, ytest; resolution = (500, 400),
-    color = (:red, .5), bisect = true, 
+plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f
 
 
-plotxy(ytest, r; resolution = (500, 400),
-    color = (:red, .5), zeros = true, 
+plotxy(ytest, r; size = (500, 400), color = (:red, .5), zeros = true, 
     xlabel = "Observed (Test)", ylabel = "Residuals").f
 
 
-f, ax = plotxy(pred, ytest;
-    xlabel = "Predicted", ylabel = "Observed",
-    resolution = (500, 400))
+f, ax = plotxy(pred, ytest; size = (500, 400), xlabel = "Predicted", 
+    ylabel = "Observed")
 zpred = vec(pred)
 zfm = loess(zpred, ytest; span = 2/3) ;
 pred_loess = Loess.predict(zfm, sort(zpred))
@@ -107,8 +105,7 @@ ablines!(ax, 0, 1; color = :grey)
 f
 
 
-f, ax = plotxy(ytest, r; color = (:blue, .5), 
-    resolution = (500, 400), 
+f, ax = plotxy(ytest, r; size = (500, 400), color = (:blue, .5), 
     xlabel = "Observed (Test)", ylabel = "Residuals") 
 zfm = loess(ytest, vec(r); span = 2/3) ;
 pred_loess = Loess.predict(zfm, sort(ytest))

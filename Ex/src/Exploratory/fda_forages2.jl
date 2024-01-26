@@ -1,6 +1,6 @@
 
-using JLD2, CairoMakie, FreqTables 
 using Jchemo, JchemoData
+using JLD2, CairoMakie, FreqTables
 
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -25,12 +25,11 @@ tab(y)
 freqtable(y, Y.test)
 
 
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst)
 
 
-plotsp(X, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
 s = Bool.(Y.test)
@@ -43,19 +42,23 @@ ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
 
-fm0 = pcasvd(Xtrain; nlv = 10) ;
-pnames(fm0)
+mod0 = pcasvd(nlv = 10)
+fit!(mod0, Xtrain)
+pnames(mod0)
+pnames(mod0.fm)
 
 
-Ttrain_pca = fm0.T
+Ttrain_pca = mod0.fm.T
 
 
-fm = fda(Ttrain_pca, ytrain; nlv = 2) ;
-#fm = fdasvd(Ttrain_pca, ytrain; nlv = 2) ; # alternative algorithm (same result)
+mod = fda(nlv = 2)
+#mod = fdasvd(nlv = 2)     # alternative algorithm (same result)
+fit!(mod, Ttrain_pca, ytrain) 
+fm = mod.fm 
 pnames(fm)
 
 
-Ttrain = fm.T
+Ttrain = mod.fm.T
 
 
 lev = fm.lev
@@ -65,35 +68,34 @@ nlev = length(lev)
 ct = fm.Tcenters
 
 
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; 
     title = "FDA", ellipse = true)
-scatter!(ax, ct[:, 1], ct[:, 2],
-    markersize = 10, color = :red)
+scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, 
+    color = :red)
 f
 
 
-Ttest_pca = Jchemo.transform(fm0, Xtest)
+Ttest_pca = transf(mod0, Xtest)
 
 
-Ttest = Jchemo.transform(fm, Ttest_pca)
+Ttest = transf(mod, Ttest_pca)
 
 
 i = 1  # class 
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; 
     title = "FDA")
-scatter!(ax, ct[:, 1], ct[:, 2],
-    markersize = 10, color = :red)
+scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
 s = ytest .== lev[i]
 zT = Ttest[s, :]
-scatter!(ax, zT[:, 1], zT[:, 2],
-    markersize = 10, color = (:purple, .8))
+scatter!(ax, zT[:, 1], zT[:, 2], markersize = 10, 
+    color = (:purple, .8))
 f
 
 
 lb = 1e-5
-fm = fda(Xtrain, ytrain; nlv = 2, lb = lb) ;
-#fm = fdasvd(Xtrain, ytrain; nlv = 2, lb = lb) ;
-pnames(fm)
+mod = fda(; nlv = 2, lb)
+#mod = fdasvd(; nlv = 2, lb)
+fit!(mod,Xtrain, ytrain)
 
 
 lev = fm.lev
@@ -108,12 +110,12 @@ Ttrain = fm.T
 
 f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
     title = "FDA", ellipse = true)
-scatter!(ax, ct[:, 1], ct[:, 2],
-    markersize = 10, color = :red)
+scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, 
+    color = :red)
 f
 
 
-Ttest = Jchemo.transform(fm, Xtest)
+Ttest = transf(mod, Xtest)
 
 
 i = 1  # class 

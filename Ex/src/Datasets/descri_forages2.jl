@@ -1,7 +1,7 @@
 
-using JLD2, CairoMakie
-using StatsBase, FreqTables 
 using Jchemo, JchemoData
+using JLD2, CairoMakie
+using FreqTables
 
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -30,8 +30,8 @@ tab(test)
 freqtable(y, test)
 
 
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst)
 
 
 s = Bool.(test)
@@ -44,24 +44,26 @@ ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
 
-plotsp(X, wl_num; nsamp = 10,
+plotsp(X, wl; nsamp = 10,
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-fm = pcasvd(X; nlv = 15) ; 
-pnames(fm)
+mod = pcasvd(nlv = 10)
+fit!(mod, X)
+pnames(mod)
+pnames(mod.fm)
 
 
-T = fm.T
+T = mod.fm.T
 @head T
 
 
-res = summary(fm, X) ;
+res = summary(mod, X) ;
 pnames(res)
 
 
 z = res.explvarx
-plotgrid(z.lv, 100 * z.pvar; step = 1,
+plotgrid(z.nlv, 100 * z.pvar; step = 1,
     xlabel = "nb. PCs", ylabel = "% variance explained").f
 
 
@@ -75,67 +77,59 @@ plotxy(T[:, i], T[:, i + 1], y; ellipse = true,
 
 
 ## Train vs Test
-fm = pcasvd(Xtrain, nlv = 15) ; 
-Ttrain = fm.T
+mod = pcasvd(nlv = 15)
+fit!(mod, Xtrain)
+Ttrain = mod.fm.T
 @head Ttrain
 
 
-Ttest = Jchemo.transform(fm, Xtest)
+Ttest = transf(mod, Xtest)
 
 
-zT = vcat(Ttrain, Ttest)
+T = vcat(Ttrain, Ttest)
 group = vcat(repeat(["0-Train";], ntrain), repeat(["1-Test";], ntest))
 i = 1
-plotxy(zT[:, i], T[:, i + 1], group;
-    xlabel = "PC1", ylabel = "PC2").f
+plotxy(T[:, i], T[:, i + 1], group; xlabel = "PC1", 
+    ylabel = "PC2").f
 
 
-res_sd = occsd(fm) ; 
-pnames(res_sd)
+mod_sd = occsd() 
+fit!(mod_sd, mod.fm)
+pnames(mod_sd)
+sdtrain = mod_sd.fm.d
+sdtest = predict(mod_sd, Xtest).d
 
 
-sdtrain = res_sd.d
+mod_od = occod() 
+fit!(mod_od, mod.fm, Xtrain)
+pnames(mod_od)
+odtrain = mod_od.fm.d
+odtest = predict(mod_od, Xtest).d
 
 
-sdtest = Jchemo.predict(res_sd, Xtest).d
-
-
-res_od = occod(fm, Xtrain) ;
-pnames(res_od)
-
-
-odtrain = res_od.d
-
-
-odtest = Jchemo.predict(res_od, Xtest).d
-
-
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f, xlabel = "SD", ylabel = "OD")
 scatter!(ax, sdtrain.dstand, odtrain.dstand, label = "Train")
-scatter!(ax, sdtest.dstand, odtest.dstand, color = (:red, .5), label = "Test")
-hlines!(ax, 1; color = :grey, linestyle = "-")
-vlines!(ax, 1; color = :grey, linestyle = "-")
+scatter!(ax, sdtest.dstand, odtest.dstand, 
+    color = (:red, .5), label = "Test")
+hlines!(ax, 1; color = :grey, linestyle = :dash)
+vlines!(ax, 1; color = :grey, linestyle = :dash)
 axislegend(position = :rt)
 f[1, 1] = ax
 f
 
 
-zres = res_sd ; nam = "SD"
-#zres = res_od ; nam = "OD"
-sdtrain = zres.d
-
-
-sdtest = Jchemo.predict(zres, Xtest).d
-
-
-f = Figure(resolution = (500, 400))
-ax = Axis(f, xlabel = nam, ylabel = "Nb. observations")
+zres = mod_sd ; nam = "SD"
+#zres = mod_od ; nam = "OD"
+pnames(zres.fm)
+sdtrain = zres.fm.d
+sdtest = predict(zres, Xtest).d
+f = Figure(size = (500, 400))
+ax = Axis(f[1, 1], xlabel = nam, ylabel = "Nb. observations")
 hist!(ax, sdtrain.d; bins = 50, label = "Train")
 hist!(ax, sdtest.d; bins = 50, label = "Test")
-vlines!(ax, zres.cutoff; color = :grey, linestyle = "-")
+vlines!(ax, zres.fm.cutoff; color = :grey, linestyle = :dash)
 axislegend(position = :rt)
-f[1, 1] = ax
 f
 
 
@@ -147,7 +141,7 @@ summ(Y, test)
 
 nam = "ndf"
 #nam = "dm"
-aggstat(Y[:, nam], test; fun = mean).X
+aggstat(Y[:, nam], test).X
 
 
 aggstat(Y; vars = nam, groups = :test)
@@ -159,17 +153,17 @@ ytrain = rmrow(y, s)
 ytest = y[s]
 
 
-f = Figure(resolution = (500, 400))
-ax = Axis(f[1, 1], xlabel = "Protein", ylabel = "Nb. observations")
+f = Figure(size = (500, 400))
+ax = Axis(f[1, 1], xlabel = nam, ylabel = "Nb. observations")
 hist!(ax, ytrain; bins = 50, label = "Train")
 hist!(ax, ytest; bins = 50, label = "Test")
 axislegend(position = :rt)
 f
 
 
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 offs = [30; 0]
-ax = Axis(f[1, 1], xlabel = "Protein", 
+ax = Axis(f[1, 1], xlabel = nam, 
     ylabel = "Nb. observations",
     yticks = (offs, ["Train" ; "Test"]))
 hist!(ax, ytrain; offset = offs[1], bins = 50)
@@ -177,7 +171,7 @@ hist!(ax, ytest; offset = offs[2], bins = 50)
 f
 
 
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1], xlabel = nam, ylabel = "Density")
 density!(ax, ytrain; color = :blue, label = "Train")
 density!(ax, ytest; color = (:red, .5), label = "Test")
@@ -185,7 +179,7 @@ axislegend(position = :rt)
 f
 
 
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 offs = [.08; 0]
 ax = Axis(f[1, 1], xlabel = nam, ylabel = "Density",
     yticks = (offs, ["Train" ; "Test"]))
@@ -196,7 +190,7 @@ density!(ax, ytest; offset = offs[2], color = (:slategray, 0.5),
 f
 
 
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1], 
     xticks = (0:1, ["Train", "Test"]),
     xlabel = "Group", ylabel = nam)

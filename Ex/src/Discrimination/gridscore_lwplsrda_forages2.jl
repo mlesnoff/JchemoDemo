@@ -1,6 +1,6 @@
 
-using JLD2, CairoMakie, FreqTables, StatsBase 
 using Jchemo, JchemoData
+using JLD2, CairoMakie, FreqTables
 
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -25,12 +25,11 @@ tab(y)
 freqtable(y, Y.test)
 
 
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst)
 
 
-plotsp(X, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
 s = Bool.(Y.test)
@@ -45,47 +44,45 @@ ntest = nro(Xtest)
 
 pct = .30
 nval = Int64.(round(pct * ntrain))
+s = samprand(ntrain, nval)
+Xcal = Xtrain[s.train, :]
+ycal = ytrain[s.train]
+Xval = Xtrain[s.test, :]
+yval = ytrain[s.test]
 ncal = ntrain - nval 
-s = sample(1:ntrain, nval; replace = false)
-Xcal = rmrow(Xtrain, s) 
-ycal = rmrow(ytrain, s) 
-Xval = Xtrain[s, :] 
-yval = ytrain[s] 
-(ntot = ntot, ntrain, ncal, nval, ntest)
+(ntot = ntot, ntrain, ntest, ncal, nval)
 
 
-nlvdis = [15; 25] ; metric = ["mahal"]
+nlvdis = [15; 25] ; metric = [:mah]
 h = [1; 2; 5] ; k = [100; 200; 300]
 nlv = 0:15
-pars = mpar(nlvdis = nlvdis, metric = metric, 
-    h = h, k = k)
+pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k)
 
 
 length(pars[1])
 
 
-res = gridscorelv(Xcal, ycal, Xval, yval;
-    score = err, fun = lwplsrda, nlv = nlv, pars = pars, 
-    verbose = false)
+mod = lwplsrda()
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = errp, 
+    nlv, pars, verbose = false)
 
 
-group = string.("metric=", res.metric, res.nlvdis, " h=", res.h, 
-    " k=", res.k)
-plotgrid(res.nlv, res.y1, group; step = 2,
-    xlabel = "Nb. LVs", ylabel = "ERR").f
+group = string.("metric=", res.metric, res.nlvdis, " h=", res.h, " k=", res.k)
+plotgrid(res.nlv, res.y1, group; step = 2, xlabel = "Nb. LVs", 
+    ylabel = "ERR").f
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 
 
-fm = lwplsrda(Xtrain, ytrain; nlvdis = res.nlvdis[u], 
-    metric = res.metric[u], h = res.h[u], k = res.k[u], 
-    nlv = res.nlv[u], verbose = false) ;
-pred = Jchemo.predict(fm, Xtest).pred
+mod = lwplsrda(nlvdis = res.nlvdis[u], metric = res.metric[u], 
+    h = res.h[u], k = res.k[u], nlv = res.nlv[u], verbose = false) ;
+fit!(mod, Xtrain, ytrain)
+pred = predict(mod, Xtest).pred
 
 
-err(pred, ytest)
+errp(pred, ytest)
 
 
 cf = confusion(pred, ytest) ;

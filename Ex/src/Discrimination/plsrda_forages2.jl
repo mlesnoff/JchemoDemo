@@ -1,6 +1,6 @@
 
-using JLD2, CairoMakie, FreqTables 
 using Jchemo, JchemoData
+using JLD2, CairoMakie, FreqTables
 
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -25,12 +25,11 @@ tab(y)
 freqtable(y, Y.test)
 
 
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst)
 
 
-plotsp(X, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
 s = Bool.(Y.test)
@@ -44,32 +43,31 @@ ntest = nro(Xtest)
 
 
 nlv = 15
-fm = plsrda(Xtrain, ytrain; nlv = nlv) ;
-#fm = plslda(Xtrain, ytrain; nlv = nlv) ;
-#fm = plsqda(Xtrain, ytrain; nlv = nlv) ;
-#fm = plsqda(Xtrain, ytrain; nlv = nlv, prior = "prop") ;
+mod = plsrda(; nlv) 
+#mod = plslda(; nlv) 
+#mod = plsqda(; nlv) 
+#mod = plsqda(; nlv, prior = :prop)
 
 
-#fm = rrda(Xtrain, ytrain; lb = 1e-5) ;
+#mod = rrda(lb = 1e-5)
 
 
-pnames(fm)
+fit!(mod, Xtrain, ytrain)
+pnames(mod) 
+pnames(mod.fm)
 
 
-pnames(fm.fm)
-
-
-res = Jchemo.predict(fm, Xtest) ;
+res = predict(mod, Xtest) ;
 pnames(res)
 
 
-pred = res.pred
+@head pred = res.pred
 
 
-res.posterior   # prediction of the dummy table
+@head res.posterior   # prediction of the dummy table
 
 
-err(pred, ytest)
+errp(pred, ytest)
 
 
 freqtable(ytest, vec(pred))
@@ -89,10 +87,4 @@ cf.accuracy
 
 
 plotconf(cf).f
-
-
-nlv = "0:20"
-fm = plsrdaavg(Xtrain, ytrain; nlv = nlv) ;
-pred = Jchemo.predict(fm, Xtest).pred
-err(pred, ytest)
 

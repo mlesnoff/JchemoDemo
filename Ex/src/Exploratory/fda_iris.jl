@@ -1,6 +1,6 @@
 
-using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
+using JLD2, CairoMakie
 
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -29,12 +29,12 @@ lev = unique(y)
 nlev = length(lev)
 
 
-ntrain = 120
-s = sample(1:n, ntrain; replace = false)
-Xtrain = X[s, :]
-ytrain = y[s]
-Xtest = rmrow(X, s)
-ytest = rmrow(y, s)
+ntest = 30
+s = samprand(n, ntest)
+Xtrain = X[s.train, :]
+ytrain = y[s.train]
+Xtest = X[s.test, :]
+ytest = y[s.test]
 
 
 tab(ytrain)
@@ -43,8 +43,10 @@ tab(ytrain)
 tab(ytest)
 
 
-fm = fda(Xtrain, ytrain; nlv = 2) ;
-#fm = fdasvd(Xtrain, ytrain; nlv = 2) ; # alternative algorithm (same result)
+mod = fda(nlv = 2)
+#mod = fdasvd(nlv = 2)     # alternative algorithm (same result)
+fit!(mod, Xtrain, ytrain) 
+fm = mod.fm 
 pnames(fm)
 
 
@@ -54,33 +56,33 @@ lev = fm.lev
 nlev = length(lev)
 
 
-@head fm.T
+@head Ttrain = mod.fm.T
 
 
-ct = fm.Tcenters
+ct = mod.fm.Tcenters
 
 
-f, ax = plotxy(fm.T[:, 1], fm.T[:, 2], ytrain;
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
     ellipse = true, title = "FDA", zeros = true)
 scatter!(ax, ct[:, 1], ct[:, 2],
     markersize = 10, color = :red)
 f
 
 
-Ttest = Jchemo.transform(fm, Xtest)
+@head Ttest = transf(mod, Xtest)
 
 
-fm.P
+P = mod.fm.P
 
 
-fm.P' * fm.P    # not orthogonal
+P' * P    # not orthogonal
 
 
-fm.eig
+mod.fm.eig
 
 
-fm.sstot
+mod.fm.sstot
 
 
-summary(fm)
+summary(mod)
 

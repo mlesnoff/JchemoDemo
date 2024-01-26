@@ -1,7 +1,6 @@
 
-using JLD2, CairoMakie
 using Jchemo, JchemoData
-using Loess
+using JLD2, CairoMakie
 
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -29,20 +28,21 @@ typ = Y.typ
 tab(typ)
 
 
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst)
 
 
-plotsp(X, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-f = 15 ; pol = 3 ; d = 2 
-Xp = savgol(snv(X); f = f, pol = pol, d = d)
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 15, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X)
 
 
-plotsp(Xp, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
 s = typ .== "train"
@@ -65,7 +65,7 @@ ytest = Ytest[:, nam]
 segm = segmkf(ntrain, 4; rep = 5)
 
 
-nlvdis = [10; 15] ; metric = ["mahal"] 
+nlvdis = [10; 15] ; metric = [:mah] 
 h = [1; 2; 6; Inf] ; k = [30; 50; 100]  
 nlv = 0:15
 pars = mpar(nlvdis = nlvdis, metric = metric, 
@@ -75,29 +75,27 @@ pars = mpar(nlvdis = nlvdis, metric = metric,
 length(pars[1])
 
 
-res = gridcvlv(Xtrain, ytrain; segm = segm,
-    score = rmsep, fun = lwplsr, nlv = nlv, 
-    pars = pars, verbose = false).res
+mod = lwplsr()
+res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, 
+    nlv, pars, verbose = false).res
 
 
-group = string.("nvldis=", res.nlvdis, " h=", res.h, 
-    " k=", res.k)
-plotgrid(res.nlv, res.y1, group; step = 2,
-    xlabel ="Nb. LVs", ylabel = "RMSEP").f
+group = string.("nvldis=", res.nlvdis, " h=", res.h, " k=", res.k)
+plotgrid(res.nlv, res.y1, group; step = 2, xlabel ="Nb. LVs", 
+    ylabel = "RMSEP").f
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 
 
-fm = lwplsr(Xtrain, ytrain; nlvdis = res.nlvdis[u],
-    metric = res.metric[u], h = res.h[u], k = res.k[u], 
-    nlv = res.nlv[u]) ;
-pred = Jchemo.predict(fm, Xtest).pred 
+mod = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], 
+    h = res.h[u], k = res.k[u], nlv = res.nlv[u]) ;
+fit!(mod, Xtrain, ytrain)
+pred = predict(mod, Xtest).pred
 rmsep(pred, ytest)
 
 
-plotxy(pred, ytest; resolution = (500, 400),
-    color = (:red, .5), bisect = true, 
+plotxy(pred, ytest; color = (:red, .5), bisect = true, 
     xlabel = "Prediction", ylabel = "Observed (Test)").f
 

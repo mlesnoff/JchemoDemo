@@ -1,6 +1,6 @@
 
-using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
+using JLD2, CairoMakie
 
 
 using JchemoData, JLD2, CairoMakie
@@ -30,79 +30,81 @@ lev = unique(year)
 nlev = length(lev)
 
 
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst)
 
 
 tab(year)
 
 
-plotsp(X, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", 
+    ylabel = "Absorbance").f
 
 
-f = 15 ; pol = 3 ; d = 2 
-Xp = savgol(snv(X); f = f, pol = pol, d = d)
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 11, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X)
 
 
-plotsp(Xp, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-fm = pcasvd(Xp, nlv = 10) ; 
-pnames(fm)
+mod = pcasvd(nlv = 10)
+fit!(mod, Xp)
+pnames(mod)
+pnames(mod.fm)
 
 
-T = fm.T
+T = mod.fm.T
 @head T
 
 
-res = summary(fm, Xp) ;
+res = summary(mod, Xp) ;
 pnames(res)
 
 
 z = res.explvarx
 
 
-plotgrid(z.lv, 100 * z.pvar; step = 1,
-    xlabel = "Nb. PCs", ylabel = "% variance explained").f
+plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "Nb. PCs", 
+    ylabel = "% variance explained").f
 
 
 i = 1
-plotxy(T[:, i], T[:, i + 1]; color = (:red, .5),
-    xlabel = "PC1", ylabel = "PC2").f
+plotxy(T[:, i], T[:, i + 1]; color = (:red, .5), xlabel = "PC1", 
+    ylabel = "PC2").f
 
 
-plotxy(T[:, i], T[:, i + 1], year; ellipse = true,
-    xlabel = "PC1", ylabel = "PC2").f
+plotxy(T[:, i], T[:, i + 1], year; ellipse = true, xlabel = "PC1", 
+    ylabel = "PC2").f
 
 
 summ(y)
 
 
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1], xlabel = "TBC", ylabel = "Nb. samples")
 hist!(ax, y; bins = 50)
 f
 
 
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1], xlabel = "Year", ylabel = "TBC")
 boxplot!(ax, year, y; show_notch = true)
 f
 
 
-f = Figure(resolution = (500, 1000))
+f = Figure(size = (500, 1000))
 ax = list(nlev)
 for i = 1:nlev
     i == nlev ? xlab = "tbc" : xlab = ""
     ax[i] = Axis(f[i, 1], title = string(lev[i]),
-        xlabel = xlab, 
-        ylabel = "Nb. obs.")
+        xlabel = xlab, ylabel = "Nb. obs.")
     xlims!(0, maximum(y))
     s = year .== lev[i]
-    hist!(ax[i], y[s]; bins = 30,
-        color = (:red, .5))
+    hist!(ax[i], y[s]; bins = 30, color = (:red, .5))
 end
 f
 

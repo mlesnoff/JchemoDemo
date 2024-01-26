@@ -1,6 +1,6 @@
 
-using JLD2, CairoMakie, StatsBase
 using Jchemo, JchemoData
+using JLD2, CairoMakie
 
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -28,36 +28,41 @@ typ = Y.typ
 tab(typ)
 
 
-wl = names(X)
-wl_num = parse.(Float64, wl)
+wlst = names(X)
+wl = parse.(Float64, wlst)
 
 
-plotsp(X, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", 
+    ylabel = "Absorbance").f
 
 
-f = 15 ; pol = 3 ; d = 2 
-Xp = savgol(snv(X); f = f, pol = pol, d = d)
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 15, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X)
 
 
-plotsp(Xp, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+plotsp(Xp, wl; xlabel = "Wavelength (nm)", 
+    ylabel = "Absorbance").f
 
 
-fm = pcasvd(Xp, nlv = 10) ; 
-pnames(fm)
+mod = pcasvd(nlv = 10)
+fit!(mod, X)
+pnames(mod)
+pnames(mod.fm)
 
 
-res = summary(fm, Xp) ;
+res = summary(mod, Xp) ;
 pnames(res)
 
 
 z = res.explvarx
-plotgrid(z.lv, 100 * z.pvar; step = 1,
+plotgrid(z.nlv, 100 * z.pvar; step = 1,
     xlabel = "Nb. PCs", ylabel = "% variance explained").f
 
 
-T = fm.T
+T = mod.fm.T
 @head T
 
 
@@ -66,8 +71,8 @@ plotxy(T[:, i], T[:, i + 1]; color = (:red, .5),
     xlabel = "PC1", ylabel = "PC2").f
 
 
-plotxy(T[:, i], T[:, i + 1], typ; 
-    xlabel = "PC1", ylabel = "PC2").f
+plotxy(T[:, i], T[:, i + 1], typ; xlabel = "PC1", 
+    ylabel = "PC2").f
 
 
 summ(Y[:, namy]).res
@@ -80,7 +85,7 @@ j = 2
 nam = namy[2]  # y-variable
 
 
-y = Y[:, 2]
+y = Y[:, nam]
 
 
 mlev(typ)
@@ -90,7 +95,7 @@ ztyp = recodcat2int(typ)
 tab(string.(ztyp, "-", typ))
 
 
-f = Figure(resolution = (500, 400))
+f = Figure(size = (500, 400))
 ax = Axis(f[1, 1], 
     xticks = (1:3, mlev(typ)),
     xlabel = "Group", ylabel = nam)

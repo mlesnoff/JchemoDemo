@@ -1,6 +1,6 @@
 
-using JLD2, CairoMakie, FreqTables
 using Jchemo, JchemoData
+using JLD2, CairoMakie, FreqTables
 using GLMakie
 CairoMakie.activate!()
 
@@ -23,15 +23,15 @@ Y = dat.Y
 ntot = nro(Xm5)
 
 
-wl = names(dat.Xm5)
-wl_num = parse.(Float64, wl)
+wlst = names(dat.Xm5)
+wl = parse.(Float64, wlst)
 
 
 summ(Y).res
 
 
-plotsp(Xm5, wl_num;
-    xlabel = "Wavelength (nm)", ylabel = "Reflectance").f
+plotsp(Xm5, wl; xlabel = "Wavelength (nm)", 
+    ylabel = "Reflectance").f
 
 
 typ = [repeat(["m5"], ntot); repeat(["mp5"], ntot);
@@ -43,21 +43,26 @@ lev = unique(typ)
 nlev = length(lev)
 
 
-fpreproc(X) = savgol(snv(X); f = 11, d = 2, pol = 3) 
-Xpm5 = fpreproc(Xm5)
-Xpmp5 = fpreproc(Xmp5)
-Xpmp6 = fpreproc(Xmp6)
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 11, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, Xm5)
+Xpm5 = transf(mod, Xm5)
+Xpmp5 = transf(mod, Xmp5)
+Xpmp6 = transf(mod, Xmp6)
 
 
 zX = vcat(Xpm5, Xpmp5, Xpmp6)
-fm = pcasvd(zX; nlv = 10) ;
-T = fm.T
+mod = pcasvd(nlv = 10)
+fit!(mod, zX)
+T = mod.fm.T
 
 
-res = summary(fm, zX).explvarx
+res = summary(mod, zX).explvarx
 
 
-scatter(res.lv, res.pvar)
+plotgrid(res.nlv, res.pvar; step = 1,
+    xlabel = "Nb. PCs", ylabel = "% explained variance").f
 
 
 i = 1
@@ -70,7 +75,7 @@ CairoMakie.activate!()
 colsh = :default    # :tab10
 colm = cgrad(colsh, 10; alpha = .7, categorical = true)[[1, 5, 8]]
 i = 1
-f = Figure(resolution = (600, 500))
+f = Figure(size = (600, 500))
 ax = Axis3(f[1, 1]; perspectiveness = 0.2,
     xlabel = string("PC", i), ylabel = string("PC", i + 1), 
     zlabel = string("PC", i + 2), 
