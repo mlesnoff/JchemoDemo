@@ -51,14 +51,14 @@ pnames(mod0.fm)
 Ttrain_pca = mod0.fm.T
 
 
-mo = fda(nlv = 2)
-#mo = fdasvd(nlv = 2)     # alternative algorithm (same result)
-fit!(mo, Ttrain_pca, ytrain) 
-fm = mo.fm 
+mod = fda(nlv = 2)
+#mod = fdasvd(nlv = 2)     # alternative algorithm (same result)
+fit!(mod, Ttrain_pca, ytrain) 
+fm = mod.fm 
 pnames(fm)
 
 
-Ttrain = mo.fm.T
+Ttrain = mod.fm.T
 
 
 lev = fm.lev
@@ -78,7 +78,7 @@ f
 Ttest_pca = transf(mod0, Xtest)
 
 
-Ttest = transf(mo, Ttest_pca)
+Ttest = transf(mod, Ttest_pca)
 
 
 i = 1  # class 
@@ -93,9 +93,9 @@ f
 
 
 lb = 1e-5
-mo = fda(; nlv = 2, lb)
-#mo = fdasvd(; nlv = 2, lb)
-fit!(mo,Xtrain, ytrain)
+mod = fda(; nlv = 2, lb)
+#mod = fdasvd(; nlv = 2, lb)
+fit!(mod,Xtrain, ytrain)
 
 
 lev = fm.lev
@@ -115,7 +115,7 @@ scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10,
 f
 
 
-Ttest = transf(mo, Xtest)
+Ttest = transf(mod, Xtest)
 
 
 i = 1  # class 

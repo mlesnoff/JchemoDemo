@@ -67,11 +67,11 @@ plotsp(X, wl; nsamp = 30).f
 #### Preprocessing
 
 ```julia
-mo1 = snv(centr = true, scal = true)
-mo2 = savgol(npoint = 21, deriv = 2, degree = 3)
-mo = pip(mo1, mo2)
-fit!(mo, X)
-Xp = transf(mo, X) 
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 21, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X) 
 ```
 
 ``` julia
@@ -100,12 +100,12 @@ ntest = nro(Xtest)
 
 ```julia
 nlv = 15
-mo = pcasvd(; nlv)
-fit!(mo, Xtrain)
+mod = pcasvd(; nlv)
+fit!(mod, Xtrain)
 ```
 
 ```julia
-res = summary(mo, Xtrain).explvarx
+res = summary(mod, Xtrain).explvarx
 ```
 
 ```julia
@@ -114,7 +114,7 @@ plotgrid(res.nlv, res.pvar; step = 2, xlabel = "PC",
 ```
 
 ```julia term = true
-@head Ttrain = mo.fm.T
+@head Ttrain = mod.fm.T
 ```
 #### Projection of Xtest
 
@@ -123,7 +123,7 @@ and DataFrames export a function `transform`. This will be the same with
 common function names such as `predict`, `coef`, etc.
 
 ```julia term = true
-@head Ttest = transf(mo, Xtest)
+@head Ttest = transf(mod, Xtest)
 ```
 
 ```julia
@@ -139,7 +139,7 @@ plotxy(T[:, i], T[:, i + 1], group; color = colm, xlabel = string("PC", i),
 
 ```julia
 mod_d = occsdod() 
-fit!(mod_d, mo.fm, Xtrain)
+fit!(mod_d, mod.fm, Xtrain)
 pnames(mod_d)
 pnames(mod_d.fm)
 ```

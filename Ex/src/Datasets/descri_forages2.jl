@@ -48,17 +48,17 @@ plotsp(X, wl; nsamp = 10,
     xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-mo = pcasvd(nlv = 10)
-fit!(mo, X)
-pnames(mo)
-pnames(mo.fm)
+mod = pcasvd(nlv = 10)
+fit!(mod, X)
+pnames(mod)
+pnames(mod.fm)
 
 
-T = mo.fm.T
+T = mod.fm.T
 @head T
 
 
-res = summary(mo, X) ;
+res = summary(mod, X) ;
 pnames(res)
 
 
@@ -77,13 +77,13 @@ plotxy(T[:, i], T[:, i + 1], y; ellipse = true,
 
 
 ## Train vs Test
-mo = pcasvd(nlv = 15)
-fit!(mo, Xtrain)
-Ttrain = mo.fm.T
+mod = pcasvd(nlv = 15)
+fit!(mod, Xtrain)
+Ttrain = mod.fm.T
 @head Ttrain
 
 
-Ttest = transf(mo, Xtest)
+Ttest = transf(mod, Xtest)
 
 
 T = vcat(Ttrain, Ttest)
@@ -94,14 +94,14 @@ plotxy(T[:, i], T[:, i + 1], group; xlabel = "PC1",
 
 
 mod_sd = occsd() 
-fit!(mod_sd, mo.fm)
+fit!(mod_sd, mod.fm)
 pnames(mod_sd)
 sdtrain = mod_sd.fm.d
 sdtest = predict(mod_sd, Xtest).d
 
 
 mod_od = occod() 
-fit!(mod_od, mo.fm, Xtrain)
+fit!(mod_od, mod.fm, Xtrain)
 pnames(mod_od)
 odtrain = mod_od.fm.d
 odtest = predict(mod_od, Xtest).d

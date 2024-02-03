@@ -42,11 +42,11 @@ freqtable(typ, test)
 plotsp(X, wl; nsamp = 30).f
 
 
-mo1 = snv(centr = true, scal = true)
-mo2 = savgol(npoint = 21, deriv = 2, degree = 3)
-mo = pip(mo1, mo2)
-fit!(mo, X)
-Xp = transf(mo, X)
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 21, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X)
 
 
 s = Bool.(test)
@@ -79,8 +79,8 @@ pars = mpar(nlvdis = nlvdis, metric = metric,
 length(pars[1])
 
 
-mo = lwplsravg()
-res = gridscore(mo, Xcal, ycal, Xval, yval;
+mod = lwplsravg()
+res = gridscore(mod, Xcal, ycal, Xval, yval;
     score = rmsep, pars, verbose = false)
 
 
@@ -88,10 +88,10 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-mo = lwplsravg(nlvdis = res.nlvdis[u], metric = res.metric[u], 
+mod = lwplsravg(nlvdis = res.nlvdis[u], metric = res.metric[u], 
     h = res.h[u], k = res.k[u], nlv = res.nlv[u]) ;
-fit!(mo, Xtrain, ytrain) 
-pred = predict(mo, Xtest).pred 
+fit!(mod, Xtrain, ytrain) 
+pred = predict(mod, Xtest).pred 
 rmsep(pred, ytest)
 
 

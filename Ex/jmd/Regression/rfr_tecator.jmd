@@ -60,11 +60,11 @@ plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 #### Preprocessing
 
 ```julia
-mo1 = snv(centr = true, scal = true)
-mo2 = savgol(npoint = 15, deriv = 2, degree = 3)
-mo = pip(mo1, mo2)
-fit!(mo, X)
-Xp = transf(mo, X)  
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 15, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X)  
 ```
 
 ```julia
@@ -105,17 +105,17 @@ n_trees = 100
 partial_sampling = .7
 n_subfeatures = p / 3
 max_depth = 20
-mo = rfr_dt(; n_trees, partial_sampling,
+mod = rfr_dt(; n_trees, partial_sampling,
     n_subfeatures, max_depth)
-fit!(mo, Xtrain, ytrain)
-pnames(mo)
-pnames(mo.fm)
+fit!(mod, Xtrain, ytrain)
+pnames(mod)
+pnames(mod.fm)
 ```
 
 #### Predictions
 
 ```julia
-pred = Jchemo.predict(mo, Xtest).pred
+pred = Jchemo.predict(mod, Xtest).pred
 ```
 
 ```julia

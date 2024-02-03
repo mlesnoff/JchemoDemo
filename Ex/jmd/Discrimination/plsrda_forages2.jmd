@@ -78,28 +78,28 @@ The term "PLSDA" can represent different methods, e.g. PLSR-DA, PLS-LDA and PLS-
 
 ```julia 
 nlv = 15
-mo = plsrda(; nlv) 
-#mo = plslda(; nlv) 
-#mo = plsqda(; nlv) 
-#mo = plsqda(; nlv, prior = :prop) 
+mod = plsrda(; nlv) 
+#mod = plslda(; nlv) 
+#mod = plsqda(; nlv) 
+#mod = plsqda(; nlv, prior = :prop) 
 ```
 
 An alternative to PLS is the ridge regularization (RR-DA):
 
 ```julia
-#mo = rrda(lb = 1e-5)
+#mod = rrda(lb = 1e-5)
 ```
 
 ```julia
-fit!(mo, Xtrain, ytrain)
-pnames(mo) 
-pnames(mo.fm)
+fit!(mod, Xtrain, ytrain)
+pnames(mod) 
+pnames(mod.fm)
 ```
 
 #### Predictions
 
 ```julia
-res = predict(mo, Xtest) ;
+res = predict(mod, Xtest) ;
 pnames(res)
 ```
 

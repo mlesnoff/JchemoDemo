@@ -36,24 +36,24 @@ plotsp(X, wl; xlabel = "Wavelength (nm)",
     ylabel = "Absorbance").f
 
 
-mo1 = snv(centr = true, scal = true)
-mo2 = savgol(npoint = 15, deriv = 2, degree = 3)
-mo = pip(mo1, mo2)
-fit!(mo, X)
-Xp = transf(mo, X)
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 15, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X)
 
 
 plotsp(Xp, wl; xlabel = "Wavelength (nm)", 
     ylabel = "Absorbance").f
 
 
-mo = pcasvd(nlv = 10)
-fit!(mo, X)
-pnames(mo)
-pnames(mo.fm)
+mod = pcasvd(nlv = 10)
+fit!(mod, X)
+pnames(mod)
+pnames(mod.fm)
 
 
-res = summary(mo, Xp) ;
+res = summary(mod, Xp) ;
 pnames(res)
 
 
@@ -62,7 +62,7 @@ plotgrid(z.nlv, 100 * z.pvar; step = 1,
     xlabel = "Nb. PCs", ylabel = "% variance explained").f
 
 
-T = mo.fm.T
+T = mod.fm.T
 @head T
 
 

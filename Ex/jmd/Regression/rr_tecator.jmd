@@ -60,11 +60,11 @@ plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 #### Preprocessing
 
 ```julia
-mo1 = snv(centr = true, scal = true)
-mo2 = savgol(npoint = 15, deriv = 2, degree = 3)
-mo = pip(mo1, mo2)
-fit!(mo, X)
-Xp = transf(mo, X) 
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 15, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X) 
 ```
 
 ```julia
@@ -102,22 +102,22 @@ ytest = Ytest[:, nam]
 
 ```julia
 lb = 1e-3
-mo = rr(; lb)
+mod = rr(; lb)
 ## Alternative RR algorithm:
-## mo = rrchol(; lb)
-fit!(mo, Xtrain, ytrain)
-pnames(mo)
-pnames(mo.fm)
+## mod = rrchol(; lb)
+fit!(mod, Xtrain, ytrain)
+pnames(mod)
+pnames(mod.fm)
 ```
 
 #### Predictions
 
 ```julia
-pred = Jchemo.predict(mo, Xtest).pred
+pred = Jchemo.predict(mod, Xtest).pred
 ```
 
 ```julia
-Jchemo.predict(mo, Xtest; lb = 1e-2).pred
+Jchemo.predict(mod, Xtest; lb = 1e-2).pred
 ```
 
 Predictions for multiple values of 'lb' are only possible with 'rr' 
@@ -125,7 +125,7 @@ Predictions for multiple values of 'lb' are only possible with 'rr'
 
 ```julia
 lb = 10.0.^(-6:-1)
-Jchemo.predict(mo, Xtest; lb = lb).pred
+Jchemo.predict(mod, Xtest; lb = lb).pred
 ```
 
 ```julia

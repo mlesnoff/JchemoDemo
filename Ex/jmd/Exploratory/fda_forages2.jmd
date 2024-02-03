@@ -93,15 +93,15 @@ Ttrain_pca = mod0.fm.T
 ```
 
 ```julia
-mo = fda(nlv = 2)
-#mo = fdasvd(nlv = 2)     # alternative algorithm (same result)
-fit!(mo, Ttrain_pca, ytrain) 
-fm = mo.fm 
+mod = fda(nlv = 2)
+#mod = fdasvd(nlv = 2)     # alternative algorithm (same result)
+fit!(mod, Ttrain_pca, ytrain) 
+fm = mod.fm 
 pnames(fm)
 ```
 
 ```julia
-Ttrain = mo.fm.T
+Ttrain = mod.fm.T
 ```
 
 ```julia
@@ -128,7 +128,7 @@ Ttest_pca = transf(mod0, Xtest)
 ```
 
 ```julia
-Ttest = transf(mo, Ttest_pca)
+Ttest = transf(mod, Ttest_pca)
 ```
 
 ```julia
@@ -151,9 +151,9 @@ of new observations is misleading.
 
 ```julia
 lb = 1e-5
-mo = fda(; nlv = 2, lb)
-#mo = fdasvd(; nlv = 2, lb)
-fit!(mo,Xtrain, ytrain)
+mod = fda(; nlv = 2, lb)
+#mod = fdasvd(; nlv = 2, lb)
+fit!(mod,Xtrain, ytrain)
 ```
 
 ```julia
@@ -180,7 +180,7 @@ f
 **Projection of Xtest**
 
 ```julia
-Ttest = transf(mo, Xtest)
+Ttest = transf(mod, Xtest)
 ```
 
 ```julia

@@ -73,11 +73,11 @@ plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 #### Preprocessing
 
 ```julia
-mo1 = snv(centr = true, scal = true)
-mo2 = savgol(npoint = 15, deriv = 2, degree = 3)
-mo = pip(mo1, mo2)
-fit!(mo, X)
-Xp = transf(mo, X) 
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 15, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X) 
 ```
 
 ```julia
@@ -87,12 +87,12 @@ plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 #### PCA
 
 ```julia
-mo = pcasvd(nlv = 6)
-fit!(mo, Xp) 
+mod = pcasvd(nlv = 6)
+fit!(mod, Xp) 
 ```
 
 ```julia
-T = mo.fm.T
+T = mod.fm.T
 ```
 
 ## 2-D score space

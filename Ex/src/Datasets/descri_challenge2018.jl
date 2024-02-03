@@ -46,11 +46,11 @@ freqtable(typ, test)
 plotsp(X, wl; nsamp = 30).f
 
 
-mo1 = snv(centr = true, scal = true)
-mo2 = savgol(npoint = 21, deriv = 2, degree = 3)
-mo = pip(mo1, mo2)
-fit!(mo, X)
-Xp = transf(mo, X)
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 21, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X)
 
 
 plotsp(Xp, wl; nsamp = 30).f
@@ -68,17 +68,17 @@ ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
 
-mo = pcasvd(nlv = 10)
-fit!(mo, Xp)
-pnames(mo)
-pnames(mo.fm)
+mod = pcasvd(nlv = 10)
+fit!(mod, Xp)
+pnames(mod)
+pnames(mod.fm)
 
 
-T = mo.fm.T
+T = mod.fm.T
 @head T
 
 
-res = summary(mo, Xp) ;
+res = summary(mod, Xp) ;
 pnames(res)
 
 
@@ -99,15 +99,15 @@ plotxy(T[:, i], T[:, i + 1], typ; color = colm,
     xlabel = string("PC", i), ylabel = string("PC", i + 1)).f
 
 
-mo = pcasvd(nlv = 15)
-fit!(mo, Xtrain)
+mod = pcasvd(nlv = 15)
+fit!(mod, Xtrain)
 
 
-Ttrain = mo.fm.T
+Ttrain = mod.fm.T
 @head Ttrain
 
 
-Ttest = transf(mo, Xtest)
+Ttest = transf(mod, Xtest)
 @head Ttest
 
 
@@ -120,14 +120,14 @@ plotxy(T[:, i], T[:, i + 1], group; color = colm, xlabel = "PC1",
 
 
 mod_sd = occsd() 
-fit!(mod_sd, mo.fm)
+fit!(mod_sd, mod.fm)
 pnames(mod_sd)
 sdtrain = mod_sd.fm.d
 sdtest = predict(mod_sd, Xtest).d
 
 
 mod_od = occod() 
-fit!(mod_od, mo.fm, Xtrain)
+fit!(mod_od, mod.fm, Xtrain)
 pnames(mod_od)
 odtrain = mod_od.fm.d
 odtest = predict(mod_od, Xtest).d

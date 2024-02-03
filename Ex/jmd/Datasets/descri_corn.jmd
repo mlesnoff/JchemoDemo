@@ -67,26 +67,26 @@ nlev = length(lev)
 #### Preprocessing
 
 ```julia
-mo1 = snv(centr = true, scal = true)
-mo2 = savgol(npoint = 11, deriv = 2, degree = 3)
-mo = pip(mo1, mo2)
-fit!(mo, Xm5)
-Xpm5 = transf(mo, Xm5)
-Xpmp5 = transf(mo, Xmp5)
-Xpmp6 = transf(mo, Xmp6)
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 11, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, Xm5)
+Xpm5 = transf(mod, Xm5)
+Xpmp5 = transf(mod, Xmp5)
+Xpmp6 = transf(mod, Xmp6)
 ```
 
 #### PCA
 
 ```julia
 zX = vcat(Xpm5, Xpmp5, Xpmp6)
-mo = pcasvd(nlv = 10)
-fit!(mo, zX)
-T = mo.fm.T
+mod = pcasvd(nlv = 10)
+fit!(mod, zX)
+T = mod.fm.T
 ```
 
 ```julia
-res = summary(mo, zX).explvarx
+res = summary(mod, zX).explvarx
 ```
 
 ```julia

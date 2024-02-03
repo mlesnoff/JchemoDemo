@@ -36,11 +36,11 @@ wl = parse.(Float64, wlst)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-mo1 = snv(centr = true, scal = true)
-mo2 = savgol(npoint = 15, deriv = 2, degree = 3)
-mo = pip(mo1, mo2)
-fit!(mo, X)
-Xp = transf(mo, X)
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 15, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X)
 
 
 plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
@@ -66,13 +66,13 @@ ytest = Ytest[:, nam]
 nlvdis = 10 ; metric = :mah
 h = 3 ; k = 30 
 nlv = 4
-mo = lwplsr(; nlvdis, metric, h, k, nlv) 
-fit!(mo, Xtrain, ytrain)
-pnames(mo)
-pnames(mo.fm)
+mod = lwplsr(; nlvdis, metric, h, k, nlv) 
+fit!(mod, Xtrain, ytrain)
+pnames(mod)
+pnames(mod.fm)
 
 
-pred = Jchemo.predict(mo, Xtest).pred
+pred = Jchemo.predict(mod, Xtest).pred
 
 
 rmsep(pred, ytest)

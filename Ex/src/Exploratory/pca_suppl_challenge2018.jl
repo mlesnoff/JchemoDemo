@@ -42,11 +42,11 @@ freqtable(typ, test)
 plotsp(X, wl; nsamp = 30).f
 
 
-mo1 = snv(centr = true, scal = true)
-mo2 = savgol(npoint = 21, deriv = 2, degree = 3)
-mo = pip(mo1, mo2)
-fit!(mo, X)
-Xp = transf(mo, X)
+mod1 = snv(centr = true, scal = true)
+mod2 = savgol(npoint = 21, deriv = 2, degree = 3)
+mod = pip(mod1, mod2)
+fit!(mod, X)
+Xp = transf(mod, X)
 
 
 s = Bool.(test)
@@ -60,21 +60,21 @@ ntest = nro(Xtest)
 
 
 nlv = 15
-mo = pcasvd(; nlv)
-fit!(mo, Xtrain)
+mod = pcasvd(; nlv)
+fit!(mod, Xtrain)
 
 
-res = summary(mo, Xtrain).explvarx
+res = summary(mod, Xtrain).explvarx
 
 
 plotgrid(res.nlv, res.pvar; step = 2, xlabel = "PC", 
     ylabel = "Prop. variance explained").f
 
 
-@head Ttrain = mo.fm.T
+@head Ttrain = mod.fm.T
 
 
-@head Ttest = transf(mo, Xtest)
+@head Ttest = transf(mod, Xtest)
 
 
 T = vcat(Ttrain, Ttest)
@@ -86,7 +86,7 @@ plotxy(T[:, i], T[:, i + 1], group; color = colm, xlabel = string("PC", i),
 
 
 mod_d = occsdod() 
-fit!(mod_d, mo.fm, Xtrain)
+fit!(mod_d, mod.fm, Xtrain)
 pnames(mod_d)
 pnames(mod_d.fm)
 
