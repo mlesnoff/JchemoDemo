@@ -36,11 +36,11 @@ wl = parse.(Float64, wlst)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-mod1 = snv(centr = true, scal = true)
-mod2 = savgol(npoint = 15, deriv = 2, degree = 3)
-mod = pip(mod1, mod2)
-fit!(mod, X)
-Xp = transf(mod, X)
+mo1 = snv(centr = true, scal = true)
+mo2 = savgol(npoint = 15, deriv = 2, degree = 3)
+mo = pip(mo1, mo2)
+fit!(mo, X)
+Xp = transf(mo, X)
 
 
 plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
@@ -64,22 +64,22 @@ ytest = Ytest[:, nam]
 
 
 lb = 1e-3
-mod = rr(; lb)
+mo = rr(; lb)
 ## Alternative RR algorithm:
-## mod = rrchol(; lb)
-fit!(mod, Xtrain, ytrain)
-pnames(mod)
-pnames(mod.fm)
+## mo = rrchol(; lb)
+fit!(mo, Xtrain, ytrain)
+pnames(mo)
+pnames(mo.fm)
 
 
-pred = Jchemo.predict(mod, Xtest).pred
+pred = Jchemo.predict(mo, Xtest).pred
 
 
-Jchemo.predict(mod, Xtest; lb = 1e-2).pred
+Jchemo.predict(mo, Xtest; lb = 1e-2).pred
 
 
 lb = 10.0.^(-6:-1)
-Jchemo.predict(mod, Xtest; lb = lb).pred
+Jchemo.predict(mo, Xtest; lb = lb).pred
 
 
 rmsep(pred, ytest)

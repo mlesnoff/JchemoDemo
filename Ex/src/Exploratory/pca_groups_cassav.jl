@@ -46,21 +46,21 @@ groupnum = recodcat2int(year)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-mod1 = snv(centr = true, scal = true)
-mod2 = savgol(npoint = 15, deriv = 2, degree = 3)
-mod = pip(mod1, mod2)
-fit!(mod, X)
-Xp = transf(mod, X)
+mo1 = snv(centr = true, scal = true)
+mo2 = savgol(npoint = 15, deriv = 2, degree = 3)
+mo = pip(mo1, mo2)
+fit!(mo, X)
+Xp = transf(mo, X)
 
 
 plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-mod = pcasvd(nlv = 6)
-fit!(mod, Xp)
+mo = pcasvd(nlv = 6)
+fit!(mo, Xp)
 
 
-T = mod.fm.T
+T = mo.fm.T
 
 
 i = 1

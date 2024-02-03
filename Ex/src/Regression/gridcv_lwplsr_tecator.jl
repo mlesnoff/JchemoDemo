@@ -35,11 +35,11 @@ wl = parse.(Float64, wlst)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-mod1 = snv(centr = true, scal = true)
-mod2 = savgol(npoint = 15, deriv = 2, degree = 3)
-mod = pip(mod1, mod2)
-fit!(mod, X)
-Xp = transf(mod, X)
+mo1 = snv(centr = true, scal = true)
+mo2 = savgol(npoint = 15, deriv = 2, degree = 3)
+mo = pip(mo1, mo2)
+fit!(mo, X)
+Xp = transf(mo, X)
 
 
 plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
@@ -75,8 +75,8 @@ pars = mpar(nlvdis = nlvdis, metric = metric,
 length(pars[1])
 
 
-mod = lwplsr()
-res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, 
+mo = lwplsr()
+res = gridcv(mo, Xtrain, ytrain; segm, score = rmsep, 
     nlv, pars, verbose = false).res
 
 
@@ -89,10 +89,10 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-mod = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], 
+mo = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], 
     h = res.h[u], k = res.k[u], nlv = res.nlv[u]) ;
-fit!(mod, Xtrain, ytrain)
-pred = predict(mod, Xtest).pred
+fit!(mo, Xtrain, ytrain)
+pred = predict(mo, Xtest).pred
 rmsep(pred, ytest)
 
 

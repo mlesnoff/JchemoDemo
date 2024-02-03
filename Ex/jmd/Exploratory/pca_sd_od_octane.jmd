@@ -52,32 +52,32 @@ plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance",
 #### PCA model fitting
 
 ```julia
-mod = pcasvd(nlv = 6) 
+mo = pcasvd(nlv = 6) 
 ## For robust spherical PCA, do:
-#mod = pcasph(nlv = 6)
-fit!(mod, X)  
-pnames(mod)
-pnames(mod.fm)
-fm = mod.fm
+#mo = pcasph(nlv = 6)
+fit!(mo, X)  
+pnames(mo)
+pnames(mo.fm)
+fm = mo.fm
 ```
 
 **Scores:**
 
 ```julia term = true
-@head T = mod.fm.T 
+@head T = mo.fm.T 
 ```
 
 #### Score distance (SD)
 
 ```julia
-mod = occsd()
-fit!(mod, fm)
-pnames(mod)
-pnames(mod.fm)
+mo = occsd()
+fit!(mo, fm)
+pnames(mo)
+pnames(mo.fm)
 ```
 
 ```julia
-d = mod.fm.d
+d = mo.fm.d
 ```
 
 ```julia
@@ -91,14 +91,14 @@ f
 #### Orthogonal distance (OD)
 
 ```julia
-mod = occod() 
-fit!(mod, fm, X)
-pnames(mod)
-pnames(mod.fm)
+mo = occod() 
+fit!(mo, fm, X)
+pnames(mo)
+pnames(mo.fm)
 ```
 
 ```julia
-d = mod.fm.d
+d = mo.fm.d
 ```
 
 ```julia
@@ -112,12 +112,12 @@ f
 #### SD-OD
 
 ```julia
-mod = occsd()
-fit!(mod, fm)
-d_sd = mod.fm.d
-mod = occod()
-fit!(mod, fm, X)
-d_od = mod.fm.d
+mo = occsd()
+fit!(mo, fm)
+d_sd = mo.fm.d
+mo = occod()
+fit!(mo, fm, X)
+d_od = mo.fm.d
 f, ax = plotxy(d_sd.dstand, d_od.dstand; xlabel = "Standardized SD", 
     ylabel = "Standardized OD")
 hlines!(ax, 1)
@@ -137,14 +137,14 @@ f
 #### Direct computation of a composite SD-OD
 
 ```julia
-mod = occsdod() 
-fit!(mod, fm, X)
-pnames(mod)
-pnames(mod.fm)
+mo = occsdod() 
+fit!(mo, fm, X)
+pnames(mo)
+pnames(mo.fm)
 ```
 
 ```julia
-d = mod.fm.d
+d = mo.fm.d
 ```
 
 ```julia

@@ -28,15 +28,15 @@ plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance",
     title = "Octane data").f
 
 
-mod = pcasvd(nlv = 6) 
+mo = pcasvd(nlv = 6) 
 ## For robust spherical PCA, do:
-#mod = pcasph(nlv = 6)
-fit!(mod, X)  
-pnames(mod)
-pnames(mod.fm)
+#mo = pcasph(nlv = 6)
+fit!(mo, X)  
+pnames(mo)
+pnames(mo.fm)
 
 
-res = summary(mod, X) ;
+res = summary(mo, X) ;
 pnames(res)
 
 

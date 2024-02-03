@@ -28,25 +28,25 @@ plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance",
     title = "Octane data").f
 
 
-mod = pcasvd(nlv = 6) 
+mo = pcasvd(nlv = 6) 
 ## For robust spherical PCA, do:
-#mod = pcasph(nlv = 6)
-fit!(mod, X)  
-pnames(mod)
-pnames(mod.fm)
-fm = mod.fm
+#mo = pcasph(nlv = 6)
+fit!(mo, X)  
+pnames(mo)
+pnames(mo.fm)
+fm = mo.fm
 
 
-@head T = mod.fm.T
+@head T = mo.fm.T
 
 
-mod = occsd()
-fit!(mod, fm)
-pnames(mod)
-pnames(mod.fm)
+mo = occsd()
+fit!(mo, fm)
+pnames(mo)
+pnames(mo.fm)
 
 
-d = mod.fm.d
+d = mo.fm.d
 
 
 f = Figure(size = (500, 400))
@@ -56,13 +56,13 @@ hist!(d.dstand; bins = 20)
 f
 
 
-mod = occod() 
-fit!(mod, fm, X)
-pnames(mod)
-pnames(mod.fm)
+mo = occod() 
+fit!(mo, fm, X)
+pnames(mo)
+pnames(mo.fm)
 
 
-d = mod.fm.d
+d = mo.fm.d
 
 
 f = Figure(size = (500, 400))
@@ -72,12 +72,12 @@ hist!(d.dstand; bins = 20)
 f
 
 
-mod = occsd()
-fit!(mod, fm)
-d_sd = mod.fm.d
-mod = occod()
-fit!(mod, fm, X)
-d_od = mod.fm.d
+mo = occsd()
+fit!(mo, fm)
+d_sd = mo.fm.d
+mo = occod()
+fit!(mo, fm, X)
+d_od = mo.fm.d
 f, ax = plotxy(d_sd.dstand, d_od.dstand; xlabel = "Standardized SD", 
     ylabel = "Standardized OD")
 hlines!(ax, 1)
@@ -93,13 +93,13 @@ vlines!(ax, 1)
 f
 
 
-mod = occsdod() 
-fit!(mod, fm, X)
-pnames(mod)
-pnames(mod.fm)
+mo = occsdod() 
+fit!(mo, fm, X)
+pnames(mo)
+pnames(mo.fm)
 
 
-d = mod.fm.d
+d = mo.fm.d
 
 
 f, ax = plotxy(1:n, d.dstand; xlabel = "Observation", 

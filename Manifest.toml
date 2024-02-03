@@ -142,9 +142,9 @@ version = "1.0.5"
 
 [[deps.CairoMakie]]
 deps = ["CRC32c", "Cairo", "Colors", "FFTW", "FileIO", "FreeType", "GeometryBasics", "LinearAlgebra", "Makie", "PrecompileTools"]
-git-tree-sha1 = "8af8e491c0809610cdec28c9c44b1f1dce01046d"
+git-tree-sha1 = "958739bc7f13916ac1a1b8707c2e8c987d2f124b"
 uuid = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
-version = "0.11.6"
+version = "0.11.7"
 
 [[deps.Cairo_jll]]
 deps = ["Artifacts", "Bzip2_jll", "CompilerSupportLibraries_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "JLLWrappers", "LZO_jll", "Libdl", "Pixman_jll", "Pkg", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Zlib_jll", "libpng_jll"]
@@ -618,9 +618,9 @@ version = "3.3.9+0"
 
 [[deps.GLMakie]]
 deps = ["ColorTypes", "Colors", "FileIO", "FixedPointNumbers", "FreeTypeAbstraction", "GLFW", "GeometryBasics", "LinearAlgebra", "Makie", "Markdown", "MeshIO", "ModernGL", "Observables", "PrecompileTools", "Printf", "ShaderAbstractions", "StaticArrays"]
-git-tree-sha1 = "501d116cbd5af531bdca20a6f4fb705ffd61784f"
+git-tree-sha1 = "da95e41d45fb536ffd9591a7374e5e37442ab830"
 uuid = "e9467ef8-e4e7-5192-8a1a-b1aee30e663a"
-version = "0.9.6"
+version = "0.9.7"
 
 [[deps.GPUArraysCore]]
 deps = ["Adapt"]
@@ -1089,9 +1089,9 @@ version = "0.5.13"
 
 [[deps.Makie]]
 deps = ["Animations", "Base64", "CRC32c", "ColorBrewer", "ColorSchemes", "ColorTypes", "Colors", "Contour", "DelaunayTriangulation", "Distributions", "DocStringExtensions", "Downloads", "FFMPEG_jll", "FileIO", "FilePaths", "FixedPointNumbers", "Formatting", "FreeType", "FreeTypeAbstraction", "GeometryBasics", "GridLayoutBase", "ImageIO", "InteractiveUtils", "IntervalSets", "Isoband", "KernelDensity", "LaTeXStrings", "LinearAlgebra", "MacroTools", "MakieCore", "Markdown", "MathTeXEngine", "Observables", "OffsetArrays", "Packing", "PlotUtils", "PolygonOps", "PrecompileTools", "Printf", "REPL", "Random", "RelocatableFolders", "Scratch", "ShaderAbstractions", "Showoff", "SignedDistanceFields", "SparseArrays", "StableHashTraits", "Statistics", "StatsBase", "StatsFuns", "StructArrays", "TriplotBase", "UnicodeFun"]
-git-tree-sha1 = "5458e49833d178c071dd6ab6938ac5320f37bc98"
+git-tree-sha1 = "8765761cc62145802eb29ff2d923723496b5fe91"
 uuid = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
-version = "0.20.5"
+version = "0.20.6"
 
 [[deps.MakieCore]]
 deps = ["Observables", "REPL"]
@@ -1803,9 +1803,9 @@ weakdeps = ["RecipesBase"]
     TimeZonesRecipesBaseExt = "RecipesBase"
 
 [[deps.TranscodingStreams]]
-git-tree-sha1 = "1fbeaaca45801b4ba17c251dd8603ef24801dd84"
+git-tree-sha1 = "54194d92959d8ebaa8e26227dbe3cdefcdcd594f"
 uuid = "3bb67fe8-82b1-5028-8e26-92a6c54297fa"
-version = "0.10.2"
+version = "0.10.3"
 weakdeps = ["Random", "Test"]
 
     [deps.TranscodingStreams.extensions]

@@ -105,8 +105,8 @@ length(pars[1])
 #### Grid-search
 
 ```julia
-mod = kplsrda()
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = errp, 
+mo = kplsrda()
+res = gridscore(mo, Xcal, ycal, Xval, yval; score = errp, 
     pars, nlv)
 ```
 
@@ -125,9 +125,9 @@ res[u, :]
 #### Final prediction (Test) using the optimal model
 
 ```julia
-mod = kplsrda(nlv = res.nlv[u], gamma = res.gamma[u])
-fit!(mod, Xtrain, ytrain)
-pred = predict(mod, Xtest).pred
+mo = kplsrda(nlv = res.nlv[u], gamma = res.gamma[u])
+fit!(mo, Xtrain, ytrain)
+pred = predict(mo, Xtest).pred
 ```
 
 #### Generalization error

@@ -36,11 +36,11 @@ wl = parse.(Float64, wlst)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-mod1 = snv(centr = true, scal = true)
-mod2 = savgol(npoint = 15, deriv = 2, degree = 3)
-mod = pip(mod1, mod2)
-fit!(mod, X)
-Xp = transf(mod, X)
+mo1 = snv(centr = true, scal = true)
+mo2 = savgol(npoint = 15, deriv = 2, degree = 3)
+mo = pip(mo1, mo2)
+fit!(mo, X)
+Xp = transf(mo, X)
 
 
 plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
@@ -65,21 +65,21 @@ ytest = Ytest[:, nam]
 
 gamma = 100
 nlv = 15
-mod = kplsr(; gamma, nlv)
+mo = kplsr(; gamma, nlv)
 ## Or Direct KPLSR (Bennet 2003):
-## mod = dkplsr(; gamma, nlv)
-fit!(mod, Xtrain, ytrain)
-pnames(mod)
-pnames(mod.fm)
+## mo = dkplsr(; gamma, nlv)
+fit!(mo, Xtrain, ytrain)
+pnames(mo)
+pnames(mo.fm)
 
 
-pred = Jchemo.predict(mod, Xtest).pred
+pred = Jchemo.predict(mo, Xtest).pred
 
 
-Jchemo.predict(mod, Xtest; nlv = 2).pred
+Jchemo.predict(mo, Xtest; nlv = 2).pred
 
 
-Jchemo.predict(mod, Xtest; nlv = 0:2).pred
+Jchemo.predict(mo, Xtest; nlv = 0:2).pred
 
 
 rmsep(pred, ytest)

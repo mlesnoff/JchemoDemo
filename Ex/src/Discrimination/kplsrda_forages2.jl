@@ -44,16 +44,16 @@ ntest = nro(Xtest)
 
 nlv = 15
 gamma = .001
-mod = kplsrda(; nlv, gamma, scal = true) 
-fit!(mod, Xtrain, ytrain)
-pnames(mod) 
-pnames(mod.fm)
+mo = kplsrda(; nlv, gamma, scal = true) 
+fit!(mo, Xtrain, ytrain)
+pnames(mo) 
+pnames(mo.fm)
 
 
-typeof(mod.fm.fm)
+typeof(mo.fm.fm)
 
 
-res = predict(mod, Xtest)
+res = predict(mo, Xtest)
 pnames(res)
 
 

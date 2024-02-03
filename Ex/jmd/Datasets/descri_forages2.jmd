@@ -83,19 +83,19 @@ plotsp(X, wl; nsamp = 10,
 #### PCA on X
 
 ```julia
-mod = pcasvd(nlv = 10)
-fit!(mod, X)
-pnames(mod)
-pnames(mod.fm)
+mo = pcasvd(nlv = 10)
+fit!(mo, X)
+pnames(mo)
+pnames(mo.fm)
 ```
 
 ```julia term = true
-T = mod.fm.T
+T = mo.fm.T
 @head T 
 ```
 
 ```julia
-res = summary(mod, X) ;
+res = summary(mo, X) ;
 pnames(res)
 ```
 
@@ -120,16 +120,16 @@ plotxy(T[:, i], T[:, i + 1], y; ellipse = true,
 
 ```julia term = true
 ## Train vs Test
-mod = pcasvd(nlv = 15)
-fit!(mod, Xtrain)
-Ttrain = mod.fm.T
+mo = pcasvd(nlv = 15)
+fit!(mo, Xtrain)
+Ttrain = mo.fm.T
 @head Ttrain
 ```
 
 Xtest is projected on the Xtrain score space.
 
 ```julia
-Ttest = transf(mod, Xtest)
+Ttest = transf(mo, Xtest)
 ```
 
 ```julia
@@ -144,7 +144,7 @@ plotxy(T[:, i], T[:, i + 1], group; xlabel = "PC1",
 
 ```julia
 mod_sd = occsd() 
-fit!(mod_sd, mod.fm)
+fit!(mod_sd, mo.fm)
 pnames(mod_sd)
 sdtrain = mod_sd.fm.d
 sdtest = predict(mod_sd, Xtest).d
@@ -152,7 +152,7 @@ sdtest = predict(mod_sd, Xtest).d
 
 ```julia
 mod_od = occod() 
-fit!(mod_od, mod.fm, Xtrain)
+fit!(mod_od, mo.fm, Xtrain)
 pnames(mod_od)
 odtrain = mod_od.fm.d
 odtest = predict(mod_od, Xtest).d

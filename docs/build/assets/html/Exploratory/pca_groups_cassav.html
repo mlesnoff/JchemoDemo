@@ -880,11 +880,11 @@ OrderedCollections.OrderedDict&#123;Int64, Int64&#125; with 5 entries:
 
 
 <pre class='hljl'>
-<span class='hljl-n'>mod1</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>snv</span><span class='hljl-p'>(</span><span class='hljl-n'>centr</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-kc'>true</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>scal</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-kc'>true</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-n'>mod2</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>savgol</span><span class='hljl-p'>(</span><span class='hljl-n'>npoint</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>15</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>deriv</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>2</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>degree</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>3</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-n'>mod</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>pip</span><span class='hljl-p'>(</span><span class='hljl-n'>mod1</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>mod2</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-n'>Xp</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>transf</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X</span><span class='hljl-p'>)</span>
+<span class='hljl-n'>mo1</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>snv</span><span class='hljl-p'>(</span><span class='hljl-n'>centr</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-kc'>true</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>scal</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-kc'>true</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-n'>mo2</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>savgol</span><span class='hljl-p'>(</span><span class='hljl-n'>npoint</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>15</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>deriv</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>2</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>degree</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>3</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-n'>mo</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>pip</span><span class='hljl-p'>(</span><span class='hljl-n'>mo1</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>mo2</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>mo</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-n'>Xp</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>transf</span><span class='hljl-p'>(</span><span class='hljl-n'>mo</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X</span><span class='hljl-p'>)</span>
 </pre>
 
 
@@ -925,15 +925,15 @@ OrderedCollections.OrderedDict&#123;Int64, Int64&#125; with 5 entries:
 
 
 <pre class='hljl'>
-<span class='hljl-n'>mod</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>pcasvd</span><span class='hljl-p'>(</span><span class='hljl-n'>nlv</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>6</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xp</span><span class='hljl-p'>)</span>
+<span class='hljl-n'>mo</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>pcasvd</span><span class='hljl-p'>(</span><span class='hljl-n'>nlv</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>6</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>mo</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xp</span><span class='hljl-p'>)</span>
 </pre>
 
 
 
 
 <pre class='hljl'>
-<span class='hljl-n'>T</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>mod</span><span class='hljl-oB'>.</span><span class='hljl-n'>fm</span><span class='hljl-oB'>.</span><span class='hljl-n'>T</span>
+<span class='hljl-n'>T</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>mo</span><span class='hljl-oB'>.</span><span class='hljl-n'>fm</span><span class='hljl-oB'>.</span><span class='hljl-n'>T</span>
 </pre>
 
 

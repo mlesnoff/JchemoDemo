@@ -33,11 +33,11 @@ wl = parse.(Float64, wlst)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-mod1 = snv(centr = true, scal = true)
-mod2 = savgol(npoint = 11, deriv = 2, degree = 3)
-mod = pip(mod1, mod2)
-fit!(mod, X)
-Xp = transf(mod, X)
+mo1 = snv(centr = true, scal = true)
+mo2 = savgol(npoint = 11, deriv = 2, degree = 3)
+mo = pip(mo1, mo2)
+fit!(mo, X)
+Xp = transf(mo, X)
 
 
 plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
@@ -67,9 +67,9 @@ ncal = ntrain - nval
 (ntot = ntot, ntrain, ntest, ncal, nval)
 
 
-mod = plskern()
+mo = plskern()
 nlv = 0:40
-res = gridscore(mod, Xcal, ycal, Xval, yval; 
+res = gridscore(mo, Xcal, ycal, Xval, yval; 
     score = rmsep, nlv)
 
 
@@ -81,9 +81,9 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-mod = plskern(nlv = res.nlv[u]) 
-fit!(mod, Xtrain, ytrain)
-pred = predict(mod, Xtest).pred 
+mo = plskern(nlv = res.nlv[u]) 
+fit!(mo, Xtrain, ytrain)
+pred = predict(mo, Xtest).pred 
 rmsep(pred, ytest)
 mse(pred, ytest)
 
@@ -99,10 +99,10 @@ pars = mpar(metric = metric, h = h, k = k)
 length(pars[1])
 
 
-mod1 = pcasvd()
-mod2 = lwmlr()
-mod = pip(mod1, mod2)
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
+mo1 = pcasvd()
+mo2 = lwmlr()
+mo = pip(mo1, mo2)
+res = gridscore(mo, Xcal, ycal, Xval, yval; score = rmsep, 
     pars, verbose = false)
 
 
@@ -110,11 +110,11 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-mod1 = pcasvd(; nlv)
-mod2 = lwmlr(metric = res.metric[u], h = res.h[u], k = res.k[u])
-mod = pip(mod1, mod2)
-fit!(mod, Xtrain, ytrain)
-pred = predict(mod, Xtest).pred
+mo1 = pcasvd(; nlv)
+mo2 = lwmlr(metric = res.metric[u], h = res.h[u], k = res.k[u])
+mo = pip(mo1, mo2)
+fit!(mo, Xtrain, ytrain)
+pred = predict(mo, Xtest).pred
 @show rmsep(pred, ytest)
 mse(pred, ytest)
 
@@ -130,10 +130,10 @@ pars = mpar(metric = metric, h = h, k = k)
 length(pars[1])
 
 
-mod1 = plskern()
-mod2 = lwmlr()
-mod = pip(mod1, mod2)
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
+mo1 = plskern()
+mo2 = lwmlr()
+mo = pip(mo1, mo2)
+res = gridscore(mo, Xcal, ycal, Xval, yval; score = rmsep, 
     pars, verbose = false)
 
 
@@ -141,11 +141,11 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-mod1 = plskern(; nlv)
-mod2 = lwmlr(metric = res.metric[u], h = res.h[u], k = res.k[u])
-mod = pip(mod1, mod2)
-fit!(mod, Xtrain, ytrain)
-pred = predict(mod, Xtest).pred
+mo1 = plskern(; nlv)
+mo2 = lwmlr(metric = res.metric[u], h = res.h[u], k = res.k[u])
+mo = pip(mo1, mo2)
+fit!(mo, Xtrain, ytrain)
+pred = predict(mo, Xtest).pred
 @show rmsep(pred, ytest)
 mse(pred, ytest)
 
@@ -161,10 +161,10 @@ pars = mpar(metric = metric, h = h, k = k)
 length(pars[1])
 
 
-mod1 = dkplsr()
-mod2 = lwmlr()
-mod = pip(mod1, mod2)
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
+mo1 = dkplsr()
+mo2 = lwmlr()
+mo = pip(mo1, mo2)
+res = gridscore(mo, Xcal, ycal, Xval, yval; score = rmsep, 
     pars, verbose = false)
 
 
@@ -172,11 +172,11 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-mod1 = dkplsr(; nlv, gamma)
-mod2 = lwmlr(metric = res.metric[u], h = res.h[u], k = res.k[u])
-mod = pip(mod1, mod2)
-fit!(mod, Xtrain, ytrain)
-pred = predict(mod, Xtest).pred
+mo1 = dkplsr(; nlv, gamma)
+mo2 = lwmlr(metric = res.metric[u], h = res.h[u], k = res.k[u])
+mo = pip(mo1, mo2)
+fit!(mo, Xtrain, ytrain)
+pred = predict(mo, Xtest).pred
 @show rmsep(pred, ytest)
 mse(pred, ytest)
 

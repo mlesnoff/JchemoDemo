@@ -61,8 +61,8 @@ pars = mpar(gamma = gamma)
 length(pars[1])
 
 
-mod = kplsrda()
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = errp, 
+mo = kplsrda()
+res = gridscore(mo, Xcal, ycal, Xval, yval; score = errp, 
     pars, nlv)
 
 
@@ -74,9 +74,9 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-mod = kplsrda(nlv = res.nlv[u], gamma = res.gamma[u])
-fit!(mod, Xtrain, ytrain)
-pred = predict(mod, Xtest).pred
+mo = kplsrda(nlv = res.nlv[u], gamma = res.gamma[u])
+fit!(mo, Xtrain, ytrain)
+pred = predict(mo, Xtest).pred
 
 
 errp(pred, ytest)

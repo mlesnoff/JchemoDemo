@@ -43,10 +43,10 @@ tab(ytrain)
 tab(ytest)
 
 
-mod = fda(nlv = 2)
-#mod = fdasvd(nlv = 2)     # alternative algorithm (same result)
-fit!(mod, Xtrain, ytrain) 
-fm = mod.fm 
+mo = fda(nlv = 2)
+#mo = fdasvd(nlv = 2)     # alternative algorithm (same result)
+fit!(mo, Xtrain, ytrain) 
+fm = mo.fm 
 pnames(fm)
 
 
@@ -56,10 +56,10 @@ lev = fm.lev
 nlev = length(lev)
 
 
-@head Ttrain = mod.fm.T
+@head Ttrain = mo.fm.T
 
 
-ct = mod.fm.Tcenters
+ct = mo.fm.Tcenters
 
 
 f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
@@ -69,20 +69,20 @@ scatter!(ax, ct[:, 1], ct[:, 2],
 f
 
 
-@head Ttest = transf(mod, Xtest)
+@head Ttest = transf(mo, Xtest)
 
 
-P = mod.fm.P
+P = mo.fm.P
 
 
 P' * P    # not orthogonal
 
 
-mod.fm.eig
+mo.fm.eig
 
 
-mod.fm.sstot
+mo.fm.sstot
 
 
-summary(mod)
+summary(mo)
 

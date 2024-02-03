@@ -58,14 +58,14 @@ Ydummy = dummy(y).Y ;
 
 ```julia
 nlv = 2
-mod = plskern(; nlv)
-fit!(mod, X, Ydummy) 
+mo = plskern(; nlv)
+fit!(mo, X, Ydummy) 
 ```
 
 **Scores:**
 
 ```julia term = true
-@head T = mod.fm.T
+@head T = mo.fm.T
 ```
 
 ```julia
