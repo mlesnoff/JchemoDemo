@@ -123,16 +123,15 @@ mod = plskern()
 res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
     pars, nlv) 
 group = string.(res.scal) 
-plotgrid(res.nlv, res.y1, group; step = 2, xlabel ="Nb. LVs", 
-    ylabel = "RMSEP").f
+plotgrid(res.nlv, res.y1, group; step = 2, xlabel ="Nb. LVs", ylabel = "RMSEP").f
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :] 
 mod = plskern(nlv = res.nlv[u], scal = res.scal[u])
 fit!(mod, Xtrain, ytrain) 
 pred = predict(mod, Xtest).pred 
 @show rmsep(pred, ytest)
-plotxy(pred, ytest; color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f  
+plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Prediction", 
+    ylabel = "Observed (Test)").f  
 ```
 
 #### Plsr-avg
@@ -211,8 +210,8 @@ mod = krr(lb = res.lb[u], gamma = res.gamma[u])
 fit!(mod, Xtrain, ytrain) 
 pred = predict(mod, Xtest).pred 
 @show rmsep(pred, ytest)
-plotxy(pred, ytest; color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f  
+plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Prediction", 
+    ylabel = "Observed (Test)").f  
 ```
 
 #### Kplsr
@@ -272,8 +271,7 @@ mod = lwplsr()
 res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
     pars, nlv, verbose = true) 
 group = string.(res.nlvdis, "-", res.h, "-", res.k) 
-plotgrid(res.nlv, res.y1, group; xlabel ="Nb. LVs", 
-    ylabel = "RMSEP").f
+plotgrid(res.nlv, res.y1, group; xlabel ="Nb. LVs", ylabel = "RMSEP").f
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 mod = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], 
@@ -333,8 +331,7 @@ nlvdis = [0; 15; 25] ; metric = [:eucl, :mah]
 h = [1; 2; 4; 6; Inf]
 k = [150; 200; 350; 500; 1000]  
 nlv = 0:20 
-pars = mpar(nlvdis = nlvdis, metric = metric, 
-    h = h, k = k)
+pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k)
 length(pars[1])
 mod2 = lwplsr()
 mod = pip(mod1, mod2)
@@ -376,8 +373,7 @@ rmsep(pred, ytest)
 n_trees = [100]
 n_subfeatures = LinRange(5, p / 2, 5)
 max_depth = [6; 10; 20; 2000]
-pars = mpar(n_trees = n_trees, n_subfeatures = n_subfeatures, 
-    max_depth = max_depth)
+pars = mpar(n_trees = n_trees, n_subfeatures = n_subfeatures, max_depth = max_depth)
 length(pars[1])
 res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
     pars, verbose = false) 
@@ -388,7 +384,7 @@ mod = rfr_dt(n_trees = res.n_trees[u], n_subfeatures = res.n_subfeatures[u],
 fit!(mod, Xtrain, ytrain) 
 pred = predict(mod, Xtest).pred 
 @show rmsep(pred, ytest)
-plotxy(pred, ytest; color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f  
+plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Prediction", 
+    ylabel = "Observed (Test)").f  
 ```
 

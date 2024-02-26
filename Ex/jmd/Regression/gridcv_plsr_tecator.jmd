@@ -148,8 +148,8 @@ res_rep = rescv.res_rep
 
 ```julia
 group = string.(res_rep.segm, "-", res_rep.rep)
-plotgrid(res_rep.nlv, res_rep.y1, group; step = 2,
-    xlabel = "Nb. LVs", ylabel = "RMSEP", leg = false).f
+plotgrid(res_rep.nlv, res_rep.y1, group; step = 2, xlabel = "Nb. LVs", 
+    ylabel = "RMSEP", leg = false).f
 ```
 
 #### Average results over the segments (folds) and the replications
@@ -161,8 +161,7 @@ res = rescv.res
 **Selection of the best parameters combination:**
 
 ```julia
-plotgrid(res.nlv, res.y1; step = 2, xlabel = "Nb. LVs", 
-    ylabel = "RMSEP").f
+plotgrid(res.nlv, res.y1; step = 2, xlabel = "Nb. LVs", ylabel = "RMSEP").f
 ```
 
 ```julia
@@ -187,8 +186,7 @@ rmsep(pred, ytest)
 #### Plotting predictions vs. observed data 
 
 ```julia
-f, ax = plotxy(pred, ytest; xlabel = "Predicted", 
-    ylabel = "Observed")
+f, ax = plotxy(pred, ytest; xlabel = "Predicted", ylabel = "Observed")
 zpred = vec(pred)
 zfm = loess(zpred, ytest; span = 2/3) ;
 pred_loess = Loess.predict(zfm, sort(zpred))
@@ -200,8 +198,7 @@ f
 #### A parcimony approach Wold's criterion
 
 ```julia
-res_sel = selwold(res.nlv, res.y1; smooth = false, 
-    alpha = .05, graph = true) ;
+res_sel = selwold(res.nlv, res.y1; smooth = false, alpha = .05, graph = true) ;
 pnames(res)
 ```
 

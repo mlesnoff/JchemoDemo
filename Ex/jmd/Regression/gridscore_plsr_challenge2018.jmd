@@ -155,8 +155,7 @@ res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep,
 **Selection of the best parameters combination:**
 
 ```julia
-plotgrid(res.nlv, res.y1; step = 5, xlabel = "Nb. LVs", 
-    ylabel = "RMSEP").f
+plotgrid(res.nlv, res.y1; step = 5, xlabel = "Nb. LVs", ylabel = "RMSEP").f
 ```
 
 ```julia
@@ -179,15 +178,14 @@ rmsep(pred, ytest)
 ```
 
 ```julia 
-plotxy(pred, ytest; color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f
+plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Prediction", 
+    ylabel = "Observed (Test)").f
 ```
 
 #### A parcimony approach Wold's criterion
 
 ```julia
-res_sel = selwold(res.nlv, res.y1; smooth = true, alpha = .05, 
-    graph = true) ;
+res_sel = selwold(res.nlv, res.y1; smooth = true, alpha = .05, graph = true) ;
 pnames(res)
 ```
 

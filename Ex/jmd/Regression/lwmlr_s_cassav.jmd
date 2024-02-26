@@ -112,13 +112,11 @@ ncal = ntrain - nval
 ```julia
 mod = plskern()
 nlv = 0:40
-res = gridscore(mod, Xcal, ycal, Xval, yval; 
-    score = rmsep, nlv) 
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, nlv) 
 ```
 
 ```julia
-plotgrid(res.nlv, res.y1; step = 5, xlabel = "Nb. LVs", 
-    ylabel = "RMSEP").f
+plotgrid(res.nlv, res.y1; step = 5, xlabel = "Nb. LVs", ylabel = "RMSEP").f
 ```
 
 ```julia
@@ -135,8 +133,8 @@ mse(pred, ytest)
 ```
 
 ```julia
-plotxy(pred, ytest; color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f
+plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Prediction", 
+    ylabel = "Observed (Test)").f
 ```
 
 #### "LWR" algorithm of Naes et al. 1990
@@ -154,8 +152,8 @@ length(pars[1])
 mod1 = pcasvd()
 mod2 = lwmlr()
 mod = pip(mod1, mod2)
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
-    pars, verbose = false) 
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, 
+    verbose = false) 
 ```
 
 ```julia
@@ -174,8 +172,8 @@ mse(pred, ytest)
 ```
 
 ```julia
-plotxy(pred, ytest; color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f
+plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Prediction", 
+    ylabel = "Observed (Test)").f
 ```
 
 #### LWMLR on preliminary PLS scores
@@ -212,8 +210,8 @@ mse(pred, ytest)
 ```
 
 ```julia
-plotxy(pred, ytest; color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f
+plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Prediction", 
+    ylabel = "Observed (Test)").f
 ```
 
 #### LWMLR on preliminary DKPLS scores
@@ -250,6 +248,6 @@ mse(pred, ytest)
 ```
 
 ```julia
-plotxy(pred, ytest; color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f
+plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Prediction", 
+    ylabel = "Observed (Test)").f
 ```

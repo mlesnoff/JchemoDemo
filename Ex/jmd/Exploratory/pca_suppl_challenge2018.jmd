@@ -109,8 +109,7 @@ res = summary(mod, Xtrain).explvarx
 ```
 
 ```julia
-plotgrid(res.nlv, res.pvar; step = 2, xlabel = "PC", 
-    ylabel = "Prop. variance explained").f
+plotgrid(res.nlv, res.pvar; step = 2, xlabel = "PC", ylabel = "Prop. variance explained").f
 ```
 
 ```julia term = true
@@ -158,8 +157,7 @@ dtest = predict(mod_d, Xtest).d
 f = Figure(size = (500, 400))
 ax = Axis(f[1, 1], xlabel = "SD", ylabel = "OD")
 scatter!(ax, dtrain.dstand_sd, dtrain.dstand_od, label = "Train")
-scatter!(ax, dtest.dstand_sd, dtest.dstand_od, color = (:red, .5), 
-    label = "Test")
+scatter!(ax, dtest.dstand_sd, dtest.dstand_od, color = (:red, .5), label = "Test")
 hlines!(ax, 1; color = :grey, linestyle = :dash)
 vlines!(ax, 1; color = :grey, linestyle = :dash)
 axislegend(position = :rt)
@@ -172,16 +170,15 @@ f
 d = vcat(dtrain, dtest)
 group = vcat(repeat(["0-Train";], ntrain), repeat(["1-Test";], ntest))
 colm = [:blue, (:red, .5)]
-plotxy(d.dstand_sd, d.dstand_od, group; color = colm,
-    xlabel = "Stand. SD", ylabel = "Stand. OD").f
+plotxy(d.dstand_sd, d.dstand_od, group; color = colm, xlabel = "Stand. SD", 
+    ylabel = "Stand. OD").f
 ```
 
 #### Composite distance SD-OD
 
 ```julia
 f = Figure(size = (500, 400))
-ax = Axis(f[1, 1], xlabel = "Standardized distance", 
-    ylabel = "Nb. observations")
+ax = Axis(f[1, 1], xlabel = "Standardized distance", ylabel = "Nb. observations")
 hist!(ax, dtrain.dstand; bins = 50, label = "Train")
 hist!(ax, dtest.dstand; bins = 50, label = "Test")
 vlines!(ax, 1; color = :grey, linestyle = :dash)

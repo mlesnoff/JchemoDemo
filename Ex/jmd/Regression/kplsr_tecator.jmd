@@ -171,8 +171,8 @@ f
 **Residuals:**
 
 ```julia
-f, ax = plotxy(ytest, r; size = (500, 400), color = (:blue, .5), 
-    xlabel = "Observed (Test)", ylabel = "Residuals") 
+f, ax = plotxy(ytest, r; size = (500, 400), color = (:blue, .5), xlabel = "Observed (Test)", 
+    ylabel = "Residuals") 
 zfm = loess(ytest, vec(r); span = 2/3) ;
 pred_loess = Loess.predict(zfm, sort(ytest))
 lines!(ax, sort(ytest), pred_loess; color = :red)

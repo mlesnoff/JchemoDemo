@@ -144,8 +144,7 @@ res[u, :]
 
 ```julia
 group = string.("nlvdis=", res.nlvdis, ",h=", res.h, ",k=", res.k) 
-plotgrid(res.nlv, res.y1, group; step = 2, xlabel ="Nb. LVs", 
-    ylabel = "RMSEP").f
+plotgrid(res.nlv, res.y1, group; step = 2, xlabel ="Nb. LVs", ylabel = "RMSEP").f
 ```
 
 #### Final prediction (Test) using the optimal model
@@ -159,7 +158,7 @@ rmsep(pred, ytest)
 ```
 
 ```julia
-plotxy(pred, ytest; color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f  
+plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Prediction", 
+    ylabel = "Observed (Test)").f  
 ```
 
