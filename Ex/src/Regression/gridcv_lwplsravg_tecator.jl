@@ -68,8 +68,7 @@ segm = segmkf(ntrain, 4; rep = 5)
 nlvdis = [10; 15] ; metric = [:mah] 
 h = [1; 2; 5; Inf] ; k = [30; 50; 100]  
 nlv = [0:5, 0:10, 1:5, 1:10]
-pars = mpar(nlvdis = nlvdis, metric = metric, 
-    h = h, k = k, nlv = nlv)
+pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k, nlv = nlv)
 
 
 length(pars[1])
@@ -91,6 +90,6 @@ pred = predict(mod, Xtest).pred
 rmsep(pred, ytest)
 
 
-plotxy(pred, ytest; color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f
+plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Prediction", 
+    ylabel = "Observed (Test)").f
 

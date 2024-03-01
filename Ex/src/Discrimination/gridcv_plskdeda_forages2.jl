@@ -51,14 +51,12 @@ pars = mpar(a_kde = [.5, 1, 1.5])
 
 nlv = 1:40
 mod = plskdeda()
-rescv = gridcv(mod, Xtrain, ytrain; segm, score = errp, 
-    pars, nlv) ; 
+rescv = gridcv(mod, Xtrain, ytrain; segm, score = errp, pars, nlv) ; 
 res = rescv.res
 
 
 group = string.("a_kde = ", res.a_kde)
-plotgrid(res.nlv, res.y1, group; step = 2, xlabel = "Nb. LVs", 
-    ylabel = "Err-CV").f
+plotgrid(res.nlv, res.y1, group; step = 2, xlabel = "Nb. LVs", ylabel = "Err-CV").f
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 

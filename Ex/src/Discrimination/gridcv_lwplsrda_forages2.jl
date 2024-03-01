@@ -49,21 +49,19 @@ K = 3 ; segm = segmkf(ntrain, K; rep = 1)       # K-fold CV
 nlvdis = [25] ; metric = [:mah]
 h = [1; 2; 5] ; k = [100; 250; 500]
 nlv = 0:15
-pars = mpar(nlvdis = nlvdis, metric = metric, h = h, 
-    k = k)
+pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k)
 
 
 length(pars[1])
 
 
 mod = lwplsrda()
-res = gridcv(mod, Xtrain, ytrain; segm, score = errp, 
-    nlv, pars, verbose = false).res
+res = gridcv(mod, Xtrain, ytrain; segm, score = errp, nlv, 
+    pars, verbose = false).res
 
 
 group = string.("metric=", res.metric, res.nlvdis, " h=", res.h, " k=", res.k)
-plotgrid(res.nlv, res.y1, group; step = 2, xlabel = "Nb. LVs", 
-    ylabel = "Err-CV").f
+plotgrid(res.nlv, res.y1, group; step = 2, xlabel = "Nb. LVs", ylabel = "Err-CV").f
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 

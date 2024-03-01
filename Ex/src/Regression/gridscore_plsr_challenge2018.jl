@@ -91,8 +91,7 @@ res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep,
     nlv)
 
 
-plotgrid(res.nlv, res.y1; step = 5, xlabel = "Nb. LVs", 
-    ylabel = "RMSEP").f
+plotgrid(res.nlv, res.y1; step = 5, xlabel = "Nb. LVs", ylabel = "RMSEP").f
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 
@@ -107,12 +106,11 @@ pred = predict(mod, Xtest).pred
 rmsep(pred, ytest)
 
 
-plotxy(pred, ytest; color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f
+plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Prediction", 
+    ylabel = "Observed (Test)").f
 
 
-res_sel = selwold(res.nlv, res.y1; smooth = true, alpha = .05, 
-    graph = true) ;
+res_sel = selwold(res.nlv, res.y1; smooth = true, alpha = .05, graph = true) ;
 pnames(res)
 
 

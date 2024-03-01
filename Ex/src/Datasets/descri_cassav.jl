@@ -37,8 +37,7 @@ wl = parse.(Float64, wlst)
 tab(year)
 
 
-plotsp(X, wl; xlabel = "Wavelength (nm)", 
-    ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
 mod1 = snv(centr = true, scal = true)
@@ -100,8 +99,8 @@ f = Figure(size = (500, 1000))
 ax = list(nlev)
 for i = 1:nlev
     i == nlev ? xlab = "tbc" : xlab = ""
-    ax[i] = Axis(f[i, 1], title = string(lev[i]),
-        xlabel = xlab, ylabel = "Nb. obs.")
+    ax[i] = Axis(f[i, 1], title = string(lev[i]), xlabel = xlab, 
+        ylabel = "Nb. obs.")
     xlims!(0, maximum(y))
     s = year .== lev[i]
     hist!(ax[i], y[s]; bins = 30, color = (:red, .5))

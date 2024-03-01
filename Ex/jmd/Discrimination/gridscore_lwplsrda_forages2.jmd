@@ -107,8 +107,8 @@ length(pars[1])
 
 ```julia
 mod = lwplsrda()
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = errp, 
-    nlv, pars, verbose = false)
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = errp, nlv, 
+    pars, verbose = false)
 ```
 
 **Selection of the best parameters combination:**

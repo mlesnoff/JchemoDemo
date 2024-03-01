@@ -85,18 +85,18 @@ pnames(res)
 z = res.explvarx
 
 
-plotgrid(z.nlv, 100 * z.pvar; step = 1,
-    xlabel = "nb. PCs", ylabel = "% variance explained").f
+plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "nb. PCs", 
+    ylabel = "% variance explained").f
 
 
 i = 1
-plotxy(T[:, i], T[:, i + 1]; color = (:red, .5),
-    xlabel = string("PC", i), ylabel = string("PC", i + 1)).f
+plotxy(T[:, i], T[:, i + 1]; color = (:red, .5), xlabel = string("PC", i), 
+    ylabel = string("PC", i + 1)).f
 
 
 colm = cgrad(:Dark2_5, nlev; categorical = true)
-plotxy(T[:, i], T[:, i + 1], typ; color = colm,
-    xlabel = string("PC", i), ylabel = string("PC", i + 1)).f
+plotxy(T[:, i], T[:, i + 1], typ; color = colm, xlabel = string("PC", i), 
+    ylabel = string("PC", i + 1)).f
 
 
 mod = pcasvd(nlv = 15)
@@ -136,8 +136,7 @@ odtest = predict(mod_od, Xtest).d
 f = Figure(size = (500, 400))
 ax = Axis(f, xlabel = "SD", ylabel = "OD")
 scatter!(ax, sdtrain.dstand, odtrain.dstand, label = "Train")
-scatter!(ax, sdtest.dstand, odtest.dstand, 
-    color = (:red, .5), label = "Test")
+scatter!(ax, sdtest.dstand, odtest.dstand, color = (:red, .5), label = "Test")
 hlines!(ax, 1; color = :grey, linestyle = :dash)
 vlines!(ax, 1; color = :grey, linestyle = :dash)
 axislegend(position = :rt)
@@ -181,8 +180,8 @@ f
 
 f = Figure(size = (500, 400))
 offs = [100; 0]
-ax = Axis(f[1, 1], xlabel = "Protein",  
-    ylabel = "Nb. observations", yticks = (offs, ["Train" ; "Test"]))
+ax = Axis(f[1, 1], xlabel = "Protein",  ylabel = "Nb. observations", 
+    yticks = (offs, ["Train" ; "Test"]))
 hist!(ax, ytrain; offset = offs[1], bins = 50)
 hist!(ax, ytest; offset = offs[2], bins = 50)
 f
@@ -198,18 +197,16 @@ f
 
 f = Figure(size = (500, 400))
 offs = [.1; 0]
-ax = Axis(f[1, 1], xlabel = "Protein", ylabel = "Density",
+ax = Axis(f[1, 1], xlabel = "Protein", ylabel = "Density", 
     yticks = (offs, ["Train" ; "Test"]))
-density!(ax, ytrain; offset = offs[1], color = (:slategray, 0.5),
-    bandwidth = 0.2)
-density!(ax, ytest; offset = offs[2], color = (:slategray, 0.5),
-    bandwidth = 0.2)
+density!(ax, ytrain; offset = offs[1], color = (:slategray, 0.5), bandwidth = 0.2)
+density!(ax, ytest; offset = offs[2], color = (:slategray, 0.5), bandwidth = 0.2)
 f
 
 
 f = Figure(size = (500, 400))
-ax = Axis(f[1, 1], xticks = (0:1, ["Train", "Test"]),
-    xlabel = "Group", ylabel = "Protein")
+ax = Axis(f[1, 1], xticks = (0:1, ["Train", "Test"]), xlabel = "Group", 
+    ylabel = "Protein")
 boxplot!(ax, test, y; width = .3, show_notch = true)
 f
 

@@ -72,16 +72,16 @@ ncal = ntrain - nval
 nlvdis = [15; 25] ; metric = [:mah] 
 h = [1; 2; 4] ; k = [150; 200; 350; 500]  
 nlv = [0:20, 5:20, 10:20]
-pars = mpar(nlvdis = nlvdis, metric = metric, 
-    h = h, k = k, nlv = nlv)
+pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k, 
+    nlv = nlv)
 
 
 length(pars[1])
 
 
 mod = lwplsravg()
-res = gridscore(mod, Xcal, ycal, Xval, yval;
-    score = rmsep, pars, verbose = false)
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
+    pars, verbose = false)
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 
@@ -95,6 +95,6 @@ pred = predict(mod, Xtest).pred
 rmsep(pred, ytest)
 
 
-plotxy(pred, ytest; color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f
+plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Prediction", 
+    ylabel = "Observed (Test)").f
 

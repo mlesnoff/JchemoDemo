@@ -62,8 +62,7 @@ length(pars[1])
 
 
 mod = kplsrda()
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = errp, 
-    pars, nlv)
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = errp, pars, nlv)
 
 
 plotgrid(res.nlv, res.y1, res.gamma; step = 5, xlabel = "Nb. LVs", 

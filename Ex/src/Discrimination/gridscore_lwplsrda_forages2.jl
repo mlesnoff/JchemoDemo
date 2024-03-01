@@ -63,8 +63,8 @@ length(pars[1])
 
 
 mod = lwplsrda()
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = errp, 
-    nlv, pars, verbose = false)
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = errp, nlv, 
+    pars, verbose = false)
 
 
 group = string.("metric=", res.metric, res.nlvdis, " h=", res.h, " k=", res.k)

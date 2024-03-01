@@ -68,10 +68,8 @@ nlev = length(lev)
 ct = fm.Tcenters
 
 
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; 
-    title = "FDA", ellipse = true)
-scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, 
-    color = :red)
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "FDA", ellipse = true)
+scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
 f
 
 
@@ -82,13 +80,11 @@ Ttest = transf(mod, Ttest_pca)
 
 
 i = 1  # class 
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; 
-    title = "FDA")
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "FDA")
 scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
 s = ytest .== lev[i]
 zT = Ttest[s, :]
-scatter!(ax, zT[:, 1], zT[:, 2], markersize = 10, 
-    color = (:purple, .8))
+scatter!(ax, zT[:, 1], zT[:, 2], markersize = 10, color = (:purple, .8))
 f
 
 
@@ -108,10 +104,8 @@ ct = fm.Tcenters
 Ttrain = fm.T
 
 
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
-    title = "FDA", ellipse = true)
-scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, 
-    color = :red)
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "FDA", ellipse = true)
+scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
 f
 
 
@@ -119,13 +113,10 @@ Ttest = transf(mod, Xtest)
 
 
 i = 1  # class 
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain;
-    title = "FDA")
-scatter!(ax, ct[:, 1], ct[:, 2],
-    markersize = 10, color = :red)
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "FDA")
+scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
 s = ytest .== lev[i]
 zT = Ttest[s, :]
-scatter!(ax, zT[:, 1], zT[:, 2],
-    markersize = 10, color = (:purple, .8))
+scatter!(ax, zT[:, 1], zT[:, 2], markersize = 10, color = (:purple, .8))
 f
 

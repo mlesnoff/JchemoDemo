@@ -92,15 +92,14 @@ res_rep = rescv.res_rep
 
 
 group = string.(res_rep.segm, "-", res_rep.rep)
-plotgrid(res_rep.nlv, res_rep.y1, group; step = 2,
-    xlabel = "Nb. LVs", ylabel = "RMSEP", leg = false).f
+plotgrid(res_rep.nlv, res_rep.y1, group; step = 2, xlabel = "Nb. LVs", 
+    ylabel = "RMSEP", leg = false).f
 
 
 res = rescv.res
 
 
-plotgrid(res.nlv, res.y1; step = 2, xlabel = "Nb. LVs", 
-    ylabel = "RMSEP").f
+plotgrid(res.nlv, res.y1; step = 2, xlabel = "Nb. LVs", ylabel = "RMSEP").f
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 
@@ -115,8 +114,7 @@ pred = Jchemo.predict(mod, Xtest).pred
 rmsep(pred, ytest)
 
 
-f, ax = plotxy(pred, ytest; xlabel = "Predicted", 
-    ylabel = "Observed")
+f, ax = plotxy(pred, ytest; xlabel = "Predicted", ylabel = "Observed")
 zpred = vec(pred)
 zfm = loess(zpred, ytest; span = 2/3) ;
 pred_loess = Loess.predict(zfm, sort(zpred))
@@ -125,8 +123,7 @@ ablines!(ax, 0, 1; color = :grey)
 f
 
 
-res_sel = selwold(res.nlv, res.y1; smooth = false, 
-    alpha = .05, graph = true) ;
+res_sel = selwold(res.nlv, res.y1; smooth = false, alpha = .05, graph = true) ;
 pnames(res)
 
 

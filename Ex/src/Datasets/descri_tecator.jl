@@ -32,8 +32,7 @@ wlst = names(X)
 wl = parse.(Float64, wlst)
 
 
-plotsp(X, wl; xlabel = "Wavelength (nm)", 
-    ylabel = "Absorbance").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
 mod1 = snv(centr = true, scal = true)
@@ -43,8 +42,7 @@ fit!(mod, X)
 Xp = transf(mod, X)
 
 
-plotsp(Xp, wl; xlabel = "Wavelength (nm)", 
-    ylabel = "Absorbance").f
+plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
 mod = pcasvd(nlv = 10)
@@ -58,8 +56,8 @@ pnames(res)
 
 
 z = res.explvarx
-plotgrid(z.nlv, 100 * z.pvar; step = 1,
-    xlabel = "Nb. PCs", ylabel = "% variance explained").f
+plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "Nb. PCs", 
+    ylabel = "% variance explained").f
 
 
 T = mod.fm.T
@@ -67,12 +65,10 @@ T = mod.fm.T
 
 
 i = 1
-plotxy(T[:, i], T[:, i + 1]; color = (:red, .5),
-    xlabel = "PC1", ylabel = "PC2").f
+plotxy(T[:, i], T[:, i + 1]; color = (:red, .5), xlabel = "PC1", ylabel = "PC2").f
 
 
-plotxy(T[:, i], T[:, i + 1], typ; xlabel = "PC1", 
-    ylabel = "PC2").f
+plotxy(T[:, i], T[:, i + 1], typ; xlabel = "PC1", ylabel = "PC2").f
 
 
 summ(Y[:, namy]).res
@@ -96,10 +92,7 @@ tab(string.(ztyp, "-", typ))
 
 
 f = Figure(size = (500, 400))
-ax = Axis(f[1, 1], 
-    xticks = (1:3, mlev(typ)),
-    xlabel = "Group", ylabel = nam)
-boxplot!(ax, ztyp, y; width = .5, 
-    show_notch = true)
+ax = Axis(f[1, 1], xticks = (1:3, mlev(typ)), xlabel = "Group", ylabel = nam)
+boxplot!(ax, ztyp, y; width = .5, show_notch = true)
 f
 

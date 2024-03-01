@@ -95,15 +95,13 @@ ncal = ntrain - nval
 ```julia
 nlv = 0:50
 mod = plsrda()
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = errp, 
-    nlv)
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = errp, nlv)
 ```
 
 **Selection of the best parameters combination:**
 
 ```julia
-plotgrid(res.nlv, res.y1; step = 5, xlabel = "Nb. LVs", 
-    ylabel = "ERR").f
+plotgrid(res.nlv, res.y1; step = 5, xlabel = "Nb. LVs", ylabel = "ERR").f
 ```
 
 ```julia

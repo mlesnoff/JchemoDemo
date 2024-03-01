@@ -67,8 +67,7 @@ n_trees = 100
 partial_sampling = .7
 n_subfeatures = p / 3
 max_depth = 20
-mod = rfr_dt(; n_trees, partial_sampling,
-    n_subfeatures, max_depth)
+mod = rfr_dt(; n_trees, partial_sampling, n_subfeatures, max_depth)
 fit!(mod, Xtrain, ytrain)
 pnames(mod)
 pnames(mod.fm)

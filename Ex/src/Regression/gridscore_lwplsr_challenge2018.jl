@@ -89,8 +89,7 @@ res[u, :]
 
 
 group = string.("nlvdis=", res.nlvdis, ",h=", res.h, ",k=", res.k) 
-plotgrid(res.nlv, res.y1, group; step = 2, xlabel ="Nb. LVs", 
-    ylabel = "RMSEP").f
+plotgrid(res.nlv, res.y1, group; step = 2, xlabel ="Nb. LVs", ylabel = "RMSEP").f
 
 
 mod = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], 
@@ -100,6 +99,6 @@ pred = predict(mod, Xtest).pred
 rmsep(pred, ytest)
 
 
-plotxy(pred, ytest; color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f
+plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Prediction", 
+    ylabel = "Observed (Test)").f
 

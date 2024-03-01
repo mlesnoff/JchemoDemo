@@ -55,12 +55,10 @@ ncal = ntrain - nval
 
 nlv = 0:50
 mod = plsrda()
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = errp, 
-    nlv)
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = errp, nlv)
 
 
-plotgrid(res.nlv, res.y1; step = 5, xlabel = "Nb. LVs", 
-    ylabel = "ERR").f
+plotgrid(res.nlv, res.y1; step = 5, xlabel = "Nb. LVs", ylabel = "ERR").f
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 

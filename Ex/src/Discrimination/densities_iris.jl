@@ -42,9 +42,8 @@ fit!(mod, X, Ydummy)
 
 
 i = 1
-plotxy(T[:, i], T[:, i + 1], y; title = "PLS2 space", 
-    xlabel = string("LV", i), ylabel = string("LV", i + 1),
-    zeros = true, ellipse = false).f
+plotxy(T[:, i], T[:, i + 1], y; title = "PLS2 space", xlabel = string("LV", i), 
+    ylabel = string("LV", i + 1), zeros = true, ellipse = false).f
 
 
 f = Figure(size = (900, 300))
@@ -87,8 +86,7 @@ for i = 1:nlev
     pred_grid = vec(zres.pred)
     ax[i] = Axis(f[1, i]; title = lev[i], xlabel = "LV1", ylabel = "LV2")
     co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
-    scatter!(ax[i], zT[:, 1], zT[:, 2],
-        color = :red, markersize = 10)
+    scatter!(ax[i], zT[:, 1], zT[:, 2], color = :red, markersize = 10)
     k = 150
     scatter!(ax[i], T[k, 1], T[k, 2], color = :blue, marker = :star5, 
         markersize = 15)
@@ -123,8 +121,7 @@ for i = 1:nlev
     co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
     scatter!(ax[i], zT[:, 1], zT[:, 2], color = :red, markersize = 10)
     k = 150
-    scatter!(ax[i], T[k, 1], T[k, 2],
-        color = :blue, marker = :star5, markersize = 15)
+    scatter!(ax[i], T[k, 1], T[k, 2], color = :blue, marker = :star5, markersize = 15)
     hlines!(ax[i], 0; linestyle = :dash, color = :grey)
     vlines!(ax[i], 0; linestyle = :dash, color = :grey)
     xlims!(ax[i], -4, 4) ; ylims!(ax[i], -1.7, 1.7)
@@ -148,8 +145,7 @@ for i = 1:nlev
     pred_grid = vec(zres.pred)
     ax[i] = Axis(f[1, i]; title = lev[i], xlabel = "LV1", ylabel = "LV2")
     co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
-    scatter!(ax[i], zT[:, 1], zT[:, 2],
-        color = :red, markersize = 10)
+    scatter!(ax[i], zT[:, 1], zT[:, 2], color = :red, markersize = 10)
     k = 150
     scatter!(ax[i], T[k, 1], T[k, 2], color = :blue, marker = :star5, 
         markersize = 15)

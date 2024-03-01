@@ -43,16 +43,16 @@ pnames(res)
 z = res.explvarx
 
 
-plotgrid(z.nlv, 100 * z.pvar; step = 1, 
-    xlabel = "nb. PCs", ylabel = "% variance explained").f
+plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "nb. PCs", 
+    ylabel = "% variance explained").f
 
 
 z = res.contr_ind
 
 
 i = 1
-scatter(z[:, i]; axis = (xlabel = "Observation", 
-    ylabel = "Contribution", title = string("PC", i)))
+scatter(z[:, i]; axis = (xlabel = "Observation", ylabel = "Contribution", 
+    title = string("PC", i)))
 
 
 plotxy(1:n, z[:, i]; xlabel = "Observation", ylabel = "Contribution", 
@@ -70,6 +70,6 @@ z = res.cor_circle
 
 
 i = 1
-plotxy(z[:, i], z[:, (i + 1)]; size = (400, 400), circle = true, 
-    zeros = true, xlabel = string("PC", i), ylabel = string("PC", i + 1)).f
+plotxy(z[:, i], z[:, (i + 1)]; size = (400, 400), circle = true, zeros = true, 
+    xlabel = string("PC", i), ylabel = string("PC", i + 1)).f
 
