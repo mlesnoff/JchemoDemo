@@ -63,13 +63,11 @@ length(pars[1])
 
 
 mod = lwplsrda()
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = errp, nlv, 
-    pars, verbose = false)
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = errp, nlv, pars, verbose = false)
 
 
 group = string.("metric=", res.metric, res.nlvdis, " h=", res.h, " k=", res.k)
-plotgrid(res.nlv, res.y1, group; step = 2, xlabel = "Nb. LVs", 
-    ylabel = "ERR").f
+plotgrid(res.nlv, res.y1, group; step = 2, xlabel = "Nb. LVs", ylabel = "ERR").f
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 
@@ -95,7 +93,10 @@ cf.cnt
 cf.pct
 
 
-cf.accuracy
+cf.diagpct
+
+
+cf.accpct
 
 
 plotconf(cf).f

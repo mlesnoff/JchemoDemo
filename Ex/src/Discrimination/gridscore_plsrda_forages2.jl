@@ -83,7 +83,10 @@ cf.cnt
 cf.pct
 
 
-cf.accuracy
+cf.diagpct
+
+
+cf.accpct
 
 
 plotconf(cf).f

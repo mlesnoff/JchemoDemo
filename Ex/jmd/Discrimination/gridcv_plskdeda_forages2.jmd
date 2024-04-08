@@ -129,7 +129,11 @@ cf.pct
 ```
 
 ```julia
-cf.accuracy 
+cf.diagpct
+```
+
+```julia
+cf.accpct
 ```
 
 ```julia

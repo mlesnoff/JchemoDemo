@@ -34,7 +34,8 @@ plotsp(Xtest; nsamp = 1).f
 mod = plsqda(nlv = 25)
 fit!(mod, Xtrain, ytrain)
 pred = predict(mod, Xtest).pred
-errp(pred, ytest)
+errp(pred, ytest)  # overall
+merrp(pred, ytest) # average by class
 
 
 freqtable(ytest, vec(pred))
@@ -50,7 +51,10 @@ cf.cnt
 cf.pct
 
 
-cf.accuracy
+cf.diagpct
+
+
+cf.accpct
 
 
 plotconf(cf).f
