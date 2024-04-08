@@ -55,7 +55,8 @@ plotsp(Xtest; nsamp = 1).f
 mod = plsqda(nlv = 25)
 fit!(mod, Xtrain, ytrain)
 pred = predict(mod, Xtest).pred
-errp(pred, ytest)
+errp(pred, ytest)  # overall
+merrp(pred, ytest) # average by class
 ```
 
 #### Confusion matrix²
@@ -65,7 +66,7 @@ freqtable(ytest, vec(pred))
 ```
 
 ```julia
-cf = confusion(pred, ytest) ;
+cf = conf(pred, ytest) ;
 pnames(cf)
 ```
 
@@ -78,7 +79,11 @@ cf.pct
 ```
 
 ```julia
-cf.accuracy 
+cf.diagpct
+```
+
+```julia
+cf.accpct
 ```
 
 ```julia

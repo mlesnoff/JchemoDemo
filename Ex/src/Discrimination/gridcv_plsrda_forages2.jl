@@ -67,7 +67,7 @@ pred = predict(mod, Xtest).pred
 errp(pred, ytest)
 
 
-cf = confusion(pred, ytest) ;
+cf = conf(pred, ytest) ;
 cf.cnt
 
 

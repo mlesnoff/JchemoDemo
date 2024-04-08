@@ -116,7 +116,7 @@ errp(pred, ytest)
 #### Confusion matrix
 
 ```julia
-cf = confusion(pred, ytest) ;
+cf = conf(pred, ytest) ;
 pnames(cf)
 ```
 

@@ -122,7 +122,7 @@ freqtable(ytest, vec(pred))
 ```
 
 ```julia
-cf = confusion(pred, ytest) ;
+cf = conf(pred, ytest) ;
 pnames(cf)
 ```
 
@@ -135,7 +135,11 @@ cf.pct
 ```
 
 ```julia
-cf.accuracy 
+cf.diagpct
+```
+
+```julia
+cf.accpct
 ```
 
 ```julia

@@ -73,7 +73,7 @@ errp(pred, ytest)
 freqtable(ytest, vec(pred))
 
 
-cf = confusion(pred, ytest) ;
+cf = conf(pred, ytest) ;
 pnames(cf)
 
 
