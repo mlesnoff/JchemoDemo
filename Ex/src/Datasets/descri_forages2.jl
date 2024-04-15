@@ -44,11 +44,10 @@ ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
 
-plotsp(X, wl; nsamp = 10, xlabel = "Wavelength (nm)", 
-    ylabel = "Absorbance").f
+plotsp(X, wl; nsamp = 10, xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-mod = pcasvd(nlv = 10)
+mod = model(pcasvd; nlv = 10)
 fit!(mod, X)
 pnames(mod)
 pnames(mod.fm)
@@ -63,8 +62,7 @@ pnames(res)
 
 
 z = res.explvarx
-plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "nb. PCs", 
-    ylabel = "% variance explained").f
+plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "nb. PCs", ylabel = "% variance explained").f
 
 
 i = 1
@@ -75,7 +73,7 @@ plotxy(T[:, i], T[:, i + 1], y; ellipse = true, xlabel = "PC1", ylabel = "PC2").
 
 
 ## Train vs Test
-mod = pcasvd(nlv = 15)
+mod = model(pcasvd; nlv = 15)
 fit!(mod, Xtrain)
 Ttrain = mod.fm.T
 @head Ttrain
@@ -90,14 +88,14 @@ i = 1
 plotxy(T[:, i], T[:, i + 1], group; xlabel = "PC1", ylabel = "PC2").f
 
 
-mod_sd = occsd() 
+mod_sd = model(occsd) 
 fit!(mod_sd, mod.fm)
 pnames(mod_sd)
 sdtrain = mod_sd.fm.d
 sdtest = predict(mod_sd, Xtest).d
 
 
-mod_od = occod() 
+mod_od = model(occod) 
 fit!(mod_od, mod.fm, Xtrain)
 pnames(mod_od)
 odtrain = mod_od.fm.d
@@ -159,8 +157,7 @@ f
 
 f = Figure(size = (500, 400))
 offs = [30; 0]
-ax = Axis(f[1, 1], xlabel = nam, ylabel = "Nb. observations", 
-    yticks = (offs, ["Train" ; "Test"]))
+ax = Axis(f[1, 1], xlabel = nam, ylabel = "Nb. observations", yticks = (offs, ["Train" ; "Test"]))
 hist!(ax, ytrain; offset = offs[1], bins = 50)
 hist!(ax, ytest; offset = offs[2], bins = 50)
 f

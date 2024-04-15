@@ -42,7 +42,7 @@ ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
 
-mod0 = pcasvd(nlv = 10)
+mod0 = model(pcasvd; nlv = 10)
 fit!(mod0, Xtrain)
 pnames(mod0)
 pnames(mod0.fm)
@@ -51,8 +51,8 @@ pnames(mod0.fm)
 Ttrain_pca = mod0.fm.T
 
 
-mod = fda(nlv = 2)
-#mod = fdasvd(nlv = 2)     # alternative algorithm (same result)
+mod = model(fda; nlv = 2)
+#mod = model(fdasvd; nlv = 2)     # alternative algorithm (same result)
 fit!(mod, Ttrain_pca, ytrain) 
 fm = mod.fm 
 pnames(fm)
@@ -89,8 +89,8 @@ f
 
 
 lb = 1e-5
-mod = fda(; nlv = 2, lb)
-#mod = fdasvd(; nlv = 2, lb)
+mod = model(fda; nlv = 2, lb)
+#mod = model(fdasvd; nlv = 2, lb)
 fit!(mod,Xtrain, ytrain)
 
 

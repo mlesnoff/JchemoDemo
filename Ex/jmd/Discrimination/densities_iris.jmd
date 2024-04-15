@@ -58,7 +58,7 @@ Ydummy = dummy(y).Y ;
 
 ```julia
 nlv = 2
-mod = plskern(; nlv)
+mod = model(plskern; nlv)
 fit!(mod, X, Ydummy) 
 ```
 
@@ -86,8 +86,7 @@ for i = 1:nlev
     scatter!(ax[i], zT[:, 1], zT[:, 2], color = :red, markersize = 10)
     ## Fictive "new" point to predict
     k = 150
-    scatter!(ax[i], T[k, 1], T[k, 2], color = :blue, marker = :star5, 
-        markersize = 15)
+    scatter!(ax[i], T[k, 1], T[k, 2], color = :blue, marker = :star5, markersize = 15)
     ## End
     hlines!(ax[i], 0; linestyle = :dash, color = :grey)
     vlines!(ax[i], 0; linestyle = :dash, color = :grey)
@@ -124,8 +123,7 @@ for i = 1:nlev
     co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
     scatter!(ax[i], zT[:, 1], zT[:, 2], color = :red, markersize = 10)
     k = 150
-    scatter!(ax[i], T[k, 1], T[k, 2], color = :blue, marker = :star5, 
-        markersize = 15)
+    scatter!(ax[i], T[k, 1], T[k, 2], color = :blue, marker = :star5, markersize = 15)
     hlines!(ax[i], 0; linestyle = :dash, color = :grey)
     vlines!(ax[i], 0; linestyle = :dash, color = :grey)
     xlims!(ax[i], -4, 4) ; ylims!(ax[i], -1.7, 1.7)
@@ -189,8 +187,7 @@ for i = 1:nlev
     co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
     scatter!(ax[i], zT[:, 1], zT[:, 2], color = :red, markersize = 10)
     k = 150
-    scatter!(ax[i], T[k, 1], T[k, 2], color = :blue, marker = :star5, 
-        markersize = 15)
+    scatter!(ax[i], T[k, 1], T[k, 2], color = :blue, marker = :star5, markersize = 15)
     hlines!(ax[i], 0; linestyle = :dash, color = :grey)
     vlines!(ax[i], 0; linestyle = :dash, color = :grey)
     xlims!(ax[i], -4, 4) ; ylims!(ax[i], -1.7, 1.7)

@@ -36,8 +36,8 @@ wl = parse.(Float64, wlst)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-mod1 = snv(centr = true, scal = true)
-mod2 = savgol(npoint = 15, deriv = 2, degree = 3)
+mod1 = model(snv; centr = true, scal = true)
+mod2 = model(savgol; npoint = 15, deriv = 2, degree = 3)
 mod = pip(mod1, mod2)
 fit!(mod, X)
 Xp = transf(mod, X)
@@ -81,10 +81,9 @@ segm[i]      # the K segments of replication 'i'
 segm[i][k]   # segment 'k' of replication 'i'
 
 
-mod = plskern()
+mod = model(plskern)
 nlv = 0:20
-rescv = gridcv(mod, Xtrain, ytrain; segm = segm, score = rmsep, 
-    nlv, verbose = false) ;
+rescv = gridcv(mod, Xtrain, ytrain; segm = segm, score = rmsep, nlv, verbose = false) ;
 pnames(rescv)
 
 
@@ -92,8 +91,8 @@ res_rep = rescv.res_rep
 
 
 group = string.(res_rep.segm, "-", res_rep.rep)
-plotgrid(res_rep.nlv, res_rep.y1, group; step = 2, xlabel = "Nb. LVs", 
-    ylabel = "RMSEP", leg = false).f
+plotgrid(res_rep.nlv, res_rep.y1, group; step = 2, xlabel = "Nb. LVs", ylabel = "RMSEP", 
+    leg = false).f
 
 
 res = rescv.res
@@ -106,7 +105,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-mod = plskern(nlv = res.nlv[u])
+mod = model(plskern; nlv = res.nlv[u])
 fit!(mod, Xtrain, ytrain)
 pred = Jchemo.predict(mod, Xtest).pred
 
@@ -136,7 +135,7 @@ res_sel.opt     # nb. LVs correponding to the minimal error rate
 res_sel.sel     # nb. LVs selected with the Wold's criterion
 
 
-mod = plskern(nlv = res_sel.sel) ;
+mod = model(plskern; nlv = res_sel.sel) ;
 fit!(mod, Xtrain, ytrain)
 pred = Jchemo.predict(mod, Xtest).pred
 rmsep(pred, ytest)

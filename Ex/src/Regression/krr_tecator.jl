@@ -36,8 +36,8 @@ wl = parse.(Float64, wlst)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-mod1 = snv(centr = true, scal = true)
-mod2 = savgol(npoint = 15, deriv = 2, degree = 3)
+mod1 = model(snv; centr = true, scal = true)
+mod2 = model(savgol; npoint = 15, deriv = 2, degree = 3)
 mod = pip(mod1, mod2)
 fit!(mod, X)
 Xp = transf(mod, X)
@@ -65,7 +65,7 @@ ytest = Ytest[:, nam]
 
 gamma = 100
 lb = 1e-3
-mod = krr(; gamma, lb)
+mod = model(krr; gamma, lb)
 fit!(mod, Xtrain, ytrain)
 pnames(mod)
 pnames(mod.fm)
@@ -86,16 +86,15 @@ mse(pred, ytest)
 r = residreg(pred, ytest) # residuals
 
 
-plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, 
-    xlabel = "Prediction", ylabel = "Observed (Test)").f
+plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, xlabel = "Prediction", 
+    ylabel = "Observed (Test)").f
 
 
-plotxy(ytest, r; size = (500, 400), color = (:red, .5), zeros = true, 
-    xlabel = "Observed (Test)", ylabel = "Residuals").f
+plotxy(ytest, r; size = (500, 400), color = (:red, .5), zeros = true, xlabel = "Observed (Test)",  
+    ylabel = "Residuals").f
 
 
-f, ax = plotxy(pred, ytest; size = (500, 400), xlabel = "Predicted", 
-    ylabel = "Observed")
+f, ax = plotxy(pred, ytest; size = (500, 400), xlabel = "Predicted", ylabel = "Observed")
 zpred = vec(pred)
 zfm = loess(zpred, ytest; span = 2/3) ;
 pred_loess = Loess.predict(zfm, sort(zpred))
@@ -104,8 +103,8 @@ ablines!(ax, 0, 1; color = :grey)
 f
 
 
-f, ax = plotxy(ytest, r; size = (500, 400), color = (:blue, .5), 
-    xlabel = "Observed (Test)", ylabel = "Residuals") 
+f, ax = plotxy(ytest, r; size = (500, 400), color = (:blue, .5), xlabel = "Observed (Test)", 
+    ylabel = "Residuals") 
 zfm = loess(ytest, vec(r); span = 2/3) ;
 pred_loess = Loess.predict(zfm, sort(ytest))
 lines!(ax, sort(ytest), pred_loess; color = :red)

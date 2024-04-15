@@ -24,13 +24,12 @@ wlst = names(X)
 wl = parse.(Float64, wlst)
 
 
-plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance",
-    title = "Octane data").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance", title = "Octane data").f
 
 
-mod = pcasvd(nlv = 6) 
+mod = model(pcasvd; nlv = 6) 
 ## For robust spherical PCA, do:
-#mod = pcasph(nlv = 6)
+#mod = model(pcasph(nlv = 6)
 fit!(mod, X)  
 pnames(mod)
 pnames(mod.fm)
@@ -43,20 +42,17 @@ pnames(res)
 z = res.explvarx
 
 
-plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "nb. PCs", 
-    ylabel = "% variance explained").f
+plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "nb. PCs", ylabel = "% variance explained").f
 
 
 z = res.contr_ind
 
 
 i = 1
-scatter(z[:, i]; axis = (xlabel = "Observation", ylabel = "Contribution", 
-    title = string("PC", i)))
+scatter(z[:, i]; axis = (xlabel = "Observation", ylabel = "Contribution", title = string("PC", i)))
 
 
-plotxy(1:n, z[:, i]; xlabel = "Observation", ylabel = "Contribution", 
-    title = string("PC", i)).f
+plotxy(1:n, z[:, i]; xlabel = "Observation", ylabel = "Contribution", title = string("PC", i)).f
 
 
 z = res.contr_var

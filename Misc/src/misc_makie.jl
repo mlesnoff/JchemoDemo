@@ -52,49 +52,38 @@ barplot(x, y;
     axis = (xticks = stk,
         xlabel = "x-value"))
 
-barplot(x, y;
-    axis = (xticks = (stk, string.("v", stk)),
-        xlabel = "x-value"))
+barplot(x, y; axis = (xticks = (stk, string.("v", stk)), xlabel = "x-value"))
 
 f = Figure(size = (500, 400))
-ax = Axis(f[1, 1],
-    xticks = (stk, string.("v", stk)), 
-    xlabel = "x-value")
+ax = Axis(f[1, 1], xticks = (stk, string.("v", stk)), xlabel = "x-value")
 barplot!(ax, x, y)
 f
 
 df = DataFrame(
     x = [1, 1, 1, 2, 2, 2],
     height = 0.1:0.1:0.6,
-    grp = [1, 2, 3, 1, 2, 3])
+    grp = [1, 2, 3, 1, 2, 3]
+    )
 df.std = .1 * df.height
 df
 
-barplot(df.x, df.height; 
-    dodge = df.grp, color = df.grp,
-    axis = (xticks = (1:2, ["left", "right"]),
-        title = "Dodged bars"))
+barplot(df.x, df.height; dodge = df.grp, color = df.grp,
+    axis = (xticks = (1:2, ["left", "right"]), title = "Dodged bars"))
 
-barplot(df.x, df.height; direction = :x,
-    dodge = df.grp, color = df.grp,
-    axis = (yticks = (1:2, ["left", "right"]),
-        title = "Dodged bars"))
+barplot(df.x, df.height; direction = :x, dodge = df.grp, color = df.grp,
+    axis = (yticks = (1:2, ["left", "right"]), title = "Dodged bars"))
 
 f = Figure()
-ax = Axis(f[1, 1], xticks = (1:2, ["left", "right"]),
-        title = "Dodged bars")
-barplot!(ax, df.x, df.height, dodge = df.grp,
-    color = df.grp)
+ax = Axis(f[1, 1], xticks = (1:2, ["left", "right"]), title = "Dodged bars")
+barplot!(ax, df.x, df.height, dodge = df.grp, color = df.grp)
 z = [.73; 1; 1.28; 1.73; 2; 2.28]
 errorbars!(ax, z, df.height, df.std, color = :red) 
 f
 
 colm = Makie.wong_colors()
 f = Figure()
-ax = Axis(f[1,1], xticks = (1:2, ["left", "right"]),
-    title = "Dodged bars with legend")
-barplot!(ax, df.x, df.height, dodge = df.grp,
-    color = colm[df.grp])
+ax = Axis(f[1,1], xticks = (1:2, ["left", "right"]), title = "Dodged bars with legend")
+barplot!(ax, df.x, df.height, dodge = df.grp, color = colm[df.grp])
 lab = ["group 1", "group 2", "group 3"]
 elt = [PolyElement(polycolor = colm[i]) for i in 1:length(lab)]
 title = "Groups"
@@ -115,19 +104,13 @@ boxplot(x, y;
     dodge = grp, show_notch = true, 
     color = grp)
 
-boxplot(x, y; 
-    dodge = grp, show_notch = true, 
-    color = grp,
-    axis = (xticks = (1:3, ["A", "B", "C"]),
-        title = "Dodged bars"))
+boxplot(x, y; dodge = grp, show_notch = true, color = grp,
+    axis = (xticks = (1:3, ["A", "B", "C"]), title = "Dodged bars"))
 
 colm = Makie.wong_colors()
 f = Figure(size = (500, 300))
-ax = Axis(f[1, 1],
-    xticks = (1:3, ["A", "B", "C"]), title = "Dodged bars")
-boxplot!(ax, x, y; 
-    dodge = grp, show_notch = true, 
-    color = colm[grp])
+ax = Axis(f[1, 1], xticks = (1:3, ["A", "B", "C"]), title = "Dodged bars")
+boxplot!(ax, x, y; dodge = grp, show_notch = true, color = colm[grp])
 lab = ["group 1", "group 2"]
 elt = [PolyElement(polycolor = colm[i]) for i in 1:length(lab)]
 title = "Groups"
@@ -176,8 +159,7 @@ f
 f = Figure()
 Axis(f[1, 1])
 scatter!(y, x, markersize = 20, color = :grey)
-errorbars!(y, x, higherrors; 
-    whiskerwidth = 15, direction = :x)
+errorbars!(y, x, higherrors; whiskerwidth = 15, direction = :x)
 f
 
 ############# EXPORT
@@ -194,17 +176,15 @@ f
 x = randn(1000)
 f = Figure()
 hist(f[1, 1], x, bins = 10)
-hist(f[1, 2], x, bins = 20, color = :red, strokewidth = 1, 
-    strokecolor = :black)
+hist(f[1, 2], x, bins = 20, color = :red, strokewidth = 1, strokecolor = :black)
 hist(f[2, 1], x, bins = [-5, -2, -1, 0, 1, 2, 5], color = :gray)
 hist(f[2, 2], x, normalization = :pdf)
 f
 
 f = Figure()
 ax = Axis(f[1, 1])
-for i in 1:5
-     hist!(ax, randn(1000), scale_to = -0.6, 
-         offset = i, direction = :x)
+for i in 1:5 
+    hist!(ax, randn(1000), scale_to = -0.6, offset = i, direction = :x)
 end
 f
 
@@ -223,12 +203,10 @@ f
 
 f = Figure(size = (500, 400))
 offs = [0.; 1.5; 3]
-Axis(f[1, 1], xlabel = "Y", ylabel = "Density",
-    yticks = (offs, string.(years)))
+Axis(f[1, 1], xlabel = "Y", ylabel = "Density", yticks = (offs, string.(years)))
 for i in 1:lastindex(years)
     s = year .== years[i]
-    density!(y[s]; offset = offs[i], 
-        label = string(years[i]), bandwidth = 0.2)
+    density!(y[s]; offset = offs[i], label = string(years[i]), bandwidth = 0.2)
 end
 f
 
@@ -284,8 +262,7 @@ n = 20
 for i = 1:2, j = 1:3
     x = rand(n)
     y = x + rand(n)
-    ax = Axis(f[i, j], 
-        xlabel = "X", ylabel = "Y")
+    ax = Axis(f[i, j], xlabel = "X", ylabel = "Y")
     scatter!(ax, x, y; color = (:red, .5))
     ablines!(ax, 0, 1; color = :grey)
     k = k + 1
@@ -390,36 +367,29 @@ n = 10
 x = rand(n) ; y = rand(n)
 z = 1:n
 
-scatter(x, y;
-    marker = '1', markersize = 30)
+scatter(x, y; marker = '1', markersize = 30)
 
-scatter(x, y;
-    marker = '✈', markersize = 50)
+scatter(x, y; marker = '✈', markersize = 50)
     
-scatter(x, y;
-    marker = :utriangle, markersize = 20)
+scatter(x, y; marker = :utriangle, markersize = 20)
 
 f, ax = scatter(x, y)
 text!(ax, x, y; text = string.(z), fontsize = 25)
 f
 
 f, ax = scatter(x, y; marker = ' ')
-text!(ax, x, y; text = string.(z), fontsize = 25,
-    align = (:center, :center))
+text!(ax, x, y; text = string.(z), fontsize = 25, align = (:center, :center))
 f
 
 f = Figure()
 ax = Axis(f[1, 1])
-scatter!(x[1:5], y[1:5];
-    marker = :utriangle, markersize = 20, label = "A")
-scatter!(x[6:10], y[6:10];
-    marker = :diamond, markersize = 20, label = "B")
+scatter!(x[1:5], y[1:5]; marker = :utriangle, markersize = 20, label = "A")
+scatter!(x[6:10], y[6:10]; marker = :diamond, markersize = 20, label = "B")
 axislegend(ax)
 f
 
 zm = vcat(repeat([:circle], 5), repeat(['X'], 5)) 
-scatter(x, y;
-    marker = zm, markersize = 20)
+scatter(x, y; marker = zm, markersize = 20)
 
 ############# QQPLOT, QNORM 
 
@@ -446,10 +416,10 @@ n = 100
 x = range(0, 10; length = n)
 y1 = sin.(x)
 y2 = cos.(x)
-f, ax = scatter(x, y1, color = 1:length(x), colormap = :tab10, 
-    label = "sin", linewidth = 4)
-scatter!(ax, x, y2, color = 1:length(x), colormap = :inferno, 
-    label = "cos", linewidth = 4)
+f, ax = scatter(x, y1, color = 1:length(x), colormap = :tab10, label = "sin", 
+    linewidth = 4)
+scatter!(ax, x, y2, color = 1:length(x), colormap = :inferno, label = "cos", 
+    linewidth = 4)
 axislegend()
 f
 
@@ -496,7 +466,6 @@ f
 
 n = 10000 ; p = 2 
 X = randn(n, p) 
-scatter(X[:, 1], X[:, 2]; 
-    color = (:blue, .3))
+scatter(X[:, 1], X[:, 2]; color = (:blue, .3))
 
 

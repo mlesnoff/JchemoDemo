@@ -20,8 +20,7 @@ colm = [:red; :blue]
 #colm = [(:red, .5); (:blue, .5)]
 f = Figure(size = (500, 300))
 ax = Axis(f[1, 1])
-scatter!(ax, x, y; color = group, 
-    colormap = colm)
+scatter!(ax, x, y; color = group, colormap = colm)
 f
 
 ## Palettes from colorschemes
@@ -47,32 +46,28 @@ colm = cgrad(:Dark2_5; categorical = true, alpha = .8)[1:nlev]
 #colm = cgrad(:Dark2_5, 2; categorical = true, alpha = .8)
 f = Figure(size = (500, 300))
 ax = Axis(f[1, 1])
-scatter!(ax, x, y; color = group, 
-    colormap = colm)
+scatter!(ax, x, y; color = group, colormap = colm)
 f
 
 ## With Legend
 lev = sort(unique(z))
 nlev = length(lev)
-colm = cgrad(:Dark2_5; categorical = true,
-    alpha = .8)[1:nlev]
+colm = cgrad(:Dark2_5; categorical = true, alpha = .8)[1:nlev]
 f = Figure(size = (500, 300))
 ax = Axis(f[1, 1])
-scatter!(ax, x, y; color = group, 
-    colormap = colm)
+scatter!(ax, x, y; color = group, colormap = colm)
 elt = [MarkerElement(color = colm[i], marker = '●', markersize = 10) for i in 1:nlev]
 lab = copy(lev) 
 title = "Type"
 Legend(f[1, 2], elt, lab, title; 
-    nbanks = 1, rowgap = 10, bgcolor = "lightgrey")
+    nbanks = 1, rowgap = 10, backgroundcolor = "lightgrey")
 f
 
 colm = cgrad(:Accent_5, nlev; categorical = true,
     alpha = .8)
 f = Figure(size = (500, 300))
 ax = Axis(f[1, 1])
-scatter!(ax, x, y; color = group, 
-    colormap = colm)
+scatter!(ax, x, y; color = group, colormap = colm)
 elt = [MarkerElement(color = colm[i], marker = '●', markersize = 10) for i in 1:nlev]
 lab = copy(lev) 
 title = "Type"

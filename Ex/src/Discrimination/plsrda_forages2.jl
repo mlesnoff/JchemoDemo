@@ -43,13 +43,13 @@ ntest = nro(Xtest)
 
 
 nlv = 15
-mod = plsrda(; nlv) 
-#mod = plslda(; nlv) 
-#mod = plsqda(; nlv) 
-#mod = plsqda(; nlv, prior = :prop)
+mod = model(plsrda; nlv) 
+#mod = model(plslda; nlv) 
+#mod = model(plsqda; nlv) 
+#mod = model(plsqda; nlv, prior = :prop)
 
 
-#mod = rrda(lb = 1e-5)
+#mod = model(rrda(lb = 1e-5)
 
 
 fit!(mod, Xtrain, ytrain)

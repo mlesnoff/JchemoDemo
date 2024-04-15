@@ -41,8 +41,8 @@ lev = unique(typ)
 nlev = length(lev)
 
 
-mod1 = snv(centr = true, scal = true)
-mod2 = savgol(npoint = 11, deriv = 2, degree = 3)
+mod1 = model(snv; centr = true, scal = true)
+mod2 = model(savgol; npoint = 11, deriv = 2, degree = 3)
 mod = pip(mod1, mod2)
 fit!(mod, Xm5)
 Xpm5 = transf(mod, Xm5)
@@ -51,7 +51,7 @@ Xpmp6 = transf(mod, Xmp6)
 
 
 zX = vcat(Xpm5, Xpmp5, Xpmp6)
-mod = pcasvd(nlv = 10)
+mod = model(pcasvd; nlv = 10)
 fit!(mod, zX)
 T = mod.fm.T
 
@@ -59,13 +59,11 @@ T = mod.fm.T
 res = summary(mod, zX).explvarx
 
 
-plotgrid(res.nlv, res.pvar; step = 1, xlabel = "Nb. PCs", 
-    ylabel = "% explained variance").f
+plotgrid(res.nlv, res.pvar; step = 1, xlabel = "Nb. PCs", ylabel = "% explained variance").f
 
 
 i = 1
-plotxy(T[:, i], T[:, i + 1], typ; xlabel = string("PC", i), 
-    ylabel = string("PC", i + 1)).f
+plotxy(T[:, i], T[:, i + 1], typ; xlabel = string("PC", i), ylabel = string("PC", i + 1)).f
 
 
 CairoMakie.activate!()
@@ -75,8 +73,7 @@ colm = cgrad(colsh, 10; alpha = .7, categorical = true)[[1, 5, 8]]
 i = 1
 f = Figure(size = (600, 500))
 ax = Axis3(f[1, 1]; perspectiveness = 0.2, xlabel = string("PC", i), 
-    ylabel = string("PC", i + 1), zlabel = string("PC", i + 2), 
-    title = "PCA score space") 
+    ylabel = string("PC", i + 1), zlabel = string("PC", i + 2), title = "PCA score space") 
 scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 15, color = typ_num, 
     colormap = colm)
 lab = string.(lev)

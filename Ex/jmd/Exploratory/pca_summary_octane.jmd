@@ -45,16 +45,15 @@ wl = parse.(Float64, wlst)
 Six of the samples of the dataset contain added alcohol  (= 25, 26, and 36-39).
 
 ```julia
-plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance",
-    title = "Octane data").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance", title = "Octane data").f
 ```
 
 #### PCA model fitting
 
 ```julia
-mod = pcasvd(nlv = 6) 
+mod = model(pcasvd; nlv = 6) 
 ## For robust spherical PCA, do:
-#mod = pcasph(nlv = 6)
+#mod = model(pcasph(nlv = 6)
 fit!(mod, X)  
 pnames(mod)
 pnames(mod.fm)
@@ -74,8 +73,7 @@ z = res.explvarx
 ```
 
 ```julia
-plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "nb. PCs", 
-    ylabel = "% variance explained").f
+plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "nb. PCs", ylabel = "% variance explained").f
 ```
 
 **Individuals' contributions to scores**
@@ -86,15 +84,13 @@ z = res.contr_ind
 
 ```julia
 i = 1
-scatter(z[:, i]; axis = (xlabel = "Observation", ylabel = "Contribution", 
-    title = string("PC", i)))
+scatter(z[:, i]; axis = (xlabel = "Observation", ylabel = "Contribution", title = string("PC", i)))
 ```
 
 Same as:
 
 ```julia
-plotxy(1:n, z[:, i]; xlabel = "Observation", ylabel = "Contribution", 
-    title = string("PC", i)).f
+plotxy(1:n, z[:, i]; xlabel = "Observation", ylabel = "Contribution", title = string("PC", i)).f
 ```
 
 **Variables' contributions**

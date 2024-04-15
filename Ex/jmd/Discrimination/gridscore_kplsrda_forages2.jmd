@@ -105,15 +105,14 @@ length(pars[1])
 #### Grid-search
 
 ```julia
-mod = kplsrda()
+mod = model(kplsrda)
 res = gridscore(mod, Xcal, ycal, Xval, yval; score = errp, pars, nlv)
 ```
 
 **Selection of the best parameters combination:**
 
 ```julia
-plotgrid(res.nlv, res.y1, res.gamma; step = 5, xlabel = "Nb. LVs", 
-    ylabel = "ERR").f
+plotgrid(res.nlv, res.y1, res.gamma; step = 5, xlabel = "Nb. LVs", ylabel = "ERR").f
 ```
 
 ```julia
@@ -124,7 +123,7 @@ res[u, :]
 #### Final prediction (Test) using the optimal model
 
 ```julia
-mod = kplsrda(nlv = res.nlv[u], gamma = res.gamma[u])
+mod = model(kplsrda; nlv = res.nlv[u], gamma = res.gamma[u])
 fit!(mod, Xtrain, ytrain)
 pred = predict(mod, Xtest).pred
 ```

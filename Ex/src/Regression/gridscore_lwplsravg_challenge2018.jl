@@ -42,8 +42,8 @@ freqtable(typ, test)
 plotsp(X, wl; nsamp = 30).f
 
 
-mod1 = snv(centr = true, scal = true)
-mod2 = savgol(npoint = 21, deriv = 2, degree = 3)
+mod1 = model(snv; centr = true, scal = true)
+mod2 = model(savgol; npoint = 21, deriv = 2, degree = 3)
 mod = pip(mod1, mod2)
 fit!(mod, X)
 Xp = transf(mod, X)
@@ -72,24 +72,22 @@ ncal = ntrain - nval
 nlvdis = [15; 25] ; metric = [:mah] 
 h = [1; 2; 4] ; k = [150; 200; 350; 500]  
 nlv = [0:20, 5:20, 10:20]
-pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k, 
-    nlv = nlv)
+pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k, nlv = nlv)
 
 
 length(pars[1])
 
 
-mod = lwplsravg()
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
-    pars, verbose = false)
+mod = model(lwplsravg)
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, verbose = false)
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 
 
-mod = lwplsravg(nlvdis = res.nlvdis[u], metric = res.metric[u], 
-    h = res.h[u], k = res.k[u], nlv = res.nlv[u]) ;
+mod = model(lwplsravg; nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
+    k = res.k[u], nlv = res.nlv[u]) ;
 fit!(mod, Xtrain, ytrain) 
 pred = predict(mod, Xtest).pred 
 rmsep(pred, ytest)
