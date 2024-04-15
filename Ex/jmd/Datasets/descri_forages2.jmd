@@ -76,14 +76,13 @@ ntest = nro(Xtest)
 Spectra are already pre-processed with savgol(snv; f = 21, p = 3, d = 2)).
 
 ```julia
-plotsp(X, wl; nsamp = 10, xlabel = "Wavelength (nm)", 
-    ylabel = "Absorbance").f
+plotsp(X, wl; nsamp = 10, xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
 #### PCA on X
 
 ```julia
-mod = model(pcasvd(nlv = 10)
+mod = model(pcasvd; nlv = 10)
 fit!(mod, X)
 pnames(mod)
 pnames(mod.fm)
@@ -101,8 +100,7 @@ pnames(res)
 
 ```julia
 z = res.explvarx
-plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "nb. PCs", 
-    ylabel = "% variance explained").f
+plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "nb. PCs", ylabel = "% variance explained").f
 ```
 
 ```julia
@@ -118,7 +116,7 @@ plotxy(T[:, i], T[:, i + 1], y; ellipse = true, xlabel = "PC1", ylabel = "PC2").
 
 ```julia term = true
 ## Train vs Test
-mod = model(pcasvd(nlv = 15)
+mod = model(pcasvd; nlv = 15)
 fit!(mod, Xtrain)
 Ttrain = mod.fm.T
 @head Ttrain
@@ -140,7 +138,7 @@ plotxy(T[:, i], T[:, i + 1], group; xlabel = "PC1", ylabel = "PC2").f
 **Score (SD) and orthogonal (OD) distances**
 
 ```julia
-mod_sd = occsd) 
+mod_sd = model(occsd) 
 fit!(mod_sd, mod.fm)
 pnames(mod_sd)
 sdtrain = mod_sd.fm.d
@@ -148,7 +146,7 @@ sdtest = predict(mod_sd, Xtest).d
 ```
 
 ```julia
-mod_od = occod) 
+mod_od = model(occod) 
 fit!(mod_od, mod.fm, Xtrain)
 pnames(mod_od)
 odtrain = mod_od.fm.d
@@ -221,8 +219,7 @@ f
 ```julia
 f = Figure(size = (500, 400))
 offs = [30; 0]
-ax = Axis(f[1, 1], xlabel = nam, ylabel = "Nb. observations", 
-    yticks = (offs, ["Train" ; "Test"]))
+ax = Axis(f[1, 1], xlabel = nam, ylabel = "Nb. observations", yticks = (offs, ["Train" ; "Test"]))
 hist!(ax, ytrain; offset = offs[1], bins = 50)
 hist!(ax, ytest; offset = offs[2], bins = 50)
 f

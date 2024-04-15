@@ -90,14 +90,14 @@ i = 1
 plotxy(T[:, i], T[:, i + 1], group; xlabel = "PC1", ylabel = "PC2").f
 
 
-mod_sd = occsd) 
+mod_sd = model(occsd) 
 fit!(mod_sd, mod.fm)
 pnames(mod_sd)
 sdtrain = mod_sd.fm.d
 sdtest = predict(mod_sd, Xtest).d
 
 
-mod_od = occod) 
+mod_od = model(occod) 
 fit!(mod_od, mod.fm, Xtrain)
 pnames(mod_od)
 odtrain = mod_od.fm.d
