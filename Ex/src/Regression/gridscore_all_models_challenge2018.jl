@@ -42,8 +42,8 @@ freqtable(typ, test)
 plotsp(X, wl; nsamp = 30).f
 
 
-mod1 = model(snv(centr = true, scal = true)
-mod2 = model(savgol(npoint = 21, deriv = 2, degree = 3)
+mod1 = model(snv; centr = true, scal = true)
+mod2 = model(savgol; npoint = 21, deriv = 2, degree = 3)
 mod = pip(mod1, mod2)
 fit!(mod, X)
 Xp = transf(mod, X)
@@ -243,7 +243,7 @@ rmsep(pred, ytest)
 nlvdis = 15 ; metric = :mah  
 h = 2 ; k = 200 
 nlv = 5:20
-mod = model(lwplsravg(; nlvdis, metric, h, k, nlv)
+mod = model(lwplsravg; nlvdis, metric, h, k, nlv)
 fit!(mod, Xtrain, ytrain) 
 pred = predict(mod, Xtest).pred 
 rmsep(pred, ytest)

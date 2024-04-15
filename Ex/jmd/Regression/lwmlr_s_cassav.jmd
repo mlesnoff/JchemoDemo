@@ -56,8 +56,8 @@ plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 #### Preprocessing
 
 ```julia
-mod1 = model(snv(centr = true, scal = true)
-mod2 = model(savgol(npoint = 11, deriv = 2, degree = 3)
+mod1 = model(snv; centr = true, scal = true)
+mod2 = model(savgol; npoint = 11, deriv = 2, degree = 3)
 mod = pip(mod1, mod2)
 fit!(mod, X)
 Xp = transf(mod, X) 
@@ -162,7 +162,7 @@ res[u, :]
 ```
 
 ```julia
-mod1 = model(pcasvd(; nlv)
+mod1 = model(pcasvd; nlv)
 mod2 = model(lwmlr(metric = res.metric[u], h = res.h[u], k = res.k[u])
 mod = pip(mod1, mod2)
 fit!(mod, Xtrain, ytrain)
@@ -200,7 +200,7 @@ res[u, :]
 ```
 
 ```julia
-mod1 = model(plskern(; nlv)
+mod1 = model(plskern; nlv)
 mod2 = model(lwmlr(metric = res.metric[u], h = res.h[u], k = res.k[u])
 mod = pip(mod1, mod2)
 fit!(mod, Xtrain, ytrain)
@@ -238,7 +238,7 @@ res[u, :]
 ```
 
 ```julia
-mod1 = model(dkplsr(; nlv, gamma)
+mod1 = model(dkplsr; nlv, gamma)
 mod2 = model(lwmlr(metric = res.metric[u], h = res.h[u], k = res.k[u])
 mod = pip(mod1, mod2)
 fit!(mod, Xtrain, ytrain)

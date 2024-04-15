@@ -48,7 +48,7 @@ plotsp(X, wl; nsamp = 10, xlabel = "Wavelength (nm)",
     ylabel = "Absorbance").f
 
 
-mod = model(pcasvd(nlv = 10)
+mod = model(pcasvd; nlv = 10)
 fit!(mod, X)
 pnames(mod)
 pnames(mod.fm)
@@ -75,7 +75,7 @@ plotxy(T[:, i], T[:, i + 1], y; ellipse = true, xlabel = "PC1", ylabel = "PC2").
 
 
 ## Train vs Test
-mod = model(pcasvd(nlv = 15)
+mod = model(pcasvd; nlv = 15)
 fit!(mod, Xtrain)
 Ttrain = mod.fm.T
 @head Ttrain

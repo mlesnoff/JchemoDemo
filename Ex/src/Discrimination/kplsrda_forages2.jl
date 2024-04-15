@@ -44,7 +44,7 @@ ntest = nro(Xtest)
 
 nlv = 15
 gamma = .001
-mod = model(kplsrda(; nlv, gamma, scal = true) 
+mod = model(kplsrda; nlv, gamma, scal = true) 
 fit!(mod, Xtrain, ytrain)
 pnames(mod) 
 pnames(mod.fm)

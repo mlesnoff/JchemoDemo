@@ -41,8 +41,8 @@ lev = unique(typ)
 nlev = length(lev)
 
 
-mod1 = model(snv(centr = true, scal = true)
-mod2 = model(savgol(npoint = 11, deriv = 2, degree = 3)
+mod1 = model(snv; centr = true, scal = true)
+mod2 = model(savgol; npoint = 11, deriv = 2, degree = 3)
 mod = pip(mod1, mod2)
 fit!(mod, Xm5)
 Xpm5 = transf(mod, Xm5)
@@ -51,7 +51,7 @@ Xpmp6 = transf(mod, Xmp6)
 
 
 zX = vcat(Xpm5, Xpmp5, Xpmp6)
-mod = model(pcasvd(nlv = 10)
+mod = model(pcasvd; nlv = 10)
 fit!(mod, zX)
 T = mod.fm.T
 

@@ -33,8 +33,8 @@ wl = parse.(Float64, wlst)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-mod1 = model(snv(centr = true, scal = true)
-mod2 = model(savgol(npoint = 11, deriv = 2, degree = 3)
+mod1 = model(snv; centr = true, scal = true)
+mod2 = model(savgol; npoint = 11, deriv = 2, degree = 3)
 mod = pip(mod1, mod2)
 fit!(mod, X)
 Xp = transf(mod, X)
@@ -108,7 +108,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-mod1 = model(pcasvd(; nlv)
+mod1 = model(pcasvd; nlv)
 mod2 = model(lwmlr(metric = res.metric[u], h = res.h[u], k = res.k[u])
 mod = pip(mod1, mod2)
 fit!(mod, Xtrain, ytrain)
@@ -139,7 +139,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-mod1 = model(plskern(; nlv)
+mod1 = model(plskern; nlv)
 mod2 = model(lwmlr(metric = res.metric[u], h = res.h[u], k = res.k[u])
 mod = pip(mod1, mod2)
 fit!(mod, Xtrain, ytrain)
@@ -170,7 +170,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-mod1 = model(dkplsr(; nlv, gamma)
+mod1 = model(dkplsr; nlv, gamma)
 mod2 = model(lwmlr(metric = res.metric[u], h = res.h[u], k = res.k[u])
 mod = pip(mod1, mod2)
 fit!(mod, Xtrain, ytrain)

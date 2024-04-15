@@ -89,8 +89,8 @@ f
 
 
 lb = 1e-5
-mod = model(fda(; nlv = 2, lb)
-#mod = model(fdasvd(; nlv = 2, lb)
+mod = model(fda; nlv = 2, lb)
+#mod = model(fdasvd; nlv = 2, lb)
 fit!(mod,Xtrain, ytrain)
 
 

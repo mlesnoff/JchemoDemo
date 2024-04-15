@@ -36,8 +36,8 @@ wl = parse.(Float64, wlst)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-mod1 = model(snv(centr = true, scal = true)
-mod2 = model(savgol(npoint = 15, deriv = 2, degree = 3)
+mod1 = model(snv; centr = true, scal = true)
+mod2 = model(savgol; npoint = 15, deriv = 2, degree = 3)
 mod = pip(mod1, mod2)
 fit!(mod, X)
 Xp = transf(mod, X)
@@ -67,7 +67,7 @@ n_trees = 100
 partial_sampling = .7
 n_subfeatures = p / 3
 max_depth = 20
-mod = model(rfr_dt(; n_trees, partial_sampling, n_subfeatures, max_depth)
+mod = model(rfr_dt; n_trees, partial_sampling, n_subfeatures, max_depth)
 fit!(mod, Xtrain, ytrain)
 pnames(mod)
 pnames(mod.fm)

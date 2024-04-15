@@ -34,7 +34,7 @@ Ydummy = dummy(y).Y ;
 
 
 nlv = 2
-mod = model(plskern(; nlv)
+mod = model(plskern; nlv)
 fit!(mod, X, Ydummy)
 
 
