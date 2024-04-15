@@ -86,8 +86,8 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-mod = model(lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], 
-    h = res.h[u], k = res.k[u], nlv = res.nlv[u]) ;
+mod = model(lwplsr; nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
+    k = res.k[u], nlv = res.nlv[u]) ;
 fit!(mod, Xtrain, ytrain)
 pred = predict(mod, Xtest).pred
 rmsep(pred, ytest)

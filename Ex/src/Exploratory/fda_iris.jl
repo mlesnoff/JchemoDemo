@@ -43,8 +43,8 @@ tab(ytrain)
 tab(ytest)
 
 
-mod = model(fda(nlv = 2)
-#mod = model(fdasvd(nlv = 2)     # alternative algorithm (same result)
+mod = model(fda; nlv = 2)
+#mod = model(fdasvd; nlv = 2)     # alternative algorithm (same result)
 fit!(mod, Xtrain, ytrain) 
 fm = mod.fm 
 pnames(fm)
@@ -62,8 +62,7 @@ nlev = length(lev)
 ct = mod.fm.Tcenters
 
 
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; ellipse = true, 
-    title = "FDA", zeros = true)
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; ellipse = true, title = "FDA", zeros = true)
 scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
 f
 

@@ -24,13 +24,12 @@ wlst = names(X)
 wl = parse.(Float64, wlst)
 
 
-plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance",
-    title = "Octane data").f
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance", title = "Octane data").f
 
 
-mod0 = pcasvd(nlv = 6) 
+mod0 = model(pcasvd; nlv = 6) 
 ## For robust spherical PCA, do:
-#mod0 = pcasph(nlv = 6)
+#mod0 = model(pcasph; nlv = 6)
 fit!(mod0, X)  
 pnames(mod0)
 pnames(mod0.fm)
@@ -75,15 +74,13 @@ d_sd = mod.fm.d
 mod = model(occod)
 fit!(mod, mod0.fm, X)
 d_od = mod.fm.d
-f, ax = plotxy(d_sd.dstand, d_od.dstand; xlabel = "Standardized SD", 
-    ylabel = "Standardized OD")
+f, ax = plotxy(d_sd.dstand, d_od.dstand; xlabel = "Standardized SD", ylabel = "Standardized OD")
 hlines!(ax, 1; color = :grey, linestyle = :dash)
 vlines!(ax, 1; color = :grey, linestyle = :dash)
 f
 
 
-f, ax = plotxy(d_sd.dstand, d_od.dstand; xlabel = "Standardized SD", 
-    ylabel = "Standardized OD")
+f, ax = plotxy(d_sd.dstand, d_od.dstand; xlabel = "Standardized SD", ylabel = "Standardized OD")
 text!(ax, d_sd.dstand, d_od.dstand; text = string.(1:n), fontsize = 15)
 hlines!(ax, 1; color = :grey, linestyle = :dash)
 vlines!(ax, 1; color = :grey, linestyle = :dash)
@@ -99,8 +96,7 @@ pnames(mod.fm)
 d = mod.fm.d
 
 
-f, ax = plotxy(1:n, d.dstand; xlabel = "Observation", 
-    ylabel = "Standardized SD-OD distance")
+f, ax = plotxy(1:n, d.dstand; xlabel = "Observation", ylabel = "Standardized SD-OD distance")
 text!(ax, 1:n, d.dstand; text = string.(1:n), fontsize = 15)
 hlines!(ax, 1; color = :grey, linestyle = :dash)
 f

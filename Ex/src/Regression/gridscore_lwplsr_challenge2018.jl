@@ -80,8 +80,8 @@ length(pars[1])
 
 
 mod = model(lwplsr)
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
-    pars, nlv, verbose = false)
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, 
+    verbose = false)
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 
@@ -92,8 +92,8 @@ group = string.("nlvdis=", res.nlvdis, ",h=", res.h, ",k=", res.k)
 plotgrid(res.nlv, res.y1, group; step = 2, xlabel ="Nb. LVs", ylabel = "RMSEP").f
 
 
-mod = model(lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], 
-    h = res.h[u], k = res.k[u], nlv = res.nlv[u])
+mod = model(lwplsr; nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
+    k = res.k[u], nlv = res.nlv[u])
 fit!(mod, Xtrain, ytrain)
 pred = predict(mod, Xtest).pred 
 rmsep(pred, ytest)

@@ -85,8 +85,7 @@ pnames(res)
 z = res.explvarx
 
 
-plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "nb. PCs", 
-    ylabel = "% variance explained").f
+plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "nb. PCs", ylabel = "% variance explained").f
 
 
 i = 1
@@ -115,8 +114,7 @@ T = vcat(Ttrain, Ttest)
 group = vcat(repeat(["0-Train";], ntrain), repeat(["1-Test";], ntest))
 colm = [:blue, (:red, .5)]
 i = 1
-plotxy(T[:, i], T[:, i + 1], group; color = colm, xlabel = "PC1", 
-    ylabel = "PC2").f
+plotxy(T[:, i], T[:, i + 1], group; color = colm, xlabel = "PC1", ylabel = "PC2").f
 
 
 mod_sd = model(occsd) 
@@ -197,16 +195,14 @@ f
 
 f = Figure(size = (500, 400))
 offs = [.1; 0]
-ax = Axis(f[1, 1], xlabel = "Protein", ylabel = "Density", 
-    yticks = (offs, ["Train" ; "Test"]))
+ax = Axis(f[1, 1], xlabel = "Protein", ylabel = "Density", yticks = (offs, ["Train" ; "Test"]))
 density!(ax, ytrain; offset = offs[1], color = (:slategray, 0.5), bandwidth = 0.2)
 density!(ax, ytest; offset = offs[2], color = (:slategray, 0.5), bandwidth = 0.2)
 f
 
 
 f = Figure(size = (500, 400))
-ax = Axis(f[1, 1], xticks = (0:1, ["Train", "Test"]), xlabel = "Group", 
-    ylabel = "Protein")
+ax = Axis(f[1, 1], xticks = (0:1, ["Train", "Test"]), xlabel = "Group", ylabel = "Protein")
 boxplot!(ax, test, y; width = .3, show_notch = true)
 f
 

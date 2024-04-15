@@ -36,20 +36,17 @@ plotsp(X).f
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance", title = "Cassava data").f
 
 
-plotsp(X, wl; color = (:red, .3), xlabel ="Wavelength (nm)", ylabel = "Absorbance", 
-    title = "Cassava data").f
+plotsp(X, wl; color = (:red, .3), xlabel ="Wavelength (nm)", ylabel = "Absorbance", title = "Cassava data").f
 
 
-plotsp(X, wl; nsamp = 10, xlabel ="Wavelength (nm)", ylabel = "Absorbance",
-    title = "Cassava data").f
+plotsp(X, wl; nsamp = 10, xlabel ="Wavelength (nm)", ylabel = "Absorbance", title = "Cassava data").f
 
 
 i = 1
-plotsp(X[i:i, :], wl; color = :blue, xlabel ="Wavelength (nm)", ylabel = "Absorbance",
-    title = "Cassava data").f
+plotsp(X[i:i, :], wl; color = :blue, xlabel ="Wavelength (nm)", ylabel = "Absorbance", title = "Cassava data").f
 
 
-f, ax = plotsp(X, wl; color = (:grey70, .5), xlabel ="Wavelength (nm)", ylabel = "Absorbance",
+f, ax = plotsp(X, wl; color = (:grey70, .5), xlabel ="Wavelength (nm)", ylabel = "Absorbance", 
     title = "Cassava data")
 lines!(ax, wl, colmean(X); color = :red, linewidth = 2)
 f

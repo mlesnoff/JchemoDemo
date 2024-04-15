@@ -83,8 +83,7 @@ segm[i][k]   # segment 'k' of replication 'i'
 
 mod = model(plskern)
 nlv = 0:20
-rescv = gridcv(mod, Xtrain, ytrain; segm = segm, score = rmsep, 
-    nlv, verbose = false) ;
+rescv = gridcv(mod, Xtrain, ytrain; segm = segm, score = rmsep, nlv, verbose = false) ;
 pnames(rescv)
 
 
@@ -92,8 +91,8 @@ res_rep = rescv.res_rep
 
 
 group = string.(res_rep.segm, "-", res_rep.rep)
-plotgrid(res_rep.nlv, res_rep.y1, group; step = 2, xlabel = "Nb. LVs", 
-    ylabel = "RMSEP", leg = false).f
+plotgrid(res_rep.nlv, res_rep.y1, group; step = 2, xlabel = "Nb. LVs", ylabel = "RMSEP", 
+    leg = false).f
 
 
 res = rescv.res

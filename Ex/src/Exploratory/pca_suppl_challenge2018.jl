@@ -84,7 +84,7 @@ plotxy(T[:, i], T[:, i + 1], group; color = colm, xlabel = string("PC", i),
     ylabel = string("PC", i + 1)).f
 
 
-mod_d = occsdod) 
+mod_d = model(occsdod) 
 fit!(mod_d, mod.fm, Xtrain)
 pnames(mod_d)
 pnames(mod_d.fm)
@@ -109,8 +109,7 @@ f
 d = vcat(dtrain, dtest)
 group = vcat(repeat(["0-Train";], ntrain), repeat(["1-Test";], ntest))
 colm = [:blue, (:red, .5)]
-plotxy(d.dstand_sd, d.dstand_od, group; color = colm, xlabel = "Stand. SD", 
-    ylabel = "Stand. OD").f
+plotxy(d.dstand_sd, d.dstand_od, group; color = colm, xlabel = "Stand. SD", ylabel = "Stand. OD").f
 
 
 f = Figure(size = (500, 400))

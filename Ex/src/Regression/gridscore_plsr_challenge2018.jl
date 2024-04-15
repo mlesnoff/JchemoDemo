@@ -87,8 +87,7 @@ ncal = ntrain - nval
 
 mod = model(plskern)
 nlv = 0:50
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
-    nlv)
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, nlv)
 
 
 plotgrid(res.nlv, res.y1; step = 5, xlabel = "Nb. LVs", ylabel = "RMSEP").f

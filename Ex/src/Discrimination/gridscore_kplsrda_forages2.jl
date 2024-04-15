@@ -65,15 +65,14 @@ mod = model(kplsrda)
 res = gridscore(mod, Xcal, ycal, Xval, yval; score = errp, pars, nlv)
 
 
-plotgrid(res.nlv, res.y1, res.gamma; step = 5, xlabel = "Nb. LVs", 
-    ylabel = "ERR").f
+plotgrid(res.nlv, res.y1, res.gamma; step = 5, xlabel = "Nb. LVs", ylabel = "ERR").f
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 
 
-mod = model(kplsrda(nlv = res.nlv[u], gamma = res.gamma[u])
+mod = model(kplsrda; nlv = res.nlv[u], gamma = res.gamma[u])
 fit!(mod, Xtrain, ytrain)
 pred = predict(mod, Xtest).pred
 

@@ -44,8 +44,7 @@ ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
 
-plotsp(X, wl; nsamp = 10, xlabel = "Wavelength (nm)", 
-    ylabel = "Absorbance").f
+plotsp(X, wl; nsamp = 10, xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
 mod = model(pcasvd; nlv = 10)
@@ -63,8 +62,7 @@ pnames(res)
 
 
 z = res.explvarx
-plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "nb. PCs", 
-    ylabel = "% variance explained").f
+plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "nb. PCs", ylabel = "% variance explained").f
 
 
 i = 1
@@ -159,8 +157,7 @@ f
 
 f = Figure(size = (500, 400))
 offs = [30; 0]
-ax = Axis(f[1, 1], xlabel = nam, ylabel = "Nb. observations", 
-    yticks = (offs, ["Train" ; "Test"]))
+ax = Axis(f[1, 1], xlabel = nam, ylabel = "Nb. observations", yticks = (offs, ["Train" ; "Test"]))
 hist!(ax, ytrain; offset = offs[1], bins = 50)
 hist!(ax, ytest; offset = offs[2], bins = 50)
 f

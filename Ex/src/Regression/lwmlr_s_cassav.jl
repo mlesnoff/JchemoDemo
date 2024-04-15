@@ -87,7 +87,7 @@ mse(pred, ytest)
 
 
 plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Prediction", 
-    ylabel = "Observed (Test)").f
+  ylabel = "Observed (Test)").f
 
 
 nlv = 15
@@ -100,8 +100,7 @@ length(pars[1])
 mod1 = model(pcasvd)
 mod2 = model(lwmlr)
 mod = pip(mod1, mod2)
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, 
-    verbose = false)
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, verbose = false)
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 
@@ -109,7 +108,7 @@ res[u, :]
 
 
 mod1 = model(pcasvd; nlv)
-mod2 = model(lwmlr(metric = res.metric[u], h = res.h[u], k = res.k[u])
+mod2 = model(lwmlr; metric = res.metric[u], h = res.h[u], k = res.k[u])
 mod = pip(mod1, mod2)
 fit!(mod, Xtrain, ytrain)
 pred = predict(mod, Xtest).pred
@@ -131,8 +130,7 @@ length(pars[1])
 mod1 = model(plskern)
 mod2 = model(lwmlr)
 mod = pip(mod1, mod2)
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
-    pars, verbose = false)
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, verbose = false)
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 
@@ -140,7 +138,7 @@ res[u, :]
 
 
 mod1 = model(plskern; nlv)
-mod2 = model(lwmlr(metric = res.metric[u], h = res.h[u], k = res.k[u])
+mod2 = model(lwmlr; metric = res.metric[u], h = res.h[u], k = res.k[u])
 mod = pip(mod1, mod2)
 fit!(mod, Xtrain, ytrain)
 pred = predict(mod, Xtest).pred
@@ -162,8 +160,7 @@ length(pars[1])
 mod1 = model(dkplsr)
 mod2 = model(lwmlr)
 mod = pip(mod1, mod2)
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
-    pars, verbose = false)
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, verbose = false)
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 
@@ -171,7 +168,7 @@ res[u, :]
 
 
 mod1 = model(dkplsr; nlv, gamma)
-mod2 = model(lwmlr(metric = res.metric[u], h = res.h[u], k = res.k[u])
+mod2 = model(lwmlr; metric = res.metric[u], h = res.h[u], k = res.k[u])
 mod = pip(mod1, mod2)
 fit!(mod, Xtrain, ytrain)
 pred = predict(mod, Xtest).pred

@@ -63,7 +63,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-mod = model(plskdeda(nlv = res.nlv[u], a_kde = res.a_kde[u])
+mod = model(plskdeda; nlv = res.nlv[u], a_kde = res.a_kde[u])
 fit!(mod, Xtrain, ytrain)
 pred = predict(mod, Xtest).pred
 errp(pred, ytest)

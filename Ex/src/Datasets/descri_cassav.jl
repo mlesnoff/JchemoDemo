@@ -72,12 +72,10 @@ plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "Nb. PCs",
 
 
 i = 1
-plotxy(T[:, i], T[:, i + 1]; color = (:red, .5), xlabel = "PC1", 
-    ylabel = "PC2").f
+plotxy(T[:, i], T[:, i + 1]; color = (:red, .5), xlabel = "PC1", ylabel = "PC2").f
 
 
-plotxy(T[:, i], T[:, i + 1], year; ellipse = true, xlabel = "PC1", 
-    ylabel = "PC2").f
+plotxy(T[:, i], T[:, i + 1], year; ellipse = true, xlabel = "PC1", ylabel = "PC2").f
 
 
 summ(y)
@@ -99,8 +97,7 @@ f = Figure(size = (500, 1000))
 ax = list(nlev)
 for i = 1:nlev
     i == nlev ? xlab = "tbc" : xlab = ""
-    ax[i] = Axis(f[i, 1], title = string(lev[i]), xlabel = xlab, 
-        ylabel = "Nb. obs.")
+    ax[i] = Axis(f[i, 1], title = string(lev[i]), xlabel = xlab, ylabel = "Nb. obs.")
     xlims!(0, maximum(y))
     s = year .== lev[i]
     hist!(ax[i], y[s]; bins = 30, color = (:red, .5))

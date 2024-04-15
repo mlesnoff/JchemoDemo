@@ -58,7 +58,7 @@ res[u, :]
 plotgrid(res.nlv, res.y1; step = 5, xlabel = "Nb. LVs", ylabel = "ERR").f
 
 
-mod = model(plsrda(nlv = res.nlv[u])
+mod = model(plsrda; nlv = res.nlv[u])
 fit!(mod, Xtrain, ytrain)
 pred = predict(mod, Xtest).pred
 
@@ -88,7 +88,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-mod = model(plslda(nlv = res.nlv[u])
+mod = model(plslda; nlv = res.nlv[u])
 fit!(mod, Xtrain, ytrain)
 pred = predict(mod, Xtest).pred
 errp(pred, ytest)

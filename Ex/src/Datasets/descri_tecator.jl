@@ -56,8 +56,7 @@ pnames(res)
 
 
 z = res.explvarx
-plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "Nb. PCs", 
-    ylabel = "% variance explained").f
+plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "Nb. PCs", ylabel = "% variance explained").f
 
 
 T = mod.fm.T
