@@ -125,8 +125,8 @@ res[u, :]
 #### Final prediction (Test) using the optimal model
 
 ```julia
-mod = model(lwplsrda(nlvdis = res.nlvdis[u], metric = res.metric[u], 
-    h = res.h[u], k = res.k[u], nlv = res.nlv[u], verbose = false) ;
+mod = model(lwplsrda; nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
+    k = res.k[u], nlv = res.nlv[u], verbose = false) ;
 fit!(mod, Xtrain, ytrain)
 pred = predict(mod, Xtest).pred
 ```
