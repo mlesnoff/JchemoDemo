@@ -67,8 +67,8 @@ plotsp(X, wl; nsamp = 30).f
 #### Preprocessing
 
 ```julia
-mod1 = snv(centr = true, scal = true)
-mod2 = savgol(npoint = 21, deriv = 2, degree = 3)
+mod1 = model(snv(centr = true, scal = true)
+mod2 = model(savgol(npoint = 21, deriv = 2, degree = 3)
 mod = pip(mod1, mod2)
 fit!(mod, X)
 Xp = transf(mod, X) 
@@ -146,7 +146,7 @@ ncal = ntrain - nval
 #### Grid-search
 
 ```julia
-mod = plskern()
+mod = model(plskern)
 nlv = 0:50
 res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
     nlv) 
@@ -166,7 +166,7 @@ res[u, :]
 #### Final prediction (Test) using the optimal model
 
 ```julia
-mod = plskern(nlv = res.nlv[u])
+mod = model(plskern(nlv = res.nlv[u])
 fit!(mod, Xtrain, ytrain) 
 pred = predict(mod, Xtest).pred
 ```
@@ -204,7 +204,7 @@ res_sel.sel     # nb. LVs selected with the Wold's criterion
 **Final prediction with the parcimonious model:**
 
 ```julia
-mod = plskern(nlv = res_sel.sel)
+mod = model(plskern(nlv = res_sel.sel)
 fit!(mod, Xtrain, ytrain) 
 pred = predict(mod, Xtest).pred
 rmsep(pred, ytest)

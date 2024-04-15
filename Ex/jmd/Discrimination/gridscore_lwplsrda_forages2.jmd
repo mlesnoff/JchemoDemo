@@ -106,7 +106,7 @@ length(pars[1])
 #### Grid-search
 
 ```julia
-mod = lwplsrda()
+mod = model(lwplsrda)
 res = gridscore(mod, Xcal, ycal, Xval, yval; score = errp, nlv, pars, verbose = false)
 ```
 
@@ -125,7 +125,7 @@ res[u, :]
 #### Final prediction (Test) using the optimal model
 
 ```julia
-mod = lwplsrda(nlvdis = res.nlvdis[u], metric = res.metric[u], 
+mod = model(lwplsrda(nlvdis = res.nlvdis[u], metric = res.metric[u], 
     h = res.h[u], k = res.k[u], nlv = res.nlv[u], verbose = false) ;
 fit!(mod, Xtrain, ytrain)
 pred = predict(mod, Xtest).pred

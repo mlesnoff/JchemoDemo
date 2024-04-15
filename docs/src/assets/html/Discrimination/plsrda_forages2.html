@@ -822,9 +822,9 @@ Legume forages           │ 167   57
 <pre class='hljl'>
 <span class='hljl-n'>nlv</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>15</span><span class='hljl-t'>
 </span><span class='hljl-n'>mod</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>plsrda</span><span class='hljl-p'>(;</span><span class='hljl-t'> </span><span class='hljl-n'>nlv</span><span class='hljl-p'>)</span><span class='hljl-t'> 
-</span><span class='hljl-cs'>#mod = plslda(; nlv) </span><span class='hljl-t'>
-</span><span class='hljl-cs'>#mod = plsqda(; nlv) </span><span class='hljl-t'>
-</span><span class='hljl-cs'>#mod = plsqda(; nlv, prior = :prop)</span>
+</span><span class='hljl-cs'>#mod = model(plslda(; nlv) </span><span class='hljl-t'>
+</span><span class='hljl-cs'>#mod = model(plsqda(; nlv) </span><span class='hljl-t'>
+</span><span class='hljl-cs'>#mod = model(plsqda(; nlv, prior = :prop)</span>
 </pre>
 
 
@@ -838,7 +838,7 @@ g, Base.Pairs&#40;:nlv &#61;&gt; 15&#41;&#41;
 
 
 <pre class='hljl'>
-<span class='hljl-cs'>#mod = rrda(lb = 1e-5)</span>
+<span class='hljl-cs'>#mod = model(rrda(lb = 1e-5)</span>
 </pre>
 
 

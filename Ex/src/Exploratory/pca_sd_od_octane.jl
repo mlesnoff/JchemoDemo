@@ -39,7 +39,7 @@ pnames(mod0.fm)
 @head T = mod0.fm.T
 
 
-mod = occsd()
+mod = model(occsd)
 fit!(mod, mod0.fm)
 pnames(mod)
 pnames(mod.fm)
@@ -54,7 +54,7 @@ hist!(d.dstand; bins = 20)
 f
 
 
-mod = occod() 
+mod = model(occod) 
 fit!(mod, mod0.fm, X)
 pnames(mod)
 pnames(mod.fm)
@@ -69,10 +69,10 @@ hist!(d.dstand; bins = 20)
 f
 
 
-mod = occsd()
+mod = model(occsd)
 fit!(mod, mod0.fm)
 d_sd = mod.fm.d
-mod = occod()
+mod = model(occod)
 fit!(mod, mod0.fm, X)
 d_od = mod.fm.d
 f, ax = plotxy(d_sd.dstand, d_od.dstand; xlabel = "Standardized SD", 
@@ -90,7 +90,7 @@ vlines!(ax, 1; color = :grey, linestyle = :dash)
 f
 
 
-mod = occsdod() 
+mod = model(occsdod) 
 fit!(mod, mod0.fm, X)
 pnames(mod)
 pnames(mod.fm)

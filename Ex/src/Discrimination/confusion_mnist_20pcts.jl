@@ -31,7 +31,7 @@ summ(vec(Xtest)).res
 plotsp(Xtest; nsamp = 1).f
 
 
-mod = plsqda(nlv = 25)
+mod = model(plsqda(nlv = 25)
 fit!(mod, Xtrain, ytrain)
 pred = predict(mod, Xtest).pred
 errp(pred, ytest)  # overall

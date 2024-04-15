@@ -3,7 +3,7 @@ using Jchemo, JchemoData
 using JLD2, CairoMakie, GLMakie
 
 
-CairoMakie.activate!()
+CairoMakie.activate!)
 #GLMakie.activate!()
 
 
@@ -27,9 +27,9 @@ wl = parse.(Float64, wlst)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance", title = "Octane data").f
 
 
-mod = pcasvd(nlv = 6) 
+mod = model(pcasvd(nlv = 6) 
 ## For robust spherical PCA, do:
-#mod = pcasph(nlv = 6)
+#mod = model(pcasph(nlv = 6)
 fit!(mod, X)  
 pnames(mod)
 pnames(mod.fm)

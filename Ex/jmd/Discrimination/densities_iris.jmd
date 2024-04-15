@@ -58,7 +58,7 @@ Ydummy = dummy(y).Y ;
 
 ```julia
 nlv = 2
-mod = plskern(; nlv)
+mod = model(plskern(; nlv)
 fit!(mod, X, Ydummy) 
 ```
 

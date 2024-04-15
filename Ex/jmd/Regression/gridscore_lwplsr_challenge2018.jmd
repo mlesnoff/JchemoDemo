@@ -67,8 +67,8 @@ plotsp(X, wl; nsamp = 30).f
 #### Preprocessing
 
 ```julia
-mod1 = snv(centr = true, scal = true)
-mod2 = savgol(npoint = 21, deriv = 2, degree = 3)
+mod1 = model(snv(centr = true, scal = true)
+mod2 = model(savgol(npoint = 21, deriv = 2, degree = 3)
 mod = pip(mod1, mod2)
 fit!(mod, X)
 Xp = transf(mod, X) 
@@ -130,7 +130,7 @@ length(pars[1])
 #### Grid-search
 
 ```julia
-mod = lwplsr()
+mod = model(lwplsr)
 res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
     pars, nlv, verbose = false) 
 ```
@@ -150,7 +150,7 @@ plotgrid(res.nlv, res.y1, group; step = 2, xlabel ="Nb. LVs", ylabel = "RMSEP").
 #### Final prediction (Test) using the optimal model
 
 ```julia
-mod = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], 
+mod = model(lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], 
     h = res.h[u], k = res.k[u], nlv = res.nlv[u])
 fit!(mod, Xtrain, ytrain)
 pred = predict(mod, Xtest).pred 

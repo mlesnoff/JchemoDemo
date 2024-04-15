@@ -36,8 +36,8 @@ wl = parse.(Float64, wlst)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-mod1 = snv(centr = true, scal = true)
-mod2 = savgol(npoint = 15, deriv = 2, degree = 3)
+mod1 = model(snv(centr = true, scal = true)
+mod2 = model(savgol(npoint = 15, deriv = 2, degree = 3)
 mod = pip(mod1, mod2)
 fit!(mod, X)
 Xp = transf(mod, X)
@@ -65,9 +65,9 @@ ytest = Ytest[:, nam]
 
 gamma = 100
 nlv = 15
-mod = kplsr(; gamma, nlv)
+mod = model(kplsr(; gamma, nlv)
 ## Or Direct KPLSR (Bennet 2003):
-## mod = dkplsr(; gamma, nlv)
+## mod = model(dkplsr(; gamma, nlv)
 fit!(mod, Xtrain, ytrain)
 pnames(mod)
 pnames(mod.fm)

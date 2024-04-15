@@ -69,7 +69,7 @@ pnames(mod0.fm)
 #### Score distance (SD)
 
 ```julia
-mod = occsd()
+mod = model(occsd)
 fit!(mod, mod0.fm)
 pnames(mod)
 pnames(mod.fm)
@@ -89,7 +89,7 @@ f
 #### Orthogonal distance (OD)
 
 ```julia
-mod = occod() 
+mod = model(occod) 
 fit!(mod, mod0.fm, X)
 pnames(mod)
 pnames(mod.fm)
@@ -109,10 +109,10 @@ f
 #### SD-OD
 
 ```julia
-mod = occsd()
+mod = model(occsd)
 fit!(mod, mod0.fm)
 d_sd = mod.fm.d
-mod = occod()
+mod = model(occod)
 fit!(mod, mod0.fm, X)
 d_od = mod.fm.d
 f, ax = plotxy(d_sd.dstand, d_od.dstand; xlabel = "Standardized SD", 
@@ -134,7 +134,7 @@ f
 #### Direct computation of a composite SD-OD
 
 ```julia
-mod = occsdod() 
+mod = model(occsdod) 
 fit!(mod, mod0.fm, X)
 pnames(mod)
 pnames(mod.fm)

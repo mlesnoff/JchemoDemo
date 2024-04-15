@@ -42,8 +42,8 @@ freqtable(typ, test)
 plotsp(X, wl; nsamp = 30).f
 
 
-mod1 = snv(centr = true, scal = true)
-mod2 = savgol(npoint = 21, deriv = 2, degree = 3)
+mod1 = model(snv(centr = true, scal = true)
+mod2 = model(savgol(npoint = 21, deriv = 2, degree = 3)
 mod = pip(mod1, mod2)
 fit!(mod, X)
 Xp = transf(mod, X)
@@ -60,7 +60,7 @@ ntest = nro(Xtest)
 
 
 nlv = 15
-mod = pcasvd(; nlv)
+mod = model(pcasvd(; nlv)
 fit!(mod, Xtrain)
 
 
@@ -84,7 +84,7 @@ plotxy(T[:, i], T[:, i + 1], group; color = colm, xlabel = string("PC", i),
     ylabel = string("PC", i + 1)).f
 
 
-mod_d = occsdod() 
+mod_d = occsdod) 
 fit!(mod_d, mod.fm, Xtrain)
 pnames(mod_d)
 pnames(mod_d.fm)

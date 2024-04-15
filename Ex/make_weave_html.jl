@@ -6,7 +6,7 @@ path_jmd = joinpath(path, "JchemoDemo/Ex/jmd")
 path_html = joinpath(path, "JchemoDemo/docs/src/assets/html")
 
 meth = "Datasets"
-##meth = "Exploratory"
+#meth = "Exploratory"
 #meth = "Regression"
 #meth = "Discrimination"
 zpath = joinpath(path_jmd, meth)

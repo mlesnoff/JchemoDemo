@@ -42,8 +42,8 @@ freqtable(typ, test)
 plotsp(X, wl; nsamp = 30).f
 
 
-mod1 = snv(centr = true, scal = true)
-mod2 = savgol(npoint = 21, deriv = 2, degree = 3)
+mod1 = model(snv(centr = true, scal = true)
+mod2 = model(savgol(npoint = 21, deriv = 2, degree = 3)
 mod = pip(mod1, mod2)
 fit!(mod, X)
 Xp = transf(mod, X)
@@ -85,7 +85,7 @@ ncal = ntrain - nval
 (ntot = ntot, ntrain, ntest, ncal, nval)
 
 
-mod = plskern()
+mod = model(plskern)
 nlv = 0:50
 res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, 
     nlv)
@@ -98,7 +98,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-mod = plskern(nlv = res.nlv[u])
+mod = model(plskern(nlv = res.nlv[u])
 fit!(mod, Xtrain, ytrain) 
 pred = predict(mod, Xtest).pred
 
@@ -123,7 +123,7 @@ res_sel.opt     # nb. LVs correponding to the minimal error rate
 res_sel.sel     # nb. LVs selected with the Wold's criterion
 
 
-mod = plskern(nlv = res_sel.sel)
+mod = model(plskern(nlv = res_sel.sel)
 fit!(mod, Xtrain, ytrain) 
 pred = predict(mod, Xtest).pred
 rmsep(pred, ytest)

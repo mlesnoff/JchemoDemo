@@ -43,8 +43,8 @@ tab(ytrain)
 tab(ytest)
 
 
-mod = fda(nlv = 2)
-#mod = fdasvd(nlv = 2)     # alternative algorithm (same result)
+mod = model(fda(nlv = 2)
+#mod = model(fdasvd(nlv = 2)     # alternative algorithm (same result)
 fit!(mod, Xtrain, ytrain) 
 fm = mod.fm 
 pnames(fm)

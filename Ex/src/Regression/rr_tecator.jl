@@ -36,8 +36,8 @@ wl = parse.(Float64, wlst)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-mod1 = snv(centr = true, scal = true)
-mod2 = savgol(npoint = 15, deriv = 2, degree = 3)
+mod1 = model(snv(centr = true, scal = true)
+mod2 = model(savgol(npoint = 15, deriv = 2, degree = 3)
 mod = pip(mod1, mod2)
 fit!(mod, X)
 Xp = transf(mod, X)
@@ -64,9 +64,9 @@ ytest = Ytest[:, nam]
 
 
 lb = 1e-3
-mod = rr(; lb)
+mod = model(rr(; lb)
 ## Alternative RR algorithm:
-## mod = rrchol(; lb)
+## mod = model(rrchol(; lb)
 fit!(mod, Xtrain, ytrain)
 pnames(mod)
 pnames(mod.fm)
