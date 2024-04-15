@@ -254,7 +254,7 @@ parse(Int, "1234", base = 5)
 parse(Int, "afc", base = 16)
 parse(Float64, "1.2e-3")
 
-wl = string.(1:10)
+wlstr = string.(1:10)
 parse.(Int64, wl) 
 Meta.parse.(wl)
 parse.(Float64, wlstr) 

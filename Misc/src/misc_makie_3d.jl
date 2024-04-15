@@ -12,37 +12,29 @@ x = LinRange(0, 10, n)
 y = LinRange(0, 15, n) 
 z = [cos(x) * sin(y) for x in x, y in y] 
 
-contour(z;
-    axis = (xlabel = "a", ylabel = "b", 
-        title = "Cos(a) * Sin(a)"))
+contour(z; axis = (xlabel = "a", ylabel = "b", title = "Cos(a) * Sin(a)"))
 
 f = Figure(size = (500, 400))
-ax = Axis(f[1, 1]; xlabel = "a", ylabel = "b", 
-        title = "Cos(a) * Sin(a)")
+ax = Axis(f[1, 1]; xlabel = "a", ylabel = "b", title = "Cos(a) * Sin(a)")
 contour!(ax, x, y, z; levels = 10, labels = true)
 f
 
 ## Does not work anymore
-f = Figure(size = (500, 400))
-ax = Axis(f[1, 1]; xlabel = "a", ylabel = "b", 
-        title = "Cos(a) * Sin(a)")
-co = contour!(ax, x, y, z; levels = 10)
-Colorbar(f[2, 1], co; label = "Density",     # this worked before
-    vertical = false)
-f
+#f = Figure(size = (500, 400))
+#ax = Axis(f[1, 1]; xlabel = "a", ylabel = "b", title = "Cos(a) * Sin(a)")
+#co = contour!(ax, x, y, z; levels = 10)
+#Colorbar(f[2, 1], co; label = "Density",     # this worked before
+#    vertical = false)
+#f
 ## End
 
 ## Contourf
-contourf(z;
-    axis = (xlabel = "a", ylabel = "b", 
-        title = "Cos(a) * Sin(a)"))
+contourf(z; axis = (xlabel = "a", ylabel = "b", title = "Cos(a) * Sin(a)"))
 
 f = Figure(size = (500, 400))
-ax = Axis(f[1, 1]; xlabel = "a", ylabel = "b", 
-        title = "Cos(a) * Sin(a)")
+ax = Axis(f[1, 1]; xlabel = "a", ylabel = "b", title = "Cos(a) * Sin(a)")
 co = contourf!(ax, x, y, z; levels = 10)
-Colorbar(f[2, 1], co; label = "Density", 
-    vertical = false)
+Colorbar(f[2, 1], co; label = "Density", vertical = false)
 f
 
 ## Contour within vortex
@@ -50,8 +42,7 @@ x = randn(200)
 y = randn(200)
 z = x .* y
 f, ax, tr = tricontourf(x, y, z, colormap = :batlow)
-scatter!(x, y, color = z, colormap = :batlow, 
-    strokewidth = 1, strokecolor = :black)
+scatter!(x, y, color = z, colormap = :batlow, strokewidth = 1, strokecolor = :black)
 Colorbar(f[1, 2], tr)
 f
 
@@ -73,14 +64,12 @@ nlevx = length(levx)
 levy = unique(y) 
 nlevy = length(levy)
 f = Figure(size = (500, 400))
-ax = Axis(f[1, 1], xlabel = "x", ylabel = "y", 
-    xticks = (1:nlevx, string.(levx)), 
+ax = Axis(f[1, 1], xlabel = "x", ylabel = "y", xticks = (1:nlevx, string.(levx)), 
     yticks = (1:nlevy, string.(levy)))
 hm = heatmap!(ax, x, y, z)
 for i in eachindex(x)
     val = string(z[i])
-    text!(ax, val; position = (x[i], y[i]),
-        color = :white)
+    text!(ax, val; position = (x[i], y[i]), color = :white)
 end
 f
 
@@ -104,15 +93,13 @@ Colorbar(f[:, end + 1], hm)
 f
 
 f = Figure(size = (500, 400))
-ax = Axis(f[1, 1], xlabel = "pred", ylabel = "y", 
-    xticks = (1:p, string.(1:p)), 
+ax = Axis(f[1, 1], xlabel = "pred", ylabel = "y", xticks = (1:p, string.(1:p)), 
     yticks = (1:n, string.(n:-1:1)))
 hm = heatmap!(ax, zA)
 Colorbar(f[:, end + 1], hm; label = "Value")
 for i = 1:n, j = 1:p
     val = string(A[i, j])
-    text!(ax, val; position = (j, n - i + 1), 
-        align = (:center, :center), fontsize = 15,
+    text!(ax, val; position = (j, n - i + 1), align = (:center, :center), fontsize = 15,
         color = :red)
 end
 ax.xticklabelrotation = π / 3   # default: 0
@@ -135,11 +122,9 @@ f
 rg = (minimum(z), maximum(z))
 cmp = :thermal
 f = Figure()
-ax = Axis(f[1, 1]; aspect = 1, 
-    xlabel = "x axis", ylabel = "y axis")
+ax = Axis(f[1, 1]; aspect = 1, xlabel = "x axis", ylabel = "y axis")
 heatmap!(ax, x, y, z; colormap = cmp)
-Colorbar(f[:, end + 1]; colorrange = rg,
-    colormap = cmp)
+Colorbar(f[:, end + 1]; colorrange = rg, colormap = cmp)
 f
 
 n = 100 ; p = 200 
@@ -157,8 +142,7 @@ f
 
 f, ax, hm = heatmap(X;
     figure = (backgroundcolor = :lightgrey,),
-    axis = (aspect = 1, xlabel = "x axis", 
-        ylabel = "y axis"))
+    axis = (aspect = 1, xlabel = "x axis", ylabel = "y axis"))
 Colorbar(f[1, 2], hm)
 f
 
@@ -172,8 +156,7 @@ X = vcat(X1, X2, X3)
 group = sort(repeat(["A"; "B";"C"], n)) 
 lev = sort(unique(group))
 nlev = length(lev)
-group_num = [if group[i] == lev[1] 1 elseif group[i] == lev[2] 2 else 3 end ; 
-    for i = eachindex(group)]
+group_num = [if group[i] == lev[1] 1 elseif group[i] == lev[2] 2 else 3 end for i = eachindex(group)]
 ## Alternative to above
 ## group_num = Jchemo.recodcat2int(group)
 ## End
@@ -186,33 +169,27 @@ CairoMakie.activate!()
 mks = 20
 scatter(x, y, z, 
     markersize = mks, color = group_num, colormap = (:Dark2_5, .7),
-    axis = (type = Axis3, xlabel = "Axis 1", ylabel = "Axis 2", 
-        zlabel = "Axis 3", title = "3D"))
+    axis = (type = Axis3, xlabel = "Axis 1", ylabel = "Axis 2", zlabel = "Axis 3", title = "3D"))
 
 f = Figure(size = (700, 500))
 mks = 15
 ax = Axis3(f[1, 1]; aspect = (1, 1, 1), perspectiveness = 0.2)
-scatter!(ax, x, y, z,
-    markersize = mks, color = group_num, colormap = (:Dark2_5, .7))
+scatter!(ax, x, y, z; markersize = mks, color = group_num, colormap = (:Dark2_5, .7))
 f
 
 f = Figure(size = (700, 500))
 mks = 15
 colsh = :default #:tab10
 colm = cgrad(colsh, nlev; alpha = .7, categorical = true) 
-ax = Axis3(f[1, 1];
-    xlabel = "Axis 1", ylabel = "Axis 2", 
-    zlabel = "Axis 3", 
+ax = Axis3(f[1, 1]; xlabel = "Axis 1", ylabel = "Axis 2", zlabel = "Axis 3", 
     perspectiveness = 0.2, azimuth = 1.2pi) 
-scatter!(ax, x, y, z, 
-    markersize = mks, color = group_num, colormap = colm)
+scatter!(ax, x, y, z; markersize = mks, color = group_num, colormap = colm)
 ## Legend
 lab = string.(lev)
 elt = [MarkerElement(color = colm[i], marker = '●', markersize = 10) for i in 1:nlev]
 #elt = [PolyElement(polycolor = colm[i]) for i in 1:nlev]
 title = "Group"
-Legend(f[1, 2], elt, lab, title; 
-    nbanks = 1, rowgap = 10, framevisible = false)
+Legend(f[1, 2], elt, lab, title; nbanks = 1, rowgap = 10, framevisible = false)
 f
 ## Alternative
 mks_l = 10
@@ -231,8 +208,7 @@ mks = 10 ; i = 1
 ax = Axis3(f[1, 1]; aspect = (1, 1, 1), perspectiveness = 0.5)  
 for j = 1:nlev
     s = group .== lev[j]
-    scatter!(ax, x[s], y[s], z[s], 
-        markersize = mks, color = colm[j], label = lev[j])
+    scatter!(ax, x[s], y[s], z[s]; markersize = mks, color = colm[j], label = lev[j])
 end
 #axislegend(ax, position = :rb)
 #f[1, 2] = Legend(f, ax, "Type", framevisible = false) 
@@ -248,9 +224,8 @@ ax2 = Axis3(f[1, 2]; aspect = (1, 1, 1), perspectiveness = 0.5)
 ax3 = Axis3(f[1, 3]; aspect = :data, perspectiveness = 0.5)
 scatter!(ax1, x, y, z; markersize = 15)
 meshscatter!(ax2, x, y, z; markersize = 0.25)
-hm = meshscatter!(ax3, x, y, z; markersize = 0.25,
-    marker = Rect3f(Vec3f(0), Vec3f(1)), color = 1:n,
-    colormap = :plasma, transparency = false)
+hm = meshscatter!(ax3, x, y, z; markersize = 0.25, marker = Rect3f(Vec3f(0), Vec3f(1)), 
+    color = 1:n, colormap = :plasma, transparency = false)
 Colorbar(f[1, 4], hm, label = "values", height = Relative(0.5))
 f
 
@@ -264,13 +239,11 @@ x = LinRange(0, 10, n)
 y = LinRange(0, 15, n) 
 z = [cos(x) * sin(y) for x in x, y in y] 
 
-surface(z,
-    axis = (type = Axis3, xlabel = "a", ylabel = "b", zlabel = "",
-        title = "Cos(a) * Sin(a)", perspectiveness = 0))
+surface(z; axis = (type = Axis3, xlabel = "a", ylabel = "b", zlabel = "", 
+    title = "Cos(a) * Sin(a)", perspectiveness = 0))
 
 f = Figure(size = (500, 400))
-ax = Axis3(f[1, 1]; xlabel = "a", ylabel = "b", zlabel = "", 
-        title = "Cos(a) * Sin(a)")
+ax = Axis3(f[1, 1]; xlabel = "a", ylabel = "b", zlabel = "", title = "Cos(a) * Sin(a)")
 surface!(ax, x, y, z)
 f
 
@@ -296,9 +269,6 @@ f
 
 x, y = collect(-8:0.5:8), collect(-8:0.5:8)
 z = [sinc(√(X^2 + Y^2) / π) for X ∈ x, Y ∈ y]
-wireframe(x, y, z, 
-    axis = (; type = Axis3), color = :grey)
-
-
+wireframe(x, y, z; axis = (; type = Axis3), color = :grey)
 
 

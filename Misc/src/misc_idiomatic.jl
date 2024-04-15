@@ -1,3 +1,5 @@
+using LinearAlgebra
+
 n = 5 
 x = rand(n) 
 for i in 1:n 
@@ -18,7 +20,7 @@ for i in eachindex(x)
     acc += x[i] # = acc + x[i]
 end
 acc
-sum(z)
+sum(x)
 
 x = rand(5) 
 acc = 0 
@@ -46,7 +48,6 @@ fz([1; 2; 3])
 x = [1; 2; 3]
 [p * 2 for p in x]
 
-using LinearAlgebra
 X = rand(5, 3)
 foreach(normalize!, eachcol(X))
 X

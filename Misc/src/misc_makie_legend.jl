@@ -30,8 +30,7 @@ f = Figure(size = (500, 300))
 ax = Axis(f[1, 1], xlabel = "x")
 for i = 1:nlev
     s = typ .== lev[i]
-    hist!(ax, x[s] .+ i / 1.2; bins = 50, 
-        color = (colm[i], .5), label = string(lev[i]))
+    hist!(ax, x[s] .+ i / 1.2; bins = 50, color = (colm[i], .5), label = string(lev[i]))
 end
 axislegend("Type")
 f
@@ -48,8 +47,7 @@ f = Figure(size = (500, 300))
 ax = Axis(f[1, 1], xlabel = "x")
 for i = 1:nlev
     s = typ .== lev[i]
-    hist!(ax, x[s] .+ i / 1.2; bins = 50, 
-        color = (colm[i], .5), label = string(lev[i]))
+    hist!(ax, x[s] .+ i / 1.2; bins = 50, color = (colm[i], .5), label = string(lev[i]))
 end
 f[1, 2] = Legend(f, ax, "Type", framevisible = false)
 f
@@ -59,25 +57,19 @@ ax = Vector{Any}(nothing, 3)
 y = [5.82; 4.00; 1.60; 4.23; 2.20; 1.63; 6.10; 6.30; 6.13]
 z = [5.26; 3.65; 1.69; 4.35; 2.12; 1.40; 4.60; 6.96; 5.18]
 x = collect(1:length(y))
-ax[1] = Axis(f, 
-            xlabel = "Error", ylabel = "k", 
-            yticks = (x, string.(x)), title = "Ligneous")
+ax[1] = Axis(f, xlabel = "Error", ylabel = "k", yticks = (x, string.(x)), title = "Ligneous")
 lines!(ax[1], y, x)
 lines!(ax[1], z, x)
 f[1, 1] = ax[1] 
 y = [2.84; 2.66; 2.80; 2.63; 1.02; .75; 4.79; 3.52; 4.61]
 z = [2.99; 2.58; 2.48; 2.63; .93; .81; 4.60; 3.60; 4.41]
-ax[2] = Axis(f, 
-            xlabel = "Error", ylabel = "k", 
-            yticks = (x, string.(x)), title = "Grasslands")
+ax[2] = Axis(f, xlabel = "Error", ylabel = "k", yticks = (x, string.(x)), title = "Grasslands")
 lines!(ax[2], y, x)
 lines!(ax[2], z, x)
 f[1, 2] = ax[2] 
 y = [1.73; .70; 1.16; 1.59; .63; .68; 2.83; 2.20; 2.57]
 z = [1.85; .89; 1.28; 1.68; .64; .70; 2.83; 2.49; 2.71]
-ax[3] = Axis(f, 
-            xlabel = "Error", ylabel = "k", 
-            yticks = (x, string.(x)), title = "Sorghum")
+ax[3] = Axis(f, xlabel = "Error", ylabel = "k", yticks = (x, string.(x)), title = "Sorghum")
 lines!(ax[3], y, x, label = "Forages")
 lines!(ax[3], z, x, label = "Specific")
 f[1, 3] = ax[3] 
@@ -95,13 +87,11 @@ colsh = :Dark2_5
 f = Figure(size = (500, 300))
 colm = cgrad(colsh; categorical = true, alpha = .7)[1:nlev] 
 ax = Axis(f, xlabel = "x", ylabel = "y")
-scatter!(ax, x, y;
-    markersize = 15, color = group, colormap = colm)
+scatter!(ax, x, y; markersize = 15, color = group, colormap = colm)
 f[1, 1] = ax 
 elt = [MarkerElement(color = colm[i], marker = '●', markersize = 20) for i in 1:nlev]
 title = "Category"
-Legend(f[1, 2], elt, lev, title; 
-    nbanks = 1, rowgap = 10, bgcolor = :lightgrey, 
+Legend(f[1, 2], elt, lev, title; nbanks = 1, rowgap = 10, backgroundcolor = :lightgrey, 
     framevisible = true, framecolor = :grey)
 f
 
@@ -110,10 +100,8 @@ y = rand(6)
 grp = repeat(1:3, 2)
 colors = Makie.wong_colors()
 f = Figure(size = (500, 400))
-ax = Axis(f[1, 1], yticks = (1:2, ["hays"; "legumes"]),
-        title = "Error rate")
-barplot!(ax, x, y; direction = :x, 
-    dodge = grp, color = colors[grp])
+ax = Axis(f[1, 1], yticks = (1:2, ["hays"; "legumes"]), title = "Error rate")
+barplot!(ax, x, y; direction = :x, dodge = grp, color = colors[grp])
 lab = ["A"; "B"; "C"] 
 elt = [PolyElement(polycolor = colors[i]) for i in 1:length(lab)]
 title = "Model"
@@ -121,10 +109,8 @@ Legend(f[1, 2], elt, lab, title)
 f
 
 f = Figure(size = (500, 400))
-ax = Axis(f[1, 1], yticks = (1:2, ["hays"; "legumes"]),
-        title = "Error rate")
-barplot!(ax, x, y; direction = :x, 
-    dodge = grp, color = colors[grp])
+ax = Axis(f[1, 1], yticks = (1:2, ["hays"; "legumes"]), title = "Error rate")
+barplot!(ax, x, y; direction = :x, dodge = grp, color = colors[grp])
 lab = ["A"; "B"; "C"]
 mks_l = 10
 elt1 = MarkerElement(color = colm[1], marker = '●', markersize = mks_l)
