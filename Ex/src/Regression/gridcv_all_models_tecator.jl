@@ -72,13 +72,12 @@ nlv = 0:50
 pars = mpar(scal = [false; true])
 length(pars[1])
 mod = model(plskern)  
-res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, 
-    pars, nlv).res 
+res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, pars, nlv).res 
 group = string.(res.scal) 
 plotgrid(res.nlv, res.y1, group; step = 2, xlabel ="Nb. LVs", ylabel = "RMSEP").f
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :] 
-mod = model(plskern(nlv = res.nlv[u], scal = res.scal[u])
+mod = model(plskern; nlv = res.nlv[u], scal = res.scal[u])
 fit!(mod, Xtrain, ytrain) 
 pred = predict(mod, Xtest).pred 
 @show rmsep(pred, ytest)
@@ -115,8 +114,7 @@ pred = predict(mod, Xtest).pred
 nlv = 0:20
 pars = mpar(msparse = [:hard], nvar = [1])
 mod = model(splskern)
-res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, 
-    pars, nlv, verbose = false).res
+res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, pars, nlv, verbose = false).res
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 mod = model(splskern(msparse = res.msparse[u], nvar = res.nvar[u], 
@@ -148,8 +146,7 @@ gamma = 10.0.^(-3:5)
 pars = mpar(gamma = gamma)
 length(pars[1])
 mod = model(kplsr)
-res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, 
-    pars, nlv, verbose = false).res
+res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, pars, nlv, verbose = false).res
 u = findall(res.y1 .== minimum(res.y1))[1] ;
 res[u, :]
 mod = model(kplsr(nlv = res.nlv[u], gamma = res.gamma[u])
@@ -163,8 +160,7 @@ gamma = 10.0.^(-3:5)
 pars = mpar(gamma = gamma)
 length(pars[1])
 mod = model(dkplsr)
-res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, 
-    pars, nlv, verbose = false).res
+res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, pars, nlv, verbose = false).res
 u = findall(res.y1 .== minimum(res.y1))[1] ;
 res[u, :]
 mod = model(dkplsr(nlv = res.nlv[u], gamma = res.gamma[u])

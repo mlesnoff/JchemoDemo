@@ -79,7 +79,7 @@ group = string.(res.scal)
 plotgrid(res.nlv, res.y1, group; step = 2, xlabel ="Nb. LVs", ylabel = "RMSEP").f
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :] 
-mod = model(plskern(nlv = res.nlv[u], scal = res.scal[u])
+mod = model(plskern; nlv = res.nlv[u], scal = res.scal[u])
 fit!(mod, Xtrain, ytrain) 
 pred = predict(mod, Xtest).pred 
 @show rmsep(pred, ytest)
@@ -249,7 +249,7 @@ pred = predict(mod, Xtest).pred
 rmsep(pred, ytest)
 
 
-mod1 = model(plskern(nlv = 30)
+mod1 = model(plskern; nlv = 30)
 nlvdis = [0; 15; 25] ; metric = [:eucl, :mah] 
 h = [1; 2; 4; 6; Inf]
 k = [150; 200; 350; 500; 1000]  

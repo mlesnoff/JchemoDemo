@@ -75,8 +75,7 @@ length(pars[1])
 
 
 mod = model(lwplsr)
-res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, 
-    pars, nlv, verbose = false).res
+res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, pars, nlv, verbose = false).res
 
 
 group = string.("nvldis=", res.nlvdis, " h=", res.h, " k=", res.k)

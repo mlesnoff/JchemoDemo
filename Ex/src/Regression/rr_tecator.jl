@@ -94,8 +94,7 @@ mse(pred, ytest)
 r = residreg(pred, ytest) # residuals
 
 
-f, ax = plotxy(pred, ytest; size = (500, 400), xlabel = "Predicted", 
-    ylabel = "Observed")
+f, ax = plotxy(pred, ytest; size = (500, 400), xlabel = "Predicted", ylabel = "Observed")
 zpred = vec(pred)
 zfm = loess(zpred, ytest; span = 2/3) ;
 pred_loess = Loess.predict(zfm, sort(zpred))

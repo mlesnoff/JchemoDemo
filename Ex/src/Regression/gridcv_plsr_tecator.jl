@@ -106,7 +106,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-mod = model(plskern(nlv = res.nlv[u])
+mod = model(plskern; nlv = res.nlv[u])
 fit!(mod, Xtrain, ytrain)
 pred = Jchemo.predict(mod, Xtest).pred
 
@@ -136,7 +136,7 @@ res_sel.opt     # nb. LVs correponding to the minimal error rate
 res_sel.sel     # nb. LVs selected with the Wold's criterion
 
 
-mod = model(plskern(nlv = res_sel.sel) ;
+mod = model(plskern; nlv = res_sel.sel) ;
 fit!(mod, Xtrain, ytrain)
 pred = Jchemo.predict(mod, Xtest).pred
 rmsep(pred, ytest)

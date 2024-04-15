@@ -102,8 +102,7 @@ plotxy(ytest, r; size = (500, 400), color = (:red, .5), zeros = true,
     xlabel = "Observed (Test)", ylabel = "Residuals").f
 
 
-f, ax = plotxy(pred, ytest; size = (500, 400), xlabel = "Predicted", 
-    ylabel = "Observed")
+f, ax = plotxy(pred, ytest; size = (500, 400), xlabel = "Predicted", ylabel = "Observed")
 zpred = vec(pred)
 zfm = loess(zpred, ytest; span = 2/3) ;
 pred_loess = Loess.predict(zfm, sort(zpred))
