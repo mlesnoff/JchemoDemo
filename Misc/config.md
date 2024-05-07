@@ -166,8 +166,7 @@ environment and therefore the risk of eventual conflicts between packages versio
     the environment of the project is loaded (if the dependent packages of this 
     environment have never been installed, use `instantiate` as explained
     in the next section)
-- If they are not present, the folder is a simple project (not a project 
-    environment) and VsCode loads the global environment 
+- If they are not present, the folder is a simple project (not a project environment) and VsCode loads the global environment 
 
 #### **How to install an external project environment**
 
@@ -175,10 +174,7 @@ This section shows for instance how to install the external project environment 
 
 - Go to this [address](https://github.com/mlesnoff/JchemoDemo)
 - Green button 'Code' ==> Download ZIP
-- Create a working directory and your PC and unzip the zip file. A new unzipped 
-    directory is created, in this example *JchemoDemo-main*. The name of this new 
-    directory can be modified at will, for instance to *JchemoDemo*; it will be 
-    the name of the project
+- Create a working directory and your PC and unzip the zip file. A new unzipped directory is created, in this example *JchemoDemo-main*. The name of this new directory can be modified at will, for instance to *JchemoDemo*; it will be the name of the project
 - In VsCode, menu 'File' ==> Open Folder 
 - Select the directory of the project *JchemoDemo*
 - ==> VsCode locates in the corresponding path
@@ -195,7 +191,7 @@ This will print (in the REPL) the list of the dependent packages. At this step, 
 This step can stay some times (do not interrupt Julia before the end). At its end, project *JchemoDemo* and its environment can be used.   
 
 The `instantiate` step needs only to be done **at the first installation**. 
-For the next working sessions, **how to simply open the existing project environment** is described in the previous section.
+For the next working sessions, how to simply open the existing project environment is described **in the previous section**.
 
 #### **How to create a project environment from scratch**
 
