@@ -54,7 +54,7 @@ is needed.
     - If another release (e.g. 1.8.4) has to be used in future sessions, 
         replace the new path in the same way, and re-run VsCode 
 
-- Then a REPL (= Julia command console) can be open 
+- Then a REPL (= Julia command console) **can be open** 
     - Icone 'Manage' ==> Command Palette ==> Start REPL 
         (or Alt+J Alt+O)
 
@@ -80,24 +80,25 @@ and the backslash makes return to the command REPL.
 
 ### **ENVIRONMENTS**
 
-An environment (= list of the used packages and their versions) is defined 
-by files ***Project.toml*** and ***Manifest.toml***.  File *Project.toml* defines 
-the packages attached to the environment and file *Manifest.toml* manages 
-the versions and dependencies of these packages.
+An **environment** (= list of the used packages and their versions) is defined 
+by the following two files: ***Project.toml*** and ***Manifest.toml***.  
+- File *Project.toml* defines the packages attached to the environment.
+- File *Manifest.toml* manages the versions and dependencies of these packages.
 
 To understand and know how to magage environments is very important to develop 
-Julia projects in good ways.At the installation of Julia, a default environment 
+Julia projects in good ways. 
+- At the installation of Julia, a default environment 
 is created: the **global environment**. It is generally recommended to install 
-only few packages in the global environment. Instead, for each operational study 
-that is developed, it is recommanded to build a specific **project environment** 
-in which its own package dependencies will be defined (*Project.toml* 
-and *Manifest.toml*).
+only few packages in the global environment. 
+- Instead, for each operational study that is developed, it is recommanded to build a 
+specific **project environment** in which its own package dependencies will 
+be defined (*Project.toml* and *Manifest.toml*).
 
 **Note:** In any given environment, it is not safe and not recommanded 
 to modify file *Manifest.toml* by hand. When a package is added to the environment, 
 *Manifest.toml* is automatically updated.
 
-### **GLOBAL Julia ENVIRONMENT**
+### **GLOBAL ENVIRONMENT**
 
 #### **Where it is located** 
 - The global environment (files *Project.toml* and *Manifest.toml*) of all 
@@ -144,7 +145,7 @@ Other information are given [here](https://docs.julialang.org/en/v1/manual/faq/#
 
 ### **PROJECT ENVIRONMENTS**
 
-In a simplified way, a project is a directory and, if this directory contains 
+In a simplified way, a **project** is a directory and, if this directory contains 
 files *Project.toml* and *Manifest.toml*, this is a **project environment**, 
 i.e. a project with its own independant environment (installed packages).
 
@@ -152,7 +153,7 @@ It is recommended to create such a project environment for each new operational
 work. This allows to limitate the number of installed package in the specific 
 environment and therefore the risk of eventual conflicts between packages versions.  
 
-#### **Open a project already existing in a given path** 
+#### **How to open a project already existing in a given path** 
 
 - In VsCode, menu 'File' ==> 'Open Folder' or 'Open Recent' 
 - Select the directory of the project
@@ -168,14 +169,13 @@ environment and therefore the risk of eventual conflicts between packages versio
 - If they are not present, the folder is a simple project (not a project 
     environment) and VsCode loads the global environment 
 
-#### **Copy and install an external project environment**
+#### **How to install an external project environment**
 
-This section shows for instance how to copy and install the externeal 
-project environment [**JchemoDemo**](https://github.com/mlesnoff/JchemoDemo).
+This section shows for instance how to install the external project environment [**JchemoDemo**](https://github.com/mlesnoff/JchemoDemo).
 
 - Go to this [address](https://github.com/mlesnoff/JchemoDemo)
 - Green button 'Code' ==> Download ZIP
-- Create a working directory and unzip the zip file. A new unzipped 
+- Create a working directory and your PC and unzip the zip file. A new unzipped 
     directory is created, in this example *JchemoDemo-main*. The name of this new 
     directory can be modified at will, for instance to *JchemoDemo*; it will be 
     the name of the project
@@ -187,20 +187,17 @@ project environment [**JchemoDemo**](https://github.com/mlesnoff/JchemoDemo).
     (JchemoDemo) pkg> status
 ```
 
-At this step, the dependent packages are not installed yet 
-    and therefore cannot be used.
+This will print (in the REPL) the list of the dependent packages. At this step, the dependent packages **are not installed yet** and therefore cannot be used. To install the dependent packages, **a web connection is needed**. The installation is done by using function `instantiate`:
 - Type in Pkg REPL: 
 ```julia 
     (JchemoDemo) pkg> instantiate
 ```
-- This installs the packages defined in the project environment. 
-- Project *JchemoDemo* and its environment can be used   
+This step can stay some times (do not interrupt Julia before the end). At its end, project *JchemoDemo* and its environment can be used.   
 
-The `instantiate` step needs only to be done at the first installation. 
-For the next working sessions, how to simply open the existing project 
-environment is described in the previous section.
+The `instantiate` step needs only to be done **at the first installation**. 
+For the next working sessions, **how to simply open the existing project environment** is described in the previous section.
 
-#### **Create a project environment from scratch**
+#### **How to create a project environment from scratch**
 
 An easy way is the following (many other are possible).
 
@@ -215,29 +212,22 @@ An easy way is the following (many other are possible).
     (@v1.8) pkg> activate .
 ```
 
-(the dot at the end of the above command means that VsCode will load the project 
-    of where VsCode locates; if the dot is removed, the command loads 
-    the global environment)
+(the dot at the end of the above command means that VsCode will load the project of where VsCode locates; if the dot is removed, the command loads the global environment)
 - Install one package (any package can be chosen), for instance package *StatsBase.jl*, 
     from the official Julia packages repository 
     - In the Pkg REPL, type
     ```julia 
         (StudyTrees) pkg> add StatsBase
     ```
-    - This installs *StatsBase.jl* in the environment, and creates the 
-        corresponding files *Project.toml* and *Manifest.toml* in the *StudyTree* 
-        directory. The project environment *StudyTrees* is now created
-- To check the installed package in the project environment 
-    *StudyTrees*, type in Pkg REPL:  
+    - This installs *StatsBase.jl* in the environment, and creates the corresponding files *Project.toml* and *Manifest.toml* in the *StudyTree* directory. The project environment *StudyTrees* is now created
+- To check the installed package in the project environment *StudyTrees*, type in Pkg REPL:  
 ```julia 
     (StudyTrees) pkg> status
 ```
 
 #### **General commands to activate an environment** 
 
-Any project environment can be loaded using command `activate` in the Pkg REPL. 
-For instance, let us assume that project environment *StudyTrees* already 
-exists at location *D:/Users/Tmp/StudyTrees/*. Then: 
+Any project environment can be loaded using command `activate` in the Pkg REPL. For instance, let us assume that project environment *StudyTrees* already exists at location *D:/Users/Tmp/StudyTrees/*. Then: 
 
 - From any path location, *StudyTrees* can be loaded by typing
     in Pkg REPL:
