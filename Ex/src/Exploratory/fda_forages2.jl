@@ -79,7 +79,7 @@ Ttest_pca = transf(mod0, Xtest)
 Ttest = transf(mod, Ttest_pca)
 
 
-i = 1  # class 
+i = 1  # class "i" in test in test
 f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "FDA")
 scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
 s = ytest .== lev[i]
@@ -92,6 +92,7 @@ lb = 1e-5
 mod = model(fda; nlv = 2, lb)
 #mod = model(fdasvd; nlv = 2, lb)
 fit!(mod,Xtrain, ytrain)
+fm = mod.fm ;
 
 
 lev = fm.lev
@@ -112,7 +113,7 @@ f
 Ttest = transf(mod, Xtest)
 
 
-i = 1  # class 
+i = 1  # class "i" in test in test
 f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "FDA")
 scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
 s = ytest .== lev[i]

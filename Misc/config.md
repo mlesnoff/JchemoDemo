@@ -1,5 +1,5 @@
-This note provides some tips about the **installation of Julia and how 
-to start with the software**. It is orientated for Windows users. 
+This note provides some tips about the **installation of Julia and how to start with the software**. 
+It is orientated for Windows users. 
 
 ### **INSTALL Julia** 
 
