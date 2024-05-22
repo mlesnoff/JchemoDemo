@@ -1,6 +1,7 @@
 
 using Jchemo, JchemoData
 using JLD2, CairoMakie
+using Loess
 
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -62,33 +63,55 @@ ytrain = Ytrain[:, nam]
 ytest = Ytest[:, nam]
 
 
-segm = segmkf(ntrain, 4; rep = 5)
+pct = .3
+nval = Int(round(pct * ntrain))
 
 
-nlvdis = [10; 15] ; metric = [:mah] 
-h = [1; 2; 5; Inf] ; k = [30; 50; 100]  
-nlv = [0:5, 0:10, 1:5, 1:10]
-pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k, nlv = nlv)
+s = samprand(ntrain, nval)
 
 
-length(pars[1])
+#s = sampks(Xtrain, nval; metric = :eucl)
 
 
-mod = model(lwplsravg)
-res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, pars, verbose = false).res
+#s = sampdp(Xtrain, nval)
+
+
+#s = sampsys(ytrain, nval)
+
+
+Xcal = Xtrain[s.train, :]
+ycal = ytrain[s.train]
+Xval = Xtrain[s.test, :]
+yval = ytrain[s.test]
+ncal = ntrain - nval 
+(ntot = ntot, ntrain, ntest, ncal, nval)
+
+
+mod = model(plskern)
+nlv = 0:20
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, nlv, verbose = false)
+
+
+plotgrid(res.nlv, res.y1; step = 2, xlabel = "Nb. LVs", ylabel = "RMSEP").f
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 
 
-mod = model(lwplsravg; nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
-    k = res.k[u], nlv = res.nlv[u])
+mod = model(plskern; nlv = res.nlv[u])
 fit!(mod, Xtrain, ytrain)
 pred = Jchemo.predict(mod, Xtest).pred
+
+
 rmsep(pred, ytest)
 
 
-plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Prediction", 
-    ylabel = "Observed (Test)").f
+f, ax = plotxy(pred, ytest; xlabel = "Predicted", ylabel = "Observed")
+zpred = vec(pred)
+zfm = loess(zpred, ytest; span = 2/3) ;
+pred_loess = Loess.predict(zfm, sort(zpred))
+lines!(ax, sort(zpred), pred_loess; color = :red)
+ablines!(ax, 0, 1; color = :grey)
+f
 

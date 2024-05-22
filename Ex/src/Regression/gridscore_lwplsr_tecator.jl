@@ -62,30 +62,43 @@ ytrain = Ytrain[:, nam]
 ytest = Ytest[:, nam]
 
 
-segm = segmkf(ntrain, 4; rep = 5)
+pct = .3
+nval = Int(round(pct * ntrain)) 
+s = samprand(ntrain, nval)
+Xcal = Xtrain[s.train, :]
+ycal = ytrain[s.train]
+Xval = Xtrain[s.test, :]
+yval = ytrain[s.test]
+ncal = ntrain - nval 
+(ntot = ntot, ntrain, ntest, ncal, nval)
 
 
 nlvdis = [10; 15] ; metric = [:mah] 
-h = [1; 2; 5; Inf] ; k = [30; 50; 100]  
-nlv = [0:5, 0:10, 1:5, 1:10]
-pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k, nlv = nlv)
+h = [1; 2; 6; Inf] ; k = [30; 50; 100]  
+nlv = 0:15
+pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k)
 
 
 length(pars[1])
 
 
-mod = model(lwplsravg)
-res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, pars, verbose = false).res
+mod = model(lwplsr)
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, 
+    verbose = false)
+
+
+group = string.("nvldis=", res.nlvdis, " h=", res.h, " k=", res.k)
+plotgrid(res.nlv, res.y1, group; step = 2, xlabel ="Nb. LVs", ylabel = "RMSEP").f
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 
 
-mod = model(lwplsravg; nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
-    k = res.k[u], nlv = res.nlv[u])
+mod = model(lwplsr; nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
+    k = res.k[u], nlv = res.nlv[u]) ;
 fit!(mod, Xtrain, ytrain)
-pred = Jchemo.predict(mod, Xtest).pred
+pred = predict(mod, Xtest).pred
 rmsep(pred, ytest)
 
 

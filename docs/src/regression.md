@@ -21,6 +21,10 @@
 ## Model tuning - gridscore
 
 ```@raw html
+    <p><a href="../assets/html/Regression/gridscore_plsr_tecator.html">gridscore_plsr_tecator.jl</a></p>
+    <p><a href="../assets/html/Regression/gridscore_lwplsr_tecator.html">gridscore_lwplsr_tecator.jl</a></p>
+    <p><a href="../assets/html/Regression/gridscore_all_models_tecator.html">gridscore_all_models_tecator.jl</a></p>
+
     <p><a href="../assets/html/Regression/gridscore_plsr_challenge2018.html">gridscore_plsr_challenge2018.jl</a></p>
     <p><a href="../assets/html/Regression/gridscore_lwplsr_challenge2018.html">gridscore_lwplsr_challenge2018.jl</a></p>
     <p><a href="../assets/html/Regression/gridscore_lwplsravg_challenge2018.html">gridscore_lwplsravg_challenge2018.jl</a></p>
