@@ -97,10 +97,22 @@ ytrain = Ytrain[:, nam]
 ytest = Ytest[:, nam]
 ```
 
-#### CV-Segments
+#### Split Train ==> Cal + Val
+
+The validation error (used for the grid-search tuning) is computed 
+on **Val**. Here the split is built from random sampling 
+(other designs are possible).
 
 ```julia
-segm = segmkf(ntrain, 4; rep = 5)
+pct = .3
+nval = Int(round(pct * ntrain)) 
+s = samprand(ntrain, nval)
+Xcal = Xtrain[s.train, :]
+ycal = ytrain[s.train]
+Xval = Xtrain[s.test, :]
+yval = ytrain[s.test]
+ncal = ntrain - nval 
+(ntot = ntot, ntrain, ntest, ncal, nval)
 ```
 
 #### Grid
@@ -116,11 +128,12 @@ pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k)
 length(pars[1])
 ```
 
-#### Grid-search by CV
+#### Grid-search
 
 ```julia
 mod = model(lwplsr)
-res = gridcv(mod, Xtrain, ytrain; segm, score = rmsep, pars, nlv, verbose = false).res 
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, 
+    verbose = false).res 
 ```
 
 **Selection of the best parameters combination:**
