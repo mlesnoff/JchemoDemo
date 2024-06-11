@@ -271,4 +271,24 @@ x, y = collect(-8:0.5:8), collect(-8:0.5:8)
 z = [sinc(√(X^2 + Y^2) / π) for X ∈ x, Y ∈ y]
 wireframe(x, y, z; axis = (; type = Axis3), color = :grey)
 
+## Vijayakumar & Schaal 1997 fig.2 p.5
+## Schaal & Atkeson 1998 Fig.4 p.16-17
+alpha = .07
+x = collect(-1:alpha:1)
+y = collect(-1:alpha:1)
+n = length(x)
+zz = [maximum([exp.(-10 * x.^2), exp.(-50 * y.^2), 1.25 * exp.(-5 * (x.^2 + y.^2))]) for x in x, y in y]
+#CairoMakie.activate!()
+GLMakie.activate!()
+f = Figure(size = (500, 400))
+ax = Axis3(f[1, 1]; xlabel = "x", ylabel = "y", zlabel = "z")
+surface!(ax, x, y, zz)
+wireframe!(ax, x, y, zz; color = :grey, linewidth = .5)
+f
+
+
+
+
+
+
 
