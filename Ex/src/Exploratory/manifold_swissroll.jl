@@ -1,13 +1,4 @@
----
-title: manifold_swissroll.jl
-weave_options:
-  error: true
-  wrap: true
-  term: false
-  #out_width: "50%"   # default
----
 
-```julia
 using Jchemo, JchemoData
 using JLD2, DataFrames
 using GLMakie, CairoMakie
@@ -15,11 +6,8 @@ using LinearAlgebra, Random
 using Distances
 using ManifoldLearning
 using UMAP
-```
 
-#### Data simulation
 
-```julia
 n = 1000
 noise = .5  # "vertical" noise (axis3)
 #noise = 2
@@ -29,14 +17,12 @@ rng = TaskLocalRNG()
 #rng = MersenneTwister(1234)
 Xt, L = ManifoldLearning.swiss_roll(n, noise; segments, hlims, rng)
 X = Xt'
-```
 
-```julia
+
 labs = vec(L)
-tab(labs) 
-```
+tab(labs)
 
-```julia
+
 CairoMakie.activate!()  
 #GLMakie.activate!() 
 mks = 10
@@ -46,77 +32,52 @@ scatter(X[:, i], X[:, i + 1], X[:, i + 2],
     color = labs, #colormap = (:Dark2_5, .7),
     axis = (type = Axis3, xlabel = string("LV", i), ylabel = string("LV", i + 1), 
         zlabel = string("LV", i + 2), title = "Swiss roll", perspectiveness = .3))
-```
 
-#### PCA
 
-```julia
 nlv = 2
 mod = model(pcasvd; nlv)
 fit!(mod, X)
-@head T = mod.fm.T  
-```
+@head T = mod.fm.T
 
-```julia
+
 CairoMakie.activate!()
 i = 1
 plotxy(T[:, i], T[:, i + 1]; color = labs,
-    xlabel = string("LV", i), ylabel = string("LV", i + 1), title = "PCA").f  
-```
+    xlabel = string("LV", i), ylabel = string("LV", i + 1), title = "PCA").f
 
-#### UMAP
 
-```julia
 nlv = 2
 n_neighbors = 15 ; min_dist = .5 
 Tt = UMAP.umap(X', nlv; n_neighbors, 
     metric = Euclidean(), min_dist = min_dist) ;
 @head T = Tt'
-```
 
-```julia
+
 CairoMakie.activate!()
 i = 1
 plotxy(T[:, i], T[:, i + 1]; color = labs,
-    xlabel = string("LV", i), ylabel = string("LV", i + 1), title = "UMAP").f  
-```
+    xlabel = string("LV", i), ylabel = string("LV", i + 1), title = "UMAP").f
 
-#### TSNE
 
-```julia
 p = 30
 maxoutdim = 2
 M = ManifoldLearning.fit(TSNE, X'; p, maxoutdim) 
 Tt =  ManifoldLearning.predict(M) 
 @head T = Tt'
-```
 
-```julia
+
 CairoMakie.activate!()
 i = 1
 plotxy(T[:, i], T[:, i + 1]; color = labs,
-    xlabel = string("LV", i), ylabel = string("LV", i + 1), title = "t-SNE").f  
-```
+    xlabel = string("LV", i), ylabel = string("LV", i + 1), title = "t-SNE").f
 
-### KPCA
 
-```
-nlv = 2
-kern = :krbf
-gamma = 1e-2
-mod = model(kpca; nlv, kern, gamma)
-fit!(mod, X)
-@head T = mod.fm.T  
-```
-
-```julia
 CairoMakie.activate!()
 i = 1
 plotxy(T[:, i], T[:, i + 1]; color = labs,
-    xlabel = string("LV", i), ylabel = string("LV", i + 1), title = "KPCA").f  
-```
+    xlabel = string("LV", i), ylabel = string("LV", i + 1), title = "KPCA").f
 
-```julia
+
 nlv = 2
 kern = :kpol
 gamma = 1 ; degree = 3 ; coef0 = 10
@@ -126,6 +87,5 @@ fit!(mod, X)
 CairoMakie.activate!()
 i = 1
 plotxy(T[:, i], T[:, i + 1]; color = labs,
-    xlabel = string("LV", i), ylabel = string("LV", i + 1), title = "KPCA").f  
-```
+    xlabel = string("LV", i), ylabel = string("LV", i + 1), title = "KPCA").f
 

@@ -133,6 +133,8 @@ plotxy(T[:, i], T[:, i + 1]; color = (:red, .5), xlabel = string("PC", i),
 ```
 
 ```julia
+lev = mlev(typ)
+nlev = length(lev)
 colm = cgrad(:Dark2_5, nlev; categorical = true)
 plotxy(T[:, i], T[:, i + 1], typ; color = colm, xlabel = string("PC", i), 
     ylabel = string("PC", i + 1)).f

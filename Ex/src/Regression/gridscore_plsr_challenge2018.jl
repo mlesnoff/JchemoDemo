@@ -49,11 +49,18 @@ fit!(mod, X)
 Xp = transf(mod, X)
 
 
+plotsp(Xp, wl; nsamp = 30).f
+
+
 s = Bool.(test)
 Xtrain = rmrow(Xp, s)
+Ytrain = rmrow(Y, s)
 ytrain = rmrow(y, s)
+typtrain = rmrow(typ, s)
 Xtest = Xp[s, :]
+Ytest = Y[s, :]
 ytest = y[s]
+typtest = typ[s]
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)

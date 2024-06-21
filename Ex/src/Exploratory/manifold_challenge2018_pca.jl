@@ -1,13 +1,4 @@
----
-title: manifold_challenge2018_pca.jl
-weave_options:
-  error: true
-  wrap: true
-  term: false
-  #out_width: "50%"   # default
----
 
-```julia
 using Jchemo, JchemoData
 using JLD2, DataFrames
 using GLMakie, CairoMakie
@@ -15,80 +6,56 @@ using LinearAlgebra, Random
 using Distances
 using FreqTables
 using ManifoldLearning, UMAP
-```
 
-#### Data importation
 
-```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/challenge2018.jld2") 
 @load db dat
 pnames(dat)
-```
 
-#### Data preparation and short description
 
-```julia
 X = dat.X 
 Y = dat.Y
 ntot, p = size(X)
-```
 
-```julia term = true
+
 @head X
 @head Y
-```
 
-```julia
+
 summ(Y)
-```
 
-```julia
+
 y = Y.conc
 typ = Y.typ
 label = Y.label 
 test = Y.test
 tab(test)
-```
 
-```julia
+
 wlst = names(X)
-wl = parse.(Float64, wlst) 
-```
+wl = parse.(Float64, wlst)
 
-```julia
+
 freqtable(string.(typ, "-", Y.label))
-```
 
-```julia
+
 freqtable(typ, test)
-```
 
-```julia
+
 plotsp(X, wl; nsamp = 30).f
-```
 
-#### Preprocessing
 
-```julia
 mod1 = model(snv; centr = true, scal = true)
 mod2 = model(savgol; npoint = 21, deriv = 2, degree = 3)
 mod = pip(mod1, mod2)
 fit!(mod, X)
-Xp = transf(mod, X) 
-```
+Xp = transf(mod, X)
 
-```julia
+
 plotsp(Xp, wl; nsamp = 30).f
-```
 
-#### Split Tot ==> Train + Test
 
-The model is tuned on **Train**. Here the split of **Tot** is already provided inside 
-the dataset (= variable `test`), but **Tot** could also be split *a posteriori*, for instance 
-by sampling (random, systematic or any other designs). 
-
-```julia
 s = Bool.(test)
 Xtrain = rmrow(Xp, s)
 Ytrain = rmrow(Y, s)
@@ -101,18 +68,14 @@ typtest = typ[s]
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
-```
 
-#### PCA
 
-```julia 
 nlv = 3
 mod = model(pcasvd; nlv)
 fit!(mod, Xtrain)
 @head T = mod.fm.T
-```
 
-```julia
+
 CairoMakie.activate!()  
 #GLMakie.activate!()  
 ztyp = recodcat2int(typtrain)
@@ -120,12 +83,9 @@ i = 1
 scatter(T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 5, 
     color = ztyp, colormap = :tab20, 
     axis = (type = Axis3, xlabel = string("LV", i), ylabel = string("LV", i + 1), 
-        zlabel = string("LV", i + 2), title = "PCA", perspectiveness = .3))   
-```
+        zlabel = string("LV", i + 2), title = "PCA", perspectiveness = .3))
 
-##### With legend 
 
-```julia
 CairoMakie.activate!()  
 #GLMakie.activate!() 
 ztyp = recodcat2int(typtrain)
@@ -144,19 +104,15 @@ elt = [MarkerElement(color = colm[i], marker = '●', markersize = 10) for i in 
 title = "Group"
 Legend(f[1, 2], elt, lev, title; nbanks = 1, rowgap = 10, framevisible = false)
 f
-```
 
-#### Projection of new observations 
 
-```julia
 nlv = 3
 mod = model(pcasvd; nlv)
 fit!(mod, Xtrain)
 @head T = mod.fm.T
 @head Ttest = transf(mod, Xtest)
-```
 
-```julia
+
 CairoMakie.activate!()  
 #GLMakie.activate!() 
 ztyp = recodcat2int(typtrain)
@@ -177,4 +133,4 @@ elt = [MarkerElement(color = colm[i], marker = '●', markersize = 10) for i in 
 title = "Group"
 Legend(f[1, 2], elt, lev, title; nbanks = 1, rowgap = 10, framevisible = false)
 f
-```
+

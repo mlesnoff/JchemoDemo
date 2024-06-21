@@ -33,10 +33,6 @@ wlst = names(X)
 wl = parse.(Float64, wlst)
 
 
-lev = unique(typ)
-nlev = length(lev)
-
-
 freqtable(string.(typ, "-", Y.label))
 
 
@@ -60,9 +56,11 @@ s = Bool.(test)
 Xtrain = rmrow(Xp, s)
 Ytrain = rmrow(Y, s)
 ytrain = rmrow(y, s)
+typtrain = rmrow(typ, s)
 Xtest = Xp[s, :]
 Ytest = Y[s, :]
 ytest = y[s]
+typtest = typ[s]
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
@@ -93,6 +91,8 @@ plotxy(T[:, i], T[:, i + 1]; color = (:red, .5), xlabel = string("PC", i),
     ylabel = string("PC", i + 1)).f
 
 
+lev = mlev(typ)
+nlev = length(lev)
 colm = cgrad(:Dark2_5, nlev; categorical = true)
 plotxy(T[:, i], T[:, i + 1], typ; color = colm, xlabel = string("PC", i), 
     ylabel = string("PC", i + 1)).f
