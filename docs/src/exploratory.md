@@ -16,6 +16,12 @@
     <p><a href="../assets/html/Exploratory/pca_suppl_challenge2018.html">pca_suppl_challenge2018.jl</a></p>
 ```
 
+## Manifolds
+
+```@raw html
+    <p><a href="../assets/html/Exploratory/manifold_swissroll.html">manifold_swissroll.jl</a></p>
+```
+
 ## FDA
 
 ```@raw html
