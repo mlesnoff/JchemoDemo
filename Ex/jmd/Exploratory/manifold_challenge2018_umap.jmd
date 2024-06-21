@@ -3,8 +3,8 @@ using JLD2, DataFrames
 using GLMakie, CairoMakie
 using LinearAlgebra, Random
 using Distances
-using ManifoldLearning
-using UMAP
+using FreqTables
+using ManifoldLearning, UMAP
 
 using JchemoData
 mypath = dirname(dirname(pathof(JchemoData)))
