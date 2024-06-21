@@ -53,11 +53,6 @@ wl = parse.(Float64, wlst)
 ```
 
 ```julia
-lev = unique(typ)
-nlev = length(lev)
-```
-
-```julia
 freqtable(string.(typ, "-", Y.label))
 ```
 
