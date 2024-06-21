@@ -80,10 +80,9 @@ plotsp(Xp, wl; nsamp = 30).f
 
 #### Split Tot ==> Train + Test
 
-The model is tuned on **Train**, and the generalization error is estimated on **Test**.
-Here the split of **Tot** is already provided inside the dataset (= variable `test`), 
-but **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic 
-or any other designs). 
+The model is tuned on **Train**. Here the split of **Tot** is already provided inside 
+the dataset (= variable `test`), but **Tot** could also be split *a posteriori*, for instance 
+by sampling (random, systematic or any other designs). 
 
 ```julia
 s = Bool.(test)

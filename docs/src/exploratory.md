@@ -20,6 +20,8 @@
 
 ```@raw html
     <p><a href="../assets/html/Exploratory/manifold_swissroll.html">manifold_swissroll.jl</a></p>
+    <p><a href="../assets/html/Exploratory/manifold_challenge2018_pca.html">manifold_challenge2018_pca.jl</a></p>
+    <p><a href="../assets/html/Exploratory/manifold_challenge2018_umap.html">manifold_challenge2018_umap.jl</a></p>
 ```
 
 ## FDA
