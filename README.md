@@ -9,7 +9,8 @@ This project can also be used to build **training sessions**.
     - [**Html**](https://mlesnoff.github.io/JchemoDemo/docs/build/) examples of data analyses 
     - [**Scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Ex/src) (*)
 
-2. [**Scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Misc/src) displaying some general Julia syntax
+2. **Examples** displaying some general Julia syntax
+    - [**Scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Misc/src) 
 
 3. [**Tips**](https://github.com/mlesnoff/JchemoDemo/blob/main/Misc/config.md) to start with the Julia environment
 
