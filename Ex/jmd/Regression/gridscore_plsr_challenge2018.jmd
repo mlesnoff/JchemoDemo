@@ -74,7 +74,7 @@ fit!(mod, X)
 Xp = transf(mod, X) 
 ```
 
-``` julia
+```julia
 plotsp(Xp, wl; nsamp = 30).f
 ```
 
