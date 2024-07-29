@@ -5,7 +5,7 @@ using GLMakie, CairoMakie
 using LinearAlgebra, Random
 using Distances
 using FreqTables
-using ManifoldLearning, UMAP
+using ManifoldLearning
 
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -72,14 +72,14 @@ ntest = nro(Xtest)
 
 nlv = 3
 n_neighbors = 40 ; min_dist = .4 
-T = umap(Xtrain', nlv; n_neighbors, 
-    metric = Euclidean(), min_dist = min_dist) 
-@head T = T'
+mod = model(umap; nlv, n_neighbors, min_dist)
+fit!(mod, Xtrain)
+@head T = transf(mod, Xtrain)
 
 
 CairoMakie.activate!()  
 #GLMakie.activate!() 
-ztyp = recodcat2int(typtrain)
+ztyp = recod_catbyint(typtrain)
 i = 1
 scatter(T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 5, 
     color = ztyp, colormap = :tab20, 
@@ -89,7 +89,7 @@ scatter(T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 5,
 
 CairoMakie.activate!()  
 #GLMakie.activate!() 
-ztyp = recodcat2int(typtrain)
+ztyp = recod_catbyint(typtrain)
 i = 1
 colsh = :tab10
 f = Figure()
@@ -109,16 +109,17 @@ f
 
 nlv = 3
 n_neighbors = 40 ; min_dist = .4 
-fm = UMAP_(Xtrain', nlv; n_neighbors, 
-    metric = Euclidean(), min_dist = min_dist) ;
-pnames(fm)
-@head T = fm.embedding'
-@head Ttest = UMAP.transform(fm, Xtest')'
+nlv = 3
+n_neighbors = 40 ; min_dist = .4 
+mod = model(umap; nlv, n_neighbors, min_dist)
+fit!(mod, Xtrain)
+@head T = transf(mod, Xtrain)
+@head Ttest = transf(mod, Xtrain)
 
 
 CairoMakie.activate!()  
 #GLMakie.activate!() 
-ztyp = recodcat2int(typtrain)
+ztyp = recod_catbyint(typtrain)
 i = 1
 colsh = :tab10
 f = Figure()

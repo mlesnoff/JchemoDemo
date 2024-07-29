@@ -84,7 +84,7 @@ y = Y[:, nam]
 
 
 mlev(typ)
-ztyp = recodcat2int(typ)
+ztyp = recod_catbyint(typ)
 
 
 tab(string.(ztyp, "-", typ))

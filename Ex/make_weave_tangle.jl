@@ -21,5 +21,3 @@ for i = 1:nf
     out_path = joinpath(path_src, meth)
     Weave.tangle(db; out_path = out_path)
 end
-
-

@@ -9,7 +9,7 @@ using Jchemo
 n = 500 ; m = 50
 x = rand(n) ; y = rand(n)
 z = vcat(repeat(["B"], m), repeat(["A"], n - m))
-group = recodcat2int(z)
+group = recod_catbyint(z)
 
 f = Figure(size = (500, 300))
 ax = Axis(f[1, 1])

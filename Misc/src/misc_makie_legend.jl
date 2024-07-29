@@ -82,7 +82,7 @@ y = 2 * x .+ 1 + rand(n)
 typ = sample(["A"; "B"; "C"], n)
 lev = sort(unique(typ))
 nlev = length(lev)
-group = recodcat2int(typ)
+group = recod_catbyint(typ)
 colsh = :Dark2_5
 f = Figure(size = (500, 300))
 colm = cgrad(colsh; categorical = true, alpha = .7)[1:nlev] 

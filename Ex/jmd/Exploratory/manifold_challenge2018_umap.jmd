@@ -14,7 +14,7 @@ using GLMakie, CairoMakie
 using LinearAlgebra, Random
 using Distances
 using FreqTables
-using ManifoldLearning, UMAP
+using ManifoldLearning
 ```
 
 #### Data importation
@@ -108,15 +108,15 @@ ntest = nro(Xtest)
 ```julia
 nlv = 3
 n_neighbors = 40 ; min_dist = .4 
-T = umap(Xtrain', nlv; n_neighbors, 
-    metric = Euclidean(), min_dist = min_dist) 
-@head T = T'
+mod = model(umap; nlv, n_neighbors, min_dist)
+fit!(mod, Xtrain)
+@head T = transf(mod, Xtrain)
 ```
 
 ```julia
 CairoMakie.activate!()  
 #GLMakie.activate!() 
-ztyp = recodcat2int(typtrain)
+ztyp = recod_catbyint(typtrain)
 i = 1
 scatter(T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 5, 
     color = ztyp, colormap = :tab20, 
@@ -129,7 +129,7 @@ scatter(T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 5,
 ```julia
 CairoMakie.activate!()  
 #GLMakie.activate!() 
-ztyp = recodcat2int(typtrain)
+ztyp = recod_catbyint(typtrain)
 i = 1
 colsh = :tab10
 f = Figure()
@@ -147,22 +147,23 @@ Legend(f[1, 2], elt, lev, title; nbanks = 1, rowgap = 10, framevisible = false)
 f
 ```
 
-#### Projection of new observations ==> UMAP_ 
+#### Projection of new observations
 
 ```julia
 nlv = 3
 n_neighbors = 40 ; min_dist = .4 
-fm = UMAP_(Xtrain', nlv; n_neighbors, 
-    metric = Euclidean(), min_dist = min_dist) ;
-pnames(fm)
-@head T = fm.embedding'
-@head Ttest = UMAP.transform(fm, Xtest')'
+nlv = 3
+n_neighbors = 40 ; min_dist = .4 
+mod = model(umap; nlv, n_neighbors, min_dist)
+fit!(mod, Xtrain)
+@head T = transf(mod, Xtrain)
+@head Ttest = transf(mod, Xtrain)
 ```
 
 ```julia
 CairoMakie.activate!()  
 #GLMakie.activate!() 
-ztyp = recodcat2int(typtrain)
+ztyp = recod_catbyint(typtrain)
 i = 1
 colsh = :tab10
 f = Figure()

@@ -5,7 +5,7 @@ using GLMakie, CairoMakie
 using LinearAlgebra, Random
 using Distances
 using FreqTables
-using ManifoldLearning, UMAP
+using ManifoldLearning
 
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -78,7 +78,7 @@ fit!(mod, Xtrain)
 
 CairoMakie.activate!()  
 #GLMakie.activate!()  
-ztyp = recodcat2int(typtrain)
+ztyp = recod_catbyint(typtrain)
 i = 1
 scatter(T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 5, 
     color = ztyp, colormap = :tab20, 
@@ -88,7 +88,7 @@ scatter(T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 5,
 
 CairoMakie.activate!()  
 #GLMakie.activate!() 
-ztyp = recodcat2int(typtrain)
+ztyp = recod_catbyint(typtrain)
 i = 1
 colsh = :tab10
 f = Figure()
@@ -115,7 +115,7 @@ fit!(mod, Xtrain)
 
 CairoMakie.activate!()  
 #GLMakie.activate!() 
-ztyp = recodcat2int(typtrain)
+ztyp = recod_catbyint(typtrain)
 i = 1
 colsh = :tab10
 f = Figure()

@@ -40,7 +40,7 @@ lev = sort(unique(year))
 nlev = length(lev)
 
 
-groupnum = recodcat2int(year)
+groupnum = recod_catbyint(year)
 
 
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f

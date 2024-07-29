@@ -34,7 +34,7 @@ plotsp(Xm5, wl; xlabel = "Wavelength (nm)", ylabel = "Reflectance").f
 
 
 typ = [repeat(["m5"], ntot); repeat(["mp5"], ntot); repeat(["mp6"], ntot)]
-typ_num = recodcat2int(typ)
+typ_num = recod_catbyint(typ)
 
 
 lev = unique(typ)

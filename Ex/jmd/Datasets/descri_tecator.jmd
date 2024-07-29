@@ -124,7 +124,7 @@ y = Y[:, nam]
 
 ```julia
 mlev(typ)
-ztyp = recodcat2int(typ)
+ztyp = recod_catbyint(typ)
 ```
 
 ```julia

@@ -235,7 +235,7 @@ length(pars[1])
 res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars) 
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
-mod = model(rfr_dt; n_trees = res.n_trees[u], n_subfeatures = res.n_subfeatures[u], 
+mod = model(rfr; n_trees = res.n_trees[u], n_subfeatures = res.n_subfeatures[u], 
     max_depth = res.max_depth[u])
 fit!(mod, Xtrain, ytrain) 
 pred = Jchemo.predict(mod, Xtest).pred 

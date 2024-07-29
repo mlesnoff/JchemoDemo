@@ -158,7 +158,7 @@ lev = sort(unique(group))
 nlev = length(lev)
 group_num = [if group[i] == lev[1] 1 elseif group[i] == lev[2] 2 else 3 end for i = eachindex(group)]
 ## Alternative to above
-## group_num = Jchemo.recodcat2int(group)
+## group_num = Jchemo.recod_catbyint(group)
 ## End
 x = X[:, 1]
 y = X[:, 2]

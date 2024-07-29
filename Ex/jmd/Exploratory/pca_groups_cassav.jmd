@@ -63,7 +63,7 @@ nlev = length(lev)
 ```
 
 ```julia
-groupnum = recodcat2int(year)
+groupnum = recod_catbyint(year)
 ```
 
 ```julia

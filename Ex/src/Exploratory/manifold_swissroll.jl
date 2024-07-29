@@ -5,7 +5,6 @@ using GLMakie, CairoMakie
 using LinearAlgebra, Random
 using Distances
 using ManifoldLearning
-using UMAP
 
 
 n = 1000
@@ -48,9 +47,10 @@ plotxy(T[:, i], T[:, i + 1]; color = labs,
 
 nlv = 2
 n_neighbors = 15 ; min_dist = .5 
-Tt = UMAP.umap(X', nlv; n_neighbors, 
-    metric = Euclidean(), min_dist = min_dist) ;
-@head T = Tt'
+
+mod = model(umap; nlv, n_neighbors, min_dist)
+fit!(mod, X)
+@head T = transf(mod, X)
 
 
 CairoMakie.activate!()
