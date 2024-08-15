@@ -48,9 +48,7 @@ y = rand(n)
 barplot(x, y) 
 
 stk = 1:2:n
-barplot(x, y;
-    axis = (xticks = stk,
-        xlabel = "x-value"))
+barplot(x, y; axis = (xticks = stk, xlabel = "x-value"))
 
 barplot(x, y; axis = (xticks = (stk, string.("v", stk)), xlabel = "x-value"))
 
