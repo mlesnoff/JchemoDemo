@@ -59,18 +59,15 @@ scatter!(ax, x, y; color = group, colormap = colm)
 elt = [MarkerElement(color = colm[i], marker = '●', markersize = 10) for i in 1:nlev]
 lab = copy(lev) 
 title = "Type"
-Legend(f[1, 2], elt, lab, title; 
-    nbanks = 1, rowgap = 10, backgroundcolor = "lightgrey")
+Legend(f[1, 2], elt, lab, title; nbanks = 1, rowgap = 10, backgroundcolor = "lightgrey")
 f
 
-colm = cgrad(:Accent_5, nlev; categorical = true,
-    alpha = .8)
+colm = cgrad(:Accent_5, nlev; categorical = true, alpha = .8)
 f = Figure(size = (500, 300))
 ax = Axis(f[1, 1])
 scatter!(ax, x, y; color = group, colormap = colm)
 elt = [MarkerElement(color = colm[i], marker = '●', markersize = 10) for i in 1:nlev]
 lab = copy(lev) 
 title = "Type"
-Legend(f[1, 2], elt, lab, title; 
-    framevisible = false)
+Legend(f[1, 2], elt, lab, title; framevisible = false)
 f
