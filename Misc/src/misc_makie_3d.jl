@@ -2,7 +2,7 @@ using CairoMakie, GLMakie
 
 ## https://docs.makie.org/stable/examples/plotting_functions
 
-################ CONTOUR 
+################ Contour 
 
 CairoMakie.activate!()  
 #GLMakie.activate!() 
@@ -46,7 +46,7 @@ scatter!(x, y, color = z, colormap = :batlow, strokewidth = 1, strokecolor = :bl
 Colorbar(f[1, 2], tr)
 f
 
-################ HEATMAP 
+################ Heatmap 
 
 CairoMakie.activate!()  
 #GLMakie.activate!() 
@@ -146,7 +146,7 @@ f, ax, hm = heatmap(X;
 Colorbar(f[1, 2], hm)
 f
 
-################ SCATTER X-Y-Z 
+################ Scatter x-y-z 
 
 n = 100
 X1 = randn(n, 3)
@@ -229,7 +229,7 @@ hm = meshscatter!(ax3, x, y, z; markersize = 0.25, marker = Rect3f(Vec3f(0), Vec
 Colorbar(f[1, 4], hm, label = "values", height = Relative(0.5))
 f
 
-################ SURFACE 
+################ Surface 
 
 CairoMakie.activate!()  
 #GLMakie.activate!() 
@@ -265,7 +265,7 @@ contourf!(ax[3], x, y, z)
 Colorbar(f[1, 4], hm, height = Relative(0.5))
 f
 
-################ WIREFRAME
+################ Wireframe
 
 x, y = collect(-8:0.5:8), collect(-8:0.5:8)
 z = [sinc(√(X^2 + Y^2) / π) for X ∈ x, Y ∈ y]
@@ -285,10 +285,6 @@ ax = Axis3(f[1, 1]; xlabel = "x", ylabel = "y", zlabel = "z")
 surface!(ax, x, y, zz)
 wireframe!(ax, x, y, zz; color = :grey, linewidth = .5)
 f
-
-
-
-
 
 
 
