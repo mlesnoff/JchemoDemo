@@ -351,8 +351,7 @@ colm = cgrad(:Dark2_5, LinRange(0, 1, length(p)))
 f = Figure(size = (700, 450), font =:sans, fontsize = 18)
 ax = Axis(f, aspect = 1, xlabel = "x", ylabel = "xᵖ")
 lins = [lines!( x, Y[:, v], color = colm[v]) for v in 1:length(p)]
-leg = Legend(f, lins, string.(p), "p", nbanks = 2, labelsize = 12,
-    valign = :center)
+leg = Legend(f, lins, string.(p), "p", nbanks = 2, labelsize = 12, valign = :center)
 f[1, 1] = ax
 f[1, 2] = leg
 f

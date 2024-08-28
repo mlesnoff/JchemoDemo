@@ -49,6 +49,12 @@ ax = Axis(f[1, 1])
 scatter!(ax, x, y; color = group, colormap = colm)
 f
 
+colm = cgrad(:default; alpha = .8)
+f = Figure(size = (500, 300))
+ax = Axis(f[1, 1])
+scatter!(ax, x, y; color = y, colormap = colm)
+f
+
 ## With Legend
 lev = sort(unique(z))
 nlev = length(lev)
