@@ -1,4 +1,5 @@
 using StatsBase, Random, Distributions 
+using Chairmarks
 
 rand(5)
 rand(5, 3)
@@ -74,18 +75,17 @@ probs = [0, 0, 1]
 sample(z, Weights(probs), 2)
 
 n = 10^6 ; x = collect(1:n) ;
-@time sample(1:n, 100, replace = false) ;  #### Good one
-@time sample!(1:n, Vector{Int}(undef, 100), replace = false) ; ## Same
+@b sample(1:n, 100, replace = false)  # ***
+@b sample!(1:n, Vector{Int}(undef, 100), replace = false) # same
 
 ## Much slower since inefficient ways
-@time sample_wr!(collect(1:n), 100) ; # Slower
-@time randperm(n)[1:100] ;
-@time randperm!(Vector{Int}(undef, n))[1:100] ;
-@time shuffle(collect(1:n))[1:100] ;
-@time shuffle!(collect(1:n))[1:100] ;
-## Even more slower
-@time sample(1:n, n, replace = false)[1:100] ;
-@time sample!(1:n, Vector{Int}(undef, n), replace = false)[1:100] ;
+@b sample_wr!(collect(1:n), 100) 
+@b randperm(n)[1:100] 
+@b randperm!(Vector{Int}(undef, n))[1:100] 
+@b shuffle(collect(1:n))[1:100] 
+@b shuffle!(collect(1:n))[1:100] 
+@b sample(1:n, n, replace = false)[1:100] 
+@b sample!(1:n, Vector{Int}(undef, n), replace = false)[1:100] 
 
 ##### Permutations
 
@@ -100,14 +100,14 @@ shuffle!(y) ;
 y
 
 n = 10^4 
-@time randperm(n) ;
-@time shuffle(1:n) ; ## Little slower, since can permute any vector
+@b randperm(n) 
+@b shuffle(1:n)  # little slower, since can permute any vector
 
 n = 10^5
 x = collect(1:n) 
-@time randperm(n) ; ## Good one
-@time sample(x, n, replace = false) ;
-@time shuffle(x)
+@b randperm(n)  # **
+@b sample(x, n, replace = false)
+@b shuffle(x)
 
 # https://stackoverflow.com/questions/27559958/how-do-i-select-a-random-item-from-a-weighted-array-in-julia
 

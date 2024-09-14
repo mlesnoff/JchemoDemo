@@ -1,3 +1,5 @@
+using Chairmarks
+
 # https://docs.julialang.org/en/v1/manual/functions/
 
 function g(X, a)
@@ -44,15 +46,15 @@ h(X; a = .1, b = 100)
 
 ## args...
 
-g1(x, y, a, b) = a * x + b * y
+h1(x, y, a, b) = a * x + b * y
 
-g2 = function(x, y, args...)
-  g1(x, y, args...)
+h2 = function(x, y, args...)
+  h1(x, y, args...)
 end
 
 x = [1.0 ; 2.0 ; 3.0]
 y = [4.0 ; 5.0 ; 6.0]
-g2(x, y, -2, -3)
+h2(x, y, -2, -3)
 
 ## kwargs...
 
@@ -66,25 +68,25 @@ x = [1.0 ; 2.0 ; 3.0]
 y = [4.0 ; 5.0 ; 6.0]
 f2(x, y; a = 2, b = 3)
 
-##################### INPLACE 
+##################### Inplace 
 
-function g1(X, a = 2)
+function h1(X, a = 2)
   X = a * X
   X
 end
 
-function g1!(X, a = 2)
+function h1!(X, a = 2)
   X .= a * X
   X
 end
 
 X = round.(10 * rand(5, 3))
-g1(X)
+h1(X)
 X
-g1!(X)
+h1!(X)
 X
 
-##################### STRUCTURE 
+##################### Structure 
 
 struct Foo     # Not modifiable!
   a
@@ -110,7 +112,7 @@ res.b
 xnew = rand(3)
 predict(res, xnew)
 
-##################### VECTORIZATION 
+##################### Vectorization 
 
 g(x, y) = 3 * x + 4 * y 
 
@@ -118,5 +120,60 @@ A = [1.0 ; 2.0 ; 3.0]
 B = [4.0 ; 5.0 ; 6.0]
 g.(A, B)
 g.(pi, A)
+
+##################### Coding
+
+## https://discourse.julialang.org/t/julian-way-to-write-this-code/119348/18
+
+function g1(x, y, w)
+  sum(i -> x[i] * y[i] * w[i], 1:length(x))
+end
+
+function g2(x, y, w)
+    sum(x .* y .* w)
+end
+
+function g3(x::AbstractArray{T}, y::AbstractArray{T}, w::AbstractArray{T}) where T
+    l = length(x)
+    r = T(0)
+    @inbounds for i in 1:l
+        r += x[i] * y[i] * w[i]
+    end
+    return r
+end
+
+function g4!(x, y, w)
+    x .*= y
+    x .*= w
+    sum(x)
+end
+
+## Generally using eachindex signals the compiler that the index access are in fact inbounds.
+function g5(x, y, w)
+  T = promote_type(eltype(x), eltype(y), eltype(w))
+  r = zero(T)
+  for i in eachindex(x, y, w)
+      r += x[i] * y[i] * w[i]
+  end
+  return r
+end
+
+g7(x, y, z) = sum(splat(*), zip(x, y, z))
+
+g9(x, y, z) = sum(x[i] * y[i] * z[i] for i in eachindex(x, y, z))
+
+## Results highly depend on n
+n = 10^5
+#n = 10^6
+#n = 3
+x = rand(n) ; y = rand(n) ; z = rand(n) ;
+vx = copy(x) ; vy = copy(y) ; vz = copy(z) ; 
+@b g1($x, $y, $z)  # ** for large n
+@b g2($x, $y, $z)
+@b g3($x, $y, $z)
+@b g4!($vx, $vy, $vz)
+@b g5($x, $y, $z)
+@b g7($x, $y, $z)
+@b g9($x, $y, $z)
 
 

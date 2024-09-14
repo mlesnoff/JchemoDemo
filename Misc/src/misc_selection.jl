@@ -1,4 +1,4 @@
-using StatsBase 
+using StatsBase, Chairmarks 
 
 ## & = Bitwise (elementwise) "and"
 1 & 1
@@ -23,12 +23,12 @@ x[s]
 filter(u -> (u < 3) .| (u > 9), x)
 filter(u -> (u < 3) || (u > 9), x)
 
-############### IFELSE 
+############### Ifelse 
 
 z = rand(5)
 ifelse.(z .< .5, 1, 2)
 
-############### SELECTION, FILTER
+############### Selection, Filter
 
 x = collect(1:10)
 s = x .> 3
@@ -47,7 +47,7 @@ filter(u -> (u > 3) .& (u <= 5), x)
 filter(u -> (u > 3) && (u <= 5), x)
 filter(u -> (u > 3) .&& (u <= 5), x)
 
-############### FIND
+############### Find
 
 ## findall, findmax, findmin, indexin
 
@@ -60,7 +60,7 @@ argmax(x)
 s = isapprox.(x, maximum(x))
 findall(s) 
 
-findmin([1 ,.5, .5, 2]) # The first is returned
+findmin([1 ,.5, .5, 2]) # the first is returned
 
 X = rand(3, 2)
 findmax(X)
@@ -78,7 +78,7 @@ s = X .< .5
 X[s] .= 0
 X
 
-################ REPLACE 
+################ Replace 
 
 x = [rand(3) ; 0 ; 1]
 replace(x, 0 => missing)
@@ -96,7 +96,7 @@ u = copy(x)
 u[u .< .5] .= -10
 u
 
-############### WITHIN
+############### Within
 
 nam = string.(350:2500) 
 z = ["1000" ; "1800"] ;
@@ -123,7 +123,7 @@ y = ["b" ; "a" ; "a" ; "c"]
 indexin(y, x)  # returns where is y[i] in x
 
 x = rand(Int64(1e6))
-@time indexin(x[500], x)
-@time findall(x .== x[500]) # for 1 search: faster 
+@b indexin(x[500], x)
+@b findall(x .== x[500])  # for 1 search: much faster 
 
 

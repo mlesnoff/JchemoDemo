@@ -1,5 +1,4 @@
-using JchemoData
-using DataFrames
+using DataFrames, JchemoData
  
 path_jdat = dirname(dirname(pathof(JchemoData)))
 path_out = "D:/Mes Donnees/Tmp"
@@ -145,6 +144,7 @@ dat = """
 zdat = JSON.parse(dat)
 res = DataFrame(zdat)
 res[!, 1] = string.(res[:, 1])
+
 res[!, 2:end] = convert.(Float64, res[:, 2:end])
 #res[!, 2:end] = convert.(Float64, res[!, 2:end])
 res

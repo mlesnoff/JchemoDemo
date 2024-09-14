@@ -41,7 +41,7 @@ X = rand(10, 5)
 df = DataFrame(X, :auto)
 describe(df)
 
-########### AGGREGATE
+########### Aggregate
 
 ## https://stackoverflow.com/questions/64226866/groupby-with-sum-on-julia-dataframe
 df = DataFrame(:A => ["x1", "x2", "x1", "x2", "x1"], 
@@ -65,7 +65,7 @@ gdf = groupby(df, [:A; :B])
 combine(gdf, nrow)
 ## Or: use package FreqTables
 
-########### CONCATENATION
+########### Concatenation
 
 df1 = DataFrame(:B => ["x1", "x2", "x1", "x2", "x1"], 
                :A => ["a", "a", "b", "a", "b"],
@@ -105,7 +105,7 @@ vcat(DataFrame(r1), DataFrame(r2))
 z = DataFrame(r1)
 append!(z, DataFrame(r2))
 
-########### MISSING DATA
+########### Missing data
 
 ## https://stackoverflow.com/questions/34611109/julia-dataframe-replacing-missing-values
 
@@ -140,7 +140,7 @@ allowmissing!(df)
 [for col in eachcol(df) ; replace!(col, 0. => missing) ; end]
 df
 
-########### ORDERING
+########### Ordering
 
 # https://dataframes.juliadata.org/stable/man/sorting/
 
@@ -155,9 +155,10 @@ sort!(zdf; rev = true)
 
 sort!(zdf, [:age ; :height])
 
-########### ALTERNATIVES TO DataFrames
+########### Alternatives to DataFrames
 
 ## https://github.com/davidavdav/NamedArrays.jl
 ## https://github.com/JuliaData/Tables.jl
 ## https://github.com/JuliaData
+## Etc.
 

@@ -54,7 +54,7 @@ X2 = rand(2, 4)
 x = vec(rand(50, 1))
 describe(x)
 
-############ CONCATENATION
+############ Concatenation
 
 ## Use push! to add individual items to collection which are not already themselves in another collection. 
 ## The result of the preceding example is equivalent to push!([1, 2, 3], 4, 5, 6).
@@ -94,7 +94,7 @@ v = collect(z)
 u = f_comp(v)
 reduce(hcat, u)
 
-############ DIAGONAL
+############ Diagonal
 # https://web.eecs.umich.edu/~fessler/course/551/julia/tutor/03-diag.html
 
 diagm(1:5)      # LinearAlgebra
@@ -153,13 +153,7 @@ D = Diagonal(d)
 @time d .* X ;
 @time (*).(d, X) ; # slow
 
-############ MAPSLICES
-
-X = rand(5, 3)
-mapslices(mean, X, dims = 1)
-StatsBase.mean(X, dims = 1) # much faster
-
-############ PRODUCTS
+############ Products
 
 A = rand(2, 3)
 B = rand(3, 2)
@@ -201,7 +195,7 @@ w = rand(n)
 @time dot(w, w) ;
 @time sum(w .* w) ; ## Much slower
 
-############### TUPLE
+############### Tuple
 
 ## https://discourse.julialang.org/t/create-empty-tuple/1032/5
 

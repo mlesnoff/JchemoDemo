@@ -1,3 +1,5 @@
+using StatsBase
+
 # https://docs.julialang.org/en/v1/manual/arrays/#Broadcasting-1
 
 z = rand(5)
@@ -38,6 +40,10 @@ n = 10000
 X = rand(n, n) 
 @time map(sqrt, X) ;
 @time sqrt.(X) ; ## Not faster
+
+X = rand(5, 3)
+mapslices(mean, X, dims = 1)
+StatsBase.mean(X, dims = 1) # much faster
 
 #### mapreduce
 

@@ -3,7 +3,7 @@ using Statistics, StatsBase
 parentmodule(mean)
 typeof(mean)
 
-############### CONVERT
+############### Convert
 
 x = 1.
 convert(Int64, x)
@@ -14,7 +14,7 @@ convert(Vector{Float64}, x)
 convert.(Float64, x)
 Float64.(x)
 
-############### DICTIONNARY, NAMES  
+############### Dictionnary, Names  
 
 ## https://docs.julialang.org/en/v1/base/collections/#Dictionaries
 ## https://en.wikibooks.org/wiki/Introducing_Julia/Dictionaries_and_sets
@@ -57,7 +57,7 @@ n = 100
 x = rand([3, 4, 10, 20, 30, 2], n)
 ftab(x)
 
-############### EACHCOL, EACHROW 
+############### Eachcol, Eachrow 
 
 X = rand(5, 3)
 eachcol(X)
@@ -70,13 +70,13 @@ end
 map(sum, collect(eachcol(X)))
 sum(X, dims = 1)
 
-############### IF 
+############### If
 
 x = .3
 x < .5 ? y = -1. : y = 1. ;
 y
 
-############### IS
+############### Is
 
 dat = (X = 1, Y = 2)
 isdefined(dat, :Y)
@@ -91,7 +91,7 @@ isa(x, Vector)
 
 typeof(z)
 
-################ FILL, REPEAT
+################ Fill, Repeat
 
 fill(1.0, (2, 3))
 ones(2, 3)
@@ -124,25 +124,25 @@ repeat(1:2; outer = 2, inner = 3)
 
 repeat([1 2 ; 3 4], inner = (2, 1), outer = (1, 3))
 
-################ ISNAN 
+################ Isnan 
 
 X = reshape([NaN; rand(8); NaN], 5, 2)
 X[isnan.(X)] .= 1
 X
 
-############### LINRANGE 
+############### Linrange 
 
 LinRange(-.1, 0.3, 5)
 
 collect(range(-0.1, 0.3; length = 5))
 
-############### LOWERCASE, UPPERCASE 
+############### Lowercase, Uppercase 
 
 x = ["a" ; "c"]
 y = uppercase.(x) 
 lowercase.(y)
 
-############### MACRO
+############### Macro
 
 macro fname(arg)
     x = string(arg)
@@ -153,7 +153,7 @@ end
 a = @fname myvar      ## macro syntax
 a = @fname(myvar)     ## called as a function
 
-############### MAP, REDUCE 
+############### Map, Reduce 
 
 # https://docs.julialang.org/en/v1/manual/arrays/#Broadcasting-1
 
@@ -220,7 +220,7 @@ for i = 1:m ; zX[i] = rand(n, p) ; end
         X = hcat(X, zX[i])
     end
 end
-@time reduce(vcat, zX) ;  # Much faster
+@time reduce(vcat, zX) ;  # faster
 
 ## mapreduce(f, op, itrs...; [init])
 ## Apply function f to each element(s) in itrs, and then reduce the result 
@@ -231,7 +231,7 @@ end
 ## Evaluates to the same as reduce(op, map(f, A...); dims=dims, init=init), 
 ## but is generally faster because the intermediate array is avoided.
 
-x = [1:3;]
+x = [1:3 ;]
 reduce(+, map(v -> v^2, x))
 mapreduce(v -> v^2, +, x)
 
@@ -244,7 +244,7 @@ mapreduce(i -> X[i, :] .== maximum(X[i, :]), hcat, 1:n)'
 v = rand(1:2, 20)
 map(x -> x == 1 ? :lightgrey : :red3, v)
 
-############### PARSE, EVAL, ASSIGN 
+############### Parse, Eval, Assign 
 
 ## https://discourse.julialang.org/t/string-as-a-variable-name/2195
 
@@ -255,8 +255,8 @@ parse(Int, "afc", base = 16)
 parse(Float64, "1.2e-3")
 
 wlst = string.(1:10)
-parse.(Int64, wl) 
-Meta.parse.(wl)
+parse.(Int64, wlst) 
+Meta.parse.(wlst)
 parse.(Float64, wlst) 
 
 eval(Meta.parse("1:5"))
@@ -271,14 +271,14 @@ myfun = eval(Meta.parse(nam))
 x = rand(5)
 myfun(x)
 
-############### PASTE 
+############### Paste 
 
 n = 3
 x = repeat(["y"], n)
 z = map(string, x, 1:n)
 Symbol.(z)
 
-############### PERFORMANCES 
+############### Performances 
 
 ## https://docs.julialang.org/en/v1/manual/performance-tips/
 
@@ -291,7 +291,7 @@ end
 
 ## See BenchmarkTools.jl
 
-################ RANGE, SEQ
+################ Range, Seq
 
 u = range(0, 1, length = 10)
 collect(u)
@@ -303,7 +303,7 @@ collect(range(1, step = 5, length = 20))
 
 range(1, step = 5, stop = 17)
 
-################ REPLACE 
+################ Replace 
 
 dict = Dict(
     "plsr" => 1,
@@ -316,7 +316,7 @@ dict = Dict(
 z = ["stack"; "plsr-p"]
 replace(z, dict...)
 
-################ REMOVE 
+################ Remove
 
 ## https://stackoverflow.com/questions/58033504/julia-delete-rows-and-columns-from-an-array-or-matix
 
@@ -331,7 +331,7 @@ setdiff(1:10, 2:3)
 setdiff([3 ; 7 ; 1], [3 ; 7 ; 1 ; 18])
 setdiff([3 ; 7 ; 1], [1 ; 18])
 
-############### SORT 
+############### Sort 
 
 x = [5 ; 4 ; 200]
 sort(x)
@@ -348,13 +348,13 @@ x[id]
 # - the 2nd lower value of x is component 7 of x,
 # etc.
 
-v = zeros(Int, 3)   ## Pre-allocated vector
-sortperm!(v, x)     ## This recalculates p by the same output-value of sortperm
+v = zeros(Int, 3)   # pre-allocated vector
+sortperm!(v, x)     # this recalculates p by the same output-value of sortperm
 v
 
 ## See StatsBase.ordinalrank
 
-############### STRING
+############### Strings
 
 string("X", "train", "_cassav")
 
@@ -366,7 +366,7 @@ nam = ["fgvvh" ; "nngfjkjjk"]
 SubString.(nam, 2, 4)
 SubString.(nam, 2)
 
-############### UNICODE 
+############### Unicode 
 
 ## http://web.mit.edu/julia_v0.6.2/julia/share/doc/julia/html/en/manual/unicode-input.html
 
