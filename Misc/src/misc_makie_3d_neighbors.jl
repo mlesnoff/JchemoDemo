@@ -10,7 +10,7 @@ X = dat.X
 ## Nearest neighbors
 mod = model(pcasvd; nlv = 3) 
 Jchemo.fit!(mod, X) 
-T = mod.fm.T[:, 1:3]
+T = mod.fm.T
 i = 10 ; k = 50
 res = getknn(T, T[i:i, :]; k = k, metric = :mah)
 s = res.ind[1]
@@ -25,7 +25,7 @@ scatter!(ax, T[i:i, 1], T[i:i, 2], T[i:i, 3]; markersize = mks, color = (:red, t
 cols = [:grey; :blue; :red]
 elt = [MarkerElement(color = cols[i], marker = '●', markersize = 10) for i in 1:3]
 lab = ["Training"; "Neighborhood"; "To predict"]
-title = "Local regression"
+title = "kNN selection"
 Legend(f[1, 2], elt, lab, title; nbanks = 1, rowgap = 10, framevisible = false)
 f
 

@@ -82,13 +82,13 @@ summ(y)
 
 
 f = Figure(size = (500, 400))
-ax = Axis(f[1, 1], xlabel = "TBC", ylabel = "Nb. samples")
+ax = Axis(f[1, 1]; xlabel = "TBC", ylabel = "Nb. samples")
 hist!(ax, y; bins = 50)
 f
 
 
 f = Figure(size = (500, 400))
-ax = Axis(f[1, 1], xlabel = "Year", ylabel = "TBC")
+ax = Axis(f[1, 1]; xlabel = "Year", ylabel = "TBC")
 boxplot!(ax, year, y; show_notch = true)
 f
 

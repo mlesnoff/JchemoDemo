@@ -103,7 +103,7 @@ odtest = predict(mod_od, Xtest).d
 
 
 f = Figure(size = (500, 400))
-ax = Axis(f, xlabel = "SD", ylabel = "OD")
+ax = Axis(f; xlabel = "SD", ylabel = "OD")
 scatter!(ax, sdtrain.dstand, odtrain.dstand, label = "Train")
 scatter!(ax, sdtest.dstand, odtest.dstand, color = (:red, .5), label = "Test")
 hlines!(ax, 1; color = :grey, linestyle = :dash)
@@ -119,7 +119,7 @@ pnames(zres.fm)
 sdtrain = zres.fm.d
 sdtest = predict(zres, Xtest).d
 f = Figure(size = (500, 400))
-ax = Axis(f[1, 1], xlabel = nam, ylabel = "Nb. observations")
+ax = Axis(f[1, 1]; xlabel = nam, ylabel = "Nb. observations")
 hist!(ax, sdtrain.d; bins = 50, label = "Train")
 hist!(ax, sdtest.d; bins = 50, label = "Test")
 vlines!(ax, zres.fm.cutoff; color = :grey, linestyle = :dash)
@@ -148,7 +148,7 @@ ytest = y[s]
 
 
 f = Figure(size = (500, 400))
-ax = Axis(f[1, 1], xlabel = nam, ylabel = "Nb. observations")
+ax = Axis(f[1, 1]; xlabel = nam, ylabel = "Nb. observations")
 hist!(ax, ytrain; bins = 50, label = "Train")
 hist!(ax, ytest; bins = 50, label = "Test")
 axislegend(position = :rt)
@@ -157,14 +157,14 @@ f
 
 f = Figure(size = (500, 400))
 offs = [30; 0]
-ax = Axis(f[1, 1], xlabel = nam, ylabel = "Nb. observations", yticks = (offs, ["Train" ; "Test"]))
+ax = Axis(f[1, 1]; xlabel = nam, ylabel = "Nb. observations", yticks = (offs, ["Train" ; "Test"]))
 hist!(ax, ytrain; offset = offs[1], bins = 50)
 hist!(ax, ytest; offset = offs[2], bins = 50)
 f
 
 
 f = Figure(size = (500, 400))
-ax = Axis(f[1, 1], xlabel = nam, ylabel = "Density")
+ax = Axis(f[1, 1]; xlabel = nam, ylabel = "Density")
 density!(ax, ytrain; color = :blue, label = "Train")
 density!(ax, ytest; color = (:red, .5), label = "Test")
 axislegend(position = :rt)
@@ -173,14 +173,14 @@ f
 
 f = Figure(size = (500, 400))
 offs = [.08; 0]
-ax = Axis(f[1, 1], xlabel = nam, ylabel = "Density", yticks = (offs, ["Train" ; "Test"]))
+ax = Axis(f[1, 1]; xlabel = nam, ylabel = "Density", yticks = (offs, ["Train" ; "Test"]))
 density!(ax, ytrain; offset = offs[1], color = (:slategray, 0.5), bandwidth = 0.2)
 density!(ax, ytest; offset = offs[2], color = (:slategray, 0.5), bandwidth = 0.2)
 f
 
 
 f = Figure(size = (500, 400))
-ax = Axis(f[1, 1], xticks = (0:1, ["Train", "Test"]), xlabel = "Group", ylabel = nam)
+ax = Axis(f[1, 1]; xticks = (0:1, ["Train", "Test"]), xlabel = "Group", ylabel = nam)
 boxplot!(ax, test, y; width = .5, show_notch = true)
 f
 

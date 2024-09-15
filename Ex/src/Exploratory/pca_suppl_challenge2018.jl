@@ -104,7 +104,7 @@ dtest = predict(mod_d, Xtest).d
 
 
 f = Figure(size = (500, 400))
-ax = Axis(f[1, 1], xlabel = "SD", ylabel = "OD")
+ax = Axis(f[1, 1]; xlabel = "SD", ylabel = "OD")
 scatter!(ax, dtrain.dstand_sd, dtrain.dstand_od, label = "Train")
 scatter!(ax, dtest.dstand_sd, dtest.dstand_od, color = (:red, .5), label = "Test")
 hlines!(ax, 1; color = :grey, linestyle = :dash)
@@ -120,7 +120,7 @@ plotxy(d.dstand_sd, d.dstand_od, group; color = colm, xlabel = "Stand. SD", ylab
 
 
 f = Figure(size = (500, 400))
-ax = Axis(f[1, 1], xlabel = "Standardized distance", ylabel = "Nb. observations")
+ax = Axis(f[1, 1]; xlabel = "Standardized distance", ylabel = "Nb. observations")
 hist!(ax, dtrain.dstand; bins = 50, label = "Train")
 hist!(ax, dtest.dstand; bins = 50, label = "Test")
 vlines!(ax, 1; color = :grey, linestyle = :dash)

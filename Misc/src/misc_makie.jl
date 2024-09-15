@@ -53,7 +53,7 @@ barplot(x, y; axis = (xticks = stk, xlabel = "x-value"))
 barplot(x, y; axis = (xticks = (stk, string.("v", stk)), xlabel = "x-value"))
 
 f = Figure(size = (500, 400))
-ax = Axis(f[1, 1], xticks = (stk, string.("v", stk)), xlabel = "x-value")
+ax = Axis(f[1, 1]; xticks = (stk, string.("v", stk)), xlabel = "x-value")
 barplot!(ax, x, y)
 f
 
@@ -71,7 +71,7 @@ barplot(df.x, df.height; direction = :x, dodge = df.grp, color = df.grp,
     axis = (yticks = (1:2, ["left", "right"]), title = "Dodged bars"))
 
 f = Figure()
-ax = Axis(f[1, 1], xticks = (1:2, ["left", "right"]), title = "Dodged bars")
+ax = Axis(f[1, 1]; xticks = (1:2, ["left", "right"]), title = "Dodged bars")
 barplot!(ax, df.x, df.height; dodge = df.grp, color = df.grp)
 z = [.73; 1; 1.28; 1.73; 2; 2.28]
 errorbars!(ax, z, df.height, df.std, color = :red) 
@@ -103,7 +103,7 @@ boxplot(x, y; dodge = grp, show_notch = true, color = grp,
 
 colm = Makie.wong_colors()
 f = Figure(size = (500, 300))
-ax = Axis(f[1, 1], xticks = (1:3, ["A", "B", "C"]), title = "Dodged bars")
+ax = Axis(f[1, 1]; xticks = (1:3, ["A", "B", "C"]), title = "Dodged bars")
 boxplot!(ax, x, y; dodge = grp, show_notch = true, color = colm[grp])
 lab = ["group 1", "group 2"]
 elt = [PolyElement(polycolor = colm[i]) for i in 1:length(lab)]
@@ -187,7 +187,7 @@ y = rand(n) ; year = sample(2000:2002, n)
 years = sort(unique(year))
 
 f = Figure(size = (500, 400))
-Axis(f[1, 1], xlabel = "Y", ylabel = "Density")
+Axis(f[1, 1]; xlabel = "Y", ylabel = "Density")
 for i in 1:lastindex(years)
     s = year .== years[i]
     density!(y[s]; label = string(years[i]))
@@ -197,7 +197,7 @@ f
 
 f = Figure(size = (500, 400))
 offs = [0.; 1.5; 3]
-Axis(f[1, 1], xlabel = "Y", ylabel = "Density", yticks = (offs, string.(years)))
+Axis(f[1, 1]; xlabel = "Y", ylabel = "Density", yticks = (offs, string.(years)))
 for i in 1:lastindex(years)
     s = year .== years[i]
     density!(y[s]; offset = offs[i], label = string(years[i]), bandwidth = 0.2)
@@ -205,7 +205,7 @@ end
 f
 
 f = Figure(size = (500, 400))
-ax = Axis(f, xlabel = "Y", ylabel = "Nb. observations")
+ax = Axis(f; xlabel = "Y", ylabel = "Nb. observations")
 s = year .== years[1]
 hist!(ax, y[s]; bins = 50, label = string(years[1]))
 s = year .== years[2]
@@ -256,7 +256,7 @@ n = 20
 for i = 1:2, j = 1:3
     x = rand(n)
     y = x + rand(n)
-    ax = Axis(f[i, j], xlabel = "X", ylabel = "Y")
+    ax = Axis(f[i, j]; xlabel = "X", ylabel = "Y")
     scatter!(ax, x, y; color = (:red, .5))
     ablines!(ax, 0, 1; color = :grey)
     k = k + 1
@@ -268,9 +268,9 @@ let
     n = 200
     x, y, color = randn(n) / 2, randn(n), randn(n)
     f = Figure(size = (700, 700))
-    ax1 = Axis(f, xgridstyle = :dash, ygridstyle = :dash, xtickalign = 1, ytickalign = 1)
-    ax2 = Axis(f, xgridstyle = :dash, ygridstyle = :dash, xtickalign = 1, ytickalign = 1)
-    ax3 = Axis(f, xgridstyle = :dash, ygridstyle = :dash, xtickalign = 1, ytickalign = 1)
+    ax1 = Axis(f; xgridstyle = :dash, ygridstyle = :dash, xtickalign = 1, ytickalign = 1)
+    ax2 = Axis(f; xgridstyle = :dash, ygridstyle = :dash, xtickalign = 1, ytickalign = 1)
+    ax3 = Axis(f; xgridstyle = :dash, ygridstyle = :dash, xtickalign = 1, ytickalign = 1)
     hist!(ax1, x, color = (:orange, 0.5), strokewidth = 0.5)
     scatter!(ax2, x, y, color = color, colormap= :plasma, markersize = 10,
         marker = :circle, strokewidth = 0)
@@ -345,7 +345,7 @@ for (indx, i) in enumerate(p)
 end
 colm = cgrad(:Dark2_5, LinRange(0, 1, length(p)))
 f = Figure(size = (700, 450), font =:sans, fontsize = 18)
-ax = Axis(f, aspect = 1, xlabel = "x", ylabel = "xᵖ")
+ax = Axis(f; aspect = 1, xlabel = "x", ylabel = "xᵖ")
 lins = [lines!( x, Y[:, v], color = colm[v]) for v in 1:length(p)]
 leg = Legend(f, lins, string.(p), "p", nbanks = 2, labelsize = 12, valign = :center)
 f[1, 1] = ax
@@ -424,7 +424,7 @@ function FigGridScatters()
     f = Figure(size = (1200, 800))
     c = 1
     for i in 1:2, j in 1:2:5
-        ax = Axis(f[i, j], aspect = 1, xgridstyle = :dash, ygridstyle = :dash,
+        ax = Axis(f[i, j]; aspect = 1, xgridstyle = :dash, ygridstyle = :dash,
                                 xtickalign = 1, ytickalign = 1)
         pnts = scatter!(x, y.^c; color = color, colormap = colms[c],
                 markersize = 15, marker = markers[c], strokewidth = 0)

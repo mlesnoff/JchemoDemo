@@ -91,7 +91,7 @@ tab(string.(ztyp, "-", typ))
 
 
 f = Figure(size = (500, 400))
-ax = Axis(f[1, 1], xticks = (1:3, mlev(typ)), xlabel = "Group", ylabel = nam)
+ax = Axis(f[1, 1]; xticks = (1:3, mlev(typ)), xlabel = "Group", ylabel = nam)
 boxplot!(ax, ztyp, y; width = .5, show_notch = true)
 f
 

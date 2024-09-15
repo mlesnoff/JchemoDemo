@@ -1,5 +1,4 @@
-using CairoMakie 
-using Jchemo
+using CairoMakie, Jchemo
 
 ## https://docs.makie.org/stable/documentation/colors/
 ## https://docs.makie.org/stable/documentation/transparency/ 
@@ -10,6 +9,8 @@ n = 500 ; m = 50
 x = rand(n) ; y = rand(n)
 z = vcat(repeat(["B"], m), repeat(["A"], n - m))
 group = recod_catbyint(z)
+lev = mlev(z)
+nlev = length(lev)
 
 f = Figure(size = (500, 300))
 ax = Axis(f[1, 1])
@@ -41,7 +42,6 @@ cgrad(:Dark2_5; categorical = true)[1:2]
 ## Note the difference with:
 cgrad(:Dark2_5, 2; categorical = true)
 
-nlev = 2
 colm = cgrad(:Dark2_5; categorical = true, alpha = .8)[1:nlev]
 #colm = cgrad(:Dark2_5, 2; categorical = true, alpha = .8)
 f = Figure(size = (500, 300))
@@ -56,8 +56,6 @@ scatter!(ax, x, y; color = y, colormap = colm)
 f
 
 ## With Legend
-lev = sort(unique(z))
-nlev = length(lev)
 colm = cgrad(:Dark2_5; categorical = true, alpha = .8)[1:nlev]
 f = Figure(size = (500, 300))
 ax = Axis(f[1, 1])

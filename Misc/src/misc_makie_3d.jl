@@ -64,7 +64,7 @@ nlevx = length(levx)
 levy = unique(y) 
 nlevy = length(levy)
 f = Figure(size = (500, 400))
-ax = Axis(f[1, 1], xlabel = "x", ylabel = "y", xticks = (1:nlevx, string.(levx)), 
+ax = Axis(f[1, 1]; xlabel = "x", ylabel = "y", xticks = (1:nlevx, string.(levx)), 
     yticks = (1:nlevy, string.(levy)))
 hm = heatmap!(ax, x, y, z)
 for i in eachindex(x)
@@ -93,7 +93,7 @@ Colorbar(f[:, end + 1], hm)
 f
 
 f = Figure(size = (500, 400))
-ax = Axis(f[1, 1], xlabel = "pred", ylabel = "y", xticks = (1:p, string.(1:p)), 
+ax = Axis(f[1, 1]; xlabel = "pred", ylabel = "y", xticks = (1:p, string.(1:p)), 
     yticks = (1:n, string.(n:-1:1)))
 hm = heatmap!(ax, zA)
 Colorbar(f[:, end + 1], hm; label = "Value")
@@ -167,8 +167,7 @@ z = X[:, 3]
 CairoMakie.activate!()  
 #GLMakie.activate!() 
 mks = 20
-scatter(x, y, z, 
-    markersize = mks, color = group_num, colormap = (:Dark2_5, .7),
+scatter(x, y, z, markersize = mks, color = group_num, colormap = (:Dark2_5, .7),
     axis = (type = Axis3, xlabel = "Axis 1", ylabel = "Axis 2", zlabel = "Axis 3", title = "3D"))
 
 f = Figure(size = (700, 500))
@@ -200,7 +199,7 @@ Legend(f[1, 2], [elt1, elt2, elt3], lab)
 f
 ## End
 
-## Function axislegend does not work
+## Function axislegend
 f = Figure(size = (800, 500))
 colsh = :default #:tab10
 colm = cgrad(colsh, nlev; alpha = .7, categorical = true) 
@@ -208,12 +207,12 @@ mks = 10 ; i = 1
 ax = Axis3(f[1, 1]; aspect = (1, 1, 1), perspectiveness = 0.5)  
 for j = 1:nlev
     s = group .== lev[j]
-    scatter!(ax, x[s], y[s], z[s]; markersize = mks, color = colm[j], label = lev[j])
+    scatter!(ax, x[s], y[s], z[s]; markersize = mks, label = lev[j])
+    #scatter!(ax, x[s], y[s], z[s]; markersize = mks, label = lev[j], color = colm[j]) 
 end
-#axislegend(ax, position = :rb)
+axislegend(ax, position = :rc)
 #f[1, 2] = Legend(f, ax, "Type", framevisible = false) 
 f
-## End
 
 ## https://juliadatascience.io/glmakie
 n = 10
@@ -260,9 +259,9 @@ x, y, z = peaks()
 f = Figure(size = (1200, 400))
 ax = [Axis3(f[1, i]) for i = 1:3]
 hm = heatmap!(ax[1], x, y, z)
-contour!(ax[2], x, y, z; levelt=20)
+contour!(ax[2], x, y, z; levels = 20)
 contourf!(ax[3], x, y, z)
-Colorbar(f[1, 4], hm, height = Relative(0.5))
+Colorbar(f[1, 4], hm; height = Relative(0.5))
 f
 
 ################ Wireframe
