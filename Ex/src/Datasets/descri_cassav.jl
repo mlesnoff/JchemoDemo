@@ -26,7 +26,7 @@ y = dat.Y.tbc
 year = dat.Y.year
 
 
-lev = unique(year)
+lev = mlev(year)
 nlev = length(lev)
 
 
@@ -40,7 +40,7 @@ tab(year)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-mod1 = model(snv; centr = true, scal = true)
+mod1 = model(snv)
 mod2 = model(savgol; npoint = 11, deriv = 2, degree = 3)
 mod = pip(mod1, mod2)
 fit!(mod, X)
@@ -56,8 +56,7 @@ pnames(mod)
 pnames(mod.fm)
 
 
-T = mod.fm.T
-@head T
+@head T = mod.fm.T
 
 
 res = summary(mod, Xp) ;

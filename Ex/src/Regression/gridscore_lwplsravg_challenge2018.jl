@@ -42,7 +42,7 @@ freqtable(typ, test)
 plotsp(X, wl; nsamp = 30).f
 
 
-mod1 = model(snv; centr = true, scal = true)
+mod1 = model(snv)
 mod2 = model(savgol; npoint = 21, deriv = 2, degree = 3)
 mod = pip(mod1, mod2)
 fit!(mod, X)

@@ -35,7 +35,7 @@ wl = parse.(Float64, wlst)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-mod1 = model(snv; centr = true, scal = true)
+mod1 = model(snv)
 mod2 = model(savgol; npoint = 15, deriv = 2, degree = 3)
 mod = pip(mod1, mod2)
 fit!(mod, X)
@@ -59,8 +59,7 @@ z = res.explvarx
 plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "Nb. PCs", ylabel = "% variance explained").f
 
 
-T = mod.fm.T
-@head T
+@head T = mod.fm.T
 
 
 i = 1

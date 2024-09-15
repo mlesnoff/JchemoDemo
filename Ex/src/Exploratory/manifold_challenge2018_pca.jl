@@ -46,7 +46,7 @@ freqtable(typ, test)
 plotsp(X, wl; nsamp = 30).f
 
 
-mod1 = model(snv; centr = true, scal = true)
+mod1 = model(snv)
 mod2 = model(savgol; npoint = 21, deriv = 2, degree = 3)
 mod = pip(mod1, mod2)
 fit!(mod, X)
@@ -92,7 +92,7 @@ ztyp = recod_catbyint(typtrain)
 i = 1
 colsh = :tab10
 f = Figure()
-ax = Axis3(f[1, 1], xlabel = string("LV", i), ylabel = string("LV", i + 1), 
+ax = Axis3(f[1, 1]; xlabel = string("LV", i), ylabel = string("LV", i + 1), 
         zlabel = string("LV", i + 2), title = "PCA", perspectiveness = .3) 
 scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 5, 
     color = ztyp, colormap = colsh)   
@@ -119,7 +119,7 @@ ztyp = recod_catbyint(typtrain)
 i = 1
 colsh = :tab10
 f = Figure()
-ax = Axis3(f[1, 1], xlabel = string("LV", i), ylabel = string("LV", i + 1), 
+ax = Axis3(f[1, 1]; xlabel = string("LV", i), ylabel = string("LV", i + 1), 
         zlabel = string("LV", i + 2), title = "PCA", perspectiveness = .3) 
 scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 5, 
     color = ztyp, colormap = colsh) 

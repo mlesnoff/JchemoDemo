@@ -37,11 +37,11 @@ typ = [repeat(["m5"], ntot); repeat(["mp5"], ntot); repeat(["mp6"], ntot)]
 typ_num = recod_catbyint(typ)
 
 
-lev = unique(typ)
+lev = mlev(typ)
 nlev = length(lev)
 
 
-mod1 = model(snv; centr = true, scal = true)
+mod1 = model(snv)
 mod2 = model(savgol; npoint = 11, deriv = 2, degree = 3)
 mod = pip(mod1, mod2)
 fit!(mod, Xm5)

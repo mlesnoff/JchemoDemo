@@ -49,7 +49,7 @@ summ(Y).res
 ```
 
 ```julia
-plotsp(Xm5, wl; xlabel = "Wavelength (nm)", ylabel = "Reflectance").f
+plotsp(Xm5, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
 ```julia
@@ -58,14 +58,14 @@ typ_num = recod_catbyint(typ)
 ```
 
 ```julia
-lev = unique(typ)
+lev = mlev(typ)
 nlev = length(lev)
 ```
 
 #### Preprocessing
 
 ```julia
-mod1 = model(snv; centr = true, scal = true)
+mod1 = model(snv)
 mod2 = model(savgol; npoint = 11, deriv = 2, degree = 3)
 mod = pip(mod1, mod2)
 fit!(mod, Xm5)
@@ -107,10 +107,9 @@ ax = Axis3(f[1, 1]; perspectiveness = 0.2, xlabel = string("PC", i),
     ylabel = string("PC", i + 1), zlabel = string("PC", i + 2), title = "PCA score space") 
 scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 15, color = typ_num, 
     colormap = colm)
-lab = string.(lev)
 elt = [MarkerElement(color = colm[i], marker = '●', markersize = 10) for i in 1:nlev]
 title = "Machine"
-Legend(f[1, 2], elt, lab, title; nbanks = 1, rowgap = 10, framevisible = false)
+Legend(f[1, 2], elt, lev, title; nbanks = 1, rowgap = 10, framevisible = false)
 f
 ```
 

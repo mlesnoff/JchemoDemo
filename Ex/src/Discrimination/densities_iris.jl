@@ -23,7 +23,7 @@ n = nro(X)
 tab(y)
 
 
-lev = unique(y)
+lev = mlev(y)
 
 
 nlev = length(lev)

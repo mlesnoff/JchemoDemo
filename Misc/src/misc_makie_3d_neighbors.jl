@@ -18,7 +18,7 @@ CairoMakie.activate!() ;
 #GLMakie.activate!() ;  
 f = Figure(size = (600, 500))
 mks = 15 ; tsp = .5
-ax = Axis3(f[1, 1], xlabel = "PC1", ylabel = "PC2", zlabel = "PC3", perspectiveness = 0.5) 
+ax = Axis3(f[1, 1]; xlabel = "PC1", ylabel = "PC2", zlabel = "PC3", perspectiveness = 0.5) 
 scatter!(ax, T[:, 1], T[:, 2], T[:, 3]; markersize = mks, color = (:grey, tsp))
 scatter!(ax, T[s, 1], T[s, 2], T[s, 3]; markersize = mks, color = (:blue, tsp))
 scatter!(ax, T[i:i, 1], T[i:i, 2], T[i:i, 3]; markersize = mks, color = (:red, tsp))

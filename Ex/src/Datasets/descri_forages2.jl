@@ -53,8 +53,7 @@ pnames(mod)
 pnames(mod.fm)
 
 
-T = mod.fm.T
-@head T
+@head T = mod.fm.T
 
 
 res = summary(mod, X) ;

@@ -89,8 +89,7 @@ pnames(mod.fm)
 ```
 
 ```julia term = true
-T = mod.fm.T
-@head T 
+@head T = mod.fm.T 
 ```
 
 ```julia

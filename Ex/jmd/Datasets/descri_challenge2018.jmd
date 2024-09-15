@@ -61,13 +61,13 @@ freqtable(typ, test)
 ```
 
 ```julia
-plotsp(X, wl; nsamp = 30).f
+plotsp(X, wl; nsamp = 30, xlabel = "Wavelength (nm)").f
 ```
 
 #### Preprocessing
 
 ```julia
-mod1 = model(snv; centr = true, scal = true)
+mod1 = model(snv)
 mod2 = model(savgol; npoint = 21, deriv = 2, degree = 3)
 mod = pip(mod1, mod2)
 fit!(mod, X)
@@ -75,7 +75,7 @@ Xp = transf(mod, X)
 ```
 
 ```julia
-plotsp(Xp, wl; nsamp = 30).f
+plotsp(Xp, wl; nsamp = 30, xlabel = "Wavelength (nm)").f
 ```
 
 #### Split Tot ==> Train + Test
@@ -109,8 +109,7 @@ pnames(mod.fm)
 ```
 
 ```julia term = true
-T = mod.fm.T
-@head T
+@head T = mod.fm.T
 ```
 
 ```julia

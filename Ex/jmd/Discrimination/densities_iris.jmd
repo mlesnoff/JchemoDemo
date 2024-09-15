@@ -42,7 +42,7 @@ tab(y)
 ```
 
 ```julia
-lev = unique(y)
+lev = mlev(y)
 ```
 
 ```julia
