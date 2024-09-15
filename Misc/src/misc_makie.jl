@@ -30,7 +30,7 @@ using DataFrames, Distributions
 res = scatter(randn(100, 2)) 
 propertynames(res)
 
-############# ABLINES!, VLINES!, HLINES! 
+############# Ablines, Vlines, Hlines 
 
 n = 10
 x = rand(n) ; y = rand(n)
@@ -40,7 +40,7 @@ vlines!(ax, [0; 1]; color = [:green, :purple])
 ablines!(ax, 0, 1; color = :lightgrey)
 f
 
-############# BARPLOTS 
+############# Barplots 
 
 n = 20
 x = 1:n
@@ -64,7 +64,6 @@ df = DataFrame(
     )
 df.std = .1 * df.height
 df
-
 barplot(df.x, df.height; dodge = df.grp, color = df.grp,
     axis = (xticks = (1:2, ["left", "right"]), title = "Dodged bars"))
 
@@ -73,7 +72,7 @@ barplot(df.x, df.height; direction = :x, dodge = df.grp, color = df.grp,
 
 f = Figure()
 ax = Axis(f[1, 1], xticks = (1:2, ["left", "right"]), title = "Dodged bars")
-barplot!(ax, df.x, df.height, dodge = df.grp, color = df.grp)
+barplot!(ax, df.x, df.height; dodge = df.grp, color = df.grp)
 z = [.73; 1; 1.28; 1.73; 2; 2.28]
 errorbars!(ax, z, df.height, df.std, color = :red) 
 f
@@ -81,26 +80,23 @@ f
 colm = Makie.wong_colors()
 f = Figure()
 ax = Axis(f[1,1], xticks = (1:2, ["left", "right"]), title = "Dodged bars with legend")
-barplot!(ax, df.x, df.height, dodge = df.grp, color = colm[df.grp])
+barplot!(ax, df.x, df.height; dodge = df.grp, color = colm[df.grp])
 lab = ["group 1", "group 2", "group 3"]
 elt = [PolyElement(polycolor = colm[i]) for i in 1:length(lab)]
 title = "Groups"
 Legend(f[1, 2], elt, lab, title)
 f
 
-############# BOXPLOTS
+############# Boxplots
 
 n = 200
 x = rand(1:3, n) ; y = randn(n)
 grp = rand(1:2, n)
-
 boxplot(x, y)
 
 boxplot(x, y; orientation = :horizontal)
 
-boxplot(x, y; 
-    dodge = grp, show_notch = true, 
-    color = grp)
+boxplot(x, y; dodge = grp, show_notch = true, color = grp)
 
 boxplot(x, y; dodge = grp, show_notch = true, color = grp,
     axis = (xticks = (1:3, ["A", "B", "C"]), title = "Dodged bars"))
@@ -115,7 +111,7 @@ title = "Groups"
 Legend(f[1, 2], elt, lab, title)
 f
 
-############# ECDF 
+############# Ecdf 
 
 n = 500
 x = rand(n)
@@ -128,7 +124,7 @@ ecdfplot!(ax, y; label = "Normal")
 axislegend(position = :rb)
 f
 
-############# ERRORBARS 
+############# Error bars 
 ## See also function rangebars
 
 x = 0:0.5:10
@@ -160,11 +156,11 @@ scatter!(y, x, markersize = 20, color = :grey)
 errorbars!(y, x, higherrors; whiskerwidth = 15, direction = :x)
 f
 
-############# EXPORT
+############# Export
 
 ## https://makie.juliaplots.org/stable/documentation/backends_and_output/figure_size/
 
-############# HISTOGRAMS, DENSITY 
+############# Histograms, Density 
 
 x = randn(1000)
 f, ax = hist(x, bins = 50)
@@ -173,16 +169,16 @@ f
 
 x = randn(1000)
 f = Figure()
-hist(f[1, 1], x, bins = 10)
-hist(f[1, 2], x, bins = 20, color = :red, strokewidth = 1, strokecolor = :black)
-hist(f[2, 1], x, bins = [-5, -2, -1, 0, 1, 2, 5], color = :gray)
-hist(f[2, 2], x, normalization = :pdf)
+hist(f[1, 1], x; bins = 10)
+hist(f[1, 2], x; bins = 20, color = :red, strokewidth = 1, strokecolor = :black)
+hist(f[2, 1], x; bins = [-5, -2, -1, 0, 1, 2, 5], color = :gray)
+hist(f[2, 2], x; normalization = :pdf)
 f
 
 f = Figure()
 ax = Axis(f[1, 1])
 for i in 1:5 
-    hist!(ax, randn(1000), scale_to = -0.6, offset = i, direction = :x)
+    hist!(ax, randn(1000); scale_to = -0.6, offset = i, direction = :x)
 end
 f
 
@@ -218,7 +214,7 @@ axislegend(position = :rt)
 f[1, 1] = ax
 f
 
-############# LAYOUT 
+############# Layout 
 
 x = rand(20)
 f = Figure()
@@ -249,9 +245,9 @@ f
 x = LinRange(0, 10, 100)
 y = sin.(x)
 f = Figure()
-lines(f[1, 1], x, y, color = :red)
-lines(f[1, 2], x, y, color = :blue)
-lines(f[2, 1:2], x, y, color = :green)
+lines(f[1, 1], x, y; color = :red)
+lines(f[1, 2], x, y; color = :blue)
+lines(f[2, 1:2], x, y; color = :green)
 f
 
 f = Figure(size = (700, 400))
@@ -298,7 +294,7 @@ let
     f
 end
 
-############# LIMITS
+############# Limits
 
 n = 1000
 x = rand(n) 
@@ -314,13 +310,13 @@ f, ax = scatter(x, y)
 limits!(ax, minimum(z), maximum(z), minimum(z), maximum(z))
 f
 
-############# LINES 
+############# Lines 
 
 x = range(0, 10; length = 100)
 y1 = sin.(x)
 y2 = cos.(x)
-f, ax = lines(x, y1, color = :red, linewidth = 2)
-lines!(ax, x, y2, color = :blue, linestyle = :dot) 
+f, ax = lines(x, y1; color = :red, linewidth = 2)
+lines!(ax, x, y2; color = :blue, linestyle = :dot) 
 f
 
 n = 10 ; p = 100
@@ -356,7 +352,7 @@ f[1, 1] = ax
 f[1, 2] = leg
 f
 
-############# MARKERS 
+############# Markers 
 
 ## https://docs.makie.org/stable/examples/plotting_functions/scatter/
 
@@ -388,7 +384,7 @@ f
 zm = vcat(repeat([:circle], 5), repeat(['X'], 5)) 
 scatter(x, y; marker = zm, markersize = 20)
 
-############# QQPLOT, QNORM 
+############# Qqplot, Qnorm 
 
 n = 500
 x = rand(Uniform(-1, 1), n)
@@ -403,7 +399,7 @@ f
 y = 2 .* randn(100) .+ 3
 qqnorm(y, qqline = :fitrobust)
 
-############## SCATTER 
+############## Scatter 
 
 x = range(0, 10, length = 100)
 y = sin.(x)
@@ -413,10 +409,8 @@ n = 100
 x = range(0, 10; length = n)
 y1 = sin.(x)
 y2 = cos.(x)
-f, ax = scatter(x, y1, color = 1:length(x), colormap = :tab10, label = "sin", 
-    linewidth = 4)
-scatter!(ax, x, y2, color = 1:length(x), colormap = :inferno, label = "cos", 
-    linewidth = 4)
+f, ax = scatter(x, y1; color = 1:length(x), colormap = :tab10, label = "sin")
+scatter!(ax, x, y2; color = 1:length(x), colormap = :inferno, label = "cos")
 axislegend()
 f
 
@@ -430,9 +424,9 @@ function FigGridScatters()
     f = Figure(size = (1200, 800))
     c = 1
     for i in 1:2, j in 1:2:5
-        ax = Axis(f[i, j],aspect = 1, xgridstyle = :dash, ygridstyle = :dash,
+        ax = Axis(f[i, j], aspect = 1, xgridstyle = :dash, ygridstyle = :dash,
                                 xtickalign = 1, ytickalign = 1)
-        pnts = scatter!(x, y.^c, color = color, colormap = colms[c],
+        pnts = scatter!(x, y.^c; color = color, colormap = colms[c],
                 markersize = 15, marker = markers[c], strokewidth = 0)
         limits!(ax, -0.1, 1.1, -0.1, 1.1)
         ax.xticks = [0, 1]
@@ -442,16 +436,16 @@ function FigGridScatters()
         cbar = Colorbar(f, pnts, height = Relative(0.75), tickwidth = 2,
                             tickalign = 1, width = 14, ticksize = 14)
         f[i, j+1] = cbar
-        c+=1
+        c += 1
     end
     f
 end
 f = FigGridScatters()
 
-############## TOOLTIP 
+############## Tooltip 
 
-x = [1.; 2]
-y = [0.; 4]
+x = [1. ; 2]
+y = [0. ; 4]
 
 f = Figure()
 ax = Axis(f[1, 1])
@@ -459,7 +453,7 @@ scatter!(ax, x, y)
 tooltip!(x[1], y[1], "x")
 f 
 
-############## TRANSPARENCY 
+############## Transparency 
 
 n = 10000 ; p = 2 
 X = randn(n, p) 
