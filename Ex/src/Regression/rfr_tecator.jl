@@ -73,7 +73,7 @@ pnames(mod)
 pnames(mod.fm)
 
 
-pred = Jchemo.predict(mod, Xtest).pred
+pred = predict(mod, Xtest).pred
 
 
 rmsep(pred, ytest)

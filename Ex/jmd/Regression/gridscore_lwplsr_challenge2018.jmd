@@ -135,8 +135,7 @@ length(pars[1])
 
 ```julia
 mod = model(lwplsr)
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, 
-    verbose = false) 
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, verbose = false) 
 ```
 
 **Selection of the best parameters combination:**

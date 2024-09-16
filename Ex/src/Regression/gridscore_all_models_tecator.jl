@@ -84,7 +84,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :] 
 mod = model(plskern; nlv = res.nlv[u], scal = res.scal[u])
 fit!(mod, Xtrain, ytrain) 
-pred = Jchemo.predict(mod, Xtest).pred 
+pred = predict(mod, Xtest).pred 
 @show rmsep(pred, ytest)
 plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Prediction", 
     ylabel = "Observed (Test)").f
@@ -99,7 +99,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :] 
 mod = model(plsravg; nlv = res.nlv[u])
 fit!(mod, Xtrain, ytrain) 
-pred = Jchemo.predict(mod, Xtest).pred 
+pred = predict(mod, Xtest).pred 
 @show rmsep(pred, ytest)
 
 
@@ -112,7 +112,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 mod = model(rr; lb = res.lb[u]) ;
 fit!(mod, Xtrain, ytrain) 
-pred = Jchemo.predict(mod, Xtest).pred 
+pred = predict(mod, Xtest).pred 
 @show rmsep(pred, ytest)
 
 
@@ -125,7 +125,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 mod = model(splskern; msparse = res.msparse[u], nvar = res.nvar[u], nlv = res.nlv[u])
 fit!(mod, Xtrain, ytrain) 
-pred = Jchemo.predict(mod, Xtest).pred 
+pred = predict(mod, Xtest).pred 
 @show rmsep(pred, ytest)
 
 
@@ -140,7 +140,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 mod = model(krr; lb = res.lb[u], gamma = res.gamma[u]) 
 fit!(mod, Xtrain, ytrain) 
-pred = Jchemo.predict(mod, Xtest).pred 
+pred = predict(mod, Xtest).pred 
 @show rmsep(pred, ytest)
 plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Prediction", 
     ylabel = "Observed (Test)").f
@@ -157,7 +157,7 @@ u = findall(res.y1 .== minimum(res.y1))[1] ;
 res[u, :]
 mod = model(kplsr; nlv = res.nlv[u], gamma = res.gamma[u])
 fit!(mod, Xtrain, ytrain) 
-pred = Jchemo.predict(mod, Xtest).pred 
+pred = predict(mod, Xtest).pred 
 rmsep(pred, ytest)
 
 
@@ -171,7 +171,7 @@ u = findall(res.y1 .== minimum(res.y1))[1] ;
 res[u, :]
 mod = model(dkplsr; nlv = res.nlv[u], gamma = res.gamma[u])
 fit!(mod, Xtrain, ytrain) 
-pred = Jchemo.predict(mod, Xtest).pred 
+pred = predict(mod, Xtest).pred 
 rmsep(pred, ytest)
 
 
@@ -191,7 +191,7 @@ res[u, :]
 mod = model(lwplsr; nlvdis = res.nlvdis[u], metric = res.metric[u], 
     h = res.h[u], k = res.k[u], nlv = res.nlv[u])
 fit!(mod, Xtrain, ytrain)
-pred = Jchemo.predict(mod, Xtest).pred 
+pred = predict(mod, Xtest).pred 
 rmsep(pred, ytest)
 
 
@@ -207,7 +207,7 @@ res[u, :]
 mod = model(lwplsravg; nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
     k = res.k[u], nlv = res.nlv[u]) ;
 fit!(mod, Xtrain, ytrain)
-pred = Jchemo.predict(mod, Xtest).pred ;
+pred = predict(mod, Xtest).pred ;
 rmsep(pred, ytest)
 
 
@@ -223,7 +223,7 @@ res[u, :]
 mod = model(knnr; nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
     k = res.k[u])
 fit!(mod, Xtrain, ytrain) 
-pred = Jchemo.predict(mod, Xtest).pred 
+pred = predict(mod, Xtest).pred 
 rmsep(pred, ytest)
 
 
@@ -238,7 +238,7 @@ res[u, :]
 mod = model(rfr; n_trees = res.n_trees[u], n_subfeatures = res.n_subfeatures[u], 
     max_depth = res.max_depth[u])
 fit!(mod, Xtrain, ytrain) 
-pred = Jchemo.predict(mod, Xtest).pred 
+pred = predict(mod, Xtest).pred 
 @show rmsep(pred, ytest)
 plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Prediction", 
     ylabel = "Observed (Test)").f

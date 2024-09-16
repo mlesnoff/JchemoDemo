@@ -72,14 +72,14 @@ pnames(mod)
 pnames(mod.fm)
 
 
-pred = Jchemo.predict(mod, Xtest).pred
+pred = predict(mod, Xtest).pred
 
 
-Jchemo.predict(mod, Xtest; lb = 1e-2).pred
+predict(mod, Xtest; lb = 1e-2).pred
 
 
 lb = 10.0.^(-6:-1)
-Jchemo.predict(mod, Xtest; lb = lb).pred
+predict(mod, Xtest; lb = lb).pred
 
 
 rmsep(pred, ytest)

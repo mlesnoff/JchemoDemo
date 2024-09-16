@@ -101,7 +101,7 @@ res[u, :]
 
 mod = model(plskern; nlv = res.nlv[u])
 fit!(mod, Xtrain, ytrain)
-pred = Jchemo.predict(mod, Xtest).pred
+pred = predict(mod, Xtest).pred
 
 
 rmsep(pred, ytest)

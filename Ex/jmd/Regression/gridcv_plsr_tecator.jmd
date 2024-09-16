@@ -174,7 +174,7 @@ res[u, :]
 ```julia
 mod = model(plskern; nlv = res.nlv[u])
 fit!(mod, Xtrain, ytrain)
-pred = Jchemo.predict(mod, Xtest).pred
+pred = predict(mod, Xtest).pred
 ```
 
 **Generalization error:**
@@ -186,11 +186,12 @@ rmsep(pred, ytest)
 #### Plotting predictions vs. observed data 
 
 ```julia
-f, ax = plotxy(pred, ytest; xlabel = "Predicted", ylabel = "Observed")
+f, ax = plotxy(pred, ytest; size = (500, 400), xlabel = "Predicted", ylabel = "Observed")
 zpred = vec(pred)
-zfm = loess(zpred, ytest; span = 2/3) ;
-pred_loess = Loess.predict(zfm, sort(zpred))
-lines!(ax, sort(zpred), pred_loess; color = :red)
+zmod = model(loessr; span = 2/3) 
+fit!(zmod, zpred, ytest)
+pred_loess = predict(zmod, sort(zpred)).pred
+lines!(ax, sort(zpred), vec(pred_loess); color = :red)
 ablines!(ax, 0, 1; color = :grey)
 f 
 ```
@@ -219,7 +220,7 @@ res_sel.sel     # nb. LVs selected with the Wold's criterion
 ```julia
 mod = model(plskern; nlv = res_sel.sel) ;
 fit!(mod, Xtrain, ytrain)
-pred = Jchemo.predict(mod, Xtest).pred
+pred = predict(mod, Xtest).pred
 rmsep(pred, ytest)
 ```
 

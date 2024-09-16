@@ -47,7 +47,7 @@ StatsBase.mean(X, dims = 1) # much faster
 
 #### mapreduce
 
-# zp = Jchemo.predict(object.fm_da, X).posterior
+# zp = predict(object.fm_da, X).posterior
 # zp .= (mapreduce(i -> Float64.(zp[i, :] .== maximum(zp[i, :])), hcat, 1:m)')
 
 #### reduce

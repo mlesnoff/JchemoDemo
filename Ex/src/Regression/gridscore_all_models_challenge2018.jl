@@ -205,7 +205,7 @@ res[u, :]
 mod = model(lwplsr; nlvdis = res.nlvdis[u], metric = res.metric[u], 
     h = res.h[u], k = res.k[u], nlv = res.nlv[u]) 
 fit!(mod, Xtrain, ytrain)
-pred = Jchemo.predict(mod, Xtest).pred 
+pred = predict(mod, Xtest).pred 
 rmsep(pred, ytest)
 
 
@@ -229,7 +229,7 @@ res[u, :]
 mod = model(lwplsravg; nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
     k = res.k[u], nlv = res.nlv[u]) ;
 fit!(mod, Xtrain, ytrain)
-pred = Jchemo.predict(mod, Xtest).pred ;
+pred = predict(mod, Xtest).pred ;
 rmsep(pred, ytest)
 
 
