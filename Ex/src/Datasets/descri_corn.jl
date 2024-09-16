@@ -76,8 +76,8 @@ ax = Axis3(f[1, 1]; perspectiveness = 0.2, xlabel = string("PC", i),
     ylabel = string("PC", i + 1), zlabel = string("PC", i + 2), title = "PCA score space") 
 scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 15, color = typ_num, 
     colormap = colm)
-lab = string.(lev)
 elt = [MarkerElement(color = colm[i], marker = '●', markersize = 10) for i in 1:nlev]
+lab = string.(lev)
 title = "Machine"
 Legend(f[1, 2], elt, lab, title; nbanks = 1, rowgap = 10, framevisible = false)
 f

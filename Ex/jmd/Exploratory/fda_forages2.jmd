@@ -89,7 +89,7 @@ pnames(mod0.fm)
 ```
 
 ```julia
-Ttrain_pca = mod0.fm.T 
+@head Ttrain_pca = mod0.fm.T 
 ```
 
 ```julia
@@ -130,12 +130,12 @@ Ttest = transf(mod, Ttest_pca)
 ```
 
 ```julia
-i = 1  # class "i" in test in test
+i = 1  # class "i" in test
 f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "FDA")
 scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
 s = ytest .== lev[i]
 zT = Ttest[s, :]
-scatter!(ax, zT[:, 1], zT[:, 2], markersize = 10, color = (:purple, .8))
+scatter!(ax, zT[:, 1], zT[:, 2]; markersize = 10, color = (:purple, .8))
 f
 ```
 
@@ -163,7 +163,7 @@ ct = fm.Tcenters
 ```
 
 ```julia
-Ttrain = fm.T
+@head Ttrain = fm.T
 ```
 
 ```julia
@@ -179,12 +179,12 @@ Ttest = transf(mod, Xtest)
 ```
 
 ```julia
-i = 1  # class "i" in test in test
+i = 1  # class "i" in test
 f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "FDA")
 scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
 s = ytest .== lev[i]
 zT = Ttest[s, :]
-scatter!(ax, zT[:, 1], zT[:, 2], markersize = 10, color = (:purple, .8))
+scatter!(ax, zT[:, 1], zT[:, 2]; markersize = 10, color = (:purple, .8))
 f
 ```
 

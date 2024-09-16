@@ -184,9 +184,9 @@ ax = Axis3(f[1, 1]; xlabel = "Axis 1", ylabel = "Axis 2", zlabel = "Axis 3",
     perspectiveness = 0.2, azimuth = 1.2pi) 
 scatter!(ax, x, y, z; markersize = mks, color = group_num, colormap = colm)
 ## Legend
-lab = string.(lev)
 elt = [MarkerElement(color = colm[i], marker = '●', markersize = 10) for i in 1:nlev]
 #elt = [PolyElement(polycolor = colm[i]) for i in 1:nlev]
+lab = string.(lev)
 title = "Group"
 Legend(f[1, 2], elt, lab, title; nbanks = 1, rowgap = 10, framevisible = false)
 f
@@ -268,7 +268,7 @@ f
 
 x, y = collect(-8:0.5:8), collect(-8:0.5:8)
 z = [sinc(√(X^2 + Y^2) / π) for X ∈ x, Y ∈ y]
-wireframe(x, y, z; axis = (; type = Axis3), color = :grey)
+wireframe(x, y, z; axis = (type = Axis3,), color = :grey)
 
 ## Vijayakumar & Schaal 1997 fig.2 p.5
 ## Schaal & Atkeson 1998 Fig.4 p.16-17

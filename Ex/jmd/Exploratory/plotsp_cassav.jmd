@@ -68,6 +68,10 @@ plotsp(X, wl; nsamp = 10, xlabel ="Wavelength (nm)", ylabel = "Absorbance", titl
 ```
 
 ```julia
+plotsp(X, wl; nsamp = 1, xlabel ="Wavelength (nm)", ylabel = "Absorbance", title = "Cassava data").f
+```
+
+```julia
 i = 1
 plotsp(X[i:i, :], wl; color = :blue, xlabel ="Wavelength (nm)", ylabel = "Absorbance", title = "Cassava data").f
 ```

@@ -26,6 +26,7 @@ f
 
 ## Palettes from colorschemes
 colsh = :default
+#colsh = :tab10
 #colsh = :Dark2_5
 #colsh = [:red; :blue]
 cgrad(colsh)
@@ -33,12 +34,18 @@ cgrad(colsh; alpha = .6)
 ## Discrete
 cgrad(colsh; categorical = true)
 cgrad(colsh, 3; categorical = true)
+cgrad(colsh)[1:3]
+cgrad(colsh, 3; categorical = true, alpha = .5)
 cgrad(colsh, 3; categorical = true, rev = true)
 cgrad(colsh, 15; categorical = true)
+cgrad(colsh, 15; categorical = true)[1:2]
+cgrad(colsh, 15)[1:2]
+
 
 cgrad(:Dark2_5) 
 cgrad(:Dark2_5; categorical = true) 
 cgrad(:Dark2_5; categorical = true)[1:2]
+cgrad(:Dark2_5)[1:2]
 ## Note the difference with:
 cgrad(:Dark2_5, 2; categorical = true)
 

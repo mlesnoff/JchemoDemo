@@ -52,8 +52,10 @@ plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance", title = "Octane
 
 ```julia
 mod0 = model(pcasvd; nlv = 6) 
-## For robust spherical PCA, do:
+## For robust PCA, do:
 #mod0 = model(pcasph; nlv = 6)
+## or:
+#mod0 = model(pcaout; nlv = 6)
 fit!(mod0, X)  
 pnames(mod0)
 pnames(mod0.fm)

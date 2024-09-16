@@ -159,8 +159,8 @@ dtest = predict(mod_d, Xtest).d
 ```julia
 f = Figure(size = (500, 400))
 ax = Axis(f[1, 1]; xlabel = "SD", ylabel = "OD")
-scatter!(ax, dtrain.dstand_sd, dtrain.dstand_od, label = "Train")
-scatter!(ax, dtest.dstand_sd, dtest.dstand_od, color = (:red, .5), label = "Test")
+scatter!(ax, dtrain.dstand_sd, dtrain.dstand_od; label = "Train")
+scatter!(ax, dtest.dstand_sd, dtest.dstand_od; color = (:red, .5), label = "Test")
 hlines!(ax, 1; color = :grey, linestyle = :dash)
 vlines!(ax, 1; color = :grey, linestyle = :dash)
 axislegend(position = :rt)
