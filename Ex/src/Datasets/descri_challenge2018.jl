@@ -39,7 +39,7 @@ freqtable(string.(typ, "-", Y.label))
 freqtable(typ, test)
 
 
-plotsp(X, wl; nsamp = 30).f
+plotsp(X, wl; nsamp = 30, xlabel = "Wavelength (nm)").f
 
 
 mod1 = model(snv)
@@ -49,7 +49,7 @@ fit!(mod, X)
 Xp = transf(mod, X)
 
 
-plotsp(Xp, wl; nsamp = 30).f
+plotsp(Xp, wl; nsamp = 30, xlabel = "Wavelength (nm)").f
 
 
 s = Bool.(test)

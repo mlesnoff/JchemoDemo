@@ -10,7 +10,6 @@ weave_options:
 ```julia
 using Jchemo, JchemoData
 using JLD2, CairoMakie
-using Loess
 ```
 
 #### Data importation

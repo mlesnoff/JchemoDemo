@@ -1,7 +1,6 @@
 
 using Jchemo, JchemoData
 using JLD2, CairoMakie
-using Loess
 
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -87,28 +86,24 @@ mse(pred, ytest)
 r = residreg(pred, ytest) # residuals
 
 
-plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, xlabel = "Prediction", 
-    ylabel = "Observed (Test)").f
-
-
-plotxy(ytest, r; size = (500, 400), color = (:red, .5), zeros = true, xlabel = "Observed (Test)",  
-    ylabel = "Residuals").f
-
-
 f, ax = plotxy(pred, ytest; size = (500, 400), xlabel = "Predicted", ylabel = "Observed")
 zpred = vec(pred)
-zfm = loess(zpred, ytest; span = 2/3) ;
-pred_loess = Loess.predict(zfm, sort(zpred))
-lines!(ax, sort(zpred), pred_loess; color = :red)
+zmod = model(loessr; span = 2/3) 
+fit!(zmod, zpred, ytest)
+pred_loess = predict(zmod, sort(zpred)).pred
+lines!(ax, sort(zpred), vec(pred_loess); color = :red)
 ablines!(ax, 0, 1; color = :grey)
 f
 
 
 f, ax = plotxy(ytest, r; size = (500, 400), color = (:blue, .5), xlabel = "Observed (Test)", 
     ylabel = "Residuals") 
-zfm = loess(ytest, vec(r); span = 2/3) ;
-pred_loess = Loess.predict(zfm, sort(ytest))
-lines!(ax, sort(ytest), pred_loess; color = :red)
-hlines!(ax, 0; color = :grey, linestyle = :dashdot)
+zpred = vec(pred)
+zr = vec(r)
+zmod = model(loessr; span = 2/3) 
+fit!(zmod, zpred, zr)
+r_loess = predict(zmod, sort(zpred)).pred
+lines!(ax, sort(zpred), vec(r_loess); color = :red)
+hlines!(ax, 0; color = :grey)
 f
 

@@ -30,7 +30,7 @@ wl = parse.(Float64, wlst)
 summ(Y).res
 
 
-plotsp(Xm5, wl; xlabel = "Wavelength (nm)", ylabel = "Reflectance").f
+plotsp(Xm5, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
 typ = [repeat(["m5"], ntot); repeat(["mp5"], ntot); repeat(["mp6"], ntot)]
@@ -77,8 +77,7 @@ ax = Axis3(f[1, 1]; perspectiveness = 0.2, xlabel = string("PC", i),
 scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 15, color = typ_num, 
     colormap = colm)
 elt = [MarkerElement(color = colm[i], marker = '●', markersize = 10) for i in 1:nlev]
-lab = string.(lev)
 title = "Machine"
-Legend(f[1, 2], elt, lab, title; nbanks = 1, rowgap = 10, framevisible = false)
+Legend(f[1, 2], elt, lev, title; nbanks = 1, rowgap = 10, framevisible = false)
 f
 

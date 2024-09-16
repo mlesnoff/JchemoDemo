@@ -252,8 +252,8 @@ pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k)
 length(pars[1])
 mod2 = model(lwplsr)
 mod = pip(mod1, mod2)
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, 
-    verbose = true) 
+## Pipeline ==> only the last model is tuned
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, verbose = true) 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 mod2 = model(lwplsr; nlvdis = res.nlvdis[u], metric = res.metric[u], 
@@ -264,7 +264,7 @@ pred = predict(mod, Xtest).pred
 rmsep(pred, ytest)
 
 
-nlvdis = [15; 20]  ; metric = [:mah] 
+nlvdis = 0  ; metric = [:eucl] 
 h = [1; 2; 4; 6; Inf] 
 k = [1; collect(5:10:100)] 
 pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k) 

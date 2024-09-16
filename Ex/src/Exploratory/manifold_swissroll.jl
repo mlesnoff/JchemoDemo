@@ -3,7 +3,6 @@ using Jchemo, JchemoData
 using JLD2, DataFrames
 using GLMakie, CairoMakie
 using LinearAlgebra, Random
-using Distances
 using ManifoldLearning
 
 
@@ -15,7 +14,7 @@ hlims = (-10.0, 10.0)  # seems to impact only axis2
 rng = TaskLocalRNG()
 #rng = MersenneTwister(1234)
 Xt, L = ManifoldLearning.swiss_roll(n, noise; segments, hlims, rng)
-X = Xt'
+@head X = Xt'
 
 
 labs = vec(L)
@@ -28,7 +27,8 @@ mks = 10
 i = 1
 scatter(X[:, i], X[:, i + 1], X[:, i + 2], 
     markersize = mks, 
-    color = labs, #colormap = (:Dark2_5, .7),
+    color = labs, 
+    #colormap = (:Dark2_5, .7),
     axis = (type = Axis3, xlabel = string("LV", i), ylabel = string("LV", i + 1), 
         zlabel = string("LV", i + 2), title = "Swiss roll", perspectiveness = .3))
 
@@ -47,7 +47,6 @@ plotxy(T[:, i], T[:, i + 1]; color = labs,
 
 nlv = 2
 n_neighbors = 15 ; min_dist = .5 
-
 mod = model(umap; nlv, n_neighbors, min_dist)
 fit!(mod, X)
 @head T = transf(mod, X)

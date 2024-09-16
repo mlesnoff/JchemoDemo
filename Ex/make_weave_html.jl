@@ -20,8 +20,8 @@ for i = 1:nf
     db = joinpath(zpath, f[i])
     out_path = joinpath(path_html, meth)
     println("Time")
-    @time weave(db; out_path = out_path, doctype = "md2html",
-        fig_path = nothing, fig_ext = nothing)
+    @time weave(db; out_path = out_path, doctype = "md2html", fig_path = nothing, 
+        fig_ext = nothing)
 end
 
 

@@ -1,7 +1,6 @@
 
 using Jchemo, JchemoData
 using JLD2, CairoMakie
-using Loess
 
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -113,11 +112,12 @@ pred = predict(mod, Xtest).pred
 rmsep(pred, ytest)
 
 
-f, ax = plotxy(pred, ytest; xlabel = "Predicted", ylabel = "Observed")
+f, ax = plotxy(pred, ytest; size = (500, 400), xlabel = "Predicted", ylabel = "Observed")
 zpred = vec(pred)
-zfm = loess(zpred, ytest; span = 2/3) ;
-pred_loess = Loess.predict(zfm, sort(zpred))
-lines!(ax, sort(zpred), pred_loess; color = :red)
+zmod = model(loessr; span = 2/3) 
+fit!(zmod, zpred, ytest)
+pred_loess = predict(zmod, sort(zpred)).pred
+lines!(ax, sort(zpred), vec(pred_loess); color = :red)
 ablines!(ax, 0, 1; color = :grey)
 f
 

@@ -28,8 +28,10 @@ plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance", title = "Octane
 
 
 mod = model(pcasvd; nlv = 6) 
-## For robust spherical PCA, do:
+## For robust PCA, do:
 #mod = model(pcasph; nlv = 6)
+## or:
+#mod = model(pcaout; nlv = 6)
 fit!(mod, X)  
 pnames(mod)
 pnames(mod.fm)
@@ -52,7 +54,7 @@ l = reshape(1:4, 2, 2)
 for j = 1:2
     for k = 1:2
         zl = l[j, k]
-        ax[zl] = Axis(f[j, k], xlabel = string("PC", zl), ylabel = string("PC", zl + 1))
+        ax[zl] = Axis(f[j, k]; xlabel = string("PC", zl), ylabel = string("PC", zl + 1))
         scatter!(ax[zl], T[:, zl:(zl + 1)]; color = (:red, .5))
     end
 end
@@ -67,7 +69,7 @@ i = 1
 f = Figure(size = (700, 500))
 ax = Axis3(f[1, 1]; perspectiveness = 0.2, xlabel = string("PC", i), 
     ylabel = string("PC", i + 1), zlabel = string("PC", i + 2), title = "PCA score space")
-scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2], markersize = 15)
+scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 15)
 f
 
 
@@ -79,7 +81,7 @@ i = 1
 f = Figure(size = (700, 500))
 ax = Axis3(f[1, 1]; perspectiveness = 0.2, xlabel = string("PC", i), 
     ylabel = string("PC", i + 1), zlabel = string("PC", i + 2), title = "PCA score space")
-scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2], markersize = 15)
+scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 15)
 text!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; text = string.(1:n), fontsize = 15)
 f
 

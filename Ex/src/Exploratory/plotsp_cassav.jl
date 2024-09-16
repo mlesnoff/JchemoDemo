@@ -42,6 +42,9 @@ plotsp(X, wl; color = (:red, .3), xlabel ="Wavelength (nm)", ylabel = "Absorbanc
 plotsp(X, wl; nsamp = 10, xlabel ="Wavelength (nm)", ylabel = "Absorbance", title = "Cassava data").f
 
 
+plotsp(X, wl; nsamp = 1, xlabel ="Wavelength (nm)", ylabel = "Absorbance", title = "Cassava data").f
+
+
 i = 1
 plotsp(X[i:i, :], wl; color = :blue, xlabel ="Wavelength (nm)", ylabel = "Absorbance", title = "Cassava data").f
 

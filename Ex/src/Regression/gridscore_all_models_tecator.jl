@@ -119,8 +119,7 @@ pred = predict(mod, Xtest).pred
 nlv = 0:20
 pars = mpar(msparse = [:hard], nvar = [1])
 mod = model(splskern)
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, 
-    verbose = false)
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, verbose = false)
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 mod = model(splskern; msparse = res.msparse[u], nvar = res.nvar[u], nlv = res.nlv[u])
@@ -134,8 +133,7 @@ gamma = 10.0.^(-3:5)
 pars = mpar(gamma = gamma) 
 length(pars[1])
 mod = model(krr)
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, lb, 
-    verbose = false)
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, lb, verbose = false)
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 mod = model(krr; lb = res.lb[u], gamma = res.gamma[u]) 
@@ -151,8 +149,7 @@ gamma = 10.0.^(-3:5)
 pars = mpar(gamma = gamma)
 length(pars[1])
 mod = model(kplsr)
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, 
-    verbose = false)
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, verbose = false)
 u = findall(res.y1 .== minimum(res.y1))[1] ;
 res[u, :]
 mod = model(kplsr; nlv = res.nlv[u], gamma = res.gamma[u])
@@ -182,8 +179,7 @@ nlv = 0:15
 pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k)
 length(pars[1])
 mod = model(lwplsr)
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, 
-    verbose = true) 
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, verbose = true) 
 group = string.(res.nlvdis, "-", res.h, "-", res.k) 
 plotgrid(res.nlv, res.y1, group; xlabel ="Nb. LVs", ylabel = "RMSEP").f
 u = findall(res.y1 .== minimum(res.y1))[1] 

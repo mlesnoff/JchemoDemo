@@ -60,7 +60,7 @@ mod = model(pcasvd; nlv = 6)
 fit!(mod, Xp)
 
 
-T = mod.fm.T
+@head T = mod.fm.T
 
 
 i = 1
@@ -95,7 +95,7 @@ colsh = :Dark2_5 #:default, :tab10
 colm = cgrad(colsh, nlev; alpha = .7, categorical = true) 
 ax = Axis3(f[1, 1]; perspectiveness = 0.2, xlabel = string("PC", i), 
     ylabel = string("PC", i + 1), zlabel = string("PC", i + 2), title = "PCA score space") 
-scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2], markersize = 15, color = groupnum, 
+scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2], markersize = 15, color = year, 
     colormap = colm)
 elt = [MarkerElement(color = colm[i], marker = '●', markersize = 10) for i in 1:nlev]
 lab = string.(lev)

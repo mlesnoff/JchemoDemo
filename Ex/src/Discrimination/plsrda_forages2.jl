@@ -46,10 +46,11 @@ nlv = 15
 mod = model(plsrda; nlv) 
 #mod = model(plslda; nlv) 
 #mod = model(plsqda; nlv) 
-#mod = model(plsqda; nlv, prior = :prop)
+#mod = model(plsqda; nlv, prior = :prop) 
+#mod = model(plskdeda; nlv)
 
 
-#mod = model(rrda(lb = 1e-5)
+#mod = model(rrda; lb = 1e-5)
 
 
 fit!(mod, Xtrain, ytrain)

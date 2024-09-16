@@ -83,8 +83,7 @@ length(pars[1])
 
 
 mod = model(lwplsr)
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, 
-    verbose = false)
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, verbose = false)
 
 
 group = string.("nvldis=", res.nlvdis, " h=", res.h, " k=", res.k)

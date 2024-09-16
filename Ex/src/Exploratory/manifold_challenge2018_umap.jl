@@ -2,10 +2,7 @@
 using Jchemo, JchemoData
 using JLD2, DataFrames
 using GLMakie, CairoMakie
-using LinearAlgebra, Random
-using Distances
 using FreqTables
-using ManifoldLearning
 
 
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -70,36 +67,48 @@ ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
 
+lev = mlev(typtrain)
+nlev = length(lev)
+ztyp = recod_catbyint(typtrain)
+
+
 nlv = 3
 n_neighbors = 40 ; min_dist = .4 
 mod = model(umap; nlv, n_neighbors, min_dist)
+#mod = model(umap; nlv, n_neighbors, min_dist, psamp = .5)
 fit!(mod, Xtrain)
 @head T = transf(mod, Xtrain)
 
 
 CairoMakie.activate!()  
-#GLMakie.activate!() 
-ztyp = recod_catbyint(typtrain)
+#GLMakie.activate!()  
 i = 1
-scatter(T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 5, 
-    color = ztyp, colormap = :tab20, 
+scatter(T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 6, 
+    color = ztyp, colormap = :tab10, 
+    axis = (type = Axis3, xlabel = string("LV", i), ylabel = string("LV", i + 1), 
+        zlabel = string("LV", i + 2), title = "UMAP", perspectiveness = .3))
+
+
+CairoMakie.activate!()  
+#GLMakie.activate!()  
+colm = cgrad(:tab10, nlev; categorical = true, alpha = .5)
+#colm = cgrad(:tab10; alpha = .5)[1:nlev]
+i = 1
+scatter(T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 6, 
+    color = ztyp, colormap = colm, 
     axis = (type = Axis3, xlabel = string("LV", i), ylabel = string("LV", i + 1), 
         zlabel = string("LV", i + 2), title = "UMAP", perspectiveness = .3))
 
 
 CairoMakie.activate!()  
 #GLMakie.activate!() 
-ztyp = recod_catbyint(typtrain)
+colm = cgrad(:tab10, nlev; categorical = true, alpha = .5)
 i = 1
-colsh = :tab10
 f = Figure()
 ax = Axis3(f[1, 1]; xlabel = string("LV", i), ylabel = string("LV", i + 1), 
         zlabel = string("LV", i + 2), title = "UMAP", perspectiveness = .3) 
-scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 5, 
+scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 6, 
     color = ztyp, colormap = colm)   
-lev = mlev(typtrain)
-nlev = length(lev)
-colm = cgrad(colsh, nlev; alpha = .7, categorical = true) 
 elt = [MarkerElement(color = colm[i], marker = '●', markersize = 10) for i in 1:nlev]
 #elt = [PolyElement(polycolor = colm[i]) for i in 1:nlev]
 title = "Group"
@@ -108,30 +117,23 @@ f
 
 
 nlv = 3
-n_neighbors = 40 ; min_dist = .4 
-nlv = 3
-n_neighbors = 40 ; min_dist = .4 
-mod = model(umap; nlv, n_neighbors, min_dist)
+mod = model(umap; nlv)
 fit!(mod, Xtrain)
 @head T = transf(mod, Xtrain)
-@head Ttest = transf(mod, Xtrain)
+@head Ttest = transf(mod, Xtest)
 
 
 CairoMakie.activate!()  
 #GLMakie.activate!() 
-ztyp = recod_catbyint(typtrain)
+colm = cgrad(:tab10, nlev; categorical = true, alpha = .5)
 i = 1
-colsh = :tab10
 f = Figure()
 ax = Axis3(f[1, 1]; xlabel = string("LV", i), ylabel = string("LV", i + 1), 
         zlabel = string("LV", i + 2), title = "UMAP", perspectiveness = .3) 
-scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 5, 
+scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 6, 
     color = ztyp, colormap = colm) 
-scatter!(ax, Ttest[:, i], Ttest[:, i + 1], Ttest[:, i + 2], color = :black, 
-    colormap = :tab20, markersize = 7)  
-lev = mlev(typtrain)
-nlev = length(lev)
-colm = cgrad(colsh, nlev; alpha = .7, categorical = true) 
+scatter!(ax, Ttest[:, i], Ttest[:, i + 1], Ttest[:, i + 2], color = (:black, .2), 
+    colormap = colm, markersize = 7)  
 elt = [MarkerElement(color = colm[i], marker = '●', markersize = 10) for i in 1:nlev]
 #elt = [PolyElement(polycolor = colm[i]) for i in 1:nlev]
 title = "Group"

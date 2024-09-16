@@ -46,7 +46,7 @@ K = 3
 segm = segmkf(ntrain, K; rep = 10)
 
 
-pars = mpar(a_kde = [.5, 1, 1.5])
+pars = mpar(a = [.5, 1, 1.5])
 
 
 nlv = 1:40
@@ -55,7 +55,7 @@ rescv = gridcv(mod, Xtrain, ytrain; segm, score = errp, pars, nlv) ;
 res = rescv.res
 
 
-group = string.("a_kde = ", res.a_kde)
+group = string.("a = ", res.a)
 plotgrid(res.nlv, res.y1, group; step = 2, xlabel = "Nb. LVs", ylabel = "Err-CV").f
 
 
@@ -63,7 +63,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-mod = model(plskdeda; nlv = res.nlv[u], a_kde = res.a_kde[u])
+mod = model(plskdeda; nlv = res.nlv[u], a = res.a[u])
 fit!(mod, Xtrain, ytrain)
 pred = predict(mod, Xtest).pred
 errp(pred, ytest)

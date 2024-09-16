@@ -48,7 +48,7 @@ pnames(mod0)
 pnames(mod0.fm)
 
 
-Ttrain_pca = mod0.fm.T
+@head Ttrain_pca = mod0.fm.T
 
 
 mod = model(fda; nlv = 2)
@@ -79,12 +79,12 @@ Ttest_pca = transf(mod0, Xtest)
 Ttest = transf(mod, Ttest_pca)
 
 
-i = 1  # class "i" in test in test
+i = 1  # class "i" in test
 f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "FDA")
 scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
 s = ytest .== lev[i]
 zT = Ttest[s, :]
-scatter!(ax, zT[:, 1], zT[:, 2], markersize = 10, color = (:purple, .8))
+scatter!(ax, zT[:, 1], zT[:, 2]; markersize = 10, color = (:purple, .8))
 f
 
 
@@ -102,7 +102,7 @@ nlev = length(lev)
 ct = fm.Tcenters
 
 
-Ttrain = fm.T
+@head Ttrain = fm.T
 
 
 f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "FDA", ellipse = true)
@@ -113,11 +113,11 @@ f
 Ttest = transf(mod, Xtest)
 
 
-i = 1  # class "i" in test in test
+i = 1  # class "i" in test
 f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "FDA")
 scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
 s = ytest .== lev[i]
 zT = Ttest[s, :]
-scatter!(ax, zT[:, 1], zT[:, 2], markersize = 10, color = (:purple, .8))
+scatter!(ax, zT[:, 1], zT[:, 2]; markersize = 10, color = (:purple, .8))
 f
 

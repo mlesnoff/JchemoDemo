@@ -87,8 +87,7 @@ length(pars[1])
 
 
 mod = model(lwplsr)
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, 
-    verbose = false)
+res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, verbose = false)
 
 
 u = findall(res.y1 .== minimum(res.y1))[1] 

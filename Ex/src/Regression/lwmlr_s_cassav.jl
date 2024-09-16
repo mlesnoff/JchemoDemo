@@ -130,6 +130,7 @@ length(pars[1])
 mod1 = model(plskern)
 mod2 = model(lwmlr)
 mod = pip(mod1, mod2)
+## Pipeline ==> only the last model is tuned
 res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, verbose = false)
 
 
