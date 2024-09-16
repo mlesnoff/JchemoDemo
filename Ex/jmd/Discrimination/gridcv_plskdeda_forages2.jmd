@@ -82,7 +82,7 @@ segm = segmkf(ntrain, K; rep = 10)
 #### Grid-search by CV 
 
 ```julia
-pars = mpar(a_kde = [.5, 1, 1.5])
+pars = mpar(a = [.5, 1, 1.5])
 ```
 
 ```julia
@@ -95,7 +95,7 @@ res = rescv.res
 **Selection of the best parameters combination**
 
 ```julia
-group = string.("a_kde = ", res.a_kde)
+group = string.("a = ", res.a)
 plotgrid(res.nlv, res.y1, group; step = 2, xlabel = "Nb. LVs", ylabel = "Err-CV").f
 ```
 
@@ -107,7 +107,7 @@ res[u, :]
 #### Final prediction (Test) using the optimal model
 
 ```julia
-mod = model(plskdeda; nlv = res.nlv[u], a_kde = res.a_kde[u])
+mod = model(plskdeda; nlv = res.nlv[u], a = res.a[u])
 fit!(mod, Xtrain, ytrain)
 pred = predict(mod, Xtest).pred
 errp(pred, ytest)
