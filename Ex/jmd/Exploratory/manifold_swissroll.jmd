@@ -12,7 +12,6 @@ using Jchemo, JchemoData
 using JLD2, DataFrames
 using GLMakie, CairoMakie
 using LinearAlgebra, Random
-#using Distances
 using ManifoldLearning
 ```
 
