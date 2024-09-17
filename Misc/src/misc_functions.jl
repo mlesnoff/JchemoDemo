@@ -176,4 +176,11 @@ vx = copy(x) ; vy = copy(y) ; vz = copy(z) ;
 @b g7($x, $y, $z)
 @b g9($x, $y, $z)
 
+@b g1(x, y, z)  # ** for large n
+@b g2(x, y, z)
+@b g3(x, y, z)
+@b g4!(vx, vy, vz)
+@b g5(x, y, z)
+@b g7(x, y, z)
+@b g9(x, y, z)
 
