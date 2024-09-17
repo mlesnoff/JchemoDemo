@@ -82,3 +82,11 @@ lab = copy(lev)
 title = "Type"
 Legend(f[1, 2], elt, lab, title; framevisible = false)
 f
+
+
+##############
+
+f = Figure()
+Axis3(f[1, 1])
+Colorbar(f[1, 2]; colormap = :viridis, limits = (0, 10), flipaxis = false)
+f
