@@ -79,13 +79,13 @@ ncal = ntrain - nval
 nlv = 0:50
 pars = mpar(scal = [false; true])
 length(pars[1])
-model = plskern)  
+model = plskern()  
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv) 
 group = string.(res.scal) 
 plotgrid(res.nlv, res.y1, group; step = 2, xlabel ="Nb. LVs", ylabel = "RMSEP").f
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :] 
-model = plskern; nlv = res.nlv[u], scal = res.scal[u])
+model = plskern(nlv = res.nlv[u], scal = res.scal[u])
 fit!(model, Xtrain, ytrain) 
 pred = predict(model, Xtest).pred 
 @show rmsep(pred, ytest)
@@ -96,25 +96,25 @@ plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Prediction",
 nlv = [0:30, 0:50, 0:70, 0:100]
 pars = mpar(nlv = nlv)
 length(pars[1])
-model = plsravg)
+model = plsravg()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, verbose = false) 
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :] 
-model = plsravg; nlv = res.nlv[u])
+model = plsravg(nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain) 
 pred = predict(model, Xtest).pred 
 @show rmsep(pred, ytest)
 
 
 lb = 10.0.^(-15:.1:3)
-model = rr)
+model = rr()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, lb) 
 zres = res[res.y1 .< 2, :]
 zlb = round.(log.(10, zres.lb), digits = 3)
 plotgrid(zlb, zres.y1; step = 2,xlabel ="Lambda", ylabel = "RMSEP").f
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-model = rr; lb = res.lb[u]) ;
+model = rr(lb = res.lb[u]) ;
 fit!(model, Xtrain, ytrain) 
 pred = predict(model, Xtest).pred 
 @show rmsep(pred, ytest)
@@ -122,11 +122,11 @@ pred = predict(model, Xtest).pred
 
 nlv = 0:40
 pars = mpar(msparse = [:hard], nvar = [1])
-model = splskern)
+model = splskern()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, verbose = false)
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-model = splskern; msparse = res.msparse[u], nvar = res.nvar[u], nlv = res.nlv[u])
+model = splskern(msparse = res.msparse[u], nvar = res.nvar[u], nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain) 
 pred = predict(model, Xtest).pred 
 @show rmsep(pred, ytest)
@@ -143,11 +143,11 @@ s = samprand(ncal, m)
 zXcal = Xcal[s.test, :]
 zycal = ycal[s.test]
 ## End
-model = krr)
+model = krr()
 res = gridscore(model, zXcal, zycal, Xval, yval; score = rmsep, pars, lb, verbose = false)
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-model = krr; lb = res.lb[u], gamma = res.gamma[u]) 
+model = krr(lb = res.lb[u], gamma = res.gamma[u]) 
 fit!(model, Xtrain, ytrain) 
 pred = predict(model, Xtest).pred 
 @show rmsep(pred, ytest)
@@ -166,11 +166,11 @@ s = samprand(ncal, m)
 zXcal = Xcal[s.test, :]
 zycal = ycal[s.test]
 ## End
-model = kplsr)
+model = kplsr()
 res = gridscore(model, zXcal, zycal, Xval, yval; score = rmsep, pars, nlv, verbose = false) 
 u = findall(res.y1 .== minimum(res.y1))[1] ;
 res[u, :]
-model = kplsr; nlv = res.nlv[u], gamma = res.gamma[u])
+model = kplsr(nlv = res.nlv[u], gamma = res.gamma[u])
 fit!(model, Xtrain, ytrain) 
 pred = predict(model, Xtest).pred 
 @show rmsep(pred, ytest)
@@ -180,11 +180,11 @@ nlv = 0:100
 gamma = 10.0.^(-3:5)
 pars = mpar(gamma = gamma)
 length(pars[1])
-model = dkplsr)
+model = dkplsr()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, verbose = false) 
 u = findall(res.y1 .== minimum(res.y1))[1] ;
 res[u, :]
-model = dkplsr; nlv = res.nlv[u], gamma = res.gamma[u])
+model = dkplsr(nlv = res.nlv[u], gamma = res.gamma[u])
 fit!(model, Xtrain, ytrain) 
 pred = predict(model, Xtest).pred 
 @show rmsep(pred, ytest)
@@ -196,13 +196,13 @@ k = [150; 200; 350; 500; 1000]
 nlv = 0:20 
 pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k)
 length(pars[1])
-model = lwplsr)
+model = lwplsr()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, verbose = true) 
 group = string.(res.nlvdis, "-", res.h, "-", res.k) 
 plotgrid(res.nlv, res.y1, group; xlabel ="Nb. LVs", ylabel = "RMSEP").f
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-model = lwplsr; nlvdis = res.nlvdis[u], metric = res.metric[u], 
+model = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], 
     h = res.h[u], k = res.k[u], nlv = res.nlv[u]) 
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred 
@@ -210,7 +210,7 @@ rmsep(pred, ytest)
 
 
 ## A performant model 
-model = lwplsr; nlvdis = 15, metric = :mah, h = 2, k = 200, nlv = 15) ;
+model = lwplsr(nlvdis = 15, metric = :mah, h = 2, k = 200, nlv = 15) ;
 fit!(model, Xtrain, ytrain) 
 pred = predict(model, Xtest).pred 
 rmsep(pred, ytest)
@@ -222,11 +222,11 @@ h = [1; 2; 4] ; k = [150; 200; 350; 500; 1000]
 pars = mpar(nlv = nlv, nlvdis = nlvdis, 
     metric = metric, h = h, k = k) 
 length(pars[1])
-model = lwplsravg) 
+model = lwplsravg() 
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, verbose = false) 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-model = lwplsravg; nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
+model = lwplsravg(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
     k = res.k[u], nlv = res.nlv[u]) ;
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred ;
@@ -237,27 +237,27 @@ rmsep(pred, ytest)
 nlvdis = 15 ; metric = :mah  
 h = 2 ; k = 200 
 nlv = 5:20
-model = lwplsravg; nlvdis, metric, h, k, nlv)
+model = lwplsravg(; nlvdis, metric, h, k, nlv)
 fit!(model, Xtrain, ytrain) 
 pred = predict(model, Xtest).pred 
 rmsep(pred, ytest)
 
 
-model1 = plskern; nlv = 30)
+model1 = plskern(nlv = 30)
 nlvdis = [0; 15; 25] ; metric = [:eucl, :mah] 
 h = [1; 2; 4; 6; Inf]
 k = [150; 200; 350; 500; 1000]  
 nlv = 0:20 
 pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k)
 length(pars[1])
-model2 = lwplsr)
+model2 = lwplsr()
 model = pip(model1, model2)
 ## Pipeline ==> only the last model is tuned
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, verbose = true) 
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-model2 = lwplsr; nlvdis = res.nlvdis[u], metric = res.metric[u], 
-    h = res.h[u], k = res.k[u], nlv = res.nlv[u])
+model2 = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
+  k = res.k[u], nlv = res.nlv[u])
 model = pip(model1, model2)
 fit!(model, Xtrain, ytrain) 
 pred = predict(model, Xtest).pred 
@@ -269,11 +269,11 @@ h = [1; 2; 4; 6; Inf]
 k = [1; collect(5:10:100)] 
 pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k) 
 length(pars[1])
-model = knnr)
+model = knnr()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, verbose = false) 
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
-model = knnr; nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
+model = knnr(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
     k = res.k[u])
 fit!(model, Xtrain, ytrain) 
 pred = predict(model, Xtest).pred 
@@ -288,7 +288,7 @@ length(pars[1])
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, verbose = false) 
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
-model = rfr; n_trees = res.n_trees[u], n_subfeatures = res.n_subfeatures[u], 
+model = rfr(n_trees = res.n_trees[u], n_subfeatures = res.n_subfeatures[u], 
     max_depth = res.max_depth[u])
 fit!(model, Xtrain, ytrain) 
 pred = predict(model, Xtest).pred 

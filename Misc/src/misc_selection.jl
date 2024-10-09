@@ -133,7 +133,7 @@ x = ["a" ; "b" ; "c" ; "d" ; "e"]
 y = ["b" ; "a" ; "a" ; "c"]
 indexin(y, x)  # returns where is y[i] in x
 
-x = rand(Int64(1e6))
+x = rand(Int(1e6))
 @b indexin(x[500], x)
 @b findall(x .== x[500])  # for 1 search: much faster 
 

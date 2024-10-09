@@ -133,7 +133,7 @@ segm[i][k]   # segment 'k' of replication 'i'
 #### Grid-search by CV 
 
 ```julia
-model = plskern)
+model = plskern()
 nlv = 0:20
 rescv = gridcv(model, Xtrain, ytrain; segm = segm, score = rmsep, nlv, verbose = false) ;
 pnames(rescv)
@@ -171,7 +171,7 @@ res[u, :]
 #### Final prediction (Test) using the optimal model
 
 ```julia
-model = plskern; nlv = res.nlv[u])
+model = plskern(nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
 ```
@@ -187,7 +187,7 @@ rmsep(pred, ytest)
 ```julia
 f, ax = plotxy(pred, ytest; size = (500, 400), xlabel = "Predicted", ylabel = "Observed")
 zpred = vec(pred)
-zmod = loessr; span = 2/3) 
+zmod = loessr(span = 2/3) 
 fit!(zmod, zpred, ytest)
 pred_loess = predict(zmod, sort(zpred)).pred
 lines!(ax, sort(zpred), vec(pred_loess); color = :red)
@@ -217,7 +217,7 @@ res_sel.sel     # nb. LVs selected with the Wold's criterion
 **Final prediction with the parcimonious model:**
 
 ```julia
-model = plskern; nlv = res_sel.sel) ;
+model = plskern(nlv = res_sel.sel) ;
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
 rmsep(pred, ytest)

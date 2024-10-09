@@ -74,8 +74,8 @@ ztyp = recod_catbyint(typtrain)
 
 nlv = 3
 n_neighbors = 40 ; min_dist = .4 
-model = umap; nlv, n_neighbors, min_dist)
-#model = umap; nlv, n_neighbors, min_dist, psamp = .5)
+model = umap(; nlv, n_neighbors, min_dist)
+#model = umap(; nlv, n_neighbors, min_dist, psamp = .5)
 fit!(model, Xtrain)
 @head T = transf(model, Xtrain)
 
@@ -117,7 +117,7 @@ f
 
 
 nlv = 3
-model = umap; nlv)
+model = umap(; nlv)
 fit!(model, Xtrain)
 @head T = transf(model, Xtrain)
 @head Ttest = transf(model, Xtest)

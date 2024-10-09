@@ -86,7 +86,7 @@ pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k)
 length(pars[1])
 
 
-model = lwplsr)
+model = lwplsr()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, verbose = false)
 
 
@@ -98,7 +98,7 @@ group = string.("nlvdis=", res.nlvdis, ",h=", res.h, ",k=", res.k)
 plotgrid(res.nlv, res.y1, group; step = 2, xlabel ="Nb. LVs", ylabel = "RMSEP").f
 
 
-model = lwplsr; nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
+model = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
     k = res.k[u], nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred 

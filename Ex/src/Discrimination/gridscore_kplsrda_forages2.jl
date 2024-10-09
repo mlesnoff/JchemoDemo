@@ -43,7 +43,7 @@ ntest = nro(Xtest)
 
 
 pct = .30
-nval = Int64.(round(pct * ntrain))
+nval = Int.(round(pct * ntrain))
 s = samprand(ntrain, nval)
 Xcal = Xtrain[s.train, :]
 ycal = ytrain[s.train]
@@ -61,7 +61,7 @@ pars = mpar(gamma = gamma)
 length(pars[1])
 
 
-model = kplsrda)
+model = kplsrda()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = errp, pars, nlv)
 
 
@@ -72,7 +72,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-model = kplsrda; nlv = res.nlv[u], gamma = res.gamma[u])
+model = kplsrda(nlv = res.nlv[u], gamma = res.gamma[u])
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
 

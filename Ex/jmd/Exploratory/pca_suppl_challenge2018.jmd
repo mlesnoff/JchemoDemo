@@ -103,7 +103,7 @@ ntest = nro(Xtest)
 
 ```julia
 nlv = 15
-model = pcasvd; nlv)
+model = pcasvd(; nlv)
 fit!(model, Xtrain)
 ```
 
@@ -140,20 +140,20 @@ plotxy(T[:, i], T[:, i + 1], group; color = colm, xlabel = string("PC", i),
 #### SD and OD distances
 
 ```julia
-mod_d = occsdod() 
-fit!(mod_d, model.fitm, Xtrain)
-pnames(mod_d)
-pnames(mod_d.fitm)
+model_d = occsdod() 
+fit!(model_d, model.fitm, Xtrain)
+pnames(model_d)
+pnames(model_d.fitm)
 ```
 
 ```julia
-dtrain = mod_d.fitm.d
+dtrain = model_d.fitm.d
 ```
 
 **Values for Xtest**
 
 ```julia
-dtest = predict(mod_d, Xtest).d
+dtest = predict(model_d, Xtest).d
 ```
 
 ```julia

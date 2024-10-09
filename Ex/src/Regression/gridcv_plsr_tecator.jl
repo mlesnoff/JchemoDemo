@@ -80,7 +80,7 @@ segm[i]      # the K segments of replication 'i'
 segm[i][k]   # segment 'k' of replication 'i'
 
 
-model = plskern)
+model = plskern()
 nlv = 0:20
 rescv = gridcv(model, Xtrain, ytrain; segm = segm, score = rmsep, nlv, verbose = false) ;
 pnames(rescv)
@@ -104,7 +104,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-model = plskern; nlv = res.nlv[u])
+model = plskern(nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
 
@@ -114,7 +114,7 @@ rmsep(pred, ytest)
 
 f, ax = plotxy(pred, ytest; size = (500, 400), xlabel = "Predicted", ylabel = "Observed")
 zpred = vec(pred)
-zmod = loessr; span = 2/3) 
+zmod = loessr(span = 2/3) 
 fit!(zmod, zpred, ytest)
 pred_loess = predict(zmod, sort(zpred)).pred
 lines!(ax, sort(zpred), vec(pred_loess); color = :red)
@@ -135,7 +135,7 @@ res_sel.opt     # nb. LVs correponding to the minimal error rate
 res_sel.sel     # nb. LVs selected with the Wold's criterion
 
 
-model = plskern; nlv = res_sel.sel) ;
+model = plskern(nlv = res_sel.sel) ;
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
 rmsep(pred, ytest)

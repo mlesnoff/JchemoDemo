@@ -43,8 +43,8 @@ tab(ytrain)
 tab(ytest)
 
 
-model = fda; nlv = 2)
-#model = fdasvd; nlv = 2)     # alternative algorithm (same result)
+model = fda(nlv = 2)
+#model = fdasvd(nlv = 2)     # alternative algorithm (same result)
 fit!(model, Xtrain, ytrain) 
 fitm = model.fitm 
 pnames(fitm)

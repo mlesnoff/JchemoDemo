@@ -8,7 +8,7 @@ end
 
 g(X, a, w) = w * a * X
 
-g(X, a::Int64) = 2 * a * X
+g(X, a::Int) = 2 * a * X
 
 g(X::Matrix) = -X
 
@@ -101,7 +101,7 @@ typeof(Foo)
 
 function foo(x)
   a = sum(x)
-  b = Int64(round(a))
+  b = Int(round(a))
   Foo(a, b)
 end
 

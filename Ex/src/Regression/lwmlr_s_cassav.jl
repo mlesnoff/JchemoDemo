@@ -57,7 +57,7 @@ ntot = ntrain + ntest
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-nval = Int64(round(.30 * ntrain))
+nval = Int(round(.30 * ntrain))
 s = sampsys(ytrain, nval)
 Xcal = Xtrain[s.train, :]
 ycal = ytrain[s.train]
@@ -67,7 +67,7 @@ ncal = ntrain - nval
 (ntot = ntot, ntrain, ntest, ncal, nval)
 
 
-model = plskern)
+model = plskern()
 nlv = 0:40
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, nlv)
 
@@ -79,7 +79,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-model = plskern; nlv = res.nlv[u]) 
+model = plskern(nlv = res.nlv[u]) 
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred 
 rmsep(pred, ytest)
@@ -97,8 +97,8 @@ pars = mpar(metric = metric, h = h, k = k)
 length(pars[1])
 
 
-model1 = pcasvd)
-model2 = lwmlr)
+model1 = pcasvd()
+model2 = lwmlr()
 model = pip(model1, model2)
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, verbose = false)
 
@@ -107,8 +107,8 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-model1 = pcasvd; nlv)
-model2 = lwmlr; metric = res.metric[u], h = res.h[u], k = res.k[u])
+model1 = pcasvd(; nlv)
+model2 = lwmlr(metric = res.metric[u], h = res.h[u], k = res.k[u])
 model = pip(model1, model2)
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
@@ -127,8 +127,8 @@ pars = mpar(metric = metric, h = h, k = k)
 length(pars[1])
 
 
-model1 = plskern)
-model2 = lwmlr)
+model1 = plskern()
+model2 = lwmlr()
 model = pip(model1, model2)
 ## Pipeline ==> only the last model is tuned
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, verbose = false)
@@ -138,8 +138,8 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-model1 = plskern; nlv)
-model2 = lwmlr; metric = res.metric[u], h = res.h[u], k = res.k[u])
+model1 = plskern(; nlv)
+model2 = lwmlr(metric = res.metric[u], h = res.h[u], k = res.k[u])
 model = pip(model1, model2)
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
@@ -158,8 +158,8 @@ pars = mpar(metric = metric, h = h, k = k)
 length(pars[1])
 
 
-model1 = dkplsr)
-model2 = lwmlr)
+model1 = dkplsr()
+model2 = lwmlr()
 model = pip(model1, model2)
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, verbose = false)
 
@@ -168,8 +168,8 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-model1 = dkplsr; nlv, gamma)
-model2 = lwmlr; metric = res.metric[u], h = res.h[u], k = res.k[u])
+model1 = dkplsr(; nlv, gamma)
+model2 = lwmlr(metric = res.metric[u], h = res.h[u], k = res.k[u])
 model = pip(model1, model2)
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred

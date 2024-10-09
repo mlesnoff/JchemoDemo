@@ -20,7 +20,7 @@ Vector{Matrix{Float64}}(undef, 3)
 # Alias for Array{T, 2}.
 Matrix{Float64}
 Matrix{Float64}(undef, 2, 3)
-Matrix{Int64}(undef, 2, 3)
+Matrix{Int}(undef, 2, 3)
 
 X = Matrix{Float64}(undef, 2, 3)
 X .= rand(2, 3)
@@ -189,7 +189,7 @@ w' * w
 dot(w, w)
 sum(w .* w)
 
-n = Int64(1e7)
+n = Int(1e7)
 w = rand(n) 
 @time w' * w ;      ## Same as dot
 @time dot(w, w) ;

@@ -145,8 +145,8 @@ ncal = ntrain - nval
 #### Grid-search
 
 ```julia
-model = plskern)
 nlv = 0:20
+model = plskern()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, nlv, verbose = false)
 ```
 
@@ -164,7 +164,7 @@ res[u, :]
 #### Final prediction (Test) using the optimal model
 
 ```julia
-model = plskern; nlv = res.nlv[u])
+model = plskern(nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
 ```
@@ -180,7 +180,7 @@ rmsep(pred, ytest)
 ```julia
 f, ax = plotxy(pred, ytest; size = (500, 400), xlabel = "Predicted", ylabel = "Observed")
 zpred = vec(pred)
-zmod = loessr; span = 2/3) 
+zmod = loessr(span = 2/3) 
 fit!(zmod, zpred, ytest)
 pred_loess = predict(zmod, sort(zpred)).pred
 lines!(ax, sort(zpred), vec(pred_loess); color = :red)

@@ -110,7 +110,7 @@ as below (other designs are possible).
 nval = 300
 ## Or:
 #pct = .20
-#nval = Int64(round(pct * ntrain))    
+#nval = Int(round(pct * ntrain))    
 ```
 
 - (1) Random sampling:
@@ -150,8 +150,8 @@ ncal = ntrain - nval
 #### Grid-search
 
 ```julia
-model = plskern)
 nlv = 0:50
+model = plskern()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, nlv) 
 ```
 
@@ -169,7 +169,7 @@ res[u, :]
 #### Final prediction (Test) using the optimal model
 
 ```julia
-model = plskern; nlv = res.nlv[u])
+model = plskern(nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain) 
 pred = predict(model, Xtest).pred
 ```
@@ -207,7 +207,7 @@ res_sel.sel     # nb. LVs selected with the Wold's criterion
 **Final prediction with the parcimonious model:**
 
 ```julia
-model = plskern; nlv = res_sel.sel)
+model = plskern(nlv = res_sel.sel)
 fit!(model, Xtrain, ytrain) 
 pred = predict(model, Xtest).pred
 rmsep(pred, ytest)

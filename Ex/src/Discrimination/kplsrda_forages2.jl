@@ -44,7 +44,7 @@ ntest = nro(Xtest)
 
 nlv = 15
 gamma = .001
-model = kplsrda; nlv, gamma, scal = true) 
+model = kplsrda(; nlv, gamma, scal = true) 
 fit!(model, Xtrain, ytrain)
 pnames(model) 
 pnames(model.fitm)

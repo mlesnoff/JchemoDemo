@@ -42,17 +42,17 @@ ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
 
-mod0 = pcasvd(nlv = 10)
-fit!(mod0, Xtrain)
-pnames(mod0)
-pnames(mod0.fitm)
+model0 = pcasvd(nlv = 10)
+fit!(model0, Xtrain)
+pnames(model0)
+pnames(model0.fitm)
 
 
-@head Ttrain_pca = mod0.fitm.T
+@head Ttrain_pca = model0.fitm.T
 
 
-model = fda; nlv = 2)
-#model = fdasvd; nlv = 2)     # alternative algorithm (same result)
+model = fda(nlv = 2)
+#model = fdasvd(nlv = 2)     # alternative algorithm (same result)
 fit!(model, Ttrain_pca, ytrain) 
 fitm = model.fitm 
 pnames(fitm)
@@ -73,7 +73,7 @@ scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
 f
 
 
-Ttest_pca = transf(mod0, Xtest)
+Ttest_pca = transf(model0, Xtest)
 
 
 Ttest = transf(model, Ttest_pca)
@@ -89,8 +89,8 @@ f
 
 
 lb = 1e-5
-model = fda; nlv = 2, lb)
-#model = fdasvd; nlv = 2, lb)
+model = fda(; nlv = 2, lb)
+#model = fdasvd(; nlv = 2, lb)
 fit!(model,Xtrain, ytrain)
 fitm = model.fitm ;
 

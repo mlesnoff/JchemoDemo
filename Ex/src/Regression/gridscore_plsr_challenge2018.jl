@@ -69,7 +69,7 @@ ntest = nro(Xtest)
 nval = 300
 ## Or:
 #pct = .20
-#nval = Int64(round(pct * ntrain))
+#nval = Int(round(pct * ntrain))
 
 
 s = samprand(ntrain, nval)
@@ -92,8 +92,8 @@ ncal = ntrain - nval
 (ntot = ntot, ntrain, ntest, ncal, nval)
 
 
-model = plskern)
 nlv = 0:50
+model = plskern()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, nlv)
 
 
@@ -104,7 +104,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-model = plskern; nlv = res.nlv[u])
+model = plskern(nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain) 
 pred = predict(model, Xtest).pred
 
@@ -129,7 +129,7 @@ res_sel.opt     # nb. LVs correponding to the minimal error rate
 res_sel.sel     # nb. LVs selected with the Wold's criterion
 
 
-model = plskern; nlv = res_sel.sel)
+model = plskern(nlv = res_sel.sel)
 fit!(model, Xtrain, ytrain) 
 pred = predict(model, Xtest).pred
 rmsep(pred, ytest)

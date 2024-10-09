@@ -110,7 +110,7 @@ ztyp = recod_catbyint(typtrain)
 
 ```julia 
 nlv = 3
-model = pcasvd; nlv)
+model = pcasvd(; nlv)
 fit!(model, Xtrain)
 @head T = model.fitm.T
 ```
@@ -160,7 +160,7 @@ f
 
 ```julia
 nlv = 3
-model = pcasvd; nlv)
+model = pcasvd(; nlv)
 fit!(model, Xtrain)
 @head T = model.fitm.T
 @head Ttest = transf(model, Xtest)

@@ -27,21 +27,21 @@ wl = parse.(Float64, wlst)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance", title = "Octane data").f
 
 
-mod0 = pcasvd(nlv = 6) 
+model0 = pcasvd(nlv = 6) 
 ## For robust PCA, do:
-#mod0 = pcasph; nlv = 6)
+#model0 = pcasph(; nlv = 6)
 ## or:
-#mod0 = pcaout; nlv = 6)
-fit!(mod0, X)  
-pnames(mod0)
-pnames(mod0.fitm)
+#model0 = pcaout(; nlv = 6)
+fit!(model0, X)  
+pnames(model0)
+pnames(model0.fitm)
 
 
-@head T = mod0.fitm.T
+@head T = model0.fitm.T
 
 
 model = occsd()
-fit!(model, mod0.fitm)
+fit!(model, model0.fitm)
 pnames(model)
 pnames(model.fitm)
 
@@ -56,7 +56,7 @@ f
 
 
 model = occod() 
-fit!(model, mod0.fitm, X)
+fit!(model, model0.fitm, X)
 pnames(model)
 pnames(model.fitm)
 
@@ -71,10 +71,10 @@ f
 
 
 model = occsd()
-fit!(model, mod0.fitm)
+fit!(model, model0.fitm)
 d_sd = model.fitm.d
 model = occod()
-fit!(model, mod0.fitm, X)
+fit!(model, model0.fitm, X)
 d_od = model.fitm.d
 f, ax = plotxy(d_sd.dstand, d_od.dstand; xlabel = "Standardized SD", ylabel = "Standardized OD")
 hlines!(ax, 1; color = :grey, linestyle = :dash)
@@ -90,7 +90,7 @@ f
 
 
 model = occsdod() 
-fit!(model, mod0.fitm, X)
+fit!(model, model0.fitm, X)
 pnames(model)
 pnames(model.fitm)
 

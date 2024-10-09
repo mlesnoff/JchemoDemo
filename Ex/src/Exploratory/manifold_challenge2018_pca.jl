@@ -73,7 +73,7 @@ ztyp = recod_catbyint(typtrain)
 
 
 nlv = 3
-model = pcasvd; nlv)
+model = pcasvd(; nlv)
 fit!(model, Xtrain)
 @head T = model.fitm.T
 
@@ -115,7 +115,7 @@ f
 
 
 nlv = 3
-model = pcasvd; nlv)
+model = pcasvd(; nlv)
 fit!(model, Xtrain)
 @head T = model.fitm.T
 @head Ttest = transf(model, Xtest)

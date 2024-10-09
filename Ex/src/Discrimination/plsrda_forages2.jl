@@ -43,7 +43,7 @@ ntest = nro(Xtest)
 
 
 nlv = 15
-model = plsrda; nlv) 
+model = plsrda(; nlv) 
 #model = plslda; nlv) 
 #model = plsqda; nlv) 
 #model = plsqda; nlv, prior = :prop) 

@@ -55,7 +55,7 @@ pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k)
 length(pars[1])
 
 
-model = lwplsrda)
+model = lwplsrda()
 res = gridcv(model, Xtrain, ytrain; segm, score = errp, nlv, pars, verbose = false).res
 
 
@@ -67,7 +67,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-model = lwplsrda; nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
+model = lwplsrda(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
     k = res.k[u], nlv = res.nlv[u], verbose = false)
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred

@@ -86,8 +86,8 @@ ncal = ntrain - nval
 (ntot = ntot, ntrain, ntest, ncal, nval)
 
 
-model = plskern)
 nlv = 0:20
+model = plskern()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, nlv, verbose = false)
 
 
@@ -98,7 +98,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-model = plskern; nlv = res.nlv[u])
+model = plskern(nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
 
@@ -108,7 +108,7 @@ rmsep(pred, ytest)
 
 f, ax = plotxy(pred, ytest; size = (500, 400), xlabel = "Predicted", ylabel = "Observed")
 zpred = vec(pred)
-zmod = loessr; span = 2/3) 
+zmod = loessr(span = 2/3) 
 fit!(zmod, zpred, ytest)
 pred_loess = predict(zmod, sort(zpred)).pred
 lines!(ax, sort(zpred), vec(pred_loess); color = :red)

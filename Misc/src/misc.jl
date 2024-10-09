@@ -6,7 +6,7 @@ typeof(mean)
 ############### Convert
 
 x = 1.
-convert(Int64, x)
+convert(Int, x)
 
 x = collect(1:10)
 typeof(x)
@@ -173,7 +173,7 @@ X = rand(5, 3)
 map(sqrt, X)
 sqrt.(X)
 
-n = Int64(1e4)
+n = Int(1e4)
 X = rand(n, n) 
 @time map(sqrt, X) ;
 @time sqrt.(X) ; # Not faster
@@ -255,7 +255,7 @@ parse(Int, "afc", base = 16)
 parse(Float64, "1.2e-3")
 
 wlst = string.(1:10)
-parse.(Int64, wlst) 
+parse.(Int, wlst) 
 Meta.parse.(wlst)
 parse.(Float64, wlst) 
 
@@ -263,7 +263,7 @@ eval(Meta.parse("1:5"))
 
 id = ["hh123" ; "gg27"]
 z = SubString.(id, 3)
-parse.(Int64, z) 
+parse.(Int, z) 
 Meta.parse.(z)   
 
 nam = "sum"

@@ -67,7 +67,7 @@ ntest = nro(Xtest)
 
 
 nlv = 15
-model = pcasvd; nlv)
+model = pcasvd(; nlv)
 fit!(model, Xtrain)
 
 
@@ -91,16 +91,16 @@ plotxy(T[:, i], T[:, i + 1], group; color = colm, xlabel = string("PC", i),
     ylabel = string("PC", i + 1)).f
 
 
-mod_d = occsdod() 
-fit!(mod_d, model.fitm, Xtrain)
-pnames(mod_d)
-pnames(mod_d.fitm)
+model_d = occsdod() 
+fit!(model_d, model.fitm, Xtrain)
+pnames(model_d)
+pnames(model_d.fitm)
 
 
-dtrain = mod_d.fitm.d
+dtrain = model_d.fitm.d
 
 
-dtest = predict(mod_d, Xtest).d
+dtest = predict(model_d, Xtest).d
 
 
 f = Figure(size = (500, 400))

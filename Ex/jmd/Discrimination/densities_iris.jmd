@@ -58,7 +58,7 @@ Ydummy = dummy(y).Y ;
 
 ```julia
 nlv = 2
-model = plskern; nlv)
+model = plskern(; nlv)
 fit!(model, X, Ydummy) 
 ```
 
@@ -116,8 +116,8 @@ for i = 1:nlev
     #lims = [[minimum(zT[:, j]) ; maximum(zT[:, j])] for j = 1:nlv]
     #x1 = LinRange(lims[1][1], lims[1][2], npoints)
     #x2 = LinRange(lims[2][1], lims[2][2], npoints)
-    zfm = dmnorm(zT; S = W) ;
-    zres = predict(zfm, grid) ;
+    zfitm = dmnorm(colmean(zT), W) ;
+    zres = predict(zfitm, grid) ;
     pred_grid = vec(zres.pred)
     ax[i] = Axis(f[1, i]; title = lev[i], xlabel = "LV1", ylabel = "LV2")
     co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
@@ -151,8 +151,8 @@ for i = 1:nlev
     s = y .== lev[i]
     zT = T[s, :]
     S = Wi[i] * ni[i] / (ni[i] - 1)
-    zfm = dmnorm(zT; S = S) ;
-    zres = predict(zfm, grid) ;
+    zfitm = dmnorm(colmean(zT), S) ;
+    zres = predict(zfitm, grid) ;
     pred_grid = vec(zres.pred) 
     ax[i] = Axis(f[1, i]; title = lev[i], xlabel = "LV1", ylabel = "LV2")
     co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
@@ -180,8 +180,8 @@ ax = list(nlev)
 for i = 1:nlev 
     s = y .== lev[i]
     zT = T[s, :]
-    zfm = dmkern(zT; a_kde = 1) 
-    zres = predict(zfm, grid) ;
+    zfitm = dmkern(zT; a_kde = 1) 
+    zres = predict(zfitm, grid) ;
     pred_grid = vec(zres.pred)
     ax[i] = Axis(f[1, i]; title = lev[i], xlabel = "LV1", ylabel = "LV2")
     co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)

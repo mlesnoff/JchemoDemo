@@ -43,7 +43,7 @@ ntest = nro(Xtest)
 
 
 pct = .30
-nval = Int64.(round(pct * ntrain))
+nval = Int.(round(pct * ntrain))
 s = samprand(ntrain, nval)
 Xcal = Xtrain[s.train, :]
 ycal = ytrain[s.train]
@@ -54,7 +54,7 @@ ncal = ntrain - nval
 
 
 nlv = 0:50
-model = plsrda)
+model = plsrda()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = errp, nlv)
 
 
@@ -65,7 +65,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-model = plsrda; nlv = res.nlv[u])
+model = plsrda(nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
 

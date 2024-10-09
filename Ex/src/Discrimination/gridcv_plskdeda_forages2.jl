@@ -50,7 +50,7 @@ pars = mpar(a = [.5, 1, 1.5])
 
 
 nlv = 1:40
-model = plskdeda)
+model = plskdeda()
 rescv = gridcv(model, Xtrain, ytrain; segm, score = errp, pars, nlv) ; 
 res = rescv.res
 
@@ -63,7 +63,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-model = plskdeda; nlv = res.nlv[u], a = res.a[u])
+model = plskdeda(nlv = res.nlv[u], a = res.a[u])
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
 errp(pred, ytest)

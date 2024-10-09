@@ -29,9 +29,9 @@ plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance", title = "Octane
 
 model = pcasvd(nlv = 6) 
 ## For robust PCA, do:
-#model = pcasph; nlv = 6)
+#model = pcasph(; nlv = 6)
 ## or:
-#model = pcaout; nlv = 6)
+#model = pcaout(; nlv = 6)
 fit!(model, X)  
 pnames(model)
 pnames(model.fitm)

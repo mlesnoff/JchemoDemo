@@ -80,7 +80,7 @@ on **Val**. Below the split is built from a random sampling
 
 ```julia
 pct = .30
-nval = Int64.(round(pct * ntrain))
+nval = Int.(round(pct * ntrain))
 s = samprand(ntrain, nval)
 Xcal = Xtrain[s.train, :]
 ycal = ytrain[s.train]
@@ -105,7 +105,7 @@ length(pars[1])
 #### Grid-search
 
 ```julia
-model = kplsrda)
+model = kplsrda()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = errp, pars, nlv)
 ```
 
@@ -123,7 +123,7 @@ res[u, :]
 #### Final prediction (Test) using the optimal model
 
 ```julia
-model = kplsrda; nlv = res.nlv[u], gamma = res.gamma[u])
+model = kplsrda(nlv = res.nlv[u], gamma = res.gamma[u])
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
 ```

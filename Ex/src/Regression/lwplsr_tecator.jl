@@ -65,7 +65,7 @@ ytest = Ytest[:, nam]
 nlvdis = 10 ; metric = :mah
 h = 3 ; k = 30 
 nlv = 4
-model = lwplsr; nlvdis, metric, h, k, nlv) 
+model = lwplsr(; nlvdis, metric, h, k, nlv) 
 fit!(model, Xtrain, ytrain)
 pnames(model)
 pnames(model.fitm)
@@ -88,7 +88,7 @@ r = residreg(pred, ytest) # residuals
 
 f, ax = plotxy(pred, ytest; size = (500, 400), xlabel = "Predicted", ylabel = "Observed")
 zpred = vec(pred)
-zmod = loessr; span = 2/3) 
+zmod = loessr(span = 2/3) 
 fit!(zmod, zpred, ytest)
 pred_loess = predict(zmod, sort(zpred)).pred
 lines!(ax, sort(zpred), vec(pred_loess); color = :red)
@@ -100,7 +100,7 @@ f, ax = plotxy(ytest, r; size = (500, 400), color = (:blue, .5), xlabel = "Obser
     ylabel = "Residuals") 
 zpred = vec(pred)
 zr = vec(r)
-zmod = loessr; span = 2/3) 
+zmod = loessr(span = 2/3) 
 fit!(zmod, zpred, zr)
 r_loess = predict(zmod, sort(zpred)).pred
 lines!(ax, sort(zpred), vec(r_loess); color = :red)

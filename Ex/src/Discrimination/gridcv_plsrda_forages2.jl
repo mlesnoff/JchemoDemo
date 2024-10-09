@@ -47,7 +47,7 @@ K = 3 ; segm = segmkf(ntrain, K; rep = 10)         # K-fold CV
 
 
 nlv = 0:40
-model = plsrda)
+model = plsrda()
 res = gridcv(model, Xtrain, ytrain; segm, score = errp, nlv, verbose = false).res
 
 
@@ -58,7 +58,7 @@ res[u, :]
 plotgrid(res.nlv, res.y1; step = 5, xlabel = "Nb. LVs", ylabel = "ERR").f
 
 
-model = plsrda; nlv = res.nlv[u])
+model = plsrda(nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
 
@@ -77,7 +77,7 @@ plotconf(cf).f
 
 
 nlv = 1:40  ## !!: Does not start from nlv = 0 (since the method runs an LDA on PLS scores)
-model = plslda)
+model = plslda()
 res = gridcv(model, Xtrain, ytrain; segm, score = errp, nlv, verbose = false).res
 
 
@@ -88,7 +88,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-model = plslda; nlv = res.nlv[u])
+model = plslda(nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
 errp(pred, ytest)

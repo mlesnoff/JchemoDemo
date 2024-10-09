@@ -85,7 +85,7 @@ pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k, nlv = nlv)
 length(pars[1])
 
 
-model = lwplsravg)
+model = lwplsravg()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, verbose = false)
 
 
@@ -93,7 +93,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-model = lwplsravg; nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
+model = lwplsravg(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
     k = res.k[u], nlv = res.nlv[u]) ;
 fit!(model, Xtrain, ytrain) 
 pred = predict(model, Xtest).pred 
