@@ -8,7 +8,7 @@ pnames(dat)
 X = dat.X
 
 ## Nearest neighbors
-model = pcasvd; nlv = 3) 
+model = pcasvd(nlv = 3) 
 Jchemo.fit!(model, X) 
 T = model.fitm.T
 i = 10 ; k = 50
