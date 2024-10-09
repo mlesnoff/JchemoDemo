@@ -8,9 +8,9 @@ pnames(dat)
 X = dat.X
 
 ## Nearest neighbors
-mod = model(pcasvd; nlv = 3) 
-Jchemo.fit!(mod, X) 
-T = mod.fm.T
+model = pcasvd; nlv = 3) 
+Jchemo.fit!(model, X) 
+T = model.fitm.T
 i = 10 ; k = 50
 res = getknn(T, T[i:i, :]; k = k, metric = :mah)
 s = res.ind[1]

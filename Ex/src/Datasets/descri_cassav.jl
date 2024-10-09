@@ -40,26 +40,26 @@ tab(year)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-mod1 = model(snv)
-mod2 = model(savgol; npoint = 11, deriv = 2, degree = 3)
-mod = pip(mod1, mod2)
-fit!(mod, X)
-Xp = transf(mod, X)
+model1 = snv)
+model2 = savgol; npoint = 11, deriv = 2, degree = 3)
+model = pip(model1, model2)
+fit!(model, X)
+Xp = transf(model, X)
 
 
 plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-mod = model(pcasvd; nlv = 10)
-fit!(mod, Xp)
-pnames(mod)
-pnames(mod.fm)
+model = pcasvd; nlv = 10)
+fit!(model, Xp)
+pnames(model)
+pnames(model.fitm)
 
 
-@head T = mod.fm.T
+@head T = model.fitm.T
 
 
-res = summary(mod, Xp) ;
+res = summary(model, Xp) ;
 pnames(res)
 
 

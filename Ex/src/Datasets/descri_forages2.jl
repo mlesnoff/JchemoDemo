@@ -47,16 +47,16 @@ ntest = nro(Xtest)
 plotsp(X, wl; nsamp = 10, xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-mod = model(pcasvd; nlv = 10)
-fit!(mod, X)
-pnames(mod)
-pnames(mod.fm)
+model = pcasvd; nlv = 10)
+fit!(model, X)
+pnames(model)
+pnames(model.fitm)
 
 
-@head T = mod.fm.T
+@head T = model.fitm.T
 
 
-res = summary(mod, X) ;
+res = summary(model, X) ;
 pnames(res)
 
 
@@ -72,13 +72,13 @@ plotxy(T[:, i], T[:, i + 1], y; ellipse = true, xlabel = "PC1", ylabel = "PC2").
 
 
 ## Train vs Test
-mod = model(pcasvd; nlv = 15)
-fit!(mod, Xtrain)
-Ttrain = mod.fm.T
+model = pcasvd; nlv = 15)
+fit!(model, Xtrain)
+Ttrain = model.fitm.T
 @head Ttrain
 
 
-Ttest = transf(mod, Xtest)
+Ttest = transf(model, Xtest)
 
 
 T = vcat(Ttrain, Ttest)
@@ -87,17 +87,17 @@ i = 1
 plotxy(T[:, i], T[:, i + 1], group; xlabel = "PC1", ylabel = "PC2").f
 
 
-mod_sd = model(occsd) 
-fit!(mod_sd, mod.fm)
+mod_sd = occsd) 
+fit!(mod_sd, model.fitm)
 pnames(mod_sd)
-sdtrain = mod_sd.fm.d
+sdtrain = mod_sd.fitm.d
 sdtest = predict(mod_sd, Xtest).d
 
 
-mod_od = model(occod) 
-fit!(mod_od, mod.fm, Xtrain)
+mod_od = occod) 
+fit!(mod_od, model.fitm, Xtrain)
 pnames(mod_od)
-odtrain = mod_od.fm.d
+odtrain = mod_od.fitm.d
 odtest = predict(mod_od, Xtest).d
 
 
@@ -114,14 +114,14 @@ f
 
 zres = mod_sd ; nam = "SD"
 #zres = mod_od ; nam = "OD"
-pnames(zres.fm)
-sdtrain = zres.fm.d
+pnames(zres.fitm)
+sdtrain = zres.fitm.d
 sdtest = predict(zres, Xtest).d
 f = Figure(size = (500, 400))
 ax = Axis(f[1, 1]; xlabel = nam, ylabel = "Nb. observations")
 hist!(ax, sdtrain.d; bins = 50, label = "Train")
 hist!(ax, sdtest.d; bins = 50, label = "Test")
-vlines!(ax, zres.fm.cutoff; color = :grey, linestyle = :dash)
+vlines!(ax, zres.fitm.cutoff; color = :grey, linestyle = :dash)
 axislegend(position = :rt)
 f
 

@@ -42,11 +42,11 @@ freqtable(typ, test)
 plotsp(X, wl; nsamp = 30).f
 
 
-mod1 = model(snv)
-mod2 = model(savgol; npoint = 21, deriv = 2, degree = 3)
-mod = pip(mod1, mod2)
-fit!(mod, X)
-Xp = transf(mod, X)
+model1 = snv)
+model2 = savgol; npoint = 21, deriv = 2, degree = 3)
+model = pip(model1, model2)
+fit!(model, X)
+Xp = transf(model, X)
 
 
 plotsp(Xp, wl; nsamp = 30).f
@@ -67,20 +67,20 @@ ntest = nro(Xtest)
 
 
 nlv = 15
-mod = model(pcasvd; nlv)
-fit!(mod, Xtrain)
+model = pcasvd; nlv)
+fit!(model, Xtrain)
 
 
-res = summary(mod, Xtrain).explvarx
+res = summary(model, Xtrain).explvarx
 
 
 plotgrid(res.nlv, res.pvar; step = 2, xlabel = "PC", ylabel = "Prop. variance explained").f
 
 
-@head Ttrain = mod.fm.T
+@head Ttrain = model.fitm.T
 
 
-@head Ttest = transf(mod, Xtest)
+@head Ttest = transf(model, Xtest)
 
 
 T = vcat(Ttrain, Ttest)
@@ -91,13 +91,13 @@ plotxy(T[:, i], T[:, i + 1], group; color = colm, xlabel = string("PC", i),
     ylabel = string("PC", i + 1)).f
 
 
-mod_d = model(occsdod) 
-fit!(mod_d, mod.fm, Xtrain)
+mod_d = occsdod) 
+fit!(mod_d, model.fitm, Xtrain)
 pnames(mod_d)
-pnames(mod_d.fm)
+pnames(mod_d.fitm)
 
 
-dtrain = mod_d.fm.d
+dtrain = mod_d.fitm.d
 
 
 dtest = predict(mod_d, Xtest).d

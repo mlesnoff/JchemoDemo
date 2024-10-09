@@ -51,20 +51,20 @@ plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance", title = "Octane
 #### PCA model fitting
 
 ```julia
-mod = model(pcasvd; nlv = 6) 
+model = pcasvd; nlv = 6) 
 ## For robust PCA, do:
-#mod = model(pcasph; nlv = 6)
+#model = pcasph; nlv = 6)
 ## or:
-#mod = model(pcaout; nlv = 6)
-fit!(mod, X)  
-pnames(mod)
-pnames(mod.fm)
+#model = pcaout; nlv = 6)
+fit!(model, X)  
+pnames(model)
+pnames(model.fitm)
 ```
 
 **Scores:**
 
 ```julia term = true
-@head T = mod.fm.T 
+@head T = model.fitm.T 
 ```
 
 **2-D score space** 

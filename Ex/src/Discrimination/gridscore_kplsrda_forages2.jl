@@ -61,8 +61,8 @@ pars = mpar(gamma = gamma)
 length(pars[1])
 
 
-mod = model(kplsrda)
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = errp, pars, nlv)
+model = kplsrda)
+res = gridscore(model, Xcal, ycal, Xval, yval; score = errp, pars, nlv)
 
 
 plotgrid(res.nlv, res.y1, res.gamma; step = 5, xlabel = "Nb. LVs", ylabel = "ERR").f
@@ -72,9 +72,9 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-mod = model(kplsrda; nlv = res.nlv[u], gamma = res.gamma[u])
-fit!(mod, Xtrain, ytrain)
-pred = predict(mod, Xtest).pred
+model = kplsrda; nlv = res.nlv[u], gamma = res.gamma[u])
+fit!(model, Xtrain, ytrain)
+pred = predict(model, Xtest).pred
 
 
 errp(pred, ytest)

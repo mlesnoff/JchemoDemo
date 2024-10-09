@@ -43,23 +43,23 @@ tab(ytrain)
 tab(ytest)
 
 
-mod = model(fda; nlv = 2)
-#mod = model(fdasvd; nlv = 2)     # alternative algorithm (same result)
-fit!(mod, Xtrain, ytrain) 
-fm = mod.fm 
-pnames(fm)
+model = fda; nlv = 2)
+#model = fdasvd; nlv = 2)     # alternative algorithm (same result)
+fit!(model, Xtrain, ytrain) 
+fitm = model.fitm 
+pnames(fitm)
 
 
-lev = fm.lev
+lev = fitm.lev
 
 
 nlev = length(lev)
 
 
-@head Ttrain = mod.fm.T
+@head Ttrain = model.fitm.T
 
 
-ct = mod.fm.Tcenters
+ct = model.fitm.Tcenters
 
 
 f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; ellipse = true, title = "FDA", zeros = true)
@@ -67,20 +67,20 @@ scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
 f
 
 
-@head Ttest = transf(mod, Xtest)
+@head Ttest = transf(model, Xtest)
 
 
-P = mod.fm.P
+P = model.fitm.P
 
 
 P' * P    # not orthogonal
 
 
-mod.fm.eig
+model.fitm.eig
 
 
-mod.fm.sstot
+model.fitm.sstot
 
 
-summary(mod)
+summary(model)
 

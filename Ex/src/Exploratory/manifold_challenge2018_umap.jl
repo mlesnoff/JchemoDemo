@@ -43,11 +43,11 @@ freqtable(typ, test)
 plotsp(X, wl; nsamp = 30).f
 
 
-mod1 = model(snv)
-mod2 = model(savgol; npoint = 21, deriv = 2, degree = 3)
-mod = pip(mod1, mod2)
-fit!(mod, X)
-Xp = transf(mod, X)
+model1 = snv)
+model2 = savgol; npoint = 21, deriv = 2, degree = 3)
+model = pip(model1, model2)
+fit!(model, X)
+Xp = transf(model, X)
 
 
 plotsp(Xp, wl; nsamp = 30).f
@@ -74,10 +74,10 @@ ztyp = recod_catbyint(typtrain)
 
 nlv = 3
 n_neighbors = 40 ; min_dist = .4 
-mod = model(umap; nlv, n_neighbors, min_dist)
-#mod = model(umap; nlv, n_neighbors, min_dist, psamp = .5)
-fit!(mod, Xtrain)
-@head T = transf(mod, Xtrain)
+model = umap; nlv, n_neighbors, min_dist)
+#model = umap; nlv, n_neighbors, min_dist, psamp = .5)
+fit!(model, Xtrain)
+@head T = transf(model, Xtrain)
 
 
 CairoMakie.activate!()  
@@ -117,10 +117,10 @@ f
 
 
 nlv = 3
-mod = model(umap; nlv)
-fit!(mod, Xtrain)
-@head T = transf(mod, Xtrain)
-@head Ttest = transf(mod, Xtest)
+model = umap; nlv)
+fit!(model, Xtrain)
+@head T = transf(model, Xtrain)
+@head Ttest = transf(model, Xtest)
 
 
 CairoMakie.activate!()  

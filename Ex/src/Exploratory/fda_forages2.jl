@@ -42,30 +42,30 @@ ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
 
-mod0 = model(pcasvd; nlv = 10)
+mod0 = pcasvd; nlv = 10)
 fit!(mod0, Xtrain)
 pnames(mod0)
-pnames(mod0.fm)
+pnames(mod0.fitm)
 
 
-@head Ttrain_pca = mod0.fm.T
+@head Ttrain_pca = mod0.fitm.T
 
 
-mod = model(fda; nlv = 2)
-#mod = model(fdasvd; nlv = 2)     # alternative algorithm (same result)
-fit!(mod, Ttrain_pca, ytrain) 
-fm = mod.fm 
-pnames(fm)
+model = fda; nlv = 2)
+#model = fdasvd; nlv = 2)     # alternative algorithm (same result)
+fit!(model, Ttrain_pca, ytrain) 
+fitm = model.fitm 
+pnames(fitm)
 
 
-Ttrain = mod.fm.T
+Ttrain = model.fitm.T
 
 
-lev = fm.lev
+lev = fitm.lev
 nlev = length(lev)
 
 
-ct = fm.Tcenters
+ct = fitm.Tcenters
 
 
 f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "FDA", ellipse = true)
@@ -76,7 +76,7 @@ f
 Ttest_pca = transf(mod0, Xtest)
 
 
-Ttest = transf(mod, Ttest_pca)
+Ttest = transf(model, Ttest_pca)
 
 
 i = 1  # class "i" in test
@@ -89,20 +89,20 @@ f
 
 
 lb = 1e-5
-mod = model(fda; nlv = 2, lb)
-#mod = model(fdasvd; nlv = 2, lb)
-fit!(mod,Xtrain, ytrain)
-fm = mod.fm ;
+model = fda; nlv = 2, lb)
+#model = fdasvd; nlv = 2, lb)
+fit!(model,Xtrain, ytrain)
+fitm = model.fitm ;
 
 
-lev = fm.lev
+lev = fitm.lev
 nlev = length(lev)
 
 
-ct = fm.Tcenters
+ct = fitm.Tcenters
 
 
-@head Ttrain = fm.T
+@head Ttrain = fitm.T
 
 
 f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "FDA", ellipse = true)
@@ -110,7 +110,7 @@ scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
 f
 
 
-Ttest = transf(mod, Xtest)
+Ttest = transf(model, Xtest)
 
 
 i = 1  # class "i" in test

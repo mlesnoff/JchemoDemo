@@ -15,6 +15,11 @@ g(X::Matrix) = -X
 g(X::Vector) = -10 * X
 
 methods(g)
+first(methods(g), 1)
+first(methods(g), 10)
+collect(methods(g))
+res = Base.method_argnames.(methods(g))
+res[3]
 
 X = rand(2, 2)
 g(X, 2.)
@@ -100,8 +105,8 @@ function foo(x)
   Foo(a, b)
 end
 
-function predict(fm::Foo, x)
-    fm.a .+ fm.b * x
+function predict(fitm::Foo, x)
+    fitm.a .+ fitm.b * x
 end
 
 x = rand(5)

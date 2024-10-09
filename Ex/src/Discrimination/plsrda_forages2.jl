@@ -43,22 +43,22 @@ ntest = nro(Xtest)
 
 
 nlv = 15
-mod = model(plsrda; nlv) 
-#mod = model(plslda; nlv) 
-#mod = model(plsqda; nlv) 
-#mod = model(plsqda; nlv, prior = :prop) 
-#mod = model(plskdeda; nlv)
+model = plsrda; nlv) 
+#model = plslda; nlv) 
+#model = plsqda; nlv) 
+#model = plsqda; nlv, prior = :prop) 
+#model = plskdeda; nlv)
 
 
-#mod = model(rrda; lb = 1e-5)
+#model = rrda; lb = 1e-5)
 
 
-fit!(mod, Xtrain, ytrain)
-pnames(mod) 
-pnames(mod.fm)
+fit!(model, Xtrain, ytrain)
+pnames(model) 
+pnames(model.fitm)
 
 
-res = predict(mod, Xtest) ;
+res = predict(model, Xtest) ;
 pnames(res)
 
 

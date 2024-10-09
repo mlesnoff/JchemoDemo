@@ -42,11 +42,11 @@ freqtable(typ, test)
 plotsp(X, wl; nsamp = 30).f
 
 
-mod1 = model(snv)
-mod2 = model(savgol; npoint = 21, deriv = 2, degree = 3)
-mod = pip(mod1, mod2)
-fit!(mod, X)
-Xp = transf(mod, X)
+model1 = snv)
+model2 = savgol; npoint = 21, deriv = 2, degree = 3)
+model = pip(model1, model2)
+fit!(model, X)
+Xp = transf(model, X)
 
 
 plotsp(Xp, wl; nsamp = 30).f
@@ -92,9 +92,9 @@ ncal = ntrain - nval
 (ntot = ntot, ntrain, ntest, ncal, nval)
 
 
-mod = model(plskern)
+model = plskern)
 nlv = 0:50
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, nlv)
+res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, nlv)
 
 
 plotgrid(res.nlv, res.y1; step = 5, xlabel = "Nb. LVs", ylabel = "RMSEP").f
@@ -104,9 +104,9 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-mod = model(plskern; nlv = res.nlv[u])
-fit!(mod, Xtrain, ytrain) 
-pred = predict(mod, Xtest).pred
+model = plskern; nlv = res.nlv[u])
+fit!(model, Xtrain, ytrain) 
+pred = predict(model, Xtest).pred
 
 
 rmsep(pred, ytest)
@@ -129,8 +129,8 @@ res_sel.opt     # nb. LVs correponding to the minimal error rate
 res_sel.sel     # nb. LVs selected with the Wold's criterion
 
 
-mod = model(plskern; nlv = res_sel.sel)
-fit!(mod, Xtrain, ytrain) 
-pred = predict(mod, Xtest).pred
+model = plskern; nlv = res_sel.sel)
+fit!(model, Xtrain, ytrain) 
+pred = predict(model, Xtest).pred
 rmsep(pred, ytest)
 

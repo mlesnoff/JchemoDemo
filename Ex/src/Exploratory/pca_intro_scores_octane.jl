@@ -27,17 +27,17 @@ wl = parse.(Float64, wlst)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance", title = "Octane data").f
 
 
-mod = model(pcasvd; nlv = 6) 
+model = pcasvd; nlv = 6) 
 ## For robust PCA, do:
-#mod = model(pcasph; nlv = 6)
+#model = pcasph; nlv = 6)
 ## or:
-#mod = model(pcaout; nlv = 6)
-fit!(mod, X)  
-pnames(mod)
-pnames(mod.fm)
+#model = pcaout; nlv = 6)
+fit!(model, X)  
+pnames(model)
+pnames(model.fitm)
 
 
-@head T = mod.fm.T
+@head T = model.fitm.T
 
 
 plotxy(T[:, 1], T[:, 2]; zeros = true, xlabel = "PC1", ylabel = "PC2").f

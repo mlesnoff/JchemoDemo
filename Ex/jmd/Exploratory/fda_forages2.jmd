@@ -82,35 +82,35 @@ for the FDA, for instance:
 #### 1) FDA on PCA scores
 
 ```julia
-mod0 = model(pcasvd; nlv = 10)
+mod0 = pcasvd; nlv = 10)
 fit!(mod0, Xtrain)
 pnames(mod0)
-pnames(mod0.fm)
+pnames(mod0.fitm)
 ```
 
 ```julia
-@head Ttrain_pca = mod0.fm.T 
+@head Ttrain_pca = mod0.fitm.T 
 ```
 
 ```julia
-mod = model(fda; nlv = 2)
-#mod = model(fdasvd; nlv = 2)     # alternative algorithm (same result)
-fit!(mod, Ttrain_pca, ytrain) 
-fm = mod.fm 
-pnames(fm)
+model = fda; nlv = 2)
+#model = fdasvd; nlv = 2)     # alternative algorithm (same result)
+fit!(model, Ttrain_pca, ytrain) 
+fitm = model.fitm 
+pnames(fitm)
 ```
 
 ```julia
-Ttrain = mod.fm.T
+Ttrain = model.fitm.T
 ```
 
 ```julia
-lev = fm.lev
+lev = fitm.lev
 nlev = length(lev)
 ```
 
 ```julia
-ct = fm.Tcenters
+ct = fitm.Tcenters
 ```
 
 ```julia
@@ -126,7 +126,7 @@ Ttest_pca = transf(mod0, Xtest)
 ```
 
 ```julia
-Ttest = transf(mod, Ttest_pca)
+Ttest = transf(model, Ttest_pca)
 ```
 
 ```julia
@@ -147,23 +147,23 @@ of new observations is misleading.
 
 ```julia
 lb = 1e-5
-mod = model(fda; nlv = 2, lb)
-#mod = model(fdasvd; nlv = 2, lb)
-fit!(mod,Xtrain, ytrain)
-fm = mod.fm ;
+model = fda; nlv = 2, lb)
+#model = fdasvd; nlv = 2, lb)
+fit!(model,Xtrain, ytrain)
+fitm = model.fitm ;
 ```
 
 ```julia
-lev = fm.lev
+lev = fitm.lev
 nlev = length(lev)
 ```
 
 ```julia
-ct = fm.Tcenters
+ct = fitm.Tcenters
 ```
 
 ```julia
-@head Ttrain = fm.T
+@head Ttrain = fitm.T
 ```
 
 ```julia
@@ -175,7 +175,7 @@ f
 **Projection of Xtest**
 
 ```julia
-Ttest = transf(mod, Xtest)
+Ttest = transf(model, Xtest)
 ```
 
 ```julia

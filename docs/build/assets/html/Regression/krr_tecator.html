@@ -812,11 +812,11 @@ OrderedCollections.OrderedDict&#123;String, Int64&#125; with 3 entries:
 
 
 <pre class='hljl'>
-<span class='hljl-n'>mod1</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>snv</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-n'>mod2</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>savgol</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>npoint</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>15</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>deriv</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>2</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>degree</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>3</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-n'>mod</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>pip</span><span class='hljl-p'>(</span><span class='hljl-n'>mod1</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>mod2</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-n'>Xp</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>transf</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X</span><span class='hljl-p'>)</span>
+<span class='hljl-n'>model1</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>snv</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-n'>model2</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>savgol</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>npoint</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>15</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>deriv</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>2</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>degree</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>3</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-n'>model</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>pip</span><span class='hljl-p'>(</span><span class='hljl-n'>model1</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>model2</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-n'>Xp</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>transf</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X</span><span class='hljl-p'>)</span>
 </pre>
 
 
@@ -917,10 +917,10 @@ OrderedCollections.OrderedDict&#123;String, Int64&#125; with 3 entries:
 <pre class='hljl'>
 <span class='hljl-n'>gamma</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>100</span><span class='hljl-t'>
 </span><span class='hljl-n'>lb</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nfB'>1e-3</span><span class='hljl-t'>
-</span><span class='hljl-n'>mod</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>krr</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>gamma</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>lb</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xtrain</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>ytrain</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-oB'>.</span><span class='hljl-n'>fm</span><span class='hljl-p'>)</span>
+</span><span class='hljl-n'>model</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>krr</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>gamma</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>lb</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xtrain</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>ytrain</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-p'>)</span>
 </pre>
 
 
@@ -934,7 +934,7 @@ ts, :kwargs, :par&#41;
 
 
 <pre class='hljl'>
-<span class='hljl-n'>pred</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>predict</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xtest</span><span class='hljl-p'>)</span><span class='hljl-oB'>.</span><span class='hljl-n'>pred</span>
+<span class='hljl-n'>pred</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>predict</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xtest</span><span class='hljl-p'>)</span><span class='hljl-oB'>.</span><span class='hljl-n'>pred</span>
 </pre>
 
 

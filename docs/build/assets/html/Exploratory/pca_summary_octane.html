@@ -763,14 +763,14 @@ div.title {text-align: center;}
 
 
 <pre class='hljl'>
-<span class='hljl-n'>mod</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>pcasvd</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>nlv</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>6</span><span class='hljl-p'>)</span><span class='hljl-t'> 
+<span class='hljl-n'>model</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>pcasvd</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>nlv</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>6</span><span class='hljl-p'>)</span><span class='hljl-t'> 
 </span><span class='hljl-cs'>## For robust PCA, do:</span><span class='hljl-t'>
-</span><span class='hljl-cs'>#mod = model(pcasph; nlv = 6)</span><span class='hljl-t'>
+</span><span class='hljl-cs'>#model = pcasph; nlv = 6)</span><span class='hljl-t'>
 </span><span class='hljl-cs'>## or:</span><span class='hljl-t'>
-</span><span class='hljl-cs'>#mod = model(pcaout; nlv = 6)</span><span class='hljl-t'>
-</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X</span><span class='hljl-p'>)</span><span class='hljl-t'>  
-</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-oB'>.</span><span class='hljl-n'>fm</span><span class='hljl-p'>)</span>
+</span><span class='hljl-cs'>#model = pcaout; nlv = 6)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X</span><span class='hljl-p'>)</span><span class='hljl-t'>  
+</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-p'>)</span>
 </pre>
 
 
@@ -783,7 +783,7 @@ div.title {text-align: center;}
 
 
 <pre class='hljl'>
-<span class='hljl-n'>res</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>summary</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-p'>;</span><span class='hljl-t'>
+<span class='hljl-n'>res</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>summary</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-p'>;</span><span class='hljl-t'>
 </span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>res</span><span class='hljl-p'>)</span>
 </pre>
 

@@ -784,8 +784,8 @@ OrderedCollections.OrderedDict&#123;String, Int64&#125; with 3 entries:
 
 <pre class='hljl'>
 <span class='hljl-n'>nlv</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>2</span><span class='hljl-t'>
-</span><span class='hljl-n'>mod</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>plskern</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>nlv</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Ydummy</span><span class='hljl-p'>)</span>
+</span><span class='hljl-n'>model</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>plskern</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>nlv</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Ydummy</span><span class='hljl-p'>)</span>
 </pre>
 
 
@@ -793,7 +793,7 @@ OrderedCollections.OrderedDict&#123;String, Int64&#125; with 3 entries:
 <p><strong>Scores:</strong></p>
 
 <pre class='hljl'>
-<span class='hljl-nB'>julia&gt; </span><span class='hljl-nd'>@head</span><span class='hljl-t'> </span><span class='hljl-n'>T</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>mod</span><span class='hljl-oB'>.</span><span class='hljl-n'>fm</span><span class='hljl-oB'>.</span><span class='hljl-n'>T</span><span class='hljl-t'>
+<span class='hljl-nB'>julia&gt; </span><span class='hljl-nd'>@head</span><span class='hljl-t'> </span><span class='hljl-n'>T</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>model</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-oB'>.</span><span class='hljl-n'>T</span><span class='hljl-t'>
 3×2 Matrix{Float64}:
  2.69582  -0.275886
  2.70525   0.243335

@@ -107,6 +107,17 @@ in(nam).(z)    # is z[i] in nam?
 
 in(z[1], nam)  # is z[1] in nam?
 
+z = ["A is BB"; "C is dD"; "K"]
+in(z).("X")
+in(z).("A")
+in(z).("D")
+in(z).("K")
+occursin.("X", z)
+occursin.("A", z)
+occursin.("dD", z)
+occursin.("D", z)
+occursin.("K", z)
+
 nam = string.(350:2500) 
 z = ["1000" ; "1800"] ;
 s = in(z).(nam)     # is nam[i] in z?

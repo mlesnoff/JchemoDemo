@@ -35,11 +35,11 @@ wl = parse.(Float64, wlst)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-mod1 = model(snv)
-mod2 = model(savgol; npoint = 15, deriv = 2, degree = 3)
-mod = pip(mod1, mod2)
-fit!(mod, X)
-Xp = transf(mod, X)
+model1 = snv)
+model2 = savgol; npoint = 15, deriv = 2, degree = 3)
+model = pip(model1, model2)
+fit!(model, X)
+Xp = transf(model, X)
 
 
 plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
@@ -80,9 +80,9 @@ segm[i]      # the K segments of replication 'i'
 segm[i][k]   # segment 'k' of replication 'i'
 
 
-mod = model(plskern)
+model = plskern)
 nlv = 0:20
-rescv = gridcv(mod, Xtrain, ytrain; segm = segm, score = rmsep, nlv, verbose = false) ;
+rescv = gridcv(model, Xtrain, ytrain; segm = segm, score = rmsep, nlv, verbose = false) ;
 pnames(rescv)
 
 
@@ -104,9 +104,9 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-mod = model(plskern; nlv = res.nlv[u])
-fit!(mod, Xtrain, ytrain)
-pred = predict(mod, Xtest).pred
+model = plskern; nlv = res.nlv[u])
+fit!(model, Xtrain, ytrain)
+pred = predict(model, Xtest).pred
 
 
 rmsep(pred, ytest)
@@ -114,7 +114,7 @@ rmsep(pred, ytest)
 
 f, ax = plotxy(pred, ytest; size = (500, 400), xlabel = "Predicted", ylabel = "Observed")
 zpred = vec(pred)
-zmod = model(loessr; span = 2/3) 
+zmod = loessr; span = 2/3) 
 fit!(zmod, zpred, ytest)
 pred_loess = predict(zmod, sort(zpred)).pred
 lines!(ax, sort(zpred), vec(pred_loess); color = :red)
@@ -135,8 +135,8 @@ res_sel.opt     # nb. LVs correponding to the minimal error rate
 res_sel.sel     # nb. LVs selected with the Wold's criterion
 
 
-mod = model(plskern; nlv = res_sel.sel) ;
-fit!(mod, Xtrain, ytrain)
-pred = predict(mod, Xtest).pred
+model = plskern; nlv = res_sel.sel) ;
+fit!(model, Xtrain, ytrain)
+pred = predict(model, Xtest).pred
 rmsep(pred, ytest)
 

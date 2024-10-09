@@ -59,11 +59,11 @@ plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 #### Preprocessing
 
 ```julia
-mod1 = model(snv)
-mod2 = model(savgol; npoint = 15, deriv = 2, degree = 3)
-mod = pip(mod1, mod2)
-fit!(mod, X)
-Xp = transf(mod, X) 
+model1 = snv)
+model2 = savgol; npoint = 15, deriv = 2, degree = 3)
+model = pip(model1, model2)
+fit!(model, X)
+Xp = transf(model, X) 
 ```
 
 ```julia
@@ -103,16 +103,16 @@ ytest = Ytest[:, nam]
 nlvdis = 10 ; metric = :mah
 h = 3 ; k = 30 
 nlv = 1:5
-mod = model(lwplsravg; nlvdis, metric, h, k, nlv)
-fit!(mod, Xtrain, ytrain)
-pnames(mod)
-pnames(mod.fm)
+model = lwplsravg; nlvdis, metric, h, k, nlv)
+fit!(model, Xtrain, ytrain)
+pnames(model)
+pnames(model.fitm)
 ```
 
 #### Predictions
 
 ```julia
-pred = predict(mod, Xtest).pred
+pred = predict(model, Xtest).pred
 ```
 
 ```julia
@@ -136,7 +136,7 @@ r = residreg(pred, ytest) # residuals
 ```julia
 f, ax = plotxy(pred, ytest; size = (500, 400), xlabel = "Predicted", ylabel = "Observed")
 zpred = vec(pred)
-zmod = model(loessr; span = 2/3) 
+zmod = loessr; span = 2/3) 
 fit!(zmod, zpred, ytest)
 pred_loess = predict(zmod, sort(zpred)).pred
 lines!(ax, sort(zpred), vec(pred_loess); color = :red)
@@ -151,7 +151,7 @@ f, ax = plotxy(ytest, r; size = (500, 400), color = (:blue, .5), xlabel = "Obser
     ylabel = "Residuals") 
 zpred = vec(pred)
 zr = vec(r)
-zmod = model(loessr; span = 2/3) 
+zmod = loessr; span = 2/3) 
 fit!(zmod, zpred, zr)
 r_loess = predict(zmod, sort(zpred)).pred
 lines!(ax, sort(zpred), vec(r_loess); color = :red)

@@ -59,11 +59,11 @@ plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 #### Preprocessing
 
 ```julia
-mod1 = model(snv)
-mod2 = model(savgol; npoint = 15, deriv = 2, degree = 3)
-mod = pip(mod1, mod2)
-fit!(mod, X)
-Xp = transf(mod, X) 
+model1 = snv)
+model2 = savgol; npoint = 15, deriv = 2, degree = 3)
+model = pip(model1, model2)
+fit!(model, X)
+Xp = transf(model, X) 
 ```
 
 ```julia
@@ -145,9 +145,9 @@ ncal = ntrain - nval
 #### Grid-search
 
 ```julia
-mod = model(plskern)
+model = plskern)
 nlv = 0:20
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, nlv, verbose = false)
+res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, nlv, verbose = false)
 ```
 
 **Selection of the best parameters combination:**
@@ -164,9 +164,9 @@ res[u, :]
 #### Final prediction (Test) using the optimal model
 
 ```julia
-mod = model(plskern; nlv = res.nlv[u])
-fit!(mod, Xtrain, ytrain)
-pred = predict(mod, Xtest).pred
+model = plskern; nlv = res.nlv[u])
+fit!(model, Xtrain, ytrain)
+pred = predict(model, Xtest).pred
 ```
 
 **Generalization error:**
@@ -180,7 +180,7 @@ rmsep(pred, ytest)
 ```julia
 f, ax = plotxy(pred, ytest; size = (500, 400), xlabel = "Predicted", ylabel = "Observed")
 zpred = vec(pred)
-zmod = model(loessr; span = 2/3) 
+zmod = loessr; span = 2/3) 
 fit!(zmod, zpred, ytest)
 pred_loess = predict(zmod, sort(zpred)).pred
 lines!(ax, sort(zpred), vec(pred_loess); color = :red)

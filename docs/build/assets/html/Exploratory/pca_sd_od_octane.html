@@ -765,12 +765,12 @@ div.title {text-align: center;}
 <pre class='hljl'>
 <span class='hljl-n'>mod0</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>pcasvd</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>nlv</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>6</span><span class='hljl-p'>)</span><span class='hljl-t'> 
 </span><span class='hljl-cs'>## For robust PCA, do:</span><span class='hljl-t'>
-</span><span class='hljl-cs'>#mod0 = model(pcasph; nlv = 6)</span><span class='hljl-t'>
+</span><span class='hljl-cs'>#mod0 = pcasph; nlv = 6)</span><span class='hljl-t'>
 </span><span class='hljl-cs'>## or:</span><span class='hljl-t'>
-</span><span class='hljl-cs'>#mod0 = model(pcaout; nlv = 6)</span><span class='hljl-t'>
+</span><span class='hljl-cs'>#mod0 = pcaout; nlv = 6)</span><span class='hljl-t'>
 </span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>mod0</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X</span><span class='hljl-p'>)</span><span class='hljl-t'>  
 </span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>mod0</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>mod0</span><span class='hljl-oB'>.</span><span class='hljl-n'>fm</span><span class='hljl-p'>)</span>
+</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>mod0</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-p'>)</span>
 </pre>
 
 
@@ -782,7 +782,7 @@ div.title {text-align: center;}
 <p><strong>Scores:</strong></p>
 
 <pre class='hljl'>
-<span class='hljl-nB'>julia&gt; </span><span class='hljl-nd'>@head</span><span class='hljl-t'> </span><span class='hljl-n'>T</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>mod0</span><span class='hljl-oB'>.</span><span class='hljl-n'>fm</span><span class='hljl-oB'>.</span><span class='hljl-n'>T</span><span class='hljl-t'>
+<span class='hljl-nB'>julia&gt; </span><span class='hljl-nd'>@head</span><span class='hljl-t'> </span><span class='hljl-n'>T</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>mod0</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-oB'>.</span><span class='hljl-n'>T</span><span class='hljl-t'>
 3×6 Matrix{Float64}:
  -0.144399  -0.0342525  0.00682902  -0.00632382  -0.0155429   -0.00905886
  -0.127914  -0.0640206  0.014206    -0.00408306  -0.00549785   0.0061774
@@ -794,21 +794,21 @@ div.title {text-align: center;}
 
 
 <pre class='hljl'>
-<span class='hljl-n'>mod</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>occsd</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>mod0</span><span class='hljl-oB'>.</span><span class='hljl-n'>fm</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-oB'>.</span><span class='hljl-n'>fm</span><span class='hljl-p'>)</span>
+<span class='hljl-n'>model</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>occsd</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>mod0</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-p'>)</span>
 </pre>
 
 
 <pre class="output">
-&#40;:d, :fm, :tscales, :e_cdf, :cutoff, :par&#41;
+&#40;:d, :fitm, :tscales, :e_cdf, :cutoff, :par&#41;
 </pre>
 
 
 
 <pre class='hljl'>
-<span class='hljl-n'>d</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>mod</span><span class='hljl-oB'>.</span><span class='hljl-n'>fm</span><span class='hljl-oB'>.</span><span class='hljl-n'>d</span>
+<span class='hljl-n'>d</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>model</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-oB'>.</span><span class='hljl-n'>d</span>
 </pre>
 
 
@@ -830,21 +830,21 @@ div.title {text-align: center;}
 
 
 <pre class='hljl'>
-<span class='hljl-n'>mod</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>occod</span><span class='hljl-p'>)</span><span class='hljl-t'> 
-</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>mod0</span><span class='hljl-oB'>.</span><span class='hljl-n'>fm</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-oB'>.</span><span class='hljl-n'>fm</span><span class='hljl-p'>)</span>
+<span class='hljl-n'>model</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>occod</span><span class='hljl-p'>)</span><span class='hljl-t'> 
+</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>mod0</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-p'>)</span>
 </pre>
 
 
 <pre class="output">
-&#40;:d, :fm, :e_cdf, :cutoff, :par&#41;
+&#40;:d, :fitm, :e_cdf, :cutoff, :par&#41;
 </pre>
 
 
 
 <pre class='hljl'>
-<span class='hljl-n'>d</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>mod</span><span class='hljl-oB'>.</span><span class='hljl-n'>fm</span><span class='hljl-oB'>.</span><span class='hljl-n'>d</span>
+<span class='hljl-n'>d</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>model</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-oB'>.</span><span class='hljl-n'>d</span>
 </pre>
 
 
@@ -866,12 +866,12 @@ div.title {text-align: center;}
 
 
 <pre class='hljl'>
-<span class='hljl-n'>mod</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>occsd</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>mod0</span><span class='hljl-oB'>.</span><span class='hljl-n'>fm</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-n'>d_sd</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>mod</span><span class='hljl-oB'>.</span><span class='hljl-n'>fm</span><span class='hljl-oB'>.</span><span class='hljl-n'>d</span><span class='hljl-t'>
-</span><span class='hljl-n'>mod</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>occod</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>mod0</span><span class='hljl-oB'>.</span><span class='hljl-n'>fm</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-n'>d_od</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>mod</span><span class='hljl-oB'>.</span><span class='hljl-n'>fm</span><span class='hljl-oB'>.</span><span class='hljl-n'>d</span><span class='hljl-t'>
+<span class='hljl-n'>model</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>occsd</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>mod0</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-n'>d_sd</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>model</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-oB'>.</span><span class='hljl-n'>d</span><span class='hljl-t'>
+</span><span class='hljl-n'>model</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>occod</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>mod0</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-n'>d_od</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>model</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-oB'>.</span><span class='hljl-n'>d</span><span class='hljl-t'>
 </span><span class='hljl-n'>f</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>ax</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>plotxy</span><span class='hljl-p'>(</span><span class='hljl-n'>d_sd</span><span class='hljl-oB'>.</span><span class='hljl-n'>dstand</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>d_od</span><span class='hljl-oB'>.</span><span class='hljl-n'>dstand</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>xlabel</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;Standardized SD&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>ylabel</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;Standardized OD&quot;</span><span class='hljl-p'>)</span><span class='hljl-t'>
 </span><span class='hljl-nf'>hlines!</span><span class='hljl-p'>(</span><span class='hljl-n'>ax</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>color</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-sc'>:grey</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>linestyle</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-sc'>:dash</span><span class='hljl-p'>)</span><span class='hljl-t'>
 </span><span class='hljl-nf'>vlines!</span><span class='hljl-p'>(</span><span class='hljl-n'>ax</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>color</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-sc'>:grey</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>linestyle</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-sc'>:dash</span><span class='hljl-p'>)</span><span class='hljl-t'>
@@ -897,10 +897,10 @@ div.title {text-align: center;}
 
 
 <pre class='hljl'>
-<span class='hljl-n'>mod</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>occsdod</span><span class='hljl-p'>)</span><span class='hljl-t'> 
-</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>mod0</span><span class='hljl-oB'>.</span><span class='hljl-n'>fm</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-oB'>.</span><span class='hljl-n'>fm</span><span class='hljl-p'>)</span>
+<span class='hljl-n'>model</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>occsdod</span><span class='hljl-p'>)</span><span class='hljl-t'> 
+</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>mod0</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-p'>)</span>
 </pre>
 
 
@@ -911,7 +911,7 @@ div.title {text-align: center;}
 
 
 <pre class='hljl'>
-<span class='hljl-n'>d</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>mod</span><span class='hljl-oB'>.</span><span class='hljl-n'>fm</span><span class='hljl-oB'>.</span><span class='hljl-n'>d</span>
+<span class='hljl-n'>d</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>model</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-oB'>.</span><span class='hljl-n'>d</span>
 </pre>
 
 

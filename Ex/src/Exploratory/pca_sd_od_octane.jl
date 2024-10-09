@@ -27,26 +27,26 @@ wl = parse.(Float64, wlst)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance", title = "Octane data").f
 
 
-mod0 = model(pcasvd; nlv = 6) 
+mod0 = pcasvd; nlv = 6) 
 ## For robust PCA, do:
-#mod0 = model(pcasph; nlv = 6)
+#mod0 = pcasph; nlv = 6)
 ## or:
-#mod0 = model(pcaout; nlv = 6)
+#mod0 = pcaout; nlv = 6)
 fit!(mod0, X)  
 pnames(mod0)
-pnames(mod0.fm)
+pnames(mod0.fitm)
 
 
-@head T = mod0.fm.T
+@head T = mod0.fitm.T
 
 
-mod = model(occsd)
-fit!(mod, mod0.fm)
-pnames(mod)
-pnames(mod.fm)
+model = occsd)
+fit!(model, mod0.fitm)
+pnames(model)
+pnames(model.fitm)
 
 
-d = mod.fm.d
+d = model.fitm.d
 
 
 f = Figure(size = (500, 400))
@@ -55,13 +55,13 @@ hist!(d.dstand; bins = 20)
 f
 
 
-mod = model(occod) 
-fit!(mod, mod0.fm, X)
-pnames(mod)
-pnames(mod.fm)
+model = occod) 
+fit!(model, mod0.fitm, X)
+pnames(model)
+pnames(model.fitm)
 
 
-d = mod.fm.d
+d = model.fitm.d
 
 
 f = Figure(size = (500, 400))
@@ -70,12 +70,12 @@ hist!(d.dstand; bins = 20)
 f
 
 
-mod = model(occsd)
-fit!(mod, mod0.fm)
-d_sd = mod.fm.d
-mod = model(occod)
-fit!(mod, mod0.fm, X)
-d_od = mod.fm.d
+model = occsd)
+fit!(model, mod0.fitm)
+d_sd = model.fitm.d
+model = occod)
+fit!(model, mod0.fitm, X)
+d_od = model.fitm.d
 f, ax = plotxy(d_sd.dstand, d_od.dstand; xlabel = "Standardized SD", ylabel = "Standardized OD")
 hlines!(ax, 1; color = :grey, linestyle = :dash)
 vlines!(ax, 1; color = :grey, linestyle = :dash)
@@ -89,13 +89,13 @@ vlines!(ax, 1; color = :grey, linestyle = :dash)
 f
 
 
-mod = model(occsdod) 
-fit!(mod, mod0.fm, X)
-pnames(mod)
-pnames(mod.fm)
+model = occsdod) 
+fit!(model, mod0.fitm, X)
+pnames(model)
+pnames(model.fitm)
 
 
-d = mod.fm.d
+d = model.fitm.d
 
 
 f, ax = plotxy(1:n, d.dstand; xlabel = "Observation", ylabel = "Standardized SD-OD distance")

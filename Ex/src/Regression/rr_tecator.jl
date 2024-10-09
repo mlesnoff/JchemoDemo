@@ -35,11 +35,11 @@ wl = parse.(Float64, wlst)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-mod1 = model(snv)
-mod2 = model(savgol; npoint = 15, deriv = 2, degree = 3)
-mod = pip(mod1, mod2)
-fit!(mod, X)
-Xp = transf(mod, X)
+model1 = snv)
+model2 = savgol; npoint = 15, deriv = 2, degree = 3)
+model = pip(model1, model2)
+fit!(model, X)
+Xp = transf(model, X)
 
 
 plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
@@ -63,22 +63,22 @@ ytest = Ytest[:, nam]
 
 
 lb = 1e-3
-mod = model(rr; lb)
+model = rr; lb)
 ## Alternative RR algorithm:
-## mod = model(rrchol; lb)
-fit!(mod, Xtrain, ytrain)
-pnames(mod)
-pnames(mod.fm)
+## model = rrchol; lb)
+fit!(model, Xtrain, ytrain)
+pnames(model)
+pnames(model.fitm)
 
 
-pred = predict(mod, Xtest).pred
+pred = predict(model, Xtest).pred
 
 
-predict(mod, Xtest; lb = 1e-2).pred
+predict(model, Xtest; lb = 1e-2).pred
 
 
 lb = 10.0.^(-6:-1)
-predict(mod, Xtest; lb = lb).pred
+predict(model, Xtest; lb = lb).pred
 
 
 rmsep(pred, ytest)
@@ -95,7 +95,7 @@ r = residreg(pred, ytest) # residuals
 
 f, ax = plotxy(pred, ytest; size = (500, 400), xlabel = "Predicted", ylabel = "Observed")
 zpred = vec(pred)
-zmod = model(loessr; span = 2/3) 
+zmod = loessr; span = 2/3) 
 fit!(zmod, zpred, ytest)
 pred_loess = predict(zmod, sort(zpred)).pred
 lines!(ax, sort(zpred), vec(pred_loess); color = :red)
@@ -107,7 +107,7 @@ f, ax = plotxy(ytest, r; size = (500, 400), color = (:blue, .5), xlabel = "Obser
     ylabel = "Residuals") 
 zpred = vec(pred)
 zr = vec(r)
-zmod = model(loessr; span = 2/3) 
+zmod = loessr; span = 2/3) 
 fit!(zmod, zpred, zr)
 r_loess = predict(zmod, sort(zpred)).pred
 lines!(ax, sort(zpred), vec(r_loess); color = :red)

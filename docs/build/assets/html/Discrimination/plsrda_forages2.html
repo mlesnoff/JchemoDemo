@@ -821,11 +821,11 @@ Legume forages           │ 167   57
 
 <pre class='hljl'>
 <span class='hljl-n'>nlv</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>15</span><span class='hljl-t'>
-</span><span class='hljl-n'>mod</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>plsrda</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>nlv</span><span class='hljl-p'>)</span><span class='hljl-t'> 
-</span><span class='hljl-cs'>#mod = model(plslda; nlv) </span><span class='hljl-t'>
-</span><span class='hljl-cs'>#mod = model(plsqda; nlv) </span><span class='hljl-t'>
-</span><span class='hljl-cs'>#mod = model(plsqda; nlv, prior = :prop) </span><span class='hljl-t'>
-</span><span class='hljl-cs'>#mod = model(plskdeda; nlv)</span>
+</span><span class='hljl-n'>model</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>plsrda</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>nlv</span><span class='hljl-p'>)</span><span class='hljl-t'> 
+</span><span class='hljl-cs'>#model = plslda; nlv) </span><span class='hljl-t'>
+</span><span class='hljl-cs'>#model = plsqda; nlv) </span><span class='hljl-t'>
+</span><span class='hljl-cs'>#model = plsqda; nlv, prior = :prop) </span><span class='hljl-t'>
+</span><span class='hljl-cs'>#model = plskdeda; nlv)</span>
 </pre>
 
 
@@ -839,16 +839,16 @@ Jchemo.Model&#123;typeof&#40;Jchemo.plsrda&#41;, Base.Pairs&#123;Symbol, Int64, 
 
 
 <pre class='hljl'>
-<span class='hljl-cs'>#mod = model(rrda; lb = 1e-5)</span>
+<span class='hljl-cs'>#model = rrda; lb = 1e-5)</span>
 </pre>
 
 
 
 
 <pre class='hljl'>
-<span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xtrain</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>ytrain</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-p'>)</span><span class='hljl-t'> 
-</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-oB'>.</span><span class='hljl-n'>fm</span><span class='hljl-p'>)</span>
+<span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xtrain</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>ytrain</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>)</span><span class='hljl-t'> 
+</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-oB'>.</span><span class='hljl-n'>fm</span><span class='hljl-p'>)</span>
 </pre>
 
 
@@ -861,7 +861,7 @@ Jchemo.Model&#123;typeof&#40;Jchemo.plsrda&#41;, Base.Pairs&#123;Symbol, Int64, 
 
 
 <pre class='hljl'>
-<span class='hljl-n'>res</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>predict</span><span class='hljl-p'>(</span><span class='hljl-n'>mod</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xtest</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-p'>;</span><span class='hljl-t'>
+<span class='hljl-n'>res</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>predict</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xtest</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-p'>;</span><span class='hljl-t'>
 </span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>res</span><span class='hljl-p'>)</span>
 </pre>
 

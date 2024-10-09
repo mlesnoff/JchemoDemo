@@ -34,9 +34,9 @@ scatter(X[:, i], X[:, i + 1], X[:, i + 2],
 
 
 nlv = 2
-mod = model(pcasvd; nlv)
-fit!(mod, X)
-@head T = mod.fm.T
+model = pcasvd; nlv)
+fit!(model, X)
+@head T = model.fitm.T
 
 
 CairoMakie.activate!()
@@ -47,9 +47,9 @@ plotxy(T[:, i], T[:, i + 1]; color = labs,
 
 nlv = 2
 n_neighbors = 15 ; min_dist = .5 
-mod = model(umap; nlv, n_neighbors, min_dist)
-fit!(mod, X)
-@head T = transf(mod, X)
+model = umap; nlv, n_neighbors, min_dist)
+fit!(model, X)
+@head T = transf(model, X)
 
 
 CairoMakie.activate!()
@@ -80,9 +80,9 @@ plotxy(T[:, i], T[:, i + 1]; color = labs,
 nlv = 2
 kern = :kpol
 gamma = 1 ; degree = 3 ; coef0 = 10
-mod = model(kpca; nlv, kern, degree, gamma, coef0)
-fit!(mod, X)
-@head T = mod.fm.T  
+model = kpca; nlv, kern, degree, gamma, coef0)
+fit!(model, X)
+@head T = model.fitm.T  
 CairoMakie.activate!()
 i = 1
 plotxy(T[:, i], T[:, i + 1]; color = labs,

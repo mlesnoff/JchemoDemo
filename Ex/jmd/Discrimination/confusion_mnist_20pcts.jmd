@@ -52,9 +52,9 @@ plotsp(Xtest; nsamp = 1).f
 #### Fitting a PLS-QDA
 
 ```julia
-mod = model(plsqda; nlv = 25)
-fit!(mod, Xtrain, ytrain)
-pred = predict(mod, Xtest).pred
+model = plsqda; nlv = 25)
+fit!(model, Xtrain, ytrain)
+pred = predict(model, Xtest).pred
 errp(pred, ytest)  # overall
 merrp(pred, ytest) # average by class
 ```

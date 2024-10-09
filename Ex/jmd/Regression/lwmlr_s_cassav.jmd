@@ -56,11 +56,11 @@ plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 #### Preprocessing
 
 ```julia
-mod1 = model(snv)
-mod2 = model(savgol; npoint = 11, deriv = 2, degree = 3)
-mod = pip(mod1, mod2)
-fit!(mod, X)
-Xp = transf(mod, X) 
+model1 = snv)
+model2 = savgol; npoint = 11, deriv = 2, degree = 3)
+model = pip(model1, model2)
+fit!(model, X)
+Xp = transf(model, X) 
 ```
 
 ```julia
@@ -110,9 +110,9 @@ ncal = ntrain - nval
 #### Benchmark with PLSR
 
 ```julia
-mod = model(plskern)
+model = plskern)
 nlv = 0:40
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, nlv) 
+res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, nlv) 
 ```
 
 ```julia
@@ -125,9 +125,9 @@ res[u, :]
 ```
 
 ```julia
-mod = model(plskern; nlv = res.nlv[u]) 
-fit!(mod, Xtrain, ytrain)
-pred = predict(mod, Xtest).pred 
+model = plskern; nlv = res.nlv[u]) 
+fit!(model, Xtrain, ytrain)
+pred = predict(model, Xtest).pred 
 rmsep(pred, ytest)
 mse(pred, ytest)
 ```
@@ -149,10 +149,10 @@ length(pars[1])
 ```
 
 ```julia
-mod1 = model(pcasvd)
-mod2 = model(lwmlr)
-mod = pip(mod1, mod2)
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, verbose = false) 
+model1 = pcasvd)
+model2 = lwmlr)
+model = pip(model1, model2)
+res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, verbose = false) 
 ```
 
 ```julia
@@ -161,11 +161,11 @@ res[u, :]
 ```
 
 ```julia
-mod1 = model(pcasvd; nlv)
-mod2 = model(lwmlr; metric = res.metric[u], h = res.h[u], k = res.k[u])
-mod = pip(mod1, mod2)
-fit!(mod, Xtrain, ytrain)
-pred = predict(mod, Xtest).pred
+model1 = pcasvd; nlv)
+model2 = lwmlr; metric = res.metric[u], h = res.h[u], k = res.k[u])
+model = pip(model1, model2)
+fit!(model, Xtrain, ytrain)
+pred = predict(model, Xtest).pred
 @show rmsep(pred, ytest)
 mse(pred, ytest)
 ```
@@ -186,11 +186,11 @@ length(pars[1])
 ```
 
 ```julia
-mod1 = model(plskern)
-mod2 = model(lwmlr)
-mod = pip(mod1, mod2)
+model1 = plskern)
+model2 = lwmlr)
+model = pip(model1, model2)
 ## Pipeline ==> only the last model is tuned
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, verbose = false) 
+res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, verbose = false) 
 ```
 
 ```julia
@@ -199,11 +199,11 @@ res[u, :]
 ```
 
 ```julia
-mod1 = model(plskern; nlv)
-mod2 = model(lwmlr; metric = res.metric[u], h = res.h[u], k = res.k[u])
-mod = pip(mod1, mod2)
-fit!(mod, Xtrain, ytrain)
-pred = predict(mod, Xtest).pred
+model1 = plskern; nlv)
+model2 = lwmlr; metric = res.metric[u], h = res.h[u], k = res.k[u])
+model = pip(model1, model2)
+fit!(model, Xtrain, ytrain)
+pred = predict(model, Xtest).pred
 @show rmsep(pred, ytest)
 mse(pred, ytest)
 ```
@@ -224,10 +224,10 @@ length(pars[1])
 ```
 
 ```julia
-mod1 = model(dkplsr)
-mod2 = model(lwmlr)
-mod = pip(mod1, mod2)
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = rmsep, pars, verbose = false) 
+model1 = dkplsr)
+model2 = lwmlr)
+model = pip(model1, model2)
+res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, verbose = false) 
 ```
 
 ```julia
@@ -236,11 +236,11 @@ res[u, :]
 ```
 
 ```julia
-mod1 = model(dkplsr; nlv, gamma)
-mod2 = model(lwmlr; metric = res.metric[u], h = res.h[u], k = res.k[u])
-mod = pip(mod1, mod2)
-fit!(mod, Xtrain, ytrain)
-pred = predict(mod, Xtest).pred
+model1 = dkplsr; nlv, gamma)
+model2 = lwmlr; metric = res.metric[u], h = res.h[u], k = res.k[u])
+model = pip(model1, model2)
+fit!(model, Xtrain, ytrain)
+pred = predict(model, Xtest).pred
 @show rmsep(pred, ytest)
 mse(pred, ytest)
 ```

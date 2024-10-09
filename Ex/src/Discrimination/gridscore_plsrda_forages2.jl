@@ -54,8 +54,8 @@ ncal = ntrain - nval
 
 
 nlv = 0:50
-mod = model(plsrda)
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = errp, nlv)
+model = plsrda)
+res = gridscore(model, Xcal, ycal, Xval, yval; score = errp, nlv)
 
 
 plotgrid(res.nlv, res.y1; step = 5, xlabel = "Nb. LVs", ylabel = "ERR").f
@@ -65,9 +65,9 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-mod = model(plsrda; nlv = res.nlv[u])
-fit!(mod, Xtrain, ytrain)
-pred = predict(mod, Xtest).pred
+model = plsrda; nlv = res.nlv[u])
+fit!(model, Xtrain, ytrain)
+pred = predict(model, Xtest).pred
 
 
 errp(pred, ytest)

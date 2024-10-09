@@ -94,8 +94,8 @@ ncal = ntrain - nval
 
 ```julia
 nlv = 0:50
-mod = model(plsrda)
-res = gridscore(mod, Xcal, ycal, Xval, yval; score = errp, nlv)
+model = plsrda)
+res = gridscore(model, Xcal, ycal, Xval, yval; score = errp, nlv)
 ```
 
 **Selection of the best parameters combination:**
@@ -112,9 +112,9 @@ res[u, :]
 #### Final prediction (Test) using the optimal model
 
 ```julia
-mod = model(plsrda; nlv = res.nlv[u])
-fit!(mod, Xtrain, ytrain)
-pred = predict(mod, Xtest).pred
+model = plsrda; nlv = res.nlv[u])
+fit!(model, Xtrain, ytrain)
+pred = predict(model, Xtest).pred
 ```
 
 #### Generalization error

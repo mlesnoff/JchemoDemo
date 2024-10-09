@@ -76,15 +76,15 @@ tab(ytest)
 #### Model fitting
 
 ```julia
-mod = model(fda; nlv = 2)
-#mod = model(fdasvd; nlv = 2)     # alternative algorithm (same result)
-fit!(mod, Xtrain, ytrain) 
-fm = mod.fm 
-pnames(fm)
+model = fda; nlv = 2)
+#model = fdasvd; nlv = 2)     # alternative algorithm (same result)
+fit!(model, Xtrain, ytrain) 
+fitm = model.fitm 
+pnames(fitm)
 ```
 
 ```julia
-lev = fm.lev
+lev = fitm.lev
 ```
 
 ```julia
@@ -94,13 +94,13 @@ nlev = length(lev)
 **FDA scores**
 
 ```julia term = true
-@head Ttrain = mod.fm.T
+@head Ttrain = model.fitm.T
 ```
 
 **Class centers projected on the score space**
 
 ```julia
-ct = mod.fm.Tcenters
+ct = model.fitm.Tcenters
 ```
 
 ```julia
@@ -112,7 +112,7 @@ f
 #### Projection of Xtest to the score space
 
 ```julia
-@head Ttest = transf(mod, Xtest)
+@head Ttest = transf(model, Xtest)
 ```
 
 #### X-loadings matrix
@@ -121,7 +121,7 @@ Columns of matrix `P` = coefficients of the linear discriminant function
 = "LD" of function lda of the R package MASS.
 
 ```julia
-P = mod.fm.P
+P = model.fitm.P
 ```
 
 ```julia
@@ -132,17 +132,17 @@ P' * P    # not orthogonal
 #### Explained variance 
 
 ```julia
-mod.fm.eig
+model.fitm.eig
 ```
 
 ```julia
-mod.fm.sstot
+model.fitm.sstot
 ```
 
 Explained variance is computed from the PCA of the class centers 
 in the transformed scale.
 
 ```julia
-summary(mod)
+summary(model)
 ```
 

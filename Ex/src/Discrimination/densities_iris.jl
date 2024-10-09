@@ -34,11 +34,11 @@ Ydummy = dummy(y).Y ;
 
 
 nlv = 2
-mod = model(plskern; nlv)
-fit!(mod, X, Ydummy)
+model = plskern; nlv)
+fit!(model, X, Ydummy)
 
 
-@head T = mod.fm.T
+@head T = model.fitm.T
 
 
 i = 1

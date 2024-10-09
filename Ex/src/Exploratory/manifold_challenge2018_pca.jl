@@ -43,11 +43,11 @@ freqtable(typ, test)
 plotsp(X, wl; nsamp = 30).f
 
 
-mod1 = model(snv)
-mod2 = model(savgol; npoint = 21, deriv = 2, degree = 3)
-mod = pip(mod1, mod2)
-fit!(mod, X)
-Xp = transf(mod, X)
+model1 = snv)
+model2 = savgol; npoint = 21, deriv = 2, degree = 3)
+model = pip(model1, model2)
+fit!(model, X)
+Xp = transf(model, X)
 
 
 plotsp(Xp, wl; nsamp = 30).f
@@ -73,9 +73,9 @@ ztyp = recod_catbyint(typtrain)
 
 
 nlv = 3
-mod = model(pcasvd; nlv)
-fit!(mod, Xtrain)
-@head T = mod.fm.T
+model = pcasvd; nlv)
+fit!(model, Xtrain)
+@head T = model.fitm.T
 
 
 CairoMakie.activate!()  
@@ -115,10 +115,10 @@ f
 
 
 nlv = 3
-mod = model(pcasvd; nlv)
-fit!(mod, Xtrain)
-@head T = mod.fm.T
-@head Ttest = transf(mod, Xtest)
+model = pcasvd; nlv)
+fit!(model, Xtrain)
+@head T = model.fitm.T
+@head Ttest = transf(model, Xtest)
 
 
 CairoMakie.activate!()  
