@@ -51,7 +51,7 @@ plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance", title = "Octane
 #### Initial PCA model fitting
 
 ```julia
-mod0 = pcasvd; nlv = 6) 
+mod0 = pcasvd(nlv = 6) 
 ## For robust PCA, do:
 #mod0 = pcasph; nlv = 6)
 ## or:
@@ -70,7 +70,7 @@ pnames(mod0.fitm)
 #### Score distance (SD)
 
 ```julia
-model = occsd)
+model = occsd()
 fit!(model, mod0.fitm)
 pnames(model)
 pnames(model.fitm)
@@ -90,7 +90,7 @@ f
 #### Orthogonal distance (OD)
 
 ```julia
-model = occod) 
+model = occod() 
 fit!(model, mod0.fitm, X)
 pnames(model)
 pnames(model.fitm)
@@ -110,10 +110,10 @@ f
 #### SD-OD
 
 ```julia
-model = occsd)
+model = occsd()
 fit!(model, mod0.fitm)
 d_sd = model.fitm.d
-model = occod)
+model = occod()
 fit!(model, mod0.fitm, X)
 d_od = model.fitm.d
 f, ax = plotxy(d_sd.dstand, d_od.dstand; xlabel = "Standardized SD", ylabel = "Standardized OD")
@@ -133,7 +133,7 @@ f
 #### Direct computation of a composite SD-OD
 
 ```julia
-model = occsdod) 
+model = occsdod() 
 fit!(model, mod0.fitm, X)
 pnames(model)
 pnames(model.fitm)

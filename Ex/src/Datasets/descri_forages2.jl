@@ -47,7 +47,7 @@ ntest = nro(Xtest)
 plotsp(X, wl; nsamp = 10, xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-model = pcasvd; nlv = 10)
+model = pcasvd(nlv = 10)
 fit!(model, X)
 pnames(model)
 pnames(model.fitm)
@@ -72,7 +72,7 @@ plotxy(T[:, i], T[:, i + 1], y; ellipse = true, xlabel = "PC1", ylabel = "PC2").
 
 
 ## Train vs Test
-model = pcasvd; nlv = 15)
+model = pcasvd(nlv = 15)
 fit!(model, Xtrain)
 Ttrain = model.fitm.T
 @head Ttrain
@@ -87,18 +87,18 @@ i = 1
 plotxy(T[:, i], T[:, i + 1], group; xlabel = "PC1", ylabel = "PC2").f
 
 
-mod_sd = occsd) 
-fit!(mod_sd, model.fitm)
-pnames(mod_sd)
-sdtrain = mod_sd.fitm.d
-sdtest = predict(mod_sd, Xtest).d
+model_sd = occsd() 
+fit!(model_sd, model.fitm)
+pnames(model_sd)
+sdtrain = model_sd.fitm.d
+sdtest = predict(model_sd, Xtest).d
 
 
-mod_od = occod) 
-fit!(mod_od, model.fitm, Xtrain)
-pnames(mod_od)
-odtrain = mod_od.fitm.d
-odtest = predict(mod_od, Xtest).d
+model_od = occod() 
+fit!(model_od, model.fitm, Xtrain)
+pnames(model_od)
+odtrain = model_od.fitm.d
+odtest = predict(model_od, Xtest).d
 
 
 f = Figure(size = (500, 400))
@@ -112,8 +112,8 @@ f[1, 1] = ax
 f
 
 
-zres = mod_sd ; nam = "SD"
-#zres = mod_od ; nam = "OD"
+zres = model_sd ; nam = "SD"
+#zres = model_od ; nam = "OD"
 pnames(zres.fitm)
 sdtrain = zres.fitm.d
 sdtest = predict(zres, Xtest).d

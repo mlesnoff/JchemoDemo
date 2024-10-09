@@ -27,7 +27,7 @@ wl = parse.(Float64, wlst)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance", title = "Octane data").f
 
 
-mod0 = pcasvd; nlv = 6) 
+mod0 = pcasvd(nlv = 6) 
 ## For robust PCA, do:
 #mod0 = pcasph; nlv = 6)
 ## or:
@@ -40,7 +40,7 @@ pnames(mod0.fitm)
 @head T = mod0.fitm.T
 
 
-model = occsd)
+model = occsd()
 fit!(model, mod0.fitm)
 pnames(model)
 pnames(model.fitm)
@@ -55,7 +55,7 @@ hist!(d.dstand; bins = 20)
 f
 
 
-model = occod) 
+model = occod() 
 fit!(model, mod0.fitm, X)
 pnames(model)
 pnames(model.fitm)
@@ -70,10 +70,10 @@ hist!(d.dstand; bins = 20)
 f
 
 
-model = occsd)
+model = occsd()
 fit!(model, mod0.fitm)
 d_sd = model.fitm.d
-model = occod)
+model = occod()
 fit!(model, mod0.fitm, X)
 d_od = model.fitm.d
 f, ax = plotxy(d_sd.dstand, d_od.dstand; xlabel = "Standardized SD", ylabel = "Standardized OD")
@@ -89,7 +89,7 @@ vlines!(ax, 1; color = :grey, linestyle = :dash)
 f
 
 
-model = occsdod) 
+model = occsdod() 
 fit!(model, mod0.fitm, X)
 pnames(model)
 pnames(model.fitm)

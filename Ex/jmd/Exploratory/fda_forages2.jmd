@@ -82,7 +82,7 @@ for the FDA, for instance:
 #### 1) FDA on PCA scores
 
 ```julia
-mod0 = pcasvd; nlv = 10)
+mod0 = pcasvd(nlv = 10)
 fit!(mod0, Xtrain)
 pnames(mod0)
 pnames(mod0.fitm)

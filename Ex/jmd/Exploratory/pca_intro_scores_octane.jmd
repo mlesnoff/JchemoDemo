@@ -51,7 +51,7 @@ plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance", title = "Octane
 #### PCA model fitting
 
 ```julia
-model = pcasvd; nlv = 6) 
+model = pcasvd(nlv = 6) 
 ## For robust PCA, do:
 #model = pcasph; nlv = 6)
 ## or:

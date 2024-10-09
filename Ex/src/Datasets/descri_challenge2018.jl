@@ -42,8 +42,8 @@ freqtable(typ, test)
 plotsp(X, wl; nsamp = 30, xlabel = "Wavelength (nm)").f
 
 
-model1 = snv)
-model2 = savgol; npoint = 21, deriv = 2, degree = 3)
+model1 = snv()
+model2 = savgol(npoint = 21, deriv = 2, degree = 3)
 model = pip(model1, model2)
 fit!(model, X)
 Xp = transf(model, X)
@@ -66,7 +66,7 @@ ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
 
-model = pcasvd; nlv = 10)
+model = pcasvd(nlv = 10)
 fit!(model, Xp)
 pnames(model)
 pnames(model.fitm)
@@ -97,7 +97,7 @@ plotxy(T[:, i], T[:, i + 1], typ; color = colm, xlabel = string("PC", i),
     ylabel = string("PC", i + 1)).f
 
 
-model = pcasvd; nlv = 15)
+model = pcasvd(nlv = 15)
 fit!(model, Xtrain)
 
 
@@ -116,18 +116,18 @@ i = 1
 plotxy(T[:, i], T[:, i + 1], group; color = colm, xlabel = "PC1", ylabel = "PC2").f
 
 
-mod_sd = occsd) 
-fit!(mod_sd, model.fitm)
-pnames(mod_sd)
-sdtrain = mod_sd.fitm.d
-sdtest = predict(mod_sd, Xtest).d
+model_sd = occsd() 
+fit!(model_sd, model.fitm)
+pnames(model_sd)
+sdtrain = model_sd.fitm.d
+sdtest = predict(model_sd, Xtest).d
 
 
-mod_od = occod) 
-fit!(mod_od, model.fitm, Xtrain)
-pnames(mod_od)
-odtrain = mod_od.fitm.d
-odtest = predict(mod_od, Xtest).d
+model_od = occod() 
+fit!(model_od, model.fitm, Xtrain)
+pnames(model_od)
+odtrain = model_od.fitm.d
+odtest = predict(model_od, Xtest).d
 
 
 f = Figure(size = (500, 400))
@@ -141,8 +141,8 @@ f[1, 1] = ax
 f
 
 
-zres = mod_sd ; nam = "SD"
-#zres = mod_od ; nam = "OD"
+zres = model_sd ; nam = "SD"
+#zres = model_od ; nam = "OD"
 pnames(zres.fitm)
 sdtrain = zres.fitm.d
 sdtest = predict(zres, Xtest).d

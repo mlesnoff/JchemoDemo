@@ -35,8 +35,8 @@ wl = parse.(Float64, wlst)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-model1 = snv)
-model2 = savgol; npoint = 15, deriv = 2, degree = 3)
+model1 = snv()
+model2 = savgol(npoint = 15, deriv = 2, degree = 3)
 model = pip(model1, model2)
 fit!(model, X)
 Xp = transf(model, X)
@@ -45,7 +45,7 @@ Xp = transf(model, X)
 plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-model = pcasvd; nlv = 10)
+model = pcasvd(nlv = 10)
 fit!(model, X)
 pnames(model)
 pnames(model.fitm)

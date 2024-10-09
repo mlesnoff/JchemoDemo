@@ -42,8 +42,8 @@ freqtable(typ, test)
 plotsp(X, wl; nsamp = 30).f
 
 
-model1 = snv)
-model2 = savgol; npoint = 21, deriv = 2, degree = 3)
+model1 = snv()
+model2 = savgol(npoint = 21, deriv = 2, degree = 3)
 model = pip(model1, model2)
 fit!(model, X)
 Xp = transf(model, X)

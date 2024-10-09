@@ -982,11 +982,11 @@ Jchemo.Model{typeof(pcasvd), Base.Pairs{Symbol, Int64, Tuple{Symbol}, @NamedTupl
 
 
 <pre class='hljl'>
-<span class='hljl-n'>mod_sd</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>occsd</span><span class='hljl-p'>)</span><span class='hljl-t'> 
-</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>mod_sd</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>model</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>mod_sd</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-n'>sdtrain</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>mod_sd</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-oB'>.</span><span class='hljl-n'>d</span><span class='hljl-t'>
-</span><span class='hljl-n'>sdtest</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>predict</span><span class='hljl-p'>(</span><span class='hljl-n'>mod_sd</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xtest</span><span class='hljl-p'>)</span><span class='hljl-oB'>.</span><span class='hljl-n'>d</span>
+<span class='hljl-n'>model_sd</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>occsd</span><span class='hljl-p'>)</span><span class='hljl-t'> 
+</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>model_sd</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>model</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>model_sd</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-n'>sdtrain</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>model_sd</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-oB'>.</span><span class='hljl-n'>d</span><span class='hljl-t'>
+</span><span class='hljl-n'>sdtest</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>predict</span><span class='hljl-p'>(</span><span class='hljl-n'>model_sd</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xtest</span><span class='hljl-p'>)</span><span class='hljl-oB'>.</span><span class='hljl-n'>d</span>
 </pre>
 
 
@@ -995,11 +995,11 @@ Jchemo.Model{typeof(pcasvd), Base.Pairs{Symbol, Int64, Tuple{Symbol}, @NamedTupl
 
 
 <pre class='hljl'>
-<span class='hljl-n'>mod_od</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>occod</span><span class='hljl-p'>)</span><span class='hljl-t'> 
-</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>mod_od</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>model</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xtrain</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>mod_od</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-n'>odtrain</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>mod_od</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-oB'>.</span><span class='hljl-n'>d</span><span class='hljl-t'>
-</span><span class='hljl-n'>odtest</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>predict</span><span class='hljl-p'>(</span><span class='hljl-n'>mod_od</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xtest</span><span class='hljl-p'>)</span><span class='hljl-oB'>.</span><span class='hljl-n'>d</span>
+<span class='hljl-n'>model_od</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>model</span><span class='hljl-p'>(</span><span class='hljl-n'>occod</span><span class='hljl-p'>)</span><span class='hljl-t'> 
+</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>model_od</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>model</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xtrain</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>model_od</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-n'>odtrain</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>model_od</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-oB'>.</span><span class='hljl-n'>d</span><span class='hljl-t'>
+</span><span class='hljl-n'>odtest</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>predict</span><span class='hljl-p'>(</span><span class='hljl-n'>model_od</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xtest</span><span class='hljl-p'>)</span><span class='hljl-oB'>.</span><span class='hljl-n'>d</span>
 </pre>
 
 
@@ -1024,8 +1024,8 @@ Jchemo.Model{typeof(pcasvd), Base.Pairs{Symbol, Int64, Tuple{Symbol}, @NamedTupl
 
 
 <pre class='hljl'>
-<span class='hljl-n'>zres</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>mod_sd</span><span class='hljl-t'> </span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>nam</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;SD&quot;</span><span class='hljl-t'>
-</span><span class='hljl-cs'>#zres = mod_od ; nam = &quot;OD&quot;</span><span class='hljl-t'>
+<span class='hljl-n'>zres</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>model_sd</span><span class='hljl-t'> </span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>nam</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;SD&quot;</span><span class='hljl-t'>
+</span><span class='hljl-cs'>#zres = model_od ; nam = &quot;OD&quot;</span><span class='hljl-t'>
 </span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>zres</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-p'>)</span><span class='hljl-t'>
 </span><span class='hljl-n'>sdtrain</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>zres</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-oB'>.</span><span class='hljl-n'>d</span><span class='hljl-t'>
 </span><span class='hljl-n'>sdtest</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>predict</span><span class='hljl-p'>(</span><span class='hljl-n'>zres</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xtest</span><span class='hljl-p'>)</span><span class='hljl-oB'>.</span><span class='hljl-n'>d</span><span class='hljl-t'>

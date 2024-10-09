@@ -41,8 +41,8 @@ lev = mlev(typ)
 nlev = length(lev)
 
 
-model1 = snv)
-model2 = savgol; npoint = 11, deriv = 2, degree = 3)
+model1 = snv()
+model2 = savgol(npoint = 11, deriv = 2, degree = 3)
 model = pip(model1, model2)
 fit!(model, Xm5)
 Xpm5 = transf(model, Xm5)
@@ -51,7 +51,7 @@ Xpmp6 = transf(model, Xmp6)
 
 
 zX = vcat(Xpm5, Xpmp5, Xpmp6)
-model = pcasvd; nlv = 10)
+model = pcasvd(nlv = 10)
 fit!(model, zX)
 T = model.fitm.T
 

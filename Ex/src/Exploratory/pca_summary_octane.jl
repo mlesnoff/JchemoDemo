@@ -27,7 +27,7 @@ wl = parse.(Float64, wlst)
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance", title = "Octane data").f
 
 
-model = pcasvd; nlv = 6) 
+model = pcasvd(nlv = 6) 
 ## For robust PCA, do:
 #model = pcasph; nlv = 6)
 ## or:

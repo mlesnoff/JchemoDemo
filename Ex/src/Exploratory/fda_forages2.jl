@@ -42,7 +42,7 @@ ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
 
-mod0 = pcasvd; nlv = 10)
+mod0 = pcasvd(nlv = 10)
 fit!(mod0, Xtrain)
 pnames(mod0)
 pnames(mod0.fitm)
