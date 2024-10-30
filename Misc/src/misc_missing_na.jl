@@ -73,8 +73,16 @@ u = findall(a .&& b)
 x[u]
 
 #### Dataframes
-                                
-# https://www.roelpeters.be/replacing-nan-missing-in-julia-dataframes/  
+
+## completecases, dropmissing
+
+df = DataFrame(i = 1:5, x = [missing, 4, missing, 2, 1], y = [missing, missing, "c", "d", "e"])
+completecases(df)
+dropmissing(df)    
+dropmissing!(df)
+df    
+
+## https://www.roelpeters.be/replacing-nan-missing-in-julia-dataframes/  
 using BenchmarkTools
 df = DataFrame(
     a = [0, 1, 2, missing, 4, 5, NaN, 7, missing, 9], 
@@ -125,20 +133,17 @@ replace!(zdf.a, NaN => -1000)
 #replace!(zdf.a, NaN => -1000)
 zdf
 
-df = DataFrame(:A => [5, 10, NaN, NaN, 25], 
-    :B => ["A", "B", "A", missing, missing])
+df = DataFrame(:A => [5, 10, NaN, NaN, 25], :B => ["A", "B", "A", missing, missing])
 dropmissing(df)
 df
 dropmissing!(df)
 df
 
-df = DataFrame(:A => [5, missing, NaN, NaN, 25], 
-    :B => ["A", "B", "A", missing, missing])
+df = DataFrame(:A => [5, missing, NaN, NaN, 25], :B => ["A", "B", "A", missing, missing])
 filter(:A => x -> !(ismissing(x) || isnothing(x) || isnan(x)), df)
 filter(:A => x -> !any(f -> f(x), (ismissing, isnothing, isnan)), df)
 
-df = DataFrame(y1 = [5.; 10; NaN; NaN; 25],
-    y2 = [0; 12; .7; 0; 2])
+df = DataFrame(y1 = [5.; 10; NaN; NaN; 25], y2 = [0; 12; .7; 0; 2])
 for col in eachcol(df)
     replace!(col, NaN => 0)
 end
