@@ -1,0 +1,141 @@
+---
+title: forages2 - Gridcv PLS-KDE-DA
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  #out_width: "50%"   # default
+---
+
+```julia
+using Jchemo, JchemoData
+using JLD2, CairoMakie, FreqTables 
+```
+
+#### Data importation
+
+```julia
+path_jdat = dirname(dirname(pathof(JchemoData)))
+db = joinpath(path_jdat, "data/forages2.jld2") 
+@load db dat
+pnames(dat)
+```
+  
+#### Data preparation and short description
+
+```julia
+X = dat.X 
+Y = dat.Y
+ntot = nro(X)
+```
+
+```julia term = true
+@head X
+@head Y
+```
+
+```julia
+y = Y.typ
+tab(y)
+```
+
+```julia
+freqtable(y, Y.test)
+```
+
+```julia
+wlst = names(X)
+wl = parse.(Float64, wlst) 
+```
+
+**Note:**: X-data are already preprocessed (SNV + Savitsky-Golay).
+
+```julia
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+```
+
+#### Split Tot ==> Train + Test
+
+The model is fitted on **Train**, and the generalization error is estimated on **Test**.
+Here the split of **Tot** is already provided inside the dataset (= variable `test`), 
+but **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic 
+or any other designs). 
+
+```julia
+s = Bool.(Y.test)
+Xtrain = rmrow(X, s)
+ytrain = rmrow(y, s)
+Xtest = X[s, :]
+ytest = y[s]
+ntrain = nro(Xtrain)
+ntest = nro(Xtest)
+(ntot = ntot, ntrain, ntest)
+```
+
+#### CV-Segments
+
+```julia
+K = 3
+segm = segmkf(ntrain, K; rep = 10)
+```
+
+#### Grid-search by CV 
+
+```julia
+pars = mpar(a = [.5, 1, 1.5])
+```
+
+```julia
+nlv = 1:40
+model = plskdeda()
+rescv = gridcv(model, Xtrain, ytrain; segm, score = errp, pars, nlv) ; 
+res = rescv.res
+```
+
+**Selection of the best parameters combination**
+
+```julia
+group = string.("a = ", res.a)
+plotgrid(res.nlv, res.y1, group; step = 2, xlabel = "Nb. LVs", ylabel = "Err-CV").f
+```
+
+```julia
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
+```
+
+#### Final prediction (Test) using the optimal model
+
+```julia
+model = plskdeda(nlv = res.nlv[u], a = res.a[u])
+fit!(model, Xtrain, ytrain)
+pred = predict(model, Xtest).pred
+errp(pred, ytest)
+```
+
+#### Confusion matrix
+
+```julia
+cf = conf(pred, ytest) ;
+pnames(cf)
+```
+
+```julia
+cf.cnt
+```
+
+```julia
+cf.pct
+```
+
+```julia
+cf.diagpct
+```
+
+```julia
+cf.accpct
+```
+
+```julia
+plotconf(cf).f
+```

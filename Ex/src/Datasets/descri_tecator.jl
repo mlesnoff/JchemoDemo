@@ -72,7 +72,7 @@ plotxy(T[:, i], T[:, i + 1], typ; xlabel = "PC1", ylabel = "PC2").f
 summ(Y[:, namy]).res
 
 
-aggstat(Y; vars = namy, groups = :typ)
+aggstat(Y; vary = namy, vargroup = :typ)
 
 
 j = 2

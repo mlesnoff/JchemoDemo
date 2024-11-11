@@ -3,7 +3,7 @@
 <HEAD>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>confusion_mnist_20pcts.jl</title>
+  <title>confusion_mnist20pct.jl</title>
   
 
   <script type="text/x-mathjax-config">
@@ -653,7 +653,7 @@ div.title {text-align: center;}
     <div class = "row">
       <div class = "col-md-12 twelve columns">
         <div class="title">
-          <h1 class="title">confusion_mnist_20pcts.jl</h1>
+          <h1 class="title">confusion_mnist20pct.jl</h1>
           
           
         </div>
@@ -672,7 +672,7 @@ div.title {text-align: center;}
 
 <pre class='hljl'>
 <span class='hljl-n'>path_jdat</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>dirname</span><span class='hljl-p'>(</span><span class='hljl-nf'>dirname</span><span class='hljl-p'>(</span><span class='hljl-nf'>pathof</span><span class='hljl-p'>(</span><span class='hljl-n'>JchemoData</span><span class='hljl-p'>)))</span><span class='hljl-t'>
-</span><span class='hljl-n'>db</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>joinpath</span><span class='hljl-p'>(</span><span class='hljl-n'>path_jdat</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;data/mnist_20pcts.jld2&quot;</span><span class='hljl-p'>)</span><span class='hljl-t'> 
+</span><span class='hljl-n'>db</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>joinpath</span><span class='hljl-p'>(</span><span class='hljl-n'>path_jdat</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;data/mnist20pct.jld2&quot;</span><span class='hljl-p'>)</span><span class='hljl-t'> 
 </span><span class='hljl-nd'>@load</span><span class='hljl-t'> </span><span class='hljl-n'>db</span><span class='hljl-t'> </span><span class='hljl-n'>dat</span><span class='hljl-t'>
 </span><span class='hljl-nf'>pnames</span><span class='hljl-p'>(</span><span class='hljl-n'>dat</span><span class='hljl-p'>)</span>
 </pre>
@@ -842,7 +842,7 @@ Dim1 ╲ Dim2 │   0    1    2    3    4    5    6    7    8    9
         <HR/>
         <div class="footer">
           <p>
-            Published from <a href="confusion_mnist_20pcts.jmd">confusion_mnist_20pcts.jmd</a>
+            Published from <a href="confusion_mnist20pct.jmd">confusion_mnist20pct.jmd</a>
             using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.12 on 2024-10-09.
           </p>
         </div>

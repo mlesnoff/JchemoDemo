@@ -1,0 +1,191 @@
+---
+title: tecator - Gridscore PLSR
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  #out_width: "50%"   # default
+---
+
+```julia
+using Jchemo, JchemoData
+using JLD2, CairoMakie
+```
+
+#### Data importation
+
+```julia
+path_jdat = dirname(dirname(pathof(JchemoData)))
+db = joinpath(path_jdat, "data/tecator.jld2") 
+@load db dat
+pnames(dat)
+```
+
+#### Data preparation and short description
+
+```julia
+X = dat.X
+Y = dat.Y 
+ntot = nro(X)
+```
+
+```julia term = true
+@head X 
+@head Y
+```
+
+```julia
+summ(Y)
+```
+
+```julia
+namy = names(Y)[1:3]
+```
+
+```julia
+typ = Y.typ
+tab(typ)
+```
+
+```julia
+wlst = names(X)
+wl = parse.(Float64, wlst) 
+```
+
+```julia
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+```
+
+#### Preprocessing
+
+```julia
+model1 = snv()
+model2 = savgol(npoint = 15, deriv = 2, degree = 3)
+model = pip(model1, model2)
+fit!(model, X)
+Xp = transf(model, X) 
+```
+
+```julia
+plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+```
+
+#### Split Tot ==> Train + Test
+
+The model is tuned on **Train**, and the generalization error is estimated on **Test**.
+Here the split of **Tot** is already provided inside the dataset (= variable `typ`), 
+but **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic 
+or any other designs). 
+
+```julia
+s = typ .== "train"
+Xtrain = Xp[s, :]
+Ytrain = Y[s, namy]
+Xtest = rmrow(Xp, s)
+Ytest = rmrow(Y[:, namy], s)
+ntrain = nro(Xtrain)
+ntest = nro(Xtest)
+ntot = ntrain + ntest
+(ntot = ntot, ntrain, ntest)
+```
+Work on the second y-variable: 
+
+```julia
+j = 2  
+nam = namy[j]    # y-variable
+ytrain = Ytrain[:, nam]
+ytest = Ytest[:, nam]
+```
+
+#### Split Train ==> Cal + Val
+
+The validation error (used for the grid-search tuning) is computed 
+on **Val**. The split can be built from different sampling designs,
+as below (other designs are possible).
+
+```julia
+pct = .3
+nval = Int(round(pct * ntrain))    
+```
+
+- (1) Random sampling:
+
+```julia
+s = samprand(ntrain, nval)
+```
+
+- (2) Or  Kennard-Stone sampling (output 'train' contains higher variability 
+    than output `test`):
+
+```julia
+#s = sampks(Xtrain, nval; metric = :eucl)
+```
+
+- (3) Or duplex sampling:
+
+```julia
+#s = sampdp(Xtrain, nval)
+```
+
+- (4) Or systematic sampling over `y`:
+
+```julia
+#s = sampsys(ytrain, nval)
+```
+
+```julia
+Xcal = Xtrain[s.train, :]
+ycal = ytrain[s.train]
+Xval = Xtrain[s.test, :]
+yval = ytrain[s.test]
+ncal = ntrain - nval 
+(ntot = ntot, ntrain, ntest, ncal, nval)
+```
+
+#### Grid-search
+
+```julia
+nlv = 0:20
+model = plskern()
+res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, nlv, verbose = false)
+```
+
+**Selection of the best parameters combination:**
+
+```julia
+plotgrid(res.nlv, res.y1; step = 2, xlabel = "Nb. LVs", ylabel = "RMSEP").f
+```
+
+```julia
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
+```
+
+#### Final prediction (Test) using the optimal model
+
+```julia
+model = plskern(nlv = res.nlv[u])
+fit!(model, Xtrain, ytrain)
+pred = predict(model, Xtest).pred
+```
+
+**Generalization error:**
+
+```julia
+rmsep(pred, ytest)
+```
+
+#### Plotting predictions vs. observed data 
+
+```julia
+f, ax = plotxy(pred, ytest; size = (500, 400), xlabel = "Predicted", ylabel = "Observed")
+zpred = vec(pred)
+zmod = loessr(span = 2/3) 
+fit!(zmod, zpred, ytest)
+pred_loess = predict(zmod, sort(zpred)).pred
+lines!(ax, sort(zpred), vec(pred_loess); color = :red)
+ablines!(ax, 0, 1; color = :grey)
+f 
+```
+
+

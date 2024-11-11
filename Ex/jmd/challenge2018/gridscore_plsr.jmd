@@ -1,0 +1,215 @@
+---
+title: challenge2018 - Gridscore PLSR
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  #out_width: "50%"   # default
+---
+
+```julia
+using Jchemo, JchemoData
+using JLD2, CairoMakie
+using FreqTables
+```
+
+#### Data importation
+
+```julia
+path_jdat = dirname(dirname(pathof(JchemoData)))
+db = joinpath(path_jdat, "data/challenge2018.jld2") 
+@load db dat
+pnames(dat)
+```
+
+#### Data preparation and short description
+
+```julia
+X = dat.X 
+Y = dat.Y
+ntot, p = size(X)
+```
+
+```julia term = true
+@head X
+@head Y
+```
+
+```julia
+summ(Y)
+```
+
+```julia
+y = Y.conc
+typ = Y.typ
+label = Y.label 
+test = Y.test
+tab(test)
+```
+
+```julia
+wlst = names(X)
+wl = parse.(Float64, wlst) 
+```
+
+```julia
+freqtable(string.(typ, "-", Y.label))
+```
+
+```julia
+freqtable(typ, test)
+```
+
+```julia
+plotsp(X, wl; nsamp = 30).f
+```
+
+#### Preprocessing
+
+```julia
+model1 = snv()
+model2 = savgol(npoint = 21, deriv = 2, degree = 3)
+model = pip(model1, model2)
+fit!(model, X)
+Xp = transf(model, X) 
+```
+
+```julia
+plotsp(Xp, wl; nsamp = 30).f
+```
+
+#### Split Tot ==> Train + Test
+
+The model is tuned on **Train**, and the generalization error is estimated on **Test**.
+Here the split of **Tot** is already provided inside the dataset (= variable `test`), 
+but **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic 
+or any other designs). 
+
+```julia
+s = Bool.(test)
+Xtrain = rmrow(Xp, s)
+Ytrain = rmrow(Y, s)
+ytrain = rmrow(y, s)
+typtrain = rmrow(typ, s)
+Xtest = Xp[s, :]
+Ytest = Y[s, :]
+ytest = y[s]
+typtest = typ[s]
+ntrain = nro(Xtrain)
+ntest = nro(Xtest)
+(ntot = ntot, ntrain, ntest)
+```
+
+#### Split Train ==> Cal + Val
+
+The validation error (used for the grid-search tuning) is computed 
+on **Val**. The split can be built from different sampling designs,
+as below (other designs are possible).
+
+```julia
+nval = 300
+## Or:
+#pct = .20
+#nval = Int(round(pct * ntrain))    
+```
+
+- (1) Random sampling:
+
+```julia
+s = samprand(ntrain, nval)
+```
+
+- (2) Or  Kennard-Stone sampling (output 'train' contains higher variability 
+    than output `test`):
+
+```julia
+#s = sampks(Xtrain, nval; metric = :eucl)
+```
+
+- (3) Or duplex sampling:
+
+```julia
+#s = sampdp(Xtrain, nval)
+```
+
+- (4) Or systematic sampling over `y`:
+
+```julia
+#s = sampsys(ytrain, nval)
+```
+
+```julia
+Xcal = Xtrain[s.train, :]
+ycal = ytrain[s.train]
+Xval = Xtrain[s.test, :]
+yval = ytrain[s.test]
+ncal = ntrain - nval 
+(ntot = ntot, ntrain, ntest, ncal, nval)
+```
+
+#### Grid-search
+
+```julia
+nlv = 0:50
+model = plskern()
+res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, nlv) 
+```
+
+**Selection of the best parameters combination:**
+
+```julia
+plotgrid(res.nlv, res.y1; step = 5, xlabel = "Nb. LVs", ylabel = "RMSEP").f
+```
+
+```julia
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
+```
+
+#### Final prediction (Test) using the optimal model
+
+```julia
+model = plskern(nlv = res.nlv[u])
+fit!(model, Xtrain, ytrain) 
+pred = predict(model, Xtest).pred
+```
+
+#### Generalization error
+
+```julia
+rmsep(pred, ytest)
+```
+
+```julia 
+plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Prediction", 
+    ylabel = "Observed (Test)").f
+```
+
+#### A parcimony approach Wold's criterion
+
+```julia
+res_sel = selwold(res.nlv, res.y1; smooth = true, alpha = .05, graph = true) ;
+pnames(res)
+```
+
+```julia
+res_sel.f       # plots
+```
+
+```julia
+res_sel.opt     # nb. LVs correponding to the minimal error rate
+```
+
+```julia
+res_sel.sel     # nb. LVs selected with the Wold's criterion
+```
+
+**Final prediction with the parcimonious model:**
+
+```julia
+model = plskern(nlv = res_sel.sel)
+fit!(model, Xtrain, ytrain) 
+pred = predict(model, Xtest).pred
+rmsep(pred, ytest)
+```
+

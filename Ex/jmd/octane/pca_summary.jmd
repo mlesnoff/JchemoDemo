@@ -1,0 +1,120 @@
+---
+title: octane - PCA summary
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  #out_width: "50%"   # default
+---
+
+```julia
+using Jchemo, JchemoData
+using JLD2, CairoMakie, GLMakie
+```
+
+```julia
+CairoMakie.activate!()
+#GLMakie.activate!() 
+```
+
+#### Data importation
+
+```julia
+path_jdat = dirname(dirname(pathof(JchemoData)))
+db = joinpath(path_jdat, "data/octane.jld2") 
+@load db dat
+pnames(dat)
+```
+
+#### Data preparation and short description
+
+```julia
+X = dat.X 
+n = nro(X)
+```
+
+```julia term = true
+@head X
+```
+
+```julia
+wlst = names(X)
+wl = parse.(Float64, wlst) 
+```
+
+Six of the samples of the dataset contain added alcohol  (= 25, 26, and 36-39).
+
+```julia
+plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance", title = "Octane data").f
+```
+
+#### PCA model fitting
+
+```julia
+model = pcasvd(nlv = 6) 
+## For robust PCA, do:
+#model = pcasph(; nlv = 6)
+## or:
+#model = pcaout(; nlv = 6)
+fit!(model, X)  
+pnames(model)
+pnames(model.fitm)
+```
+
+#### Summary of the fitted model
+
+```julia
+res = summary(model, X) ;
+pnames(res)
+```
+
+**% Variance explained**
+
+```julia
+z = res.explvarx
+```
+
+```julia
+plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "nb. PCs", ylabel = "% variance explained").f
+```
+
+**Individuals' contributions to scores**
+
+```julia
+z = res.contr_ind
+```
+
+```julia
+i = 1
+scatter(z[:, i]; axis = (xlabel = "Observation", ylabel = "Contribution", title = string("PC", i)))
+```
+
+Same as:
+
+```julia
+plotxy(1:n, z[:, i]; xlabel = "Observation", ylabel = "Contribution", title = string("PC", i)).f
+```
+
+**Variables' contributions**
+
+```julia
+z = res.contr_var 
+```
+
+```julia
+i = 1
+scatter(z[:, i], z[:, i + 1])
+```
+
+**Correlation circle**
+
+```julia
+z = res.cor_circle
+```
+
+```julia
+i = 1
+plotxy(z[:, i], z[:, (i + 1)]; size = (400, 400), circle = true, zeros = true, 
+    xlabel = string("PC", i), ylabel = string("PC", i + 1)).f
+```
+

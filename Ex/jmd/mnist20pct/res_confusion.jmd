@@ -1,0 +1,95 @@
+---
+title: mnist20pct - Confusion matrix
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  #out_width: "50%"   # default
+---
+
+```julia
+using JLD2, CairoMakie, FreqTables 
+using Jchemo, JchemoData
+using CodecZlib # required since the dataset is compressed 
+```
+
+#### Data importation
+
+```julia
+path_jdat = dirname(dirname(pathof(JchemoData)))
+db = joinpath(path_jdat, "data/mnist20pct.jld2") 
+@load db dat
+pnames(dat)
+```
+
+#### Data preparation and short description
+
+```julia
+Xtrain = dat.Xtrain
+ytrain = dat.ytrain
+Xtest = dat.Xtest
+ytest = dat.ytest
+Xtrain = Matrix(Xtrain) / 255
+Xtest = Matrix(Xtest) / 255
+ntrain, p = size(Xtrain)
+ntest = nro(Xtest)
+ntot = ntrain + ntest
+(ntot = ntot, ntrain, ntest)  
+```
+
+```julia
+summ(vec(Xtrain)).res
+```
+
+```julia
+summ(vec(Xtest)).res
+```
+
+```julia
+plotsp(Xtest; nsamp = 1).f
+```
+
+#### Fitting a PLS-QDA
+
+```julia
+model = plsqda(nlv = 25)
+fit!(model, Xtrain, ytrain)
+pred = predict(model, Xtest).pred
+errp(pred, ytest)  # overall
+merrp(pred, ytest) # average by class
+```
+
+#### Confusion matrix²
+
+```julia
+freqtable(ytest, vec(pred))
+```
+
+```julia
+cf = conf(pred, ytest) ;
+pnames(cf)
+```
+
+```julia
+cf.cnt
+```
+
+```julia
+cf.pct
+```
+
+```julia
+cf.diagpct
+```
+
+```julia
+cf.accpct
+```
+
+```julia
+plotconf(cf).f
+```
+
+```julia
+plotconf(cf; cnt = false).f
+```

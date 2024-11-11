@@ -1,15 +1,11 @@
 using Weave
 
 path = "C:/Users/lesnoff/.julia/dev"
-
 path_jmd = joinpath(path, "JchemoDemo/Ex/jmd")
 path_src = joinpath(path, "JchemoDemo/Ex/src")
 
-meth = "Datasets"
-#meth = "Exploratory"
-#meth = "Regression"
-#meth = "Discrimination"
-zpath = joinpath(path_jmd, meth)
+nam = "swissroll"
+zpath = joinpath(path_jmd, nam)
 @show f = filter(endswith("jmd"), readdir(zpath))
 nf = length(f) 
 for i = 1:nf 

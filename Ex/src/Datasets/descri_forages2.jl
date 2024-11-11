@@ -137,7 +137,7 @@ nam = "ndf"
 aggstat(Y[:, nam], test).X
 
 
-aggstat(Y; vars = nam, groups = :test)
+aggstat(Y; vary = nam, vargroup = :test)
 
 
 y = Float64.(Y[:, nam])  # To remove type "Missing" for the given variable

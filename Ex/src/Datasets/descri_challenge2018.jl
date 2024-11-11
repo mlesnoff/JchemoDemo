@@ -164,7 +164,7 @@ summ(y, test)
 aggstat(y, test).X
 
 
-aggstat(Y; vars = :conc, groups = :test)
+aggstat(Y; vary = :conc, vargroup = :test)
 
 
 f = Figure(size = (500, 400))
