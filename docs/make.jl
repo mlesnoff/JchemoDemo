@@ -14,10 +14,6 @@ makedocs(
         "octane" => "octane.md",
         "swissroll" => "swissroll.md",
         "tecator" => "tecator.md"
-        #"Datasets" => "datasets.md",
-        #"Exploratory data analysis" => "exploratory.md",
-        #"Regression" => "regression.md",
-        #"Discrimination" => "discrimination.md"
         ]
     )
 

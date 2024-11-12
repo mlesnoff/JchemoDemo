@@ -23,6 +23,6 @@ for i = 1:nf
     #i = 11
     f[i]
     db = joinpath(zpath, f[i])
-    out_path = joinpath(path_src, meth)
+    out_path = joinpath(path_src, nam)
     Weave.tangle(db; out_path = out_path)
 end
