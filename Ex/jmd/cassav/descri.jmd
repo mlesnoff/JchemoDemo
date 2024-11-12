@@ -76,7 +76,7 @@ Xp = transf(model, X)
 plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
-#### PCA
+#### Pca
 
 ```julia
 model = pcasvd(nlv = 10)

@@ -1,5 +1,5 @@
 ---
-title: forages2 - PLSR-DA
+title: forages2 - Plsr-Da
 weave_options:
   error: true
   wrap: true
@@ -74,7 +74,7 @@ ntest = nro(Xtest)
 
 #### Model fitting
 
-The term "PLSDA" can represent different methods, e.g. PLSR-DA, PLS-LDA and PLS-QDA. 
+The term "PLSDA" can represent different methods, e.g. Plsr-Da, Pls-Lda and Pls-Qda. 
 
 ```julia 
 nlv = 15
@@ -85,7 +85,7 @@ model = plsrda(; nlv)
 #model = plskdeda; nlv) 
 ```
 
-An alternative to PLS is the ridge regularization (RR-DA):
+An alternative to Pls is the ridge regularization (Rr-Da):
 
 ```julia
 #model = rrda; lb = 1e-5)
@@ -117,10 +117,6 @@ errp(pred, ytest)
 ```
 
 #### Confusion matrix
-
-```julia
-freqtable(ytest, vec(pred))
-```
 
 ```julia
 cf = conf(pred, ytest) ;

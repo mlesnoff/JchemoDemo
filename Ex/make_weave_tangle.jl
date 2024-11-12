@@ -4,7 +4,16 @@ path = "C:/Users/lesnoff/.julia/dev"
 path_jmd = joinpath(path, "JchemoDemo/Ex/jmd")
 path_src = joinpath(path, "JchemoDemo/Ex/src")
 
-nam = "swissroll"
+nam = "cassav"
+#nam = "challenge2018"
+#nam = "corn"
+#nam = "forages2"
+#nam = "iris"
+#nam = "mnist20pct"
+#nam = "multifruit"
+#nam = "octane"
+#nam = "swissroll"
+#nam = "tecator"
 zpath = joinpath(path_jmd, nam)
 @show f = filter(endswith("jmd"), readdir(zpath))
 nf = length(f) 

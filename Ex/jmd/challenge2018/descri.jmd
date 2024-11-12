@@ -99,7 +99,7 @@ ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 ```
 
-#### PCA on Xp
+#### Pca on Xp
 
 ```julia
 model = pcasvd(nlv = 10)
@@ -139,7 +139,7 @@ plotxy(T[:, i], T[:, i + 1], typ; color = colm, xlabel = string("PC", i),
     ylabel = string("PC", i + 1)).f
 ```
 
-#### PCA on Xtrain and projection of Xtest
+#### Pca on Xtrain and projection of Xtest
 
 ```julia
 model = pcasvd(nlv = 15)

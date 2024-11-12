@@ -79,7 +79,7 @@ Spectra are already pre-processed with savgol(snv; f = 21, p = 3, d = 2)).
 plotsp(X, wl; nsamp = 10, xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
-#### PCA on X
+#### Pca on X
 
 ```julia
 model = pcasvd(nlv = 10)
@@ -111,7 +111,7 @@ plotxy(T[:, i], T[:, i + 1]; color = (:red, .5), xlabel = "PC1", ylabel = "PC2")
 plotxy(T[:, i], T[:, i + 1], y; ellipse = true, xlabel = "PC1", ylabel = "PC2").f
 ```
 
-#### PCA on Xtrain and projection of Xtest
+#### Pca on Xtrain and projection of Xtest
 
 ```julia term = true
 ## Train vs Test

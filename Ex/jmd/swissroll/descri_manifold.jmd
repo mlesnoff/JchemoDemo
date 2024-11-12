@@ -47,7 +47,7 @@ scatter(X[:, i], X[:, i + 1], X[:, i + 2],
         zlabel = string("LV", i + 2), title = "Swiss roll", perspectiveness = .3))
 ```
 
-#### PCA
+#### Pca
 
 ```julia
 nlv = 2
@@ -60,10 +60,10 @@ fit!(model, X)
 CairoMakie.activate!()
 i = 1
 plotxy(T[:, i], T[:, i + 1]; color = labs,
-    xlabel = string("LV", i), ylabel = string("LV", i + 1), title = "PCA").f  
+    xlabel = string("LV", i), ylabel = string("LV", i + 1), title = "Pca").f  
 ```
 
-#### UMAP
+#### Umap
 
 ```julia
 nlv = 2
@@ -77,10 +77,10 @@ fit!(model, X)
 CairoMakie.activate!()
 i = 1
 plotxy(T[:, i], T[:, i + 1]; color = labs,
-    xlabel = string("LV", i), ylabel = string("LV", i + 1), title = "UMAP").f  
+    xlabel = string("LV", i), ylabel = string("LV", i + 1), title = "Umap").f  
 ```
 
-#### TSNE
+#### Tsne
 
 ```julia
 p = 30
@@ -97,7 +97,7 @@ plotxy(T[:, i], T[:, i + 1]; color = labs,
     xlabel = string("LV", i), ylabel = string("LV", i + 1), title = "t-SNE").f  
 ```
 
-### KPCA
+### Kpca
 
 ```
 nlv = 2
@@ -112,7 +112,7 @@ fit!(model, X)
 CairoMakie.activate!()
 i = 1
 plotxy(T[:, i], T[:, i + 1]; color = labs,
-    xlabel = string("LV", i), ylabel = string("LV", i + 1), title = "KPCA").f  
+    xlabel = string("LV", i), ylabel = string("LV", i + 1), title = "Kpca").f  
 ```
 
 ```julia
@@ -125,6 +125,6 @@ fit!(model, X)
 CairoMakie.activate!()
 i = 1
 plotxy(T[:, i], T[:, i + 1]; color = labs,
-    xlabel = string("LV", i), ylabel = string("LV", i + 1), title = "KPCA").f  
+    xlabel = string("LV", i), ylabel = string("LV", i + 1), title = "Kpca").f  
 ```
 

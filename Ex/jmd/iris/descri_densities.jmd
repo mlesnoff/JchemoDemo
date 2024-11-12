@@ -49,7 +49,7 @@ lev = mlev(y)
 nlev = length(lev)
 ```
 
-#### Computation of PLS scores on the Y-dummy table
+#### Computation of Pls scores on the Y-dummy table
 
 ```julia term = true
 Ydummy = dummy(y).Y ;
@@ -97,7 +97,7 @@ f
 
 #### Density estimates in the score space
 
-**By LDA**
+**By Lda**
 
 ```julia
 weights = mweight(ones(n))
@@ -132,7 +132,7 @@ end
 f
 ```
 
-**By QDA**
+**By Qda**
 
 ```julia
 res = matW(T, y, weights)
@@ -167,7 +167,7 @@ end
 f
 ```
 
-**By non-parametric KDE**
+**By non-parametric Kde**
 
 ```julia
 npoints = 2^7

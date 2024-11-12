@@ -1,5 +1,5 @@
 ---
-title: challenge2018 - PCA with supplementary observations
+title: challenge2018 - Pca with supplementary observations
 weave_options:
   error: true
   wrap: true
@@ -99,7 +99,7 @@ ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 ```
 
-#### PCA on Xtrain
+#### Pca on Xtrain
 
 ```julia
 nlv = 15

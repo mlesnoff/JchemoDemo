@@ -1,10 +1,9 @@
-# Datasets description
+# Scripts
 
 ```@raw html
-    <p><a href="../assets/html/Datasets/descri_cassav.html">descri_cassav.jl</a></p>
-    <p><a href="../assets/html/Datasets/descri_challenge2018.html">descri_challenge2018.jl</a></p>
-    <p><a href="../assets/html/Datasets/descri_corn.html">descri_corn.jl</a></p>
-    <p><a href="../assets/html/Datasets/descri_forages2.html">descri_forages2.jl</a></p>
-    <p><a href="../assets/html/Datasets/descri_tecator.html">descri_tecator.jl</a></p>
+    <p><a href="../assets/html/cassav/descri.html">descri</a></p>
+    <p><a href="../assets/html/cassav/pca_groups.html">pca_groups</a></p>
+    <p><a href="../assets/html/cassav/plot_spectra.html">plot_spectra</a></p>
+    <p><a href="../assets/html/cassav/predict_pca_lwmlr.html">predict_pca_lwmlr</a></p>
 ```
 

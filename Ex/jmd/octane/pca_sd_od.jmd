@@ -1,5 +1,5 @@
 ---
-title: octane - PCA score and orthogonal distances
+title: octane - Pca score and orthogonal distances
 weave_options:
   error: true
   wrap: true
@@ -48,11 +48,11 @@ Six of the samples of the dataset contain added alcohol  (= 25, 26, and 36-39).
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance", title = "Octane data").f
 ```
 
-#### Initial PCA model fitting
+#### Initial Pca model fitting
 
 ```julia
 model0 = pcasvd(nlv = 6) 
-## For robust PCA, do:
+## For robust Pca, do:
 #model0 = pcasph(; nlv = 6)
 ## or:
 #model0 = pcaout(; nlv = 6)

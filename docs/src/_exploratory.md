@@ -24,7 +24,7 @@
     <p><a href="../assets/html/Exploratory/manifold_challenge2018_umap.html">manifold_challenge2018_umap.jl</a></p>
 ```
 
-## FDA
+## Fda
 
 ```@raw html
     <p><a href="../assets/html/Exploratory/fda_iris.html">fda_iris.jl</a></p>

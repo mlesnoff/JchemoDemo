@@ -1,5 +1,5 @@
 ---
-title: forages2 - FDA
+title: forages2 - Fda
 weave_options:
   error: true
   wrap: true
@@ -73,13 +73,13 @@ ntest = nro(Xtest)
 ```
 
 Since X-data contain high multicolinearities, a regularization is required 
-for the FDA, for instance: 
+for the Fda, for instance: 
 
 1) by preliminary dimension reduction,
 
 2) or by using a ridge regularization.
 
-#### 1) FDA on PCA scores
+#### 1) Fda on Pca scores
 
 ```julia
 model0 = pcasvd(nlv = 10)
@@ -114,7 +114,7 @@ ct = fitm.Tcenters
 ```
 
 ```julia
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "FDA", ellipse = true)
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "Fda", ellipse = true)
 scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
 f
 ```
@@ -131,7 +131,7 @@ Ttest = transf(model, Ttest_pca)
 
 ```julia
 i = 1  # class "i" in test
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "FDA")
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "Fda")
 scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
 s = ytest .== lev[i]
 zT = Ttest[s, :]
@@ -139,7 +139,7 @@ scatter!(ax, zT[:, 1], zT[:, 2]; markersize = 10, color = (:purple, .8))
 f
 ```
 
-#### 2) FDA directly on X but using a ridge regularization 
+#### 2) Fda directly on X but using a ridge regularization 
 
 **Note:** If the ridge parameter `lb` is too small (e.g. here from 
 around 1e-10), the model can be overfitted and the discrimination 
@@ -167,7 +167,7 @@ ct = fitm.Tcenters
 ```
 
 ```julia
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "FDA", ellipse = true)
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "Fda", ellipse = true)
 scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
 f
 ```
@@ -180,7 +180,7 @@ Ttest = transf(model, Xtest)
 
 ```julia
 i = 1  # class "i" in test
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "FDA")
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "Fda")
 scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
 s = ytest .== lev[i]
 zT = Ttest[s, :]

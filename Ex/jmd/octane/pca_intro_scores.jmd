@@ -1,5 +1,5 @@
 ---
-title: octane - PCA introduction 
+title: octane - Pca introduction 
 weave_options:
   error: true
   wrap: true
@@ -48,11 +48,11 @@ Six of the samples of the dataset contain added alcohol  (= 25, 26, and 36-39).
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance", title = "Octane data").f
 ```
 
-#### PCA model fitting
+#### Pca model fitting
 
 ```julia
 model = pcasvd(nlv = 6) 
-## For robust PCA, do:
+## For robust Pca, do:
 #model = pcasph; nlv = 6)
 ## or:
 #model = pcaout; nlv = 6)
@@ -104,7 +104,7 @@ CairoMakie.activate!()
 i = 1
 f = Figure(size = (700, 500))
 ax = Axis3(f[1, 1]; perspectiveness = 0.2, xlabel = string("PC", i), 
-    ylabel = string("PC", i + 1), zlabel = string("PC", i + 2), title = "PCA score space")
+    ylabel = string("PC", i + 1), zlabel = string("PC", i + 2), title = "Pca score space")
 scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 15)
 f
 ```
@@ -118,7 +118,7 @@ CairoMakie.activate!()
 i = 1
 f = Figure(size = (700, 500))
 ax = Axis3(f[1, 1]; perspectiveness = 0.2, xlabel = string("PC", i), 
-    ylabel = string("PC", i + 1), zlabel = string("PC", i + 2), title = "PCA score space")
+    ylabel = string("PC", i + 1), zlabel = string("PC", i + 2), title = "Pca score space")
 scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 15)
 text!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; text = string.(1:n), fontsize = 15)
 f

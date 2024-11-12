@@ -1,5 +1,5 @@
 ---
-title: tecator - KPLSR
+title: tecator - Kplsr
 weave_options:
   error: true
   wrap: true
@@ -103,7 +103,7 @@ ytest = Ytest[:, nam]
 gamma = 100
 nlv = 15
 model = kplsr(; gamma, nlv)
-## Or Direct KPLSR (Bennet 2003):
+## Or Direct Kplsr (Bennet 2003):
 ## model = dkplsr; gamma, nlv)
 fit!(model, Xtrain, ytrain)
 pnames(model)

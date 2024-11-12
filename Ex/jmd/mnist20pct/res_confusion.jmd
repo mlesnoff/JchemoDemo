@@ -49,7 +49,7 @@ summ(vec(Xtest)).res
 plotsp(Xtest; nsamp = 1).f
 ```
 
-#### Fitting a PLS-QDA
+#### Fitting a Pls-Qda
 
 ```julia
 model = plsqda(nlv = 25)
@@ -59,7 +59,7 @@ errp(pred, ytest)  # overall
 merrp(pred, ytest) # average by class
 ```
 
-#### Confusion matrix²
+#### Confusion matrix
 
 ```julia
 freqtable(ytest, vec(pred))

@@ -1,5 +1,5 @@
 ---
-title: forages2 - Gridcv PLSR-DA
+title: forages2 - Gridcv Plsr-Da
 weave_options:
   error: true
   wrap: true
@@ -130,7 +130,7 @@ plotconf(cf).f
 #### Example with PLSLDA
 
 ```julia
-nlv = 1:40  ## !!: Does not start from nlv = 0 (since the method runs an LDA on PLS scores)
+nlv = 1:40  ## !!: Does not start from nlv = 0 (since the method runs an Lda on Pls scores)
 model = plslda()
 res = gridcv(model, Xtrain, ytrain; segm, score = errp, nlv, verbose = false).res
 ```

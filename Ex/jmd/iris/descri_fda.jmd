@@ -1,5 +1,5 @@
 ---
-title: iris - FDA
+title: iris - Fda
 weave_options:
   error: true
   wrap: true
@@ -91,7 +91,7 @@ lev = fitm.lev
 nlev = length(lev)
 ```
 
-**FDA scores**
+**Fda scores**
 
 ```julia term = true
 @head Ttrain = model.fitm.T
@@ -104,7 +104,7 @@ ct = model.fitm.Tcenters
 ```
 
 ```julia
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; ellipse = true, title = "FDA", zeros = true)
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; ellipse = true, title = "Fda", zeros = true)
 scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
 f
 ```
@@ -139,7 +139,7 @@ model.fitm.eig
 model.fitm.sstot
 ```
 
-Explained variance is computed from the PCA of the class centers 
+Explained variance is computed from the Pca of the class centers 
 in the transformed scale.
 
 ```julia

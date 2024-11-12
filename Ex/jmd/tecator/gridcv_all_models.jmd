@@ -129,7 +129,7 @@ plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Prediction",
     ylabel = "Observed (Test)").f  
 ```
 
-#### Plsravg
+#### Plsr-Avg
 
 ```julia term = true
 nlv = [0:10, 0:20, 0:50]
@@ -229,7 +229,7 @@ pred = predict(model, Xtest).pred
 rmsep(pred, ytest)
 ```
 
-#### Lwplsr
+#### Knn-Lwplsr
 
 ```julia term = true
 nlvdis = [10; 15] ; metric = [:mah] 
@@ -251,7 +251,7 @@ pred = predict(model, Xtest).pred
 rmsep(pred, ytest)
 ```
 
-#### Lwplsravg 
+#### Knn-Lwplsr-Avg 
 
 ```julia term = true
 nlvdis = [10; 15] ; metric = [:mah] 

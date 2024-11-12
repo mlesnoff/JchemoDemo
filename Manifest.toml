@@ -1043,7 +1043,7 @@ uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 version = "0.21.4"
 
 [[deps.Jchemo]]
-deps = ["DataFrames", "DataInterpolations", "DecisionTree", "Distances", "Distributions", "ImageFiltering", "LIBSVM", "LinearAlgebra", "Loess", "Makie", "NearestNeighbors", "Random", "SparseArrays", "Statistics", "StatsBase", "UMAP"]
+deps = ["DataFrames", "DataInterpolations", "DecisionTree", "Distances", "Distributions", "ImageFiltering", "LIBSVM", "LinearAlgebra", "Loess", "Makie", "NearestNeighbors", "Random", "SparseArrays", "Statistics", "StatsBase", "Umap"]
 git-tree-sha1 = "c2da8cbea9bc0f46f85106c4acc44599990638e9"
 uuid = "fbca9394-dd0a-4d1c-b066-ae75f6ef1ad5"
 version = "0.6.2"
@@ -2028,7 +2028,7 @@ git-tree-sha1 = "4d4ed7f294cda19382ff7de4c137d24d16adc89b"
 uuid = "981d1d27-644d-49a2-9326-4793e63143c3"
 version = "0.1.0"
 
-[[deps.UMAP]]
+[[deps.Umap]]
 deps = ["Arpack", "Distances", "LinearAlgebra", "LsqFit", "NearestNeighborDescent", "Random", "SparseArrays"]
 git-tree-sha1 = "df15e2580e56acb1bde25d2ac36460d22f0f57f2"
 uuid = "c4f8c510-2410-5be4-91d7-4fbaeb39457e"

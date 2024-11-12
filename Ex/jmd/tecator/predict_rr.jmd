@@ -1,5 +1,5 @@
 ---
-title: tecator - RR
+title: tecator - Rr
 weave_options:
   error: true
   wrap: true
@@ -102,7 +102,7 @@ ytest = Ytest[:, nam]
 ```julia
 lb = 1e-3
 model = rr(; lb)
-## Alternative RR algorithm:
+## Alternative Rr algorithm:
 ## model = rrchol; lb)
 fit!(model, Xtrain, ytrain)
 pnames(model)
