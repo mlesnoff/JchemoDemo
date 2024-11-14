@@ -1,0 +1,506 @@
+---
+title: multifruit - Passos & Mishra Chemolab 2023
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  out_width: "60%"   
+---
+
+The present note demonstrates the implementation of some non linear models with package 
+[**Jchemo.jl**](https://github.com/mlesnoff/Jchemo.jl)
+to analyse the data made available by 
+[Darios Passos](https://github.com/dario-passos/DeepLearning_for_VIS-NIR_Spectra/tree/master/notebooks/Deep-Tuttifrutti_I). 
+These data have already been analyzed in the article [Passos & Mishra, Chemolab 2023 (available in open access)](https://www.sciencedirect.com/science/article/pii/S0169743923002733)
+exploring CNN architectures for dry matter prediction in fruit from multi-fruit near-infrared spectra.
+
+This note considers (1) the PLSR model and **three simple non-linear models**:
+- (2) Direct kernel PLSR (Benett & Embrecht 2003) 
+- (3) KNN-LWPLSR
+- (4) DKPLS > KNN-LWPLSR
+
+Passos & Mishra 2023 used two datasets: (a) the **multifruit dataset** *stricto senso* 
+(model optimization, and internal multifruit test set), and (b)
+the **Anderson et al. mango dataset** ([here](https://data.mendeley.com/datasets/46htwnp833/1))
+from which is build an external test set (the mango spectra were collected from a different spectrometer).
+The note uses the same data as in Passos & Mishra 2023, available in JLD2 format in package
+[JchemoData.jl](https://github.com/mlesnoff/JchemoData.jl). 
+
+Performances of the models on the present data can be compared to those reported by Passos & Mishra 2023 
+in their **Tab.5** (internal multifruit test set) and **Tab.7** (external mango test set). 
+Nevertheless, this note has not the objective to compare the methods in general since, in the machine 
+learning domain, the comparative performances of methods can be **highly dataset-dependent**. 
+
+##### Overall process 
+
+**(a) Internal evaluation**
+
+The internal model evaluation is implemented on the multifruit dataset only. 
+The spectra available in this dataset are preprocessed spectra 
+(second derivative, returned directly by the spectrometer used in the study). 
+Passos & Mishra 2023 separated the data to a **training set {Xtrain, Ytrain}** 
+and a **test set {Xtest, Ytest}**.
+
+In the present note, the model optimization is implemented by full grid-search. 
+- Data {Xtrain, Ytrain} are splitted to a **calibration set (*Cal*)** and a 
+    **validation set (*Val*)**. The set *Val* is built by selecting nval = 500 observations 
+    by systematic sampling over the rank of the training DM values.
+- Then, for each combination of parameters of the grid, the model is fitted
+    on *Cal* and evaluated on *Val*. 
+
+The grid-search is implemented with the generic function `gridscore` that works for any 
+predictive function of **Jchemo.jl**. This function (as well as function `gridcv` that 
+implements cross-validation) is optimized to decrease computing times for models based 
+on latent variables (LV), and also ridge regression regularizations.      
+
+Finally, the model is refitted on the training set {Xtrain, Ytrain} using 
+the best combination of the grid, and evaluated on the test set {Xtest, Ytest}, 
+giving an estimate of generalization error. 
+
+**(b) External evaluation**
+
+The external model evaluation uses both datasets (multifruit, and Anderson et al. mango).
+The best model selected above is refitted on the full multifruit dataset ({Xtrain-ext, Ytrain-ext}
+= aggregation {Xtrain + Xtest, Ytrain + Ytest}), and evaluated on a **mango test set** 
+({Xtest-ext, Ytest-ext}) built from the Anderson et al. data. This gives another estimate of 
+generalization error (for mango). 
+
+The mango test set is built by the "Eval test set" of Anderson et al. 2021
+for years 2018 and 2019. The spectra have to be preprocessed in the same way as for 
+the multifruit dataset, and the same wavelength range (735-1047 nm) has to be selected
+(see Passos & Mishra 2023, section 2.1), to become similar to the multifruit spectra.
+
+### Data importation and description
+
+```julia
+using Jchemo, JchemoData
+using JLD2, CairoMakie 
+using DataFrames, Dates, FreqTables
+```
+
+##### Multifruit dataset
+
+```julia
+## Importation
+path_jdat = dirname(dirname(pathof(JchemoData)))
+db = joinpath(path_jdat, "data/multifruit.jld2") 
+@load db dat
+pnames(dat)
+```
+
+```julia
+## Training and test sets
+Xtrain = dat.Xtrain
+Ytrain = dat.Ytrain
+ytrain = Ytrain.dm   # dry matter (DM)
+yclatrain = Ytrain.fruit
+Xtest = dat.Xtest
+Ytest = dat.Ytest
+ytest = Ytest.dm     # dry matter (DM)
+yclatest = Ytest.fruit ;
+```
+
+```julia
+ntrain = nro(Xtrain)
+ntest = nro(Xtest)
+ntot = ntrain + ntest
+(ntot = ntot, ntrain, ntest)
+```
+
+```julia
+tab(yclatrain)
+```
+
+```julia
+tab(yclatest)
+```
+
+```julia
+## Wavelengths
+wlst = names(Xtrain)
+@head wl = parse.(Float64, wlst)
+extrema(wl)
+```
+
+```julia
+## Plotting some spectra
+zX = copy(Xtrain)
+#zX = copy(Xtest)
+plotsp(zX, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance", nsamp = 100).f
+```
+
+```julia
+## Training set ==> Cal/Val
+nval = 500
+s = sampsys(ytrain, nval)
+Xcal = Xtrain[s.train, :]
+ycal = ytrain[s.train]
+Xval = Xtrain[s.test, :]
+yval = ytrain[s.test]
+ncal = ntrain - nval
+(ntot = ntot, ntrain, ncal, nval, ntest)
+```
+
+##### Anderson mango dataset
+
+```julia
+## Importation
+db = joinpath(path_jdat, "data/mango_anderson.jld2") 
+@load db dat
+pnames(dat) 
+```
+
+```julia
+X = dat.X
+Y = dat.Y 
+y = Y.dm
+set = Y.set
+wlst_a = names(X)
+wl_a = parse.(Float64, wlst_a)
+year = Dates.year.(Date.(Y.date, dateformat"d/m/y")) ;
+```
+
+```julia
+freqtable(set, year)
+```
+
+```julia
+## Preprocessing
+npoint = 9 ; degree = 2 ; deriv = 2
+model = savgol(; npoint, degree, deriv)
+fit!(model, X)
+zXp = transf(model, X) / 2 ;
+```
+
+```julia
+## Wavelength selection
+s = wl_a .>= 735 .&& wl_a .<= 1047
+wlp = wl_a[s]
+Xp = DataFrame(zXp[:, s], string.(wlp)) ;
+```
+
+```julia
+## Final data
+Xtrain_ext = vcat(Xtrain, Xtest)
+ytrain_ext = vcat(ytrain, ytest)
+s = set .== "Val Ext" .&& year .>= 2018
+Xtest_ext = Xp[s, :] 
+ytest_ext = y[s] ;
+```
+
+```julia
+## Plotting some spectra
+zX = copy(Xtrain_ext)
+#zX = copy(Xtest_ext)
+plotsp(zX, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance", nsamp = 100).f
+```
+
+### (1) PLSR model
+
+##### Internal evaluation
+
+```julia
+## Grid
+nlv = 0:50
+scal = true  # Passos & Mishra scaled the X-columns
+pars = mpar(scal = scal)  # grid (except nlv)
+```
+
+```julia
+## Grid-search
+model = plskern()
+res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars = pars, nlv)
+@head res  # first rows of the grid evaluation
+```
+
+```julia
+plotgrid(res.nlv, res.y1; xlabel = "Nb. LVs", ylabel = "RMSEP_val").f
+```
+
+```julia
+## Best model
+u = findall(res.y1 .== minimum(res.y1))[1]
+res[u, :] 
+```
+
+```julia
+## Refitting the best model and predictions
+model = plskern(nlv = res.nlv[u], scal = res.scal[u])
+fit!(model, Xtrain, ytrain)
+pred = predict(model, Xtest).pred
+@head pred
+```
+
+```julia
+## Generalization error
+rmsep(pred, ytest)
+```
+
+```julia
+plotxy(ytest, vec(pred); bisect = true, color = (:blue, .3), xlabel = "Observed DM", ylabel = "Predictions").f
+```
+
+##### External evaluation
+
+```julia
+## Refitting the best model and predictions
+model = plskern(nlv = res.nlv[u], scal = res.scal[u])
+fit!(model, Xtrain_ext, ytrain_ext)
+pred = predict(model, Xtest_ext).pred
+@head pred
+```
+
+```julia
+## Generalization error
+rmsep(pred, ytest_ext)
+```
+
+```julia
+plotxy(ytest_ext, vec(pred); bisect = true, color = (:blue, .3), xlabel = "Observed DM", ylabel = "Predictions").f
+```
+
+### (2) DKPLSR model
+
+The direct kernel PLSR method (Bennett & Embrechts 2003) is in general slightly less efficiet than the 
+"true" KPLSR (Rosipal &  Trejo 2001) but much faster when the number of observations
+is large. The approximation done in DKPLSR is to center directly the Gram matrix K, while the true
+KPLSR (function `kplsr`) centers matrix Phi(X) where K = Phi(X) * Phi(X)' (which is theoritically
+more relevant but time consumming).
+
+Below, DKPLSR is defined with a Gaussian (RBF) kernel, but other kernels can be used in 
+function `dkplsr`. 
+
+##### Internal evaluation
+
+```julia
+## Grid
+gamma = 10. .^(-1:-.1:-6)
+nlv = 0:50
+pars = mpar(gamma = gamma, scal = true)   # grid (except nlv)
+length(pars[1])  # nb. parameter combinations (except nlv)
+```
+
+```julia
+## Grid-search
+model = dkplsr()
+res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv)
+@head res  # first rows of the grid evaluation
+```
+
+```julia
+group = round.(log.(10, res.gamma); digits = 1)
+plotgrid(res.nlv, res.y1, group; xlabel = "Nb. LVs", ylabel = "RMSEP_val", title_leg = "log(gamma)").f
+```
+
+```julia
+## Best model
+u = findall(res.y1 .== minimum(res.y1))[1]
+res[u, :] 
+```
+
+```julia
+## Refitting the best model and predictions
+model = dkplsr(gamma = res.gamma[u], nlv = res.nlv[u], scal = res.scal[u])
+fit!(model, Xtrain, ytrain)
+pred = predict(model, Xtest).pred
+@head pred
+```
+
+```julia
+## Generalization error
+rmsep(pred, ytest)
+```
+
+```julia
+plotxy(ytest, vec(pred); bisect = true, color = (:blue, .3), xlabel = "Observed DM", ylabel = "Predictions").f
+```
+
+##### External evaluation
+
+```julia
+## Refitting the best model and predictions
+model = dkplsr(gamma = res.gamma[u], nlv = res.nlv[u], scal = res.scal[u])
+fit!(model, Xtrain_ext, ytrain_ext)
+pred = predict(model, Xtest_ext).pred
+@head pred
+```
+
+```julia
+## Generalization error
+rmsep(pred, ytest_ext)
+```
+
+```julia
+plotxy(ytest_ext, vec(pred); bisect = true, color = (:blue, .3), xlabel = "Observed DM", ylabel = "Predictions").f
+```
+
+### (3) KNN-LWPLSR model
+
+KNN-LWPLSR (Lesnoff et al. 2020) is in general more efficient than the usual local PLSR (KNN-PLSR).
+When the number of observations is large, it is much faster than a LWPLSR, i.e. without preliminary 
+KNN selection. Function `lwplsr` allows to implement the three algorithms. The function uses the 
+fast Dayal & MacGregor 1997 PLS algorithm ("improved kernel algorithm #1") and parallelization.
+
+##### Internal evaluation
+
+```julia
+## Grid
+nlvdis = [5; 10; 15 ; 25] ; metric = [:mah]   
+h = [1; 1.8; 2.5; 3.5; 5] ; k = [150; 300; 500; 600; 750; 1000] 
+nlv = 0:20
+scal = true
+pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k, scal = scal)  # grid (except nlv)
+length(pars[1])  # nb. parameter combinations (except nlv)
+```
+
+```julia
+## Grid-search
+model = lwplsr()
+res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv)
+@head res  # first rows of the grid evaluation
+```
+
+```julia
+group = string.("nlvdis=", res.nlvdis, "metric=", res.metric, " h=", res.h, " k=", res.k)
+plotgrid(res.nlv, res.y1, group; xlabel = "Nb. LVs", ylabel = "RMSEP_val").f
+```
+
+```julia
+## Best model
+u = findall(res.y1 .== minimum(res.y1))[1]
+res[u, :] 
+```
+
+```julia
+## Refitting the best model and predictions
+model = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], k = res.k[u], 
+    nlv = res.nlv[u], scal = res.scal[u])
+fit!(model, Xtrain, ytrain)
+pred = predict(model, Xtest).pred
+@head pred
+```
+
+```julia
+## Generalization error
+rmsep(pred, ytest)
+```
+
+```julia
+plotxy(ytest, vec(pred); bisect = true, color = (:blue, .3), xlabel = "Observed DM", ylabel = "Predictions").f
+```
+
+##### External evaluation
+
+```julia
+## Refitting the best model and predictions
+model = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], k = res.k[u], 
+    nlv = res.nlv[u], scal = res.scal[u])
+fit!(model, Xtrain_ext, ytrain_ext)
+pred = predict(model, Xtest_ext).pred
+@head pred
+```
+
+```julia
+## Generalization error
+rmsep(pred, ytest_ext)
+```
+
+```julia
+plotxy(ytest_ext, vec(pred); bisect = true, color = (:blue, .3), xlabel = "Observed DM", ylabel = "Predictions").f
+```
+
+### (4) DKPLS > KNN-LWPLSR model
+
+This section illustrates the ability of package **Jchemo.jl** to build ad'hoc pipelines (i.e. sequences 
+of models; see the [readme](https://github.com/mlesnoff/Jchemo.jl)) with function `pip`.
+Here, a global DKPLSR is preliminary computed, and then a KNN-LWPLSR is implemented on the 
+computed DKPLS scores, instead of on the X-data. 
+
+Running KNN-LWPLSR after a dimension reduction allows to accelerate the computations and, 
+in some cases, to decrease the negative effect of the noise contained in matrix X. Many 
+variants of such pipelines (applying a non linear model on reduced data) can be implemented. 
+For instance, in the past, Shen et al. 2019 used the pipeline PLS > KNN-PLSR, and longer ago, 
+Naes et al. 1998 proposed what they referred to as "LWR" that is a PCA > LWMLR pipeline. 
+
+The interest of using DKPLS instead of PCA or PLS for data reduction is to potentially better 
+linearize the {X, Y} space in which are computed the distances for the KNN selection (a similar idea 
+was introduced by Zhang et al. 2017). 
+
+##### Internal evaluation
+
+```julia
+## Grid
+## In the actual version of Jchemo, for a pipeline, function gridscore 
+## only optimizes the last model of the pipeline
+nlv0 = 50
+gamma = 1e5
+##
+nlvdis = [5; 10; 15; 25] ; metric = [:mah]
+h = [1; 1.8; 2.5; 3.5; 5] ; k = [150; 300; 500; 600; 750; 1000] 
+nlv = 0:min(nlv0, 20)
+scal = true
+pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k, scal = scal)  # grid (except nlv)
+length(pars[1])  # nb. parameter combinations (except nlv)
+```
+
+```julia
+## Grid-search
+model1 = dkplsr(; gamma, nlv = nlv0)
+model2 = lwplsr()
+model = pip(model1, model2)
+res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv)
+@head res  # first rows of the grid evaluation
+```
+
+```julia
+group = string.("nlvdis=", res.nlvdis, "metric=", res.metric, " h=", res.h, " k=", res.k)
+plotgrid(res.nlv, res.y1, group; xlabel = "Nb. LVs", ylabel = "RMSEP_val").f
+```
+
+```julia
+## Best model
+u = findall(res.y1 .== minimum(res.y1))[1]
+res[u, :] 
+```
+
+```julia
+## Refitting the best model and predictions
+model2 = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
+    k = res.k[u], nlv = res.nlv[u], scal = res.scal[u], verbose = false)
+model = pip(model1, model2) 
+fit!(model, Xtrain, ytrain)
+pred = predict(model, Xtest).pred
+@head pred
+```
+
+```julia
+## Generalization error
+rmsep(pred, ytest)
+```
+
+```julia
+plotxy(ytest, vec(pred); bisect = true, color = (:blue, .3), xlabel = "Observed DM", ylabel = "Predictions").f
+```
+
+##### External evaluation
+
+```julia
+## Refitting the best model and predictions
+model1 = dkplsr(; gamma, nlv = nlv0)
+model2 = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
+    k = res.k[u], nlv = res.nlv[u], scal = res.scal[u], verbose = false)
+model = pip(model1, model2) 
+fit!(model, Xtrain_ext, ytrain_ext)
+pred = predict(model, Xtest_ext).pred
+@head pred
+```
+
+```julia
+## Generalization error
+rmsep(pred, ytest_ext)
+```
+
+```julia
+plotxy(ytest_ext, vec(pred); bisect = true, color = (:blue, .3), xlabel = "Observed DM", ylabel = "Predictions").f
+```
+

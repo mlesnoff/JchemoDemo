@@ -4,7 +4,7 @@ weave_options:
   error: true
   wrap: true
   term: false
-  #out_width: "50%"   # default
+  out_width: "60%" 
 ---
 
 ```julia
