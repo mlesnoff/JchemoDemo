@@ -33,10 +33,12 @@ learning domain, the comparative performances of methods can be **highly dataset
 
 ##### Overall process 
 
+Two steps of model evaluations are implemented, internal and external.
+
 **(a) Internal evaluation**
 
 The internal model evaluation is implemented on the multifruit dataset only. 
-The spectra available in this dataset are preprocessed spectra 
+The spectra available in this dataset are already preprocessed spectra 
 (second derivative, returned directly by the spectrometer used in the study). 
 Passos & Mishra 2023 separated the data to a **training set {Xtrain, Ytrain}** 
 and a **test set {Xtest, Ytest}**.
@@ -420,7 +422,7 @@ Running KNN-LWPLSR after a dimension reduction allows to accelerate the computat
 in some cases, to decrease the negative effect of the noise contained in matrix X. Many 
 variants of such pipelines (applying a non linear model on reduced data) can be implemented. 
 For instance, in the past, Shen et al. 2019 used the pipeline PLS > KNN-PLSR, and longer ago, 
-Naes et al. 1998 proposed what they referred to as "LWR" that is a PCA > LWMLR pipeline. 
+Naes et al. 1998 proposed what they referred to as "LWR" that is a PCA > KNN-LWMLR pipeline. 
 
 The interest of using DKPLS instead of PCA or PLS for data reduction is to potentially better 
 linearize the {X, Y} space in which are computed the distances for the KNN selection (a similar idea 
