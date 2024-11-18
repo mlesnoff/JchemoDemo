@@ -83,7 +83,6 @@ title = "Type"
 Legend(f[1, 2], elt, lab, title; framevisible = false)
 f
 
-
 ##############
 
 f = Figure()
