@@ -87,6 +87,38 @@ title = "Groups"
 Legend(f[1, 2], elt, lab, title)
 f
 
+p = 7
+x = collect(1:p)
+y1 = rand(p)
+y2 = rand(p) 
+df = DataFrame(
+    x = vcat(x, x),
+    y = vcat(y1, y2),
+    group = vcat(repeat([1], p), repeat([2], p))
+    )
+##
+colm = cgrad(:Dark2_5; categorical = true)[1:2]
+f = Figure(size = (500, 400))
+ax = Axis(f[1, 1]; xticks = x,
+    xlabel = "x", ylabel = "y", title = "Barplot")
+barplot!(ax, df.x, df.y; dodge = df.group, color = df.group, colormap = colm)
+hlines!(.2; color = (:red, .5), linestyle = :dash)
+lab = ["y1", "y2"]
+elt = [PolyElement(polycolor = colm[i]) for i in 1:length(lab)]
+title = "Groups"
+Legend(f[1, 2], elt, lab)
+f
+
+colm = cgrad(:Dark2_5; categorical = true)[1:2]
+f = Figure(size = (500, 400))
+ax = Axis(f[1, 1]; xticks = x,
+    xlabel = "x", ylabel = "y", title = "Soft-thresholding")
+barplot!(ax, x, y1; label = "y1", color = colm[1])
+barplot!(ax, x, y2; label = "y2", color = colm[2])
+hlines!(.2; color = (:red, .5), linestyle = :dash)
+Legend(f[1, 2], ax, "", framevisible = false)
+f
+
 ############# Boxplots
 
 n = 200
