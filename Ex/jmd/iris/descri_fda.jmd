@@ -117,15 +117,15 @@ f
 
 #### X-loadings matrix
 
-Columns of matrix `P` = coefficients of the linear discriminant function 
+Columns of matrix `V` = coefficients of the linear discriminant function 
 = "LD" of function lda of the R package MASS.
 
 ```julia
-P = model.fitm.P
+V = model.fitm.V
 ```
 
 ```julia
-P' * P    # not orthogonal
+V' * V    # not orthogonal
 ```
 
 

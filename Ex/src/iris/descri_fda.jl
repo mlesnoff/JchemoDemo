@@ -70,10 +70,10 @@ f
 @head Ttest = transf(model, Xtest)
 
 
-P = model.fitm.P
+V = model.fitm.V
 
 
-P' * P    # not orthogonal
+V' * V    # not orthogonal
 
 
 model.fitm.eig
