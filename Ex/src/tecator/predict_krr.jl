@@ -6,7 +6,7 @@ using JLD2, CairoMakie
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/tecator.jld2") 
 @load db dat
-pnames(dat)
+@names dat
 
 
 X = dat.X
@@ -66,8 +66,8 @@ gamma = 100
 lb = 1e-3
 model = krr(; gamma, lb)
 fit!(model, Xtrain, ytrain)
-pnames(model)
-pnames(model.fitm)
+@names model
+@names model.fitm
 
 
 pred = predict(model, Xtest).pred

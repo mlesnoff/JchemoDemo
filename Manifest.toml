@@ -926,9 +926,9 @@ uuid = "d25df0c9-e2be-5dd7-82c8-3ad0b3e990b9"
 version = "0.1.5"
 
 [[deps.InlineStrings]]
-git-tree-sha1 = "45521d31238e87ee9f9732561bfee12d4eebd52d"
+git-tree-sha1 = "6a9fde685a7ac1eb3495f8e812c5a7c3711c2d5e"
 uuid = "842dd82b-1e85-43dc-bf29-5d0ee9dffc48"
-version = "1.4.2"
+version = "1.4.3"
 
     [deps.InlineStrings.extensions]
     ArrowTypesExt = "ArrowTypes"
@@ -1044,12 +1044,12 @@ version = "0.21.4"
 
 [[deps.Jchemo]]
 deps = ["DataFrames", "DataInterpolations", "DecisionTree", "Distances", "Distributions", "ImageFiltering", "LIBSVM", "LinearAlgebra", "Loess", "Makie", "NearestNeighbors", "Random", "SparseArrays", "Statistics", "StatsBase", "UMAP"]
-git-tree-sha1 = "4ddae32abe1876c4ca9b7104973a9c1cb240b9bb"
+git-tree-sha1 = "0a921804bcdc5827064b3a2d5455b950b454d6e7"
 uuid = "fbca9394-dd0a-4d1c-b066-ae75f6ef1ad5"
-version = "0.8.5"
+version = "0.8.6"
 
 [[deps.JchemoData]]
-git-tree-sha1 = "cc65d7bfc2bd725c2739efebdc3f66840d8e5964"
+git-tree-sha1 = "f1b1b36a576434d024f407005e5effe91abc09ac"
 repo-rev = "main"
 repo-url = "https://github.com/mlesnoff/JchemoData.jl.git"
 uuid = "3440f217-e3fb-4eda-bd77-d99cfb805e7c"
@@ -1541,9 +1541,9 @@ version = "0.11.32"
 
 [[deps.PNGFiles]]
 deps = ["Base64", "CEnum", "ImageCore", "IndirectArrays", "OffsetArrays", "libpng_jll"]
-git-tree-sha1 = "67186a2bc9a90f9f85ff3cc8277868961fb57cbd"
+git-tree-sha1 = "cf181f0b1e6a18dfeb0ee8acc4a9d1672499626c"
 uuid = "f57f5aa1-a3ce-4bc8-8ab9-96f992907883"
-version = "0.4.3"
+version = "0.4.4"
 
 [[deps.Packing]]
 deps = ["GeometryBasics"]

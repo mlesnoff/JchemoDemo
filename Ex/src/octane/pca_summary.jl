@@ -10,7 +10,7 @@ CairoMakie.activate!()
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/octane.jld2") 
 @load db dat
-pnames(dat)
+@names dat
 
 
 X = dat.X 
@@ -33,12 +33,12 @@ model = pcasvd(nlv = 6)
 ## or:
 #model = pcaout(; nlv = 6)
 fit!(model, X)  
-pnames(model)
-pnames(model.fitm)
+@names model
+@names model.fitm
 
 
 res = summary(model, X) ;
-pnames(res)
+@names res
 
 
 z = res.explvarx

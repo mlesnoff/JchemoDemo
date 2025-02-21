@@ -6,7 +6,7 @@ using JLD2, CairoMakie
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/tecator.jld2") 
 @load db dat
-pnames(dat)
+@names dat
 
 
 X = dat.X
@@ -47,12 +47,12 @@ plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 model = pcasvd(nlv = 10)
 fit!(model, X)
-pnames(model)
-pnames(model.fitm)
+@names model
+@names model.fitm
 
 
 res = summary(model, Xp) ;
-pnames(res)
+@names res
 
 
 z = res.explvarx

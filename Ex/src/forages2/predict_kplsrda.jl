@@ -6,7 +6,7 @@ using JLD2, CairoMakie, FreqTables
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/forages2.jld2") 
 @load db dat
-pnames(dat)
+@names dat
 
 
 X = dat.X 
@@ -46,15 +46,15 @@ nlv = 15
 gamma = .001
 model = kplsrda(; nlv, gamma, scal = true) 
 fit!(model, Xtrain, ytrain)
-pnames(model) 
-pnames(model.fitm)
+@names model 
+@names model.fitm
 
 
 typeof(model.fitm.fitm)
 
 
 res = predict(model, Xtest)
-pnames(res)
+@names res
 
 
 @head pred = res.pred

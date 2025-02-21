@@ -18,7 +18,7 @@ using JLD2, CairoMakie, FreqTables
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/forages2.jld2") 
 @load db dat
-pnames(dat)
+@names dat
 ```
   
 #### Data preparation and short description
@@ -93,15 +93,15 @@ An alternative to Pls is the ridge regularization (Rr-Da):
 
 ```julia
 fit!(model, Xtrain, ytrain)
-pnames(model) 
-pnames(model.fitm)
+@names model 
+@names model.fitm
 ```
 
 #### Predictions
 
 ```julia
 res = predict(model, Xtest) ;
-pnames(res)
+@names res
 ```
 
 ```julia
@@ -120,7 +120,7 @@ errp(pred, ytest)
 
 ```julia
 cf = conf(pred, ytest) ;
-pnames(cf)
+@names cf
 ```
 
 ```julia

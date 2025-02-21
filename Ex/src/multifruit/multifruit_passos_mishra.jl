@@ -8,7 +8,7 @@ using DataFrames, Dates, FreqTables
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/multifruit.jld2") 
 @load db dat
-pnames(dat)
+@names dat
 
 
 ## Training and test sets
@@ -60,7 +60,7 @@ ncal = ntrain - nval
 ## Importation
 db = joinpath(path_jdat, "data/mango_anderson.jld2") 
 @load db dat
-pnames(dat)
+@names dat
 
 
 X = dat.X

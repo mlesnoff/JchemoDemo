@@ -7,7 +7,7 @@ using FreqTables
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/challenge2018.jld2") 
 @load db dat
-pnames(dat)
+@names dat
 
 
 X = dat.X 

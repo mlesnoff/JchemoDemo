@@ -6,7 +6,7 @@ using JLD2, CairoMakie
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data", "iris.jld2") 
 @load db dat
-pnames(dat)
+@names dat
 
 
 summ(dat.X)
@@ -47,7 +47,7 @@ model = fda(nlv = 2)
 #model = fdasvd(nlv = 2)     # alternative algorithm (same result)
 fit!(model, Xtrain, ytrain) 
 fitm = model.fitm 
-pnames(fitm)
+@names fitm
 
 
 lev = fitm.lev

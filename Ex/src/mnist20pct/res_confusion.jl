@@ -7,7 +7,7 @@ using CodecZlib # required since the dataset is compressed
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/mnist20pct.jld2") 
 @load db dat
-pnames(dat)
+@names dat
 
 
 Xtrain = dat.Xtrain
@@ -42,7 +42,7 @@ freqtable(ytest, vec(pred))
 
 
 cf = conf(pred, ytest) ;
-pnames(cf)
+@names cf
 
 
 cf.cnt

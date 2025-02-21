@@ -7,7 +7,7 @@ using FreqTables
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/challenge2018.jld2") 
 @load db dat
-pnames(dat)
+@names dat
 
 
 X = dat.X 
@@ -68,15 +68,15 @@ ntest = nro(Xtest)
 
 model = pcasvd(nlv = 10)
 fit!(model, Xp)
-pnames(model)
-pnames(model.fitm)
+@names model
+@names model.fitm
 
 
 @head T = model.fitm.T
 
 
 res = summary(model, Xp) ;
-pnames(res)
+@names res
 
 
 z = res.explvarx
@@ -118,14 +118,14 @@ plotxy(T[:, i], T[:, i + 1], group; color = colm, xlabel = "PC1", ylabel = "PC2"
 
 model_sd = occsd() 
 fit!(model_sd, model.fitm)
-pnames(model_sd)
+@names model_sd
 sdtrain = model_sd.fitm.d
 sdtest = predict(model_sd, Xtest).d
 
 
 model_od = occod() 
 fit!(model_od, model.fitm, Xtrain)
-pnames(model_od)
+@names model_od
 odtrain = model_od.fitm.d
 odtest = predict(model_od, Xtest).d
 
@@ -143,7 +143,7 @@ f
 
 zres = model_sd ; nam = "SD"
 #zres = model_od ; nam = "OD"
-pnames(zres.fitm)
+@names zres.fitm
 sdtrain = zres.fitm.d
 sdtest = predict(zres, Xtest).d
 f = Figure(size = (500, 400))

@@ -8,7 +8,7 @@ CairoMakie.activate!()
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/corn.jld2") 
 @load db dat
-pnames(dat)
+@names dat
 
 
 Xm5 = dat.Xm5

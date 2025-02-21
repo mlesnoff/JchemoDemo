@@ -7,7 +7,7 @@ using FreqTables
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/challenge2018.jld2") 
 @load db dat
-pnames(dat)
+@names dat
 
 
 X = dat.X 
@@ -93,8 +93,8 @@ plotxy(T[:, i], T[:, i + 1], group; color = colm, xlabel = string("PC", i),
 
 model_d = occsdod() 
 fit!(model_d, model.fitm, Xtrain)
-pnames(model_d)
-pnames(model_d.fitm)
+@names model_d
+@names model_d.fitm
 
 
 dtrain = model_d.fitm.d

@@ -18,7 +18,7 @@ using JLD2, CairoMakie, FreqTables
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/forages2.jld2") 
 @load db dat
-pnames(dat)
+@names dat
 ```
   
 #### Data preparation and short description
@@ -79,8 +79,8 @@ nlv = 15
 gamma = .001
 model = kplsrda(; nlv, gamma, scal = true) 
 fit!(model, Xtrain, ytrain)
-pnames(model) 
-pnames(model.fitm)
+@names model 
+@names model.fitm
 ```
 
 ```julia
@@ -91,7 +91,7 @@ typeof(model.fitm.fitm)
 
 ```julia
 res = predict(model, Xtest)
-pnames(res)
+@names res
 ```
 
 ```julia

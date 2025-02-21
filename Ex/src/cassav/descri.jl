@@ -7,7 +7,7 @@ using JchemoData, JLD2, CairoMakie
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/cassav.jld2")
 @load db dat
-pnames(dat)
+@names dat
 
 
 X = dat.X
@@ -52,15 +52,15 @@ plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 model = pcasvd(nlv = 10)
 fit!(model, Xp)
-pnames(model)
-pnames(model.fitm)
+@names model
+@names model.fitm
 
 
 @head T = model.fitm.T
 
 
 res = summary(model, Xp) ;
-pnames(res)
+@names res
 
 
 z = res.explvarx

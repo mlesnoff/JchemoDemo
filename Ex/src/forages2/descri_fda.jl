@@ -6,7 +6,7 @@ using JLD2, CairoMakie, FreqTables
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/forages2.jld2") 
 @load db dat
-pnames(dat)
+@names dat
 
 
 X = dat.X 
@@ -44,8 +44,8 @@ ntest = nro(Xtest)
 
 model0 = pcasvd(nlv = 10)
 fit!(model0, Xtrain)
-pnames(model0)
-pnames(model0.fitm)
+@names model0
+@names model0.fitm
 
 
 @head Ttrain_pca = model0.fitm.T
@@ -55,7 +55,7 @@ model = fda(nlv = 2)
 #model = fdasvd(nlv = 2)     # alternative algorithm (same result)
 fit!(model, Ttrain_pca, ytrain) 
 fitm = model.fitm 
-pnames(fitm)
+@names fitm
 
 
 Ttrain = model.fitm.T

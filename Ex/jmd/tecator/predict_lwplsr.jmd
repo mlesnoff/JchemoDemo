@@ -18,7 +18,7 @@ using JLD2, CairoMakie
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/tecator.jld2") 
 @load db dat
-pnames(dat)
+@names dat
 ```
 
 #### Data preparation and short description
@@ -104,8 +104,8 @@ h = 3 ; k = 30
 nlv = 4
 model = lwplsr(; nlvdis, metric, h, k, nlv) 
 fit!(model, Xtrain, ytrain)
-pnames(model)
-pnames(model.fitm)
+@names model
+@names model.fitm
 ```
 
 #### Predictions

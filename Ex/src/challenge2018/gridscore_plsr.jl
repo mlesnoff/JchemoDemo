@@ -7,7 +7,7 @@ using FreqTables
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/challenge2018.jld2") 
 @load db dat
-pnames(dat)
+@names dat
 
 
 X = dat.X 
@@ -117,7 +117,7 @@ plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Prediction",
 
 
 res_sel = selwold(res.nlv, res.y1; smooth = true, alpha = .05, graph = true) ;
-pnames(res)
+@names res
 
 
 res_sel.f       # plots

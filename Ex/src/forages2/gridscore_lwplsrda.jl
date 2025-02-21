@@ -6,7 +6,7 @@ using JLD2, CairoMakie, FreqTables
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/forages2.jld2") 
 @load db dat
-pnames(dat)
+@names dat
 
 
 X = dat.X 
@@ -84,7 +84,7 @@ errp(pred, ytest)
 
 
 cf = conf(pred, ytest) ;
-pnames(cf)
+@names cf
 
 
 cf.cnt

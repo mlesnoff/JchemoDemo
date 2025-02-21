@@ -18,7 +18,7 @@ using JLD2, CairoMakie
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/tecator.jld2") 
 @load db dat
-pnames(dat)
+@names dat
 ```
 
 #### Data preparation and short description
@@ -105,8 +105,8 @@ model = rr(; lb)
 ## Alternative Rr algorithm:
 ## model = rrchol; lb)
 fit!(model, Xtrain, ytrain)
-pnames(model)
-pnames(model.fitm)
+@names model
+@names model.fitm
 ```
 
 #### Predictions

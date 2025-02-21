@@ -6,7 +6,7 @@ using JLD2, CairoMakie
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/tecator.jld2") 
 @load db dat
-pnames(dat)
+@names dat
 
 
 X = dat.X
@@ -83,7 +83,7 @@ segm[i][k]   # segment 'k' of replication 'i'
 model = plskern()
 nlv = 0:20
 rescv = gridcv(model, Xtrain, ytrain; segm = segm, score = rmsep, nlv, verbose = false) ;
-pnames(rescv)
+@names rescv
 
 
 res_rep = rescv.res_rep
@@ -123,7 +123,7 @@ f
 
 
 res_sel = selwold(res.nlv, res.y1; smooth = false, alpha = .05, graph = true) ;
-pnames(res)
+@names res
 
 
 res_sel.f       # plots
