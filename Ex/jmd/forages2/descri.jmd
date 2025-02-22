@@ -229,7 +229,7 @@ f = Figure(size = (500, 400))
 ax = Axis(f[1, 1]; xlabel = nam, ylabel = "Density")
 density!(ax, ytrain; color = :blue, label = "Train")
 density!(ax, ytest; color = (:red, .5), label = "Test")
-axislegend(position = :rt)
+#axislegend(position = :rt)  # tmp bug in Makie
 f
 ```
 
