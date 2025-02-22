@@ -1,11 +1,10 @@
 # JchemoDemo
 
-**JchemoDemo** is a **Julia project** (with its [**environment**](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)) demonstrating basic functions of package [**Jchemo.jl**](https://github.com/mlesnoff/Jchemo.jl) and the general syntax. 
-This project is also used to deliver ad'hoc **training sessions**. 
+**JchemoDemo** is a **Julia project** (with its [**environment**](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)) demonstrating basic functions of package [**Jchemo.jl**](https://github.com/mlesnoff/Jchemo.jl) and the general syntax. This project is also used to deliver ad'hoc **training sessions**. 
 
 **What is provided:**
 
-1. **Examples with Jchemo.jl**
+1. **Examples with Jchemo**
     - [**Html**](https://mlesnoff.github.io/JchemoDemo/docs/build/) examples of data analyses 
 
 2. **Examples of general Julia syntax** (Does not use Jchemo)
