@@ -7,7 +7,6 @@ This project is also used to deliver ad'hoc **training sessions**.
 
 1. **Examples with Jchemo.jl**
     - [**Html**](https://mlesnoff.github.io/JchemoDemo/docs/build/) examples of data analyses 
-    - [**Scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Ex/src) (*)
 
 2. **Examples of general Julia syntax** (Does not use Jchemo)
     - [**Scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Misc/src) 
@@ -20,7 +19,6 @@ This project is also used to deliver ad'hoc **training sessions**.
 
 The **datasets** used in the examples are stored in package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl), already installed in the [**JchemoDemo environment**](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml).
 
-(*) When exploring a given script, it is recommended to run the code row by row (or by block) in the REPL to observe the corresponding outputs. 
 
 ## <span style="color:green"> **Author** </span> 
 
