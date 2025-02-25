@@ -14,6 +14,7 @@ nam = "cassav"
 #nam = "octane"
 #nam = "swissroll"
 #nam = "tecator"
+#nam = "wines_sensory"
 zpath = joinpath(path_jmd, nam)
 @show f = filter(endswith("jmd"), readdir(zpath))
 nf = length(f) 

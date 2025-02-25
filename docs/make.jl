@@ -13,7 +13,8 @@ makedocs(
         "multifruit" => "multifruit.md",
         "octane" => "octane.md",
         "swissroll" => "swissroll.md",
-        "tecator" => "tecator.md"
+        "tecator" => "tecator.md",
+        "wines_sensory" => "wines_sensory.md"
         ]
     )
 
