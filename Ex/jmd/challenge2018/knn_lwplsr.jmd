@@ -1,0 +1,352 @@
+---
+title: Introduction to the KNN-LWPLSR algorithmn
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  out_width: "60%" 
+---
+
+This note presents the main principles of the 
+[kNN-LWPLSR algorithm](https://analyticalsciencejournals.onlinelibrary.wiley.com/doi/10.1002/cem.3209), 
+an efficient and versatile pipeline combining nearest neighborhood selection and partial least squared 
+regression. It is particularly adapted to multicollinear predictive variables *X* and to heterogeneous 
+data inducing non-linear relations between *X* and the response variables *Y* to predict.  
+
+The note provides example workflows with package [Jchemo](https://github.com/mlesnoff/Jchemo.jl),
+illustrated with the NIRS dataset 
+[challenge2008](https://github.com/mlesnoff/JchemoData.jl/tree/main?tab=readme-ov-file#challenge2018). 
+
+#### Context
+
+Near-infrared spectroscopy (NIRS) is a fast and nondestructive analytical method used in 
+many agronomic contexts, for instance to evaluate the nutritive quality of forages. Basically, 
+spectral data *X* (matrix of *n* observations and *p* wavelengths) are collected on samples of 
+the material to study (e.g. forages) using a spectrometer, and targeted response variables 
+ *Y = {y1, …, yq}* (*q* vectors of *n* observations; e.g. chemical compositions) are measured precisely 
+in laboratory. Regression models of *Y* on *X* are then fitted and used to predict the response 
+variables from new spectral observations. Spectral data are known to be highly collinear and, 
+in general, matrix *X* is ill-conditioned. Specific regression methods have to be implemented, in particular
+partial least squares regression (PLSR) [1–3]. The general principle of PLSR is to reduce the dimension 
+of *X* to a limited number *a << p* of orthogonal vectors *n x 1* maximizing the squared covariance 
+with *Y* and referred to as scores. The scores are then used as regressor latent variables (LVs) in a 
+multiple linear regression (MLR). PLSR is very efficient when the relationship between 
+*X* and *Y* is linear [4]. 
+
+For several years, agronomic databases (e.g. in feed, food or soils researches) tend to aggregate 
+large numbers of samples of different natures or origins, bringing heterogeneity. This generates curvatures 
+and/or clustering in the data that can alter the linear relation between X and Y and therefore the PLSR 
+predictions. **Local PLSR** is an easy tool that can turn out non-linearity in the data [4–7].  
+The general principle is, for each new observation to predict, to do a pre-selection of *k* nearest 
+neighbors of the observation (the kNN selection step) and then to apply a PLSR to the neighborhood 
+(i.e. the *k* neighbors). 
+
+Many variants of local PLSR pipelines can be built, depending essentially on the type of PLSR implemented, 
+and on how areselected the neighborhood. 
+
+One of these variants is the **kNN-LWPLSR** algorithm ([8]). It consists in applying a 
+locally weighted PLSR (LWPLSR), instead of a PLSR (as it is done in more common local PLSRs), on each 
+neighborhood of the observation to predict. 
+
+#### Theory
+
+##### Summary 
+
+LWPLSR, has the particularity to weight each of the n training observations *{x_i ; i = 1, ..., n}* 
+depending on its distance (or any dissimilarity) to the observation to predict, 
+*x_new* (while in PLSR a uniform weight *1 / n* is given to all the *x_i*).  Closer is xi to xnew, higher is 
+its weight in the iterative PLSR equations and therefore its importance in the prediction. 
+
+Implementing LWPLSR on each kNN neighborhood, local pipeline referred to as kNN-LWPLSR ([8]), 
+has been observed to be more efficient than using kNN-PLSR for various data (including forages), 
+for regression as for discrimination [8,9]. 
+
+kNN-LWPLSR is a particular case of a LWPLSR where positive weights are given to the neighbors 
+of *xnew* and null weights to the observations outside of the neighborhood. Nevertheless, for large datasets, 
+doing the kNN step and then applying LWPLSR only on the neighborhood is much faster in terms of computation 
+times than implementing LWPLSR on the all dataset ([8]).
+
+##### Some details
+
+LWPLSR, and its kNN version, have been described in Lesnoff et al. [8]. LWPLSR [20–22] is a particular 
+case of weighted PLSR (WPLSR). In WPLSR, a n  1 vector of weights  = {1, 2, … n} is injected into the 
+PLSR algorithm, in two steps: (a) the PLS scores (LVs) are computed by maximizing -weighted 
+(instead of unweighted) squared covariances between the scores and the response variable, and (b) the MLR 
+prediction equation is computed by regressing y on the scores using -weighted (instead of ordinary) 
+least-squares. The specificity of LWPLSR within the generic WPLSR is that  is computed from a decreasing 
+function, say f, of the distances (or any dissimilarities) between the n training observations and xnew. 
+This is the same principle as in the well-known locally weighted regression algorithm [23,24]. The kNN-LWPLSR pipeline
+simply adds a preliminary step to LWPLSR: a neighborhood is selected around xnew (kNN selection step) on which 
+LWPLSR is then applied. 
+
+This present article uses the same kNN-LWPLSR pipeline as in Lesnoff et al. [8], involving a fast PLSR algorithm, 
+referred to as “Dayal & McGregor kernel #1” [25]. The pipeline consists in the following steps. Firstly, a global 
+PLSR (i.e. over all the training observation) is fitted and defines a global score space. Secondly, for each new observation xnew, Mahalanobis distances in this global score space between the training observations and xnew are computed (obviously, other global spaces, e.g. PCA or nonlinear kernel-PCA/PLS score spaces, and/or other types of distances or dissimilarities could be used). These distances are used to compute the neighborhood of xnew (kNN selection) and the weights  within the neighborhood. The weight function f was chosen to be easily tunable ([8]). It has a negative exponential shape whose the sharpness depends on a scalar parameter, say h [8,21]: lower is h, sharper is function f and therefore more the closest neighbors of xnew have importance in the LWPLSR fit. The case h =  is the unweighted situation (all the components of  are equal) corresponding to a kNN-PLSR. 
+At the end, this kNN-LWPLSR pipeline has four parameters to tune: nlvdis (the number of global PLS scores used to compute the distances), k (the number of neighbors in the kNN selection), h (the shape of the weight function f) and nlv (the number of LVs used in the LWPLSR implemented on the neighborhood).
+
+#### Data importation
+
+```julia
+using Jchemo, JchemoData
+using JLD2, CairoMakie
+using FreqTables
+```
+
+```julia
+path_jdat = dirname(dirname(pathof(JchemoData)))
+db = joinpath(path_jdat, "data/challenge2018.jld2") 
+@load db dat
+@names dat
+```
+
+#### Data preparation and short description
+
+```julia
+X = dat.X 
+Y = dat.Y
+ntot, p = size(X)
+```
+
+```julia term = true
+@head X
+@head Y
+```
+
+```julia
+summ(Y)
+```
+
+```julia
+y = Y.conc
+typ = Y.typ
+label = Y.label 
+test = Y.test
+tab(test)
+```
+
+```julia
+wlst = names(X)
+wl = parse.(Float64, wlst)
+```
+
+```julia
+freqtable(string.(typ, "-", Y.label))
+```
+
+```julia
+freqtable(typ, test)
+```
+
+```julia
+plotsp(X, wl; nsamp = 30, xlabel = "Wavelength (nm)").f
+```
+
+#### Preprocessing
+
+```julia
+model1 = snv()
+model2 = savgol(npoint = 21, deriv = 2, degree = 3)
+model = pip(model1, model2)
+fit!(model, X)
+Xp = transf(model, X) 
+```
+
+```julia
+plotsp(Xp, wl; nsamp = 30, xlabel = "Wavelength (nm)").f
+```
+
+#### Split Tot ==> Train + Test
+
+Here the split of **Tot** between datasets **Train** and **Test** is already provided inside 
+the dataset (= variable `test`), but **Tot** could also be split *a posteriori*, for instance 
+by sampling (random, systematic or any other designs). 
+
+```julia
+s = Bool.(test)
+Xtrain = rmrow(Xp, s)
+Ytrain = rmrow(Y, s)
+ytrain = rmrow(y, s)
+typtrain = rmrow(typ, s)
+Xtest = Xp[s, :]
+Ytest = Y[s, :]
+ytest = y[s]
+typtest = typ[s]
+ntrain = nro(Xtrain)
+ntest = nro(Xtest)
+(ntot = ntot, ntrain, ntest)
+```
+
+#### Pca on Xp
+
+```julia
+model = pcasvd(nlv = 10)
+fit!(model, Xp)
+@names model
+@names model.fitm
+```
+
+```julia term = true
+@head T = model.fitm.T
+```
+
+```julia
+res = summary(model, Xp) ;
+@names res
+```
+
+```julia
+z = res.explvarx
+```
+
+```julia
+plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "nb. PCs", ylabel = "% variance explained").f
+```
+
+```julia
+i = 1
+plotxy(T[:, i], T[:, i + 1]; color = (:red, .5), xlabel = string("PC", i), 
+    ylabel = string("PC", i + 1)).f
+```
+
+```julia
+lev = mlev(typ)
+nlev = length(lev)
+colm = cgrad(:Dark2_5, nlev; categorical = true)
+plotxy(T[:, i], T[:, i + 1], typ; color = colm, xlabel = string("PC", i), 
+    ylabel = string("PC", i + 1)).f
+```
+
+#### Pca on Xtrain and projection of Xtest
+
+```julia
+model = pcasvd(nlv = 15)
+fit!(model, Xtrain)
+```
+
+```julia term = true
+Ttrain = model.fitm.T
+@head Ttrain
+```
+
+Xtest is projected on the Xtrain score space:
+
+```julia term = true
+Ttest = transf(model, Xtest)
+@head Ttest 
+```
+
+```julia
+T = vcat(Ttrain, Ttest)
+group = vcat(repeat(["0-Train";], ntrain), repeat(["1-Test";], ntest))
+colm = [:blue, (:red, .5)]
+i = 1
+plotxy(T[:, i], T[:, i + 1], group; color = colm, xlabel = "PC1", ylabel = "PC2").f
+```
+
+**Score (SD) and orthogonal (OD) distances**
+
+```julia
+model_sd = occsd() 
+fit!(model_sd, model.fitm)
+@names model_sd
+sdtrain = model_sd.fitm.d
+sdtest = predict(model_sd, Xtest).d
+```
+
+```julia
+model_od = occod() 
+fit!(model_od, model.fitm, Xtrain)
+@names model_od
+odtrain = model_od.fitm.d
+odtest = predict(model_od, Xtest).d
+```
+
+```julia
+f = Figure(size = (500, 400))
+ax = Axis(f; xlabel = "SD", ylabel = "OD")
+scatter!(ax, sdtrain.dstand, odtrain.dstand, label = "Train")
+scatter!(ax, sdtest.dstand, odtest.dstand, color = (:red, .5), label = "Test")
+hlines!(ax, 1; color = :grey, linestyle = :dash)
+vlines!(ax, 1; color = :grey, linestyle = :dash)
+axislegend(position = :rt)
+f[1, 1] = ax
+f
+```
+
+```julia
+zres = model_sd ; nam = "SD"
+#zres = model_od ; nam = "OD"
+@names zres.fitm
+sdtrain = zres.fitm.d
+sdtest = predict(zres, Xtest).d
+f = Figure(size = (500, 400))
+ax = Axis(f[1, 1]; xlabel = nam, ylabel = "Nb. observations")
+hist!(ax, sdtrain.d; bins = 50, label = "Train")
+hist!(ax, sdtest.d; bins = 50, label = "Test")
+vlines!(ax, zres.fitm.cutoff; color = :grey, linestyle = :dash)
+axislegend(position = :rt)
+f
+```
+
+#### Y-variables
+
+```julia
+summ(y)
+```
+
+```julia
+summ(y, test)
+```
+
+```julia
+aggstat(y, test).X
+```
+
+```julia
+aggstat(Y; vary = :conc, vargroup = :test)
+```
+
+```julia
+f = Figure(size = (500, 400))
+ax = Axis(f[1, 1]; xlabel = "Protein", ylabel = "Nb. observations")
+hist!(ax, ytrain; bins = 50, label = "Train")
+hist!(ax, ytest; bins = 50, label = "Test")
+axislegend(position = :rt)
+f
+```
+
+```julia
+f = Figure(size = (500, 400))
+offs = [100; 0]
+ax = Axis(f[1, 1]; xlabel = "Protein",  ylabel = "Nb. observations", 
+    yticks = (offs, ["Train" ; "Test"]))
+hist!(ax, ytrain; offset = offs[1], bins = 50)
+hist!(ax, ytest; offset = offs[2], bins = 50)
+f
+```
+
+```julia
+f = Figure(size = (500, 400))
+ax = Axis(f[1, 1]; xlabel = "Protein", ylabel = "Density")
+density!(ax, ytrain; color = :blue, label = "Train")
+density!(ax, ytest; color = (:red, .5), label = "Test")
+#axislegend(position = :rt)  # tmp bug in Makie
+f
+```
+
+```julia
+f = Figure(size = (500, 400))
+offs = [.1; 0]
+ax = Axis(f[1, 1]; xlabel = "Protein", ylabel = "Density", yticks = (offs, ["Train" ; "Test"]))
+density!(ax, ytrain; offset = offs[1], color = (:slategray, 0.5), bandwidth = 0.2)
+density!(ax, ytest; offset = offs[2], color = (:slategray, 0.5), bandwidth = 0.2)
+f
+```
+
+```julia
+f = Figure(size = (500, 400))
+ax = Axis(f[1, 1]; xticks = (0:1, ["Train", "Test"]), xlabel = "Group", ylabel = "Protein")
+boxplot!(ax, test, y; width = .3, show_notch = true)
+f
+```
+

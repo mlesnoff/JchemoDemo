@@ -18,7 +18,7 @@ nam = "cassav"
 zpath = joinpath(path_jmd, nam)
 @show f = filter(endswith("jmd"), readdir(zpath))
 nf = length(f) 
-for i = 1:nf 
+for i = 6:6 #1:nf 
     @show i
     @show f[i]
     #i = 11
