@@ -18,7 +18,7 @@ to the algorithm also provided in the R package
 [rchemo](https://cran.r-project.org/web/packages/rchemo/index.html).
 
 kNN-LWPLSR is an efficient and versatile pipeline combining nearest neighborhood selection and partial least squared 
-regression ([8,9]). kNN-LWPLSR is well suited when the predictive variables (*X*) are multicollinear and when 
+regression. kNN-LWPLSR is well suited when the predictive variables (*X*) are multicollinear and when 
 heterogeneity in the data generates non-linear relations between *X* and the response variables
 to predict (*Y*).  
 
@@ -35,7 +35,7 @@ and used to predict the response variables from new spectral observations.
 
 Spectral data are known to be highly collinear in columns and, in general, matrix *X* is ill-conditioned. 
 Regularization methods have to be implemented to solve the regression problem. A very popular regularization 
-used for NIRS is the partial least squares regression (PLSR) [1–3], which is one of the 
+used for NIRS is the partial least squares regression (PLSR), which is one of the 
 regression methods based on *latent variables* (LVs). PLSR starts by reducing the dimension of *X* 
 (nb. columns) to a limited number *a << p* of orthogonal vectors *n x 1* maximizing the squared covariance 
 with *Y*, and referred to as scores *T (n x a)*. Response *Y* is then regressed on scores *T* (latent variable) 
@@ -67,10 +67,10 @@ using *w*-weighted least-squares. The *w*-weighting is also embedded in the cent
 scaling of the data. *Note:* in usual PLSR, a uniform weight, *1 / n*, is given to all the traing observations 
 and therefore *w* can be removed from the the equations.
 
-In LWPLSR, the weight vector *w* is computed from a decreasing function, say *f*, of dissimilarities (e.g. distances) 
-between the *n* training observations and the observation to predict *x_new*. Closer is *x_i* to *x_new*, higher is the weight 
-*w_i* in the PLSR equations and therefore its importance to the prediction. This is the same distance-based principle
-as in the well-known locally weighted regression algorithm *LOESS* [23,24]. 
+In LWPLSR, the weight vector *w* is computed from a decreasing function, say *f*, of dissimilarities 
+(e.g. distances) between the *n* training observations and the observation to predict *x_new*. Closer is *x_i* 
+to *x_new*, higher is the weight *w_i* in the PLSR equations and therefore its importance to the prediction. 
+This is the same distance-based principle as in the well-known locally weighted regression algorithm *LOESS* [23,24]. 
 
 Compared to LWPLSR, kNN-LWPLSR simply adds a preliminary step: a neighborhood is selected around *x_new*, 
 and then LWPLSR is applied to this neighborhood for prediction. kNN-LWPLSR can be viewed as 
@@ -238,7 +238,7 @@ Xp = transf(model, X)
 plotsp(Xp, wl; size = (400, 300), nsamp = 30, xlabel = "Wavelength (nm)").f
 ```
 
-###### 3.3 Split training vs. test sets
+###### 3.3 Split training *vs.* test sets
 
 Here the split of the total data is already provided in the dataset (variable `Y.test`), but the split could also be 
 done *a posteriori* by *ad'hoc* sampling. 
@@ -318,4 +318,159 @@ hist!(ax, ytest; bins = 50, label = "Test")
 axislegend(position = :rt)
 f
 ```
+
+###### 3.4 Model tuning 
+
+A usual approach of model tuning is to do a grid search (evaluate the model performance over a grid of 
+parameter combinations) using a sampling design that splits the training data to several calibration 
+*vs.* validation sets. The popular K-Fold cross-validation (CV) is such a sampling design. Nevertheless, 
+CV requires to predict all of the training observations (here *ntrain* = 3,701 obs.) for each parameter combination, 
+which can be too time consuming for local PLSR and large datasets. A slighter is to split the training set
+to a calibration set and a validation set, and to run the grid search on the validation set. This is what is done in this 
+note, using the [`gridscore`](https://github.com/mlesnoff/Jchemo.jl/blob/master/src/gridscore.jl) function. 
+
+Below, the validation set is selected by systematic sampling over the rank of the *y* observations (but 
+other sampling designs, e.g. random,  could be chosen)
+
+```julia
+nval = 300
+s = sampsys(ytrain, nval)
+Xcal = Xtrain[s.train, :]
+ycal = ytrain[s.train]
+Xval = Xtrain[s.test, :]
+yval = ytrain[s.test]
+ncal = ntrain - nval 
+(ntot = ntot, ntrain, ntest, ncal, nval)
+```
+
+Then the grid of parameters is built by
+
+```julia 
+nlvdis = [15; 20; 25] ; metric = [:mah] 
+h = [1; 2; 4; 6; Inf]
+k = [150; 200; 300; 400; 500; 700; 1000]  
+nlv = 0:15
+pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k)
+```
+
+```julia 
+length(pars[1])  # nb. parameter combinations considered
+```
+
+Consider the performance criterion as the RMSEP computed on the validation test
+
+```julia
+model = lwplsr()
+res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, verbose = false)
+@head res   # first rows of the result table
+```
+
+that gives graphically
+
+```julia
+group = string.("nlvdis=", res.nlvdis, ", h=", res.h, ", k=", res.k) 
+plotgrid(res.nlv, res.y1, group; step = 1, xlabel ="Nb. LVs", ylabel = "RMSEP_Val").f
+```
+
+###### 3.5 Final predictions
+
+The final model can be defined by selecting the best parameters combination
+
+```julia
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
+```
+
+and the the final prediction on the test are given by
+
+```julia
+model = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
+    k = res.k[u], nlv = res.nlv[u])
+fit!(model, Xtrain, ytrain)
+pred = predict(model, Xtest).pred 
+@head pred 
+```
+
+Summary of the predictions
+
+```julia
+mse(pred, ytest)
+```
+
+```julia
+rmsep(pred, ytest)
+```
+
+```julia
+plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Predictions", 
+    ylabel = "Observed test data", title = "Protein concentration (%)").f
+```
+
+#### 4. Related references
+
+* Andersson M. A comparison of nine PLS1 algorithms. J Chemom. 2009;23(10):518-529. 
+doi:10.1002/cem.1248.
+
+* Cleveland, W. S. (1979). Robust locally weighted regression and smoothing scatterplots. 
+Journal of the American statistical association, 74(368), 829-836. 
+DOI: 10.1080/01621459.1979.10481038
+
+* Cleveland, W. S., & Devlin, S. J. (1988). Locally weighted regression: an approach to 
+regression analysis by local fitting. Journal of the American statistical association, 83(403), 
+596-610. DOI:10.1080/01621459.1988.10478639
+
+* Davrieux F, Dufour D, Dardenne P, et al. LOCAL regression algorithm improves near infrared 
+spectroscopy predictions when the target constituent evolves in breeding populations. 
+J Infrared Spectrosc. 2016;24(2):109. doi:10.1255/jnirs.1213
+
+* Davrieux F, Dufour D, Dardenne P, et al. LOCAL regression algorithm improves near infrared 
+spectroscopy predictions when the target constituent evolves in breeding populations. 
+J Infrared Spectrosc. 2016;24(2):109. doi:10.1255/jnirs.1213
+
+* Dayal BS, MacGregor JF. Improved PLS algorithms. J Chemom. 1997;11(1):73-85. 
+doi:10.1002/(SICI)1099-128X(199701)11:1<73::AID-CEM435>3.0.CO;2-#.
+
+* Höskuldsson A. PLS regression methods. J Chemom. 1988;2(3):211-228. doi:10.1002/cem.1180020306.
+
+* Kim S, Kano M, Nakagawa H, Hasebe S. Estimation of active pharmaceutical ingredients content 
+using locally weighted partial least squares and statistical wavelength selection. 
+Int J Pharm. 2011;421(2):269-274. doi:10.1016/j.ijpharm.2011.10.007
+
+* Lesnoff, M., Metz, M., Roger, J.-M., 2020. Comparison of locally weighted PLS strategies 
+for regression and discrimination on agronomic NIR data. Journal of Chemometrics n/a, e3209. 
+https://doi.org/10.1002/cem.3209
+
+* Lesnoff, M., 2024. Averaging a local PLSR pipeline to predict chemical compositions and 
+nutritive values of forages and feed from spectral near infrared data. Chemometrics 
+and Intelligent Laboratory Systems 244, 105031. https://doi.org/10.1016/j.chemolab.2023.105031
+
+* Manne R. Analysis of two partial-least-squares algorithms for multivariate calibration. 
+Chemom Intell Lab Syst. 1987;2(1-3):187-197. doi:10.1016/0169-7439(87)80096-5.
+ 
+* Schaal, S., Atkeson, C.G., Vijayakumar, S., 2002. Scalable Techniques from Nonparametric 
+Statistics for Real Time Robot Learning. Applied Intelligence 17, 49–60. 
+https://doi.org/10.1023/A:1015727715131
+
+* Shenk J, Westerhaus M, Berzaghi P. Investigation of a LOCAL calibration procedure 
+for near infrared instruments. J Infrared Spectrosc. 1997;5(1):223. doi:10.1255/jnirs.115
+
+* Sicard E, Sabatier R. Theoretical framework for local PLS1 regression, and application 
+to a rainfall data set. Comput Stat Data Anal. 2006;51(2):1393-1410. doi:10.1016/j.csda.2006.05.002.
+
+* Wold H. Nonlinear iterative partial least squares (NIPALS) modeling: some current developments. 
+In: Multivariate Analysis II. Wright State University, Dayton, Ohio, USA.  June 19–24, 1972. 
+New York : Academic Press: Krishnaiah , P. R.; 1973:383 – 407.
+
+* Wold S, Sjöström M, Eriksson L. PLS-regression: a basic tool of chemometrics. 
+Chemom Intell Lab Syst. 2001;58(2):109-130. doi:10.1016/S0169-7439(01)00155-1.
+
+* Yoshizaki R, Kano M, Tanabe S, Miyano T. Process Parameter Optimization based on LW-PLS 
+in Pharmaceutical Granulation Process∗∗This work was partially supported by Japan Society for the 
+Promotion of Science (JSPS), Grant-in-Aid for Scientific Research (C) 24560940. IFAC-Pap. 
+2015;48(8):303-308. doi:10.1016/j.ifacol.2015.08.198.
+
+* Zhang X, Kano M, Li Y. Locally weighted kernel partial least squares regression based on 
+sparse nonlinear features for virtual sensing of nonlinear time-varying processes. 
+Comput Chem Eng. 2017;104:164-171. doi:10.1016/j.compchemeng.2017.04.014.
+
 
