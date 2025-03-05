@@ -5,20 +5,20 @@ weave_options:
   wrap: true
   term: false
   out_width: 60%
-  out_height: 50%
+  out_height: 30%
 ---
 
-The note introduces how to implement the 
+The note introduces how to implement the efficient and versatile 
 [kNN-LWPLSR algorithm](https://analyticalsciencejournals.onlinelibrary.wiley.com/doi/10.1002/cem.3209) 
 with [Julia](https://julialang.org/) package 
 [Jchemo](https://github.com/mlesnoff/Jchemo.jl).
 The workflow examples are illustrated with dataset 
 [challenge2008](https://github.com/mlesnoff/JchemoData.jl/tree/main?tab=readme-ov-file#challenge2018) 
-on near-infrared spectroscopy (NIRS). *Note:* almost all the contents of this note can be diretly translated 
-to the algorithm also provided in the R package 
+on near-infrared spectroscopy (NIRS). *Note:* almost the entire content of this note can be directly translated 
+to the algorithm provided in the R package 
 [rchemo](https://cran.r-project.org/web/packages/rchemo/index.html).
 
-kNN-LWPLSR is an efficient and versatile pipeline combining nearest neighborhood selection and partial least squared 
+kNN-LWPLSR combines nearest neighborhood selection and partial least squared 
 regression. kNN-LWPLSR is well suited when the predictive variables (*X*) are multicollinear and when 
 heterogeneity in the data generates non-linear relations between *X* and the response variables
 to predict (*Y*).  
@@ -27,32 +27,31 @@ to predict (*Y*).
 
 ###### 1.1 NIRS regression 
 
-NIRS is a fast and nondestructive analytical method used in many agronomic contexts, for instance to 
+NIRS is a fast and nondestructive analytical method used in many contexts, for instance in agronomy to 
 evaluate the nutritive quality of forages. Basically, spectral data *X* (matrix of *n* observations and 
-*p* wavelengths) are collected on samples of the material to study (e.g. forages) using a spectrometer, 
-and targeted response variables *Y = {y1, …, yq}* (*q* vectors of *n* observations; e.g. chemical 
-compositions) are measured precisely in laboratory. Regression models of *Y* on *X* are then fitted 
+*p* columns representing wavelengths) are collected on samples of the material to study (e.g. forages) using 
+a spectrometer, and targeted response variables *Y = { y1, …, yq }* (*q* vectors of *n* observations) (e.g. 
+chemical compositions) are measured precisely in laboratory. Regression models of *Y* on *X* are then fitted 
 and used to predict the response variables from new spectral observations. 
 
 Spectral data are known to be highly collinear in columns and, in general, matrix *X* is ill-conditioned. 
 Regularization methods have to be implemented to solve the regression problem. A very popular regularization 
-used for NIRS is the partial least squares regression (PLSR), which is one of the 
-regression methods based on *latent variables* (LVs). PLSR starts by reducing the dimension of *X* 
-(nb. columns) to a limited number *a << p* of orthogonal vectors *n x 1* maximizing the squared covariance 
-with *Y*, and referred to as scores *T (n x a)*. Response *Y* is then regressed on scores (latent variables) *T* 
-by a multiple linear regression (MLR). PLSR is in general very efficient when the relationship 
-between *X* and *Y* is linear. The method is fast (in particular the *Dayal & McGregor kernel #1* algorithm),
-even for large data. The parameter to tune is the dimension of *T* (number of LVs).
+used for NIRS is the partial least squares regression (PLSR) that is a *latent variables* (LVs) approach. 
+PLSR starts by reducing the dimension (nb. columns) of *X* to a limited number *a << p* of orthogonal vectors 
+*n x 1* maximizing the squared covariance with *Y*, and referred to as scores *T (n x a)*. Response *Y* is then 
+regressed on scores (latent variables) *T* by a multiple linear regression (MLR). PLSR is in general very efficient 
+when the relationship between *X* and *Y* is linear. The method is fast (in particular with the 
+*Dayal & McGregor kernel #1* algorithm), even for large data. The parameter to tune is the dimension of *T* (number of LVs).
 
 For several years, agronomic databases (e.g. in feed, food or soils researches) tend to aggregate 
 large numbers of samples of different natures or origins, bringing heterogeneity. This generates curvatures 
 and/or clustering in the data that can alter the linear relation between *X* and *Y* and therefore the PLSR 
 predictions. **Local PLSR** methodology is an easy approach that can turn out non-linearity in the data.  
-The general principle is, for each new observation to predict (*x_new*), to do a pre-selection of *k* nearest 
+The general principle is, for each new observation to predict (*xnew*), to do a pre-selection of *k* nearest 
 neighbors of the observation (the *kNN* selection step; see two illustrations in the figures below) and then to 
-apply a PLSR to the neighborhood (i.e. the *k* selected neighbors). 
+apply a PLSR to the neighborhood (i.e. the *k* selected neighbors). Two illustrations of neighborhood are presented below
 
-```julia, echo = false
+```julia, echo = false, out_width = "70%"
 using JLD2, CairoMakie
 using Jchemo, JchemoData
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -86,7 +85,7 @@ res = getknn(T, Tnew[i:i, :]; k = k, metric = :mah)
 s = res.ind[1]
 #CairoMakie.activate!() ;  
 #GLMakie.activate!() ;  
-f = Figure(size = (600, 400))
+f = Figure(size = (700, 500))
 mks = 8
 ax = Axis3(f[1, 1]; xlabel = "LV1", ylabel = "LV2", zlabel = "LV3", perspectiveness = 0.5) 
 scatter!(ax, T[:, 1], T[:, 2], T[:, 3]; markersize = mks, color = (:grey, .3))
@@ -94,18 +93,18 @@ scatter!(ax, T[s, 1], T[s, 2], T[s, 3]; markersize = mks, color = (:blue, .3))
 scatter!(ax, Tnew[i:i, 1], Tnew[i:i, 2], Tnew[i:i, 3]; markersize = 10, color = (:red, .8))
 cols = [:grey; :blue; :red]
 elt = [MarkerElement(color = cols[i], marker = '●', markersize = 10) for i in 1:3]
-lab = ["Training obs."; "Neighborhood"; "x_new (to predict)"]
+lab = ["Training obs."; "Neighborhood"; "xnew (to predict)"]
 #title = "kNN selection"
 #Legend(f[1, 2], elt, lab, title; nbanks = 1, rowgap = 10, framevisible = false)
 Legend(f[1, 2], elt, lab; nbanks = 1, rowgap = 10, framevisible = false)
 f
 ```
 
-```julia, echo = false
+```julia, echo = false, out_width = "70%"
 i = 300
 res = getknn(T, Tnew[i:i, :]; k = k, metric = :mah)
 s = res.ind[1] 
-f = Figure(size = (600, 400))
+f = Figure(size = (700, 500))
 mks = 10
 ax = Axis3(f[1, 1]; xlabel = "LV1", ylabel = "LV2", zlabel = "LV3", perspectiveness = 0.5) 
 scatter!(ax, T[:, 1], T[:, 2], T[:, 3]; markersize = mks, color = (:grey, .3))
@@ -113,20 +112,20 @@ scatter!(ax, T[s, 1], T[s, 2], T[s, 3]; markersize = mks, color = (:blue, .3))
 scatter!(ax, Tnew[i:i, 1], Tnew[i:i, 2], Tnew[i:i, 3]; markersize = 10, color = (:red, .8))
 cols = [:grey; :blue; :red]
 elt = [MarkerElement(color = cols[i], marker = '●', markersize = 10) for i in 1:3]
-lab = ["Training obs."; "Neighborhood"; "x_new (to predict)"]
+lab = ["Training obs."; "Neighborhood"; "xnew (to predict)"]
 Legend(f[1, 2], elt, lab; nbanks = 1, rowgap = 10, framevisible = false)
 f
 ```
 
 Many variants of local PLSR pipelines can be built, depending essentially on *(a)* how are selected the 
-neighborhoods and *(b)* the type of PLSR model implemented. One of these variants is the 
+neighborhoods and *(b)* the type of PLSR model implemented on the neighborhoods. The 
 [kNN-LWPLSR algorithm](https://analyticalsciencejournals.onlinelibrary.wiley.com/doi/10.1002/cem.3209)
-described below. 
+described below is one of these variants.
 
 ###### 1.2 Theory (summary)
 
-kNN-LWPLSR algorithm applies **locally weighted PLSR (LWPLSR)** (instead of common PLSR) on each neighborhood. 
-LWPLSR is a particular case of **weighted PLSR (WPLSR)**. In WPLSR, a *n x 1* vector of weights *w = (w_1, w_2, … w_n)* is embedded 
+kNN-LWPLSR applies **locally weighted PLSR (LWPLSR)**, instead of common PLSR, on each neighborhood. 
+LWPLSR is a particular case of weighted PLSR (WPLSR). In WPLSR, a *n x 1* vector of weights *w = ( w[1], w[2], … w[n] )* is embedded 
 into the PLSR equations. The PLS scores are computed by maximizing *w*-weighted squared covariances between the scores 
 and the response variables. The MLR prediction equation is computed by regressing y on the scores 
 using *w*-weighted least-squares. The *w*-weighting is also embedded in the centering and eventual 
@@ -134,13 +133,13 @@ scaling of the data. *Note:* in usual PLSR, a uniform weight, *1 / n*, is given 
 and therefore *w* can be removed from the the equations.
 
 In LWPLSR, the weight vector *w* is computed from a decreasing function, say *f*, of dissimilarities 
-(e.g. distances) between the *n* training observations and the observation to predict *x_new*. Closer is *x_i* 
-to *x_new*, higher is the weight *w_i* in the PLSR equations and therefore its importance to the prediction. 
+(e.g. distances) between the *n* training observations and the observation to predict *xnew*. Closer is *xi* 
+to *xnew*, higher is the weight *w[i]* in the PLSR equations and therefore its importance to the prediction. 
 This is the same distance-based principle as in the well-known locally weighted regression algorithm *LOESS*. 
 
-Compared to LWPLSR, kNN-LWPLSR simply adds a preliminary step: a neighborhood is selected around *x_new*, 
+Compared to LWPLSR, kNN-LWPLSR simply adds a preliminary step: a neighborhood is selected around *xnew*, 
 and then LWPLSR is applied to this neighborhood for prediction. kNN-LWPLSR can be viewed as 
-a LWPLSR with a double weighting: a first binary weighting (0: *x_i* is not a neighbor, 1: *x_i* is a neighbor)
+a LWPLSR with a double weighting: a first binary weighting (0: *xi* is not a neighbor, 1: *xi* is a neighbor)
 and a second weighting, intra-neighborhood, defined by function *f*. From an algorithmic point of view,
 it is much faster to compute kNN-LWPLSR than LWPLSR over the all dataset.  
 
@@ -192,7 +191,7 @@ Function `lwplsr` has several keyword parameters that can be specified. The full
 
 and the default values of the parameters can be displayed by
 
-```julia term = true
+```julia, term = true
 using Jchemo
 @pars lwplsr
 ```
@@ -204,7 +203,7 @@ The **main parameters** to consider are: `nlvdis`, `metric`, `h`, `k` and `nlv`.
 A first step is to choose if the dissimilarities between observations are computed after a dimension reduction of *X* or not. 
 This is managed by parameter `nlvdis`
 * If `nlvdis = 0`, there is not dimension reduction 
-* If `nlvdis > 0`, a preliminary global PLS with `nlvdis` LVs is done on the entire dataset *{X, y}* and the dissimilarities
+* If `nlvdis > 0`, a preliminary global PLS with `nlvdis` LVs is done on the entire dataset *{X, Y}* and the dissimilarities
     are computed on the resulting score matrix *T* (*n* x `nlvdis`)
     
 Then the type of dissimilarities has to be chosen, with parameter `metric`. The available metrics are those 
@@ -224,19 +223,19 @@ a preliminary dimension reduction since the inverse of the covariance matrix *co
 
 The next paramater to set is parameter `h`. Weight function [*f*](https://github.com/mlesnoff/Jchemo.jl/blob/master/src/winvs.jl)  
 has a negative exponential shape whose `h` defines its sharpness: lower is `h`, 
-sharper is function *f* and therefore more the closest neighbors of *x_new* have importance in the LWPLSR fit. The case `h` = *Inf* is 
+sharper is function *f* and therefore more the closest neighbors of *xnew* have importance in the LWPLSR fit. The case `h` = *Inf* is 
 the unweighted situation (all the components of *w* are equal) corresponding to a kNN-PLSR. 
 
 More precisely, weights are computed by *exp(-d / (h * MAD(d)))* and are set to 0 for extreme (potentially outlier) distances 
 such as d > Median(d) + 4 * MAD(d). Finally, weights are standardized to their maximal value. An illustration of the effect 
 of `h` is given below 
 
-```julia, echo = false
+```julia, echo = false, out_width = "80%"
 using Distributions
 x1 = rand(Chisq(10), 100) ;
 x2 = rand(Chisq(40), 10) ;
 d = [sqrt.(x1) ; sqrt.(x2)]
-f = Figure(size = (1000, 300))
+f = Figure(size = (1000, 200))
 ax1 = Axis(f, xlabel = "Distance", ylabel = "Nb. observations",)
 hist!(ax1, d, bins = 30)
 ##
@@ -274,7 +273,7 @@ Function *f* was chosen to be versatile and easily tunable.
 ###### 2.3 Dimensions of the neighborhood and the local models 
 
 The two final parameters to set are 
-* `k`: the number of observations defining the neighborhood for each obserbation,
+* `k`: the number of observations defining the neighborhood for each observation to predict,
 * `nlv`: the number of LVs considered in the local LWPLSR model. 
 Note that if `k` is larger than the training size, kNN-LWPLSR reduces to LWLSR.
 
@@ -282,13 +281,13 @@ Note that if `k` is larger than the training size, kNN-LWPLSR reduces to LWLSR.
 
 Dataset [challenge2008](https://github.com/mlesnoff/JchemoData.jl/tree/main?tab=readme-ov-file#challenge2018) 
 was built for the *prediction-challenge* organized at congress Chemometrics2018 (Paris, January 2018). It consists in NIR spectra 
-collected on various forages and feed samples. The variable to predict is the protein content.
+collected on various forages and feed samples. The response *Y* to predict is univariate and corresponds to the *protein concentration*.
 
 ###### 3.1 Data importation 
 
 The dataset contains
 * Object `X` (4075 *x* 680): The spectra, with wavelengths of 1120-2478 nm and a 2-nm step.
-* Object `Y` (4075 *x* 4): Variable `conc` (protein concentration to predict) and other meta-data.
+* Object `Y` (4075 *x* 4): Variable `conc` (protein concentration) and other meta-data.
 
 ```julia, results = "hidden"
 ## Preliminary loading of packages
@@ -329,7 +328,7 @@ plotsp(X, wl; size = (500, 300), nsamp = 30, xlabel = "Wavelength (nm)",
 ###### 3.2 Data preprocessing
 
 Two preprocessing steps are implemented to remove eventual non-informative physical effects in the spectra: a standard normal 
-variation transformation (SNV), followed by a  Savitsky-Golay derivation/smoothing
+variation transformation (SNV), followed by a 2nd-order Savitsky-Golay derivation
 
 ```julia, results = "hidden"
 model1 = snv()
@@ -339,14 +338,40 @@ fit!(model, X)
 Xp = transf(model, X) 
 ```
 
+The resulting spectra indicate the presence of high heterogeneity in the data
 ```julia
 plotsp(Xp, wl; size = (500, 300), nsamp = 30, xlabel = "Wavelength (nm)").f
 ```
 
+that is confirmed by the highly clustered pattern (related to the considered forages and feed) observed in 
+the PCA score space
+
+```julia, out_width = "70%"
+lev = mlev(Y.typ)
+nlev = length(lev)
+ztyp = recod_catbyint(Y.typ)
+nlv = 3
+model = pcasvd(; nlv)
+fit!(model, X)
+@head T = model.fitm.T
+colm = cgrad(:tab10, nlev; categorical = true, alpha = .5)
+i = 1
+f = Figure(size = (700, 500))
+ax = Axis3(f[1, 1]; xlabel = string("LV", i), ylabel = string("LV", i + 1), 
+        zlabel = string("LV", i + 2), title = "Pca", perspectiveness = .3) 
+scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 6, 
+    color = ztyp, colormap = colm)   
+elt = [MarkerElement(color = colm[i], marker = '●', markersize = 10) for i in 1:nlev]
+#elt = [PolyElement(polycolor = colm[i]) for i in 1:nlev]
+title = "Forage/Feed"
+Legend(f[1, 2], elt, lev, title; nbanks = 1, rowgap = 10, framevisible = false)
+f
+```
+
 ###### 3.3 Split training *vs.* test sets
 
-Here the split of the total data is already provided in the dataset (variable `Y.test`), but the split could also be 
-done *a posteriori* by *ad'hoc* sampling. 
+Here the split of the total data is already provided in the dataset (variable `Y.test`), but other splitting could be 
+done *a posteriori* by *ad'hoc* sampling 
 
 ```julia
 freqtable(Y.test)
@@ -370,7 +395,7 @@ ntest = nro(Xtest)
 ```
 
 It is convenient to check that the test set is globally well represented by the training set, 
-for instance using projections in a PCA score space 
+for instance using projection of the test in a PCA score space built from the training observations 
 
 ```julia, echo = false
 model = pcasvd(nlv = 15)
@@ -385,7 +410,7 @@ plotxy(T[:, i], T[:, i + 1], group; size = (500, 300), color = colm, xlabel = "P
 ```
 
 The plot *score (SD) vs. orthogonal (OD) distances* is even more powerful since it involves all dimensions of 
-the PCA model
+the PCA model (rather than only two or three plotted dimensions) 
 
 ```julia, echo = false
 model_sd = occsd() 
@@ -428,18 +453,18 @@ f
 
 A usual approach of model tuning is to do a grid search (evaluate the model performance over a grid of 
 parameter combinations) using a sampling design that splits the training data to several calibration 
-*vs.* validation sets. The popular K-Fold cross-validation (CV) is such a sampling design. Nevertheless, 
-CV requires to predict all of the training observations (here *ntrain* = 3,701 obs.) for each parameter combination, 
+*vs.* validation sets. The popular K-fold cross-validation (CV) is such a sampling design. Nevertheless, 
+K-fold CV requires to predict all of the training observations (here *ntrain* = 3,701 obs.) for each parameter combination, 
 which can be too time consuming for local PLSR and large datasets. A slighter is to split the training set
 to a calibration set and a validation set, and to run the grid search on the validation set. This is what is done in this 
 note, using the [`gridscore`](https://github.com/mlesnoff/Jchemo.jl/blob/master/src/gridscore.jl) function. 
 
-Below, the validation set is selected by systematic sampling over the rank of the *y* observations (but 
+Below, the validation set is selected by systematic sampling over the data (but 
 other sampling designs, e.g. random,  could be chosen)
 
 ```julia
 nval = 300
-s = sampsys(ytrain, nval)
+s = sampsys(1:ntrain, nval)
 Xcal = Xtrain[s.train, :]
 ycal = ytrain[s.train]
 Xval = Xtrain[s.test, :]
@@ -451,12 +476,13 @@ ncal = ntrain - nval
 Then the grid of parameters is built by
 
 ```julia 
-nlvdis = [15; 20; 25] ; metric = [:mah] 
+## More extended combinations could be considered below
+## (simplification for the example)
+nlvdis = [15] ; metric = [:mah] 
 h = [1; 2; 4; 6; Inf]
-k = [150; 200; 300; 400; 500; 700; 1000]
-nlv = 0:15
-nlvdis = 15 ; h = 1 ; k = 100 ; nlv = 0:3 
-pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k)
+k = [200; 350; 500; 1000]  
+nlv = 0:15 
+pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k)  # the grid
 ```
 
 ```julia 
@@ -473,7 +499,7 @@ res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, verbose
 
 that gives graphically
 
-```julia
+```julia, out_width = "70%"
 group = string.("nlvdis=", res.nlvdis, ", h=", res.h, ", k=", res.k) 
 plotgrid(res.nlv, res.y1, group; step = 1, xlabel ="Nb. LVs", ylabel = "RMSEP (Validation)").f
 ```
@@ -487,7 +513,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 ```
 
-and the the final prediction on the test are given by
+and the the final prediction of the test set is given by
 
 ```julia
 model = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
@@ -499,12 +525,9 @@ pred = predict(model, Xtest).pred
 
 Summary of the predictions
 
-```julia
+```julia, term = true
 mse(pred, ytest)
-```
-
-```julia
-rmsep(pred, ytest)
+rmsep(pred, ytest)    # estimate of generalization error
 ```
 
 ```julia
@@ -587,7 +610,7 @@ plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Predictions",
  
 
 * Yoshizaki R, Kano M, Tanabe S, Miyano T. Process Parameter Optimization based on LW-PLS 
-    in Pharmaceutical Granulation Process∗∗This work was partially supported by Japan Society for the 
+    in Pharmaceutical Granulation Process - This work was partially supported by Japan Society for the 
     Promotion of Science (JSPS), Grant-in-Aid for Scientific Research (C) 24560940. IFAC-Pap. 
     2015;48(8):303-308. doi:10.1016/j.ifacol.2015.08.198.
  
