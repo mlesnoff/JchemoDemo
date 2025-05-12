@@ -204,7 +204,7 @@ f = Figure(size = (800, 500))
 colsh = :default #:tab10
 colm = cgrad(colsh, nlev; alpha = .7, categorical = true) 
 mks = 10 ; i = 1
-ax = Axis3(f[1, 1]; aspect = (1, 1, 1), perspectiveness = 0.5)  
+ax = Axis3(f[1, 1]; aspect = (1, 1, 1), perspectiveness = .1)  
 for j = 1:nlev
     s = group .== lev[j]
     scatter!(ax, x[s], y[s], z[s]; markersize = mks, label = lev[j])
@@ -218,9 +218,9 @@ f
 n = 10
 x, y, z = randn(n), randn(n), randn(n)
 f = Figure(size = (1200, 400))
-ax1 = Axis3(f[1, 1]; aspect = (1, 1, 1), perspectiveness = 0.5)
-ax2 = Axis3(f[1, 2]; aspect = (1, 1, 1), perspectiveness = 0.5)
-ax3 = Axis3(f[1, 3]; aspect = :data, perspectiveness = 0.5)
+ax1 = Axis3(f[1, 1]; aspect = (1, 1, 1), perspectiveness = .1)
+ax2 = Axis3(f[1, 2]; aspect = (1, 1, 1), perspectiveness = .1)
+ax3 = Axis3(f[1, 3]; aspect = :data, perspectiveness = .1)
 scatter!(ax1, x, y, z; markersize = 15)
 meshscatter!(ax2, x, y, z; markersize = 0.25)
 hm = meshscatter!(ax3, x, y, z; markersize = 0.25, marker = Rect3f(Vec3f(0), Vec3f(1)), 

@@ -41,11 +41,11 @@ cgrad(colsh, 15; categorical = true)
 cgrad(colsh, 15; categorical = true)[1:2]
 cgrad(colsh, 15)[1:2]
 
-
 cgrad(:Dark2_5) 
 cgrad(:Dark2_5; categorical = true) 
 cgrad(:Dark2_5; categorical = true)[1:2]
 cgrad(:Dark2_5)[1:2]
+categorical_colors(:Dark2_5, 2)
 ## Note the difference with:
 cgrad(:Dark2_5, 2; categorical = true)
 
