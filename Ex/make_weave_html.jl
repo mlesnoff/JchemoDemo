@@ -4,6 +4,16 @@ path = "C:/Users/lesnoff/.julia/dev"
 path_jmd = joinpath(path, "JchemoDemo/Ex/jmd")
 path_html = joinpath(path, "JchemoDemo/docs/src/assets/html")
 
+
+
+
+
+
+
+
+
+
+
 nam = "cassav"
 #nam = "challenge2018"
 #nam = "corn"
