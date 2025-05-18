@@ -1,3 +1,34 @@
+
+```julia results = "hidden" 
+wlst = names(X)
+wl = parse.(Float64, wlst) 
+year = Y.year
+```
+
+```julia
+@head wlst
+```
+
+```julia
+@head wl
+```
+
+```julia
+@head year
+```
+
+```julia
+tab(year)
+```
+
+```julia
+lev = mlev(year)  # levels of variable 'year'
+```
+
+```julia results = "hidden"
+nlev = length(lev)
+```
+
 ```julia 
 groupnum = recod_catbyint(year)
 @head groupnum
