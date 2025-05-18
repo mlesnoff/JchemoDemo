@@ -12,7 +12,8 @@ zpath = joinpath(path_jmd, nam)
 @show f = filter(endswith("jmd"), readdir(zpath))
 nf = length(f) 
 for i = 1:nf 
-    @show string("-------- ", i)
+    #i = 2
+    @show string("-------- script:", i)
     @show f[i]
     #i = 11
     f[i]

@@ -1,15 +1,17 @@
 ---
-title: octane - Pca introduction 
+title: Pca introduction - scores - Cassav 
 weave_options:
   error: true
   wrap: true
   term: false
-  out_width: "60%" 
+  out_width: 60%
+  out_height: 30%
 ---
 
 ```julia
 using Jchemo, JchemoData
 using JLD2, CairoMakie, GLMakie
+using FreqTables
 ```
 
 ```julia
@@ -17,83 +19,112 @@ CairoMakie.activate!()
 #GLMakie.activate!() 
 ```
 
-#### Data importation
+#### Data importation and preparation
 
 ```julia
+using JchemoData, JLD2, CairoMakie, GLMakie
 path_jdat = dirname(dirname(pathof(JchemoData)))
-db = joinpath(path_jdat, "data/octane.jld2") 
+db = joinpath(path_jdat, "data/cassav.jld2")
 @load db dat
 @names dat
 ```
 
-#### Data preparation and short description
-
 ```julia
-X = dat.X 
-n = nro(X)
+X = dat.X
+Y = dat.Y
+ntot = nro(X)
 ```
 
-```julia term = true
-@head X
-```
-
-```julia
+```julia results = "hidden" 
 wlst = names(X)
 wl = parse.(Float64, wlst) 
+year = Y.year
 ```
 
-Six of the samples of the dataset contain added alcohol  (= 25, 26, and 36-39).
-
 ```julia
-plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance", title = "Octane data").f
+@head wlst
 ```
 
-#### Pca model fitting
+```julia
+@head wl
+```
 
 ```julia
-model = pcasvd(nlv = 6) 
-## For robust Pca, do:
-#model = pcasph; nlv = 6)
-## or:
-#model = pcaout; nlv = 6)
+@head year
+```
+
+```julia
+tab(year)
+```
+
+Levels of the year variable:
+```julia
+lev = mlev(year)
+```
+
+```julia results = "hidden"
+nlev = length(lev)
+```
+
+```julia 
+groupnum = recod_catbyint(year)
+@head groupnum
+```
+```julia
+freqtable(year, groupnum)
+```
+
+#### Model fitting
+
+```julia
+model = pcasvd(nlv = 20) 
 fit!(model, X)  
 @names model
-@names model.fitm
 ```
-
-**Scores:**
-
-```julia term = true
-@head T = model.fitm.T 
-```
-
-**2-D score space** 
 
 ```julia
+fitm = model.fitm
+@names fitm
+```
+
+#### Scores T
+
+The scores are already computed and returned in object `fitm` 
+
+```julia term = true
+T = fitm.T
+@head T 
+```
+
+but can also be computed by projecting the data on the loadings
+(which is done to compute the scores of new data not used in the model fitting)
+
+```julia term = true
+@head transf(model, X) 
+```
+
+#### 2-D score spaces 
+
+For instance, the space PC1-PC2 can be plotted by
+
+```julia
+CairoMakie.activate!()
 plotxy(T[:, 1], T[:, 2]; zeros = true, xlabel = "PC1", ylabel = "PC2").f
 ```
 
-```julia
-i = 1
-plotxy(T[:, i], T[:, i + 1]; color = (:red, .5), xlabel = string("PC", i), 
-    ylabel = string("PC", i + 1), zeros = true, markersize = 15).f
-```
+More information (recommended in practice) can be displayed using function `plotlv`
 
 ```julia
-f = Figure(size = (600, 400))     
-ax = list(4)
-l = reshape(1:4, 2, 2)
-for j = 1:2
-    for k = 1:2
-        zl = l[j, k]
-        ax[zl] = Axis(f[j, k]; xlabel = string("PC", zl), ylabel = string("PC", zl + 1))
-        scatter!(ax[zl], T[:, zl:(zl + 1)]; color = (:red, .5))
-    end
-end
-f    
+plotlv(T[:, 1:6]; shape = (2, 3), color = (:blue, .5), zeros = true, xlabel = "PC", ylabel = "PC").f
 ```
 
-**3-D score space** 
+See functions `plotxy` and `plotlv` for more options.
+
+#### 3-D score spaces
+
+In general, 3D representations of the score space are more informative than 2D representations,
+especially whith interactive axe-rotation (for this last, GLMakie has to be activate, as below in the 
+'#' line).
 
 ```julia
 CairoMakie.activate!()  
@@ -102,26 +133,11 @@ CairoMakie.activate!()
 
 ```julia
 i = 1
-f = Figure(size = (700, 500))
-ax = Axis3(f[1, 1]; perspectiveness = 0.2, xlabel = string("PC", i), 
-    ylabel = string("PC", i + 1), zlabel = string("PC", i + 2), title = "Pca score space")
-scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 15)
-f
+size = (500, 250)
+plotxyz(T[:, i], T[:, i + 1], T[:, i + 2]; size, color = (:red, .3), markersize = 10, 
+    xlabel = string("PC", i), ylabel = string("PC", i + 1), zlabel = string("PC", i + 2), 
+    title = "Pca score space").f
 ```
 
-```julia
-CairoMakie.activate!()  
-#GLMakie.activate!() 
-```
-
-```julia
-i = 1
-f = Figure(size = (700, 500))
-ax = Axis3(f[1, 1]; perspectiveness = 0.2, xlabel = string("PC", i), 
-    ylabel = string("PC", i + 1), zlabel = string("PC", i + 2), title = "Pca score space")
-scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 15)
-text!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; text = string.(1:n), fontsize = 15)
-f
-```
-
+See function `plotxyz` for more options.
 

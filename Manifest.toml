@@ -2,7 +2,7 @@
 
 julia_version = "1.11.5"
 manifest_format = "2.0"
-project_hash = "29530a533fe182d6b5733ee2d519c9c5157065c7"
+project_hash = "195b9bf623ed42e7972c7f484acee0982d9a31f6"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "e2478490447631aedba0823d4d7a80b2cc8cdb32"
@@ -1141,9 +1141,18 @@ version = "0.21.4"
 
 [[deps.Jchemo]]
 deps = ["DataFrames", "DataInterpolations", "DecisionTree", "Distances", "Distributions", "ImageFiltering", "LIBSVM", "LinearAlgebra", "Loess", "Makie", "NearestNeighbors", "Random", "SparseArrays", "Statistics", "StatsBase", "UMAP"]
-git-tree-sha1 = "5985dfb7c00c56f0919bb1441ad9edca7b5c0493"
+git-tree-sha1 = "5aa7ace31e58c9dc02508b475c9e56d684d56999"
+repo-rev = "master"
+repo-url = "https://github.com/mlesnoff/Jchemo.jl.git"
 uuid = "fbca9394-dd0a-4d1c-b066-ae75f6ef1ad5"
-version = "0.8.9"
+version = "0.8.10"
+
+[[deps.JchemoData]]
+git-tree-sha1 = "b40b16230dc4a5ece2670e45a54428b830f0dec5"
+repo-rev = "main"
+repo-url = "https://github.com/mlesnoff/JchemoData.jl.git"
+uuid = "3440f217-e3fb-4eda-bd77-d99cfb805e7c"
+version = "0.0.0"
 
 [[deps.JpegTurbo]]
 deps = ["CEnum", "FileIO", "ImageCore", "JpegTurbo_jll", "TOML"]
