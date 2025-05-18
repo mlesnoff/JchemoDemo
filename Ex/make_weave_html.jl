@@ -6,7 +6,6 @@ path_jmd = joinpath(path, "JchemoDemo/Ex/jmd")
 path_html = joinpath(path, "JchemoDemo/docs/src/assets/html")
 ## End
 
-
 nam = "Exploratory/Pca"
 zpath = joinpath(path_jmd, nam)
 @show f = filter(endswith("jmd"), readdir(zpath))
