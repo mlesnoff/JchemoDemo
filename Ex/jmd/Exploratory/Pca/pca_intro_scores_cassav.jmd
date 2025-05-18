@@ -15,7 +15,7 @@ using JLD2, CairoMakie, GLMakie
 
 #### Data importation
 
-```julia
+```julia term = true
 using JchemoData, JLD2, CairoMakie, GLMakie
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/cassav.jld2")
@@ -23,24 +23,27 @@ db = joinpath(path_jdat, "data/cassav.jld2")
 @names dat
 ```
 
-```julia
+```julia term = true
 X = dat.X ;
+```
+
+```julia term = true
 @head X
 ```
 
-```julia
+```julia term = true
 names(X)
 ```
 
 #### Model fitting
 
-```julia
-model = pcasvd(nlv = 10) 
+```julia term = true
+model = pcasvd(nlv = 10) ;
 fit!(model, X)  
 @names model
 ```
 
-```julia
+```julia term = true
 fitm = model.fitm ;
 @names fitm
 ```
@@ -49,31 +52,32 @@ fitm = model.fitm ;
 
 The scores are already computed and returned in sub-object `fitm` 
 
-```julia
-T = fitm.T 
+```julia term = true
+T = fitm.T ;
 @head T 
 ```
 
 but can also be computed by projecting the data on the loadings
 (more generally, this projection is done to compute the scores of new data not used in the model fitting)
 
-```julia
+```julia term = true
 @head transf(model, X) 
 ```
 
 #### % Variance explained
 
-```julia
+```julia term = true
 res = summary(model, X) ;
 @names res
 ```
 
-```julia
-z = res.explvarx
+```julia term = true
+pcts = res.explvarx
 ```
 
-```julia
-plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "nb. PCs", ylabel = "% variance explained").f
+```julia term = true
+CairoMakie.activate!()
+plotgrid(pcts.nlv, 100 * pcts.pvar; step = 1, xlabel = "nb. PCs", ylabel = "% variance explained").f
 ```
 
 #### 2-D score spaces 
@@ -81,7 +85,6 @@ plotgrid(z.nlv, 100 * z.pvar; step = 1, xlabel = "nb. PCs", ylabel = "% variance
 For instance, the space PC1-PC2 can be plotted by
 
 ```julia
-CairoMakie.activate!()
 plotxy(T[:, 1], T[:, 2]; zeros = true, xlabel = "PC1", ylabel = "PC2").f
 ```
 
