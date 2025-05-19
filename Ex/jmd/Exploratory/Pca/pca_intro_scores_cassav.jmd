@@ -8,7 +8,7 @@ weave_options:
   out_height: 30%
 ---
 
-```julia
+```julia term = true
 using Jchemo, JchemoData
 using JLD2, CairoMakie, GLMakie
 ```
@@ -24,27 +24,20 @@ db = joinpath(path_jdat, "data/cassav.jld2")
 ```
 
 ```julia term = true
-X = dat.X ;
-```
-
-```julia term = true
-@head X
-```
-
-```julia term = true
+X = dat.X
 names(X)
 ```
 
 #### Model fitting
 
 ```julia term = true
-model = pcasvd(nlv = 10) ;
+model = pcasvd(nlv = 10)
 fit!(model, X)  
 @names model
 ```
 
 ```julia term = true
-fitm = model.fitm ;
+fitm = model.fitm ; 
 @names fitm
 ```
 
@@ -53,8 +46,7 @@ fitm = model.fitm ;
 The scores are already computed and returned in sub-object `fitm` 
 
 ```julia term = true
-T = fitm.T ;
-@head T 
+@head T = fitm.T 
 ```
 
 but can also be computed by projecting the data on the loadings
@@ -84,14 +76,15 @@ plotgrid(pcts.nlv, 100 * pcts.pvar; step = 1, xlabel = "nb. PCs", ylabel = "% va
 
 For instance, the space PC1-PC2 can be plotted by
 
-```julia
+```julia term = true
 plotxy(T[:, 1], T[:, 2]; zeros = true, xlabel = "PC1", ylabel = "PC2").f
 ```
 
 More information (recommended in practice) can be displayed using function `plotlv`
 
-```julia
-plotlv(T[:, 1:6]; shape = (2, 3), color = (:blue, .5), zeros = true, xlabel = "PC", ylabel = "PC").f
+```julia term = true
+plotlv(T[:, 1:6]; shape = (2, 3), color = (:blue, .5), zeros = true, xlabel = "PC", 
+    ylabel = "PC").f
 ```
 
 See functions `plotxy` and `plotlv` for more options.
@@ -101,7 +94,7 @@ See functions `plotxy` and `plotlv` for more options.
 3D representations of the score space are often more informative than 2D representations,
 especially when using interactive axe-rotation.
 
-```julia
+```julia term = true
 CairoMakie.activate!()  
 #GLMakie.activate!()    # for interactive axe-rotation
 

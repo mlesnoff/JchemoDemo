@@ -7,18 +7,18 @@ path_html = joinpath(path, "JchemoDemo/docs/src/assets/html")
 ## End
 
 nam = "Exploratory/Pca"
-zpath = joinpath(path_jmd, nam)
-@show f = filter(endswith("jmd"), readdir(zpath))
+path_scripts = joinpath(path_jmd, nam)
+@show f = filter(endswith("jmd"), readdir(path_scripts))
 nf = length(f) 
 for i = 1:nf 
-    #i = 5
+    #i = 4
     @show string("-------- script:", i)
     @show f[i]
     f[i]
-    db = joinpath(zpath, f[i])
+    nam_script = joinpath(path_scripts, f[i])
     out_path = joinpath(path_html, nam)
     println("Time")
-    @time weave(db; out_path = out_path, doctype = "md2html", fig_path = nothing, fig_ext = nothing)
+    @time weave(nam_script; out_path, doctype = "md2html", fig_path = nothing, fig_ext = nothing)
 end
 
 
