@@ -5,7 +5,7 @@ makedocs(
     pages = [
         "Home" => "index.md",
         "Exploratory" => "exploratory.md",
-        #"Regression" => "regression.md",
+        "Regression" => "regression.md"
         ]
     )
 

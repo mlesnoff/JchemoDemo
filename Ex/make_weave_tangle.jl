@@ -7,17 +7,18 @@ path_src = joinpath(path, "JchemoDemo/Ex/src")
 ## End
 
 nam = "Exploratory/Pca"
-zpath = joinpath(path_jmd, nam)
-@show f = filter(endswith("jmd"), readdir(zpath))
+#nam = "Regression/Plsr"
+path_scripts = joinpath(path_jmd, nam)
+@show f = filter(endswith("jmd"), readdir(path_scripts))
 nf = length(f) 
 for i = 1:nf 
     #i = 4
     @show string("-------- script:", i)
     @show f[i]
     f[i]
-    db = joinpath(zpath, f[i])
+    db = joinpath(path_scripts, f[i])
     out_path = joinpath(path_src, nam)
-    Weave.tangle(db; out_path = out_path)
+    Weave.tangle(db; out_path)
 end
 
 

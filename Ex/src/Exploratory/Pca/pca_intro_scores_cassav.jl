@@ -10,26 +10,20 @@ db = joinpath(path_jdat, "data/cassav.jld2")
 @names dat
 
 
-X = dat.X ;
-
-
-@head X
-
-
+X = dat.X
 names(X)
 
 
-model = pcasvd(nlv = 10) ;
+model = pcasvd(nlv = 10)
 fit!(model, X)  
 @names model
 
 
-fitm = model.fitm ; ;
+fitm = model.fitm ; 
 @names fitm
 
 
-T = fitm.T ;
-@head T
+@head T = fitm.T
 
 
 @head transf(model, X)
@@ -49,7 +43,8 @@ plotgrid(pcts.nlv, 100 * pcts.pvar; step = 1, xlabel = "nb. PCs", ylabel = "% va
 plotxy(T[:, 1], T[:, 2]; zeros = true, xlabel = "PC1", ylabel = "PC2").f
 
 
-plotlv(T[:, 1:6]; shape = (2, 3), color = (:blue, .5), zeros = true, xlabel = "PC", ylabel = "PC").f
+plotlv(T[:, 1:6]; shape = (2, 3), color = (:blue, .5), zeros = true, xlabel = "PC", 
+    ylabel = "PC").f
 
 
 CairoMakie.activate!()  
