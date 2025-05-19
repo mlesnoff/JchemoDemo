@@ -658,13 +658,11 @@ div.title {text-align: center;}
           
         </div>
 
-        
-<pre class='hljl'>
-<span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>Jchemo</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>JchemoData</span><span class='hljl-t'>
-</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>JLD2</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>CairoMakie</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>GLMakie</span>
+        <pre class='hljl'>
+<span class='hljl-nB'>julia&gt; </span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>Jchemo</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>JchemoData</span><span class='hljl-t'>
+
+</span><span class='hljl-nB'>julia&gt; </span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>JLD2</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>CairoMakie</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>GLMakie</span><span class='hljl-t'>e</span>
 </pre>
-
-
 
 <h4>Data importation</h4>
 
@@ -746,8 +744,7 @@ Jchemo.JchemoModel{typeof(pcasvd), Base.Pairs{Symbol, Int64, Tuple{Symbol}, @Nam
 </pre>
 
 <pre class='hljl'>
-<span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>fitm</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>model</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-t'>
-Jchemo.Pca([-1.7408469178373422 -1.2500257197705955 … 0.023458246040500952 -0.04836017853443731; -2.1748241463392683 -1.493408567379891 … -0.013572157081123196 -0.016200270268798854; … ; -0.5605404152122073 1.20506856932747 … -0.020906031652987104 0.0051424604110025095; 2.415216224648455 1.214663167649725 … 0.05803836440503177 -0.013495040609918829], [0.018271624366877005 -0.033552802630824316 … -0.0173764124708351 -0.015409059566209056; 0.018611973794021228 -0.03356273557771147 … -0.020662327086888473 -0.011920592336183864; … ; 0.055950400465689054 0.05939569798804291 … -0.06066660390019651 -0.003970784543815685; 0.05601841469342258 0.059646586066204536 … -0.061530278726182934 -0.003712871666161623], [2.2225982503102286, 1.2018574877043577, 0.5175100956923625, 0.1654899198367021, 0.11713241483626197, 0.08694557791088678, 0.07878560699858257, 0.0489257222811039, 0.0422546724721427, 0.03502419039131754  …  3.161707355155957e-5, 3.118616191026034e-5, 3.068233998613417e-5, 2.981635161497466e-5, 2.8990247649687014e-5, 2.753051336794493e-5, 2.5379330440874318e-5, 2.4293416218018302e-5, 2.406751548558083e-5, 3.132585417776874e-15], [0.38946291428571433, 0.396749425, 0.4041503596428571, 0.4113644389285714, 0.4182143871428571, 0.4247364964285713, 0.43109217178571424, 0.4373192424999999, 0.44333429, 0.44912851249999997  …  1.7159855617857145, 1.719229022142857, 1.7222601514285711, 1.7250431475, 1.727576587142857, 1.7299163750000004, 1.7320800407142856, 1.7340503439285717, 1.7357941239285717, 1.7373623010714279], [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0  …  1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], Jchemo.Weight{Float64}([0.0035714285714285713, 0.0035714285714285713, 0.0035714285714285713, 0.0035714285714285713, 0.0035714285714285713, 0.0035714285714285713, 0.0035714285714285713, 0.0035714285714285713, 0.0035714285714285713, 0.0035714285714285713  …  0.0035714285714285713, 0.0035714285714285713, 0.0035714285714285713, 0.0035714285714285713, 0.0035714285714285713, 0.0035714285714285713, 0.0035714285714285713, 0.0035714285714285713, 0.0035714285714285713, 0.0035714285714285713]), nothing, Jchemo.ParPca(10, false))
+<span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>fitm</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>model</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-t'> </span><span class='hljl-p'>;</span><span class='hljl-t'>
 
 </span><span class='hljl-nB'>julia&gt; </span><span class='hljl-nd'>@names</span><span class='hljl-t'> </span><span class='hljl-n'>fitm</span><span class='hljl-t'>
 (:T, :V, :sv, :xmeans, :xscales, :weights, :niter, :par)</span>
