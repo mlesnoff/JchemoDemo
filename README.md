@@ -4,8 +4,9 @@
 
 **What is provided:**
 
-1. **Examples with Jchemo**
+1. **Examples with Jchemo**  Not available at the moment - Re-building the examples
     - [**Html**](https://mlesnoff.github.io/JchemoDemo-dev/docs/build/) examples of data analyses 
+    - [**Scripts**]() Not available at the moment - Re-building the examples
 
 2. **Examples of general Julia syntax** (Does not use Jchemo)
     - [**Scripts**](https://github.com/mlesnoff/JchemoDemo-dev/tree/main/Misc/src) 
