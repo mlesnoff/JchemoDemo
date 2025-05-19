@@ -6,15 +6,14 @@ path_jmd = joinpath(path, "JchemoDemo/Ex/jmd")
 path_html = joinpath(path, "JchemoDemo/docs/src/assets/html")
 ## End
 
-
 nam = "Exploratory/Pca"
 zpath = joinpath(path_jmd, nam)
 @show f = filter(endswith("jmd"), readdir(zpath))
 nf = length(f) 
 for i = 1:nf 
-    @show string("-------- ", i)
+    #i = 5
+    @show string("-------- script:", i)
     @show f[i]
-    #i = 11
     f[i]
     db = joinpath(zpath, f[i])
     out_path = joinpath(path_html, nam)
@@ -24,7 +23,8 @@ end
 
 
 
-C:\Users\lesnoff\.julia\dev\JchemoDemo\Ex\jmd\Exploratory\Pca
+
+
 
 
 

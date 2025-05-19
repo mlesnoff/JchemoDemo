@@ -1,22 +1,22 @@
 # JchemoDemo
 
-**JchemoDemo** is a **Julia project** (with its [**environment**](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)) demonstrating basic functions of package [**Jchemo.jl**](https://github.com/mlesnoff/Jchemo.jl) and the general syntax. This project is also used to deliver ad'hoc **training sessions**. 
+**JchemoDemo** is a **Julia project** (with its [**environment**](https://github.com/mlesnoff/JchemoDemo-dev/blob/master/Project.toml)) demonstrating basic functions of package [**Jchemo.jl**](https://github.com/mlesnoff/Jchemo.jl) and the general syntax. This project is also used to deliver ad'hoc **training sessions**. 
 
 **What is provided:**
 
 1. **Examples with Jchemo**
-    - [**Html**](https://mlesnoff.github.io/JchemoDemo/docs/build/) examples of data analyses 
+    - [**Html**](https://mlesnoff.github.io/JchemoDemo-dev/docs/build/) examples of data analyses 
 
 2. **Examples of general Julia syntax** (Does not use Jchemo)
-    - [**Scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Misc/src) 
+    - [**Scripts**](https://github.com/mlesnoff/JchemoDemo-dev/tree/main/Misc/src) 
 
 3. **About the Julia environment**
-    - [**Tips to start**](https://github.com/mlesnoff/JchemoDemo/blob/main/Misc/config.md)
+    - [**Tips to start**](https://github.com/mlesnoff/JchemoDemo-dev/blob/main/Misc/config.md)
 
 4. **Some methodological materials**
-    - [**Slides**](https://github.com/mlesnoff/JchemoDemo/tree/main/Misc/annexes)
+    - [**Slides**](https://github.com/mlesnoff/JchemoDemo-dev/tree/main/Misc/annexes)
 
-The **datasets** used in the examples are stored in package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl), already installed in the [**JchemoDemo environment**](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml).
+The **datasets** used in the examples are stored in package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl), already installed in the [**JchemoDemo environment**](https://github.com/mlesnoff/JchemoDemo-dev/blob/master/Project.toml).
 
 
 ## <span style="color:green"> **Author** </span> 
