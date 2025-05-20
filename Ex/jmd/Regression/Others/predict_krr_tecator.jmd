@@ -1,0 +1,159 @@
+---
+title: Krr - prediction - tecator
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  out_width: 60%
+  out_height: 30%
+---
+
+```julia term = true
+using Jchemo, JchemoData
+using JLD2, CairoMakie
+```
+
+#### Data importation
+
+```julia term = true
+path_jdat = dirname(dirname(pathof(JchemoData)))
+db = joinpath(path_jdat, "data/tecator.jld2") 
+@load db dat
+@names dat
+```
+
+```julia term = true
+X = dat.X
+Y = dat.Y 
+typ = Y.typ ;
+tab(typ)
+```
+
+```julia term = true
+wlst = names(X) ;
+wl = parse.(Float64, wlst) 
+#plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+```
+
+#### Preprocessing
+
+```julia term = true
+model1 = snv()
+model2 = savgol(npoint = 15, deriv = 2, degree = 3)
+model = pip(model1, model2)
+fit!(model, X)
+@head Xp = transf(model, X) 
+#plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+```
+
+#### Split Tot ==> Train + Test
+
+```julia term = true
+s = typ .== "train" ;
+Xtrain = Xp[s, :] ; 
+Ytrain = Y[s, :] ;
+Xtest = rmrow(Xp, s) ;
+Ytest = rmrow(Y, s) ;
+ntrain = nro(Xtrain)
+ntest = nro(Xtest)
+ntot = ntrain + ntest
+(ntot = ntot, ntrain, ntest)
+```
+
+**Working response y**
+
+```julia term = true
+namy = names(Y)[1:3]
+j = 2  
+nam = namy[j]    # work on the j-th y-variable
+ytrain = Ytrain[:, nam] ;
+ytest = Ytest[:, nam] ;
+```
+
+#### Model fitting
+
+```julia term = true
+gamma = 100
+lb = 1e-3
+model = krr(; gamma, lb)
+fit!(model, Xtrain, ytrain)
+@names model
+fitm = model.fitm ;
+@names fitm
+```
+
+#### Predictions
+
+```julia term = true
+@head pred = predict(model, Xtest).pred
+```
+
+```julia term = true
+@head predict(model, Xtest; lb = .1).pred
+```
+
+```julia term = true
+predict(model, Xtest; lb = [.1, 1e-3]).pred
+```
+
+```julia term = true
+rmsep(pred, ytest)
+```
+
+```julia term = true
+bias(pred, ytest)
+```
+
+```julia term = true
+mse(pred, ytest)
+```
+
+```julia term = true
+r = residreg(pred, ytest) # residuals
+```
+
+#### Plotting predictions vs. observed data
+
+```julia term = true 
+plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title = string("Test set - variable ", nam), 
+    xlabel = "Prediction", ylabel = "Observed").f   
+```
+
+**Residuals**
+
+```julia term = true
+plotxy(ytest, r; size = (500, 400), color = (:red, .5), zeros = true, title = string("Test set - variable ", nam), 
+    xlabel = "Observed (Test)", ylabel = "Residuals").f   
+```
+
+#### Adding a smoothing
+
+```julia term = true
+zpred = vec(pred) ;
+zr = vec(r) ;
+```
+
+**Predictions**
+
+```julia term = true
+model_lo = loessr(span = 1/2) 
+fit!(model_lo, zpred, ytest)
+pred_lo = predict(model_lo, sort(zpred)).pred ;
+f, ax = plotxy(zpred, ytest; size = (500, 400), bisect = true, title = string("Test set - variable ", nam), 
+    xlabel = "Predicted", ylabel = "Observed") ;
+lines!(ax, sort(zpred), vec(pred_lo); color = :red)
+f    
+```
+
+**Residuals**
+
+```julia term = true
+model_lo = loessr(span = 1/2) 
+fit!(model_lo, zpred, zr)
+pred_lo = predict(model_lo, sort(zpred)).pred ;
+f, ax = plotxy(zpred, zr; size = (500, 400), title = string("Test set - variable ", nam), 
+    xlabel = "Predictions", ylabel = "Residuals") ;
+lines!(ax, sort(zpred), vec(pred_lo); color = :red)
+hlines!(ax, 0; color = :grey)
+f    
+```
