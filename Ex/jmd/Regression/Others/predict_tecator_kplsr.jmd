@@ -1,5 +1,5 @@
 ---
-title: Krr - prediction - tecator
+title: Prediction - tecator - Kplsr
 weave_options:
   error: true
   wrap: true
@@ -74,8 +74,9 @@ ytest = Ytest[:, nam] ;
 
 ```julia term = true
 gamma = 100
-lb = 1e-3
-model = krr(; gamma, lb)
+nlv = 15
+model = kplsr(; gamma, nlv)   # For direct KPLSR (Bennett & Embrechts, 2003), use as below:
+#model = dkplsr(; gamma, nlv)  
 fit!(model, Xtrain, ytrain)
 @names model
 fitm = model.fitm ;
@@ -89,11 +90,11 @@ fitm = model.fitm ;
 ```
 
 ```julia term = true
-@head predict(model, Xtest; lb = .1).pred
+@head predict(model, Xtest; nlv = 2).pred
 ```
 
 ```julia term = true
-predict(model, Xtest; lb = [.1, 1e-3]).pred
+predict(model, Xtest; nlv = 0:2).pred
 ```
 
 ```julia term = true

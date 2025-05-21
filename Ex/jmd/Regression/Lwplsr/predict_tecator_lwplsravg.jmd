@@ -1,5 +1,5 @@
 ---
-title: Knn-Lwplsr - prediction - tecator
+title: Prediction - tecator - Knn-LwplsrAvg 
 weave_options:
   error: true
   wrap: true
@@ -75,8 +75,8 @@ ytest = Ytest[:, nam] ;
 ```julia term = true
 nlvdis = 10 ; metric = :mah
 h = 3 ; k = 30 
-nlv = 4
-model = lwplsr(; nlvdis, metric, h, k, nlv) 
+nlv = 1:5
+model = lwplsravg(; nlvdis, metric, h, k, nlv) 
 fit!(model, Xtrain, ytrain)
 @names model
 fitm = model.fitm ;

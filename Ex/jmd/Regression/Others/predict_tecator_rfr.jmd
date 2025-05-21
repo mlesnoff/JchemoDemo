@@ -1,5 +1,5 @@
 ---
-title: Kplsr - prediction - tecator
+title: Prediction - tecator - Rfr
 weave_options:
   error: true
   wrap: true
@@ -25,6 +25,7 @@ db = joinpath(path_jdat, "data/tecator.jld2")
 ```julia term = true
 X = dat.X
 Y = dat.Y 
+ntot, p = size(X)
 typ = Y.typ ;
 tab(typ)
 ```
@@ -56,7 +57,6 @@ Xtest = rmrow(Xp, s) ;
 Ytest = rmrow(Y, s) ;
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
-ntot = ntrain + ntest
 (ntot = ntot, ntrain, ntest)
 ```
 
@@ -73,10 +73,11 @@ ytest = Ytest[:, nam] ;
 #### Model fitting
 
 ```julia term = true
-gamma = 100
-nlv = 15
-model = kplsr(; gamma, nlv)   # For direct KPLSR (Bennett & Embrechts, 2003), use as below:
-#model = dkplsr(; gamma, nlv)  
+n_trees = 100
+partial_sampling = .7
+n_subfeatures = p / 3
+max_depth = 20
+model = rfr(; n_trees, partial_sampling, n_subfeatures, max_depth)
 fit!(model, Xtrain, ytrain)
 @names model
 fitm = model.fitm ;
@@ -87,14 +88,6 @@ fitm = model.fitm ;
 
 ```julia term = true
 @head pred = predict(model, Xtest).pred
-```
-
-```julia term = true
-@head predict(model, Xtest; nlv = 2).pred
-```
-
-```julia term = true
-predict(model, Xtest; nlv = 0:2).pred
 ```
 
 ```julia term = true

@@ -1,5 +1,5 @@
 ---
-title: Knn-LwplsrAvg - prediction - tecator
+title: Prediction - tecator - Plsr
 weave_options:
   error: true
   wrap: true
@@ -48,6 +48,11 @@ fit!(model, X)
 
 #### Split Tot ==> Train + Test
 
+The model is fitted on **Train**, and the generalization error is estimated on **Test**.
+In this example, the training set is already defined in variable `typ` of the dataset,
+and the test set is defined by the remaining samples. But **Tot** could also be split *a posteriori*, 
+for instance by sampling (random, systematic or any other designs). 
+
 ```julia term = true
 s = typ .== "train" ;
 Xtrain = Xp[s, :] ; 
@@ -73,10 +78,9 @@ ytest = Ytest[:, nam] ;
 #### Model fitting
 
 ```julia term = true
-nlvdis = 10 ; metric = :mah
-h = 3 ; k = 30 
-nlv = 1:5
-model = lwplsravg(; nlvdis, metric, h, k, nlv) 
+nlv = 15
+model = plskern(; nlv)    # which is the same as below:
+#model = plskern(nlv = 15)
 fit!(model, Xtrain, ytrain)
 @names model
 fitm = model.fitm ;
@@ -87,6 +91,14 @@ fitm = model.fitm ;
 
 ```julia term = true
 @head pred = predict(model, Xtest).pred
+```
+
+```julia term = true
+@head predict(model, Xtest; nlv = 2).pred
+```
+
+```julia term = true
+predict(model, Xtest; nlv = 0:2).pred
 ```
 
 ```julia term = true
