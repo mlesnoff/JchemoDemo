@@ -35,7 +35,7 @@ wl = parse.(Float64, wlst)
 #plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
-#### Preprocessing
+**Preprocessing**
 
 ```julia term = true
 model1 = snv()

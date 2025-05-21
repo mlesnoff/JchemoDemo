@@ -1141,7 +1141,7 @@ version = "0.21.4"
 
 [[deps.Jchemo]]
 deps = ["DataFrames", "DataInterpolations", "DecisionTree", "Distances", "Distributions", "ImageFiltering", "LIBSVM", "LinearAlgebra", "Loess", "Makie", "NearestNeighbors", "Random", "SparseArrays", "Statistics", "StatsBase", "UMAP"]
-git-tree-sha1 = "91c24f52f1fe382d02815fd4c6843f5cf4fe7254"
+git-tree-sha1 = "d26fcf4b77604366487548bbd26a9486643346a5"
 repo-rev = "master"
 repo-url = "https://github.com/mlesnoff/Jchemo.jl.git"
 uuid = "fbca9394-dd0a-4d1c-b066-ae75f6ef1ad5"

@@ -35,7 +35,7 @@ wl = parse.(Float64, wlst)
 #plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
-#### Preprocessing
+**Preprocessing**
 
 ```julia term = true
 model1 = snv()
@@ -74,7 +74,7 @@ ytest = Ytest[:, nam] ;
 
 ```julia term = true
 lb = 1e-3
-model = rr(; lb)
+model = rr(; lb)    # se also function 'rrchol'
 fit!(model, Xtrain, ytrain)
 @names model
 fitm = model.fitm ;

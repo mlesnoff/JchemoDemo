@@ -8,7 +8,10 @@ path_html = joinpath(path, "JchemoDemo/docs/src/assets/html")
 
 nam = "Exploratory/Pca"
 #nam = "Regression/Plsr"
+#nam = "Regression/Lwplsr"
 #nam = "Regression/Others"
+#nam = "Regression/Gridscore"
+#nam = "Regression/Gridcv"
 path_scripts = joinpath(path_jmd, nam)
 @show f = filter(endswith("jmd"), readdir(path_scripts))
 nf = length(f) 
