@@ -1,0 +1,201 @@
+---
+title: gridscore - tecator - Plsr
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  out_width: 60%
+  out_height: 30%
+---
+
+```julia term = true
+using Jchemo, JchemoData
+using JLD2, CairoMakie
+```
+
+#### Data importation
+
+```julia term = true
+path_jdat = dirname(dirname(pathof(JchemoData)))
+db = joinpath(path_jdat, "data/tecator.jld2") 
+@load db dat
+@names dat
+```
+
+```julia term = true
+X = dat.X
+Y = dat.Y 
+typ = Y.typ ;
+tab(typ)
+```
+
+```julia term = true
+wlst = names(X) ;
+wl = parse.(Float64, wlst) 
+#plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+```
+
+**Preprocessing**
+
+```julia term = true
+model1 = snv()
+model2 = savgol(npoint = 15, deriv = 2, degree = 3)
+model = pip(model1, model2)
+fit!(model, X)
+@head Xp = transf(model, X) 
+#plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+```
+
+#### Split Tot ==> Train + Test
+
+The model is fitted on **Train**, and the generalization error is estimated on **Test**.
+In this example, the training set is already defined in variable `typ` of the dataset,
+and the test set is defined by the remaining samples. But **Tot** could also be split *a posteriori*, 
+for instance by sampling (random, systematic or any other designs). 
+
+```julia term = true
+s = typ .== "train" ;
+Xtrain = Xp[s, :] ; 
+Ytrain = Y[s, :] ;
+Xtest = rmrow(Xp, s) ;
+Ytest = rmrow(Y, s) ;
+ntrain = nro(Xtrain)
+ntest = nro(Xtest)
+ntot = ntrain + ntest
+(ntot = ntot, ntrain, ntest)
+```
+
+**Working response y**
+
+```julia term = true
+namy = names(Y)[1:3]
+j = 2  
+nam = namy[j]    # work on the j-th y-variable
+ytrain = Ytrain[:, nam] ;
+ytest = Ytest[:, nam] ;
+```
+
+#### Split of Train for model tuning
+
+The training set (**Train**) is split to a calibration set (**Cal**) and a validation set (**Val**). 
+A grid search is implemented by fitting the model on **Cal** and computing a validation error on **Val**.   
+
+The split Cal/Val can be built from different sampling designs, such as examples (not exhaustive) given below.
+
+```julia term = true
+pct = .3  # proportion of Train for Val
+nval = round(Int, pct * ntrain)    
+```
+
+- (1) Random sampling:
+
+```julia term = true
+s = samprand(ntrain, nval)
+```
+
+- (2) Or  Kennard-Stone sampling (Warning: output `train` contains higher variability 
+    than output `test`, see function `sampks`):
+
+```julia
+#s = sampks(Xtrain, nval; metric = :eucl)
+```
+
+- (3) Or duplex sampling:
+
+```julia
+#s = sampdp(Xtrain, nval)
+```
+
+- (4) Or systematic sampling over variable `y`:
+
+```julia
+#s = sampsys(ytrain, nval)
+```
+
+```julia term = true
+Xcal = Xtrain[s.train, :] ;
+ycal = ytrain[s.train] ;
+Xval = Xtrain[s.test, :] ;
+yval = ytrain[s.test] ;
+ncal = ntrain - nval 
+(ntot = ntot, ntrain, ncal, nval, ntest)
+```
+
+#### Grid-search 
+
+The best syntax to use function `gridscore` for models based on LVs (Plsr, Kplsr, Pcr, etc.) is to
+set the parameter `nlv` outside of the generic argument `pars` defining the grid. In that case, the computation 
+time is reduced [See the naïve and non-optimized syntax at the end of this script]. This is the same principle 
+when definining the parameter `lb` in ridge models (eg. Rr, Krr, etc.).
+
+```julia term = true
+nlv = 0:20
+model = plskern()
+res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, nlv)
+```
+
+```julia term = true
+plotgrid(res.nlv, res.y1; step = 2, xlabel = "Nb. LVs", ylabel = "RMSEP-Val").f
+```
+
+If other parameters have to be defined in the grid, they have to be set in argument `pars`, such as in 
+the example below.
+
+```julia term = true
+pars = mpar(scal = [false; true])
+nlv = 0:20
+model = plskern()
+res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv)
+```
+
+```julia term = true
+plotgrid(res.nlv, res.y1, res.scal; step = 2, xlabel = "Nb. LVs", ylabel = "RMSEP-Val").f
+```
+
+**Selection of the best parameter combination**
+
+```julia term = true
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
+```
+
+#### Final prediction (Test) using the optimal model
+
+```julia term = true
+model = plskern(nlv = res.nlv[u], scal = res.scal[u])
+fit!(model, Xtrain, ytrain)
+pred = predict(model, Xtest).pred
+```
+
+**Generalization error**
+
+```julia term = true
+rmsep(pred, ytest)
+```
+
+**Plotting predictions vs. observed data**
+
+```julia term = true 
+plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title = string("Test set - variable ", nam), 
+    xlabel = "Prediction", ylabel = "Observed").f   
+```
+
+#### Naïve syntax to use gridscore for LV-based models 
+
+Parameter `nlv` can also be set in argument `pars` (wich is the generic approach to define the grid). 
+This is strictly equivalent (gives the same results) but the computations are slower.
+
+```julia term = true
+pars = mpar(nlv = 0:20)
+model = plskern()
+res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars)
+```
+
+```julia term = true
+pars = mpar(nlv = 0:20, scal = [false; true])
+model = plskern()
+res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars)
+```
+
+
+
