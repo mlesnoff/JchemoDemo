@@ -75,6 +75,44 @@ ytrain = Ytrain[:, nam] ;
 ytest = Ytest[:, nam] ;
 ```
 
+#### CV-Segments
+
+Two methods can be used to build the CV segments within **Train**:
+- (1) Replicated K-fold CV
+    - Train is splitted in a number of K folds (segments),
+    - and this split can be replicated (==> replicated K-Fold CV).
+
+```julia
+K = 3     # nb. folds (segments)
+rep = 10  # nb. replications
+segm = segmkf(ntrain, K; rep = rep)
+```
+
+- (2) Or replicated "Test-set" CV 
+    - Train is split to Cal + Val (e.g. Cal = 70% of Train, Val = 30% of Train),
+    - and this is replicated.
+
+```julia
+#pct = .30
+#m = Int(round(pct * ntrain))
+#segm = segmts(ntrain, m; rep = 30)
+```
+
+In general, for the same total numebr of segments, the resuts of the two methods are close.
+
+```julia
+i = 1  
+k = 1
+segm[i]      # the K segments of replication 'i'
+```
+
+```julia
+segm[i][k]   # segment 'k' of replication 'i'
+```
+
+
+
+
 #### Split of Train for model tuning
 
 The training set (**Train**) is split to a calibration set (**Cal**) and a validation set (**Val**). 
