@@ -1,36 +1,19 @@
-## Linear 
+## Prediction 
 
-**Plsr**
+**Linear**
 
 ```@raw html
     <p><a href="../assets/html/Regression/Prediction/predict_tecator_plsr.html">Prediction - tecator - Plsr</a></p>
-```
-
-**Others**
-
-```@raw html
     <p><a href="../assets/html/Regression/Prediction/predict_tecator_rr.html">Prediction - tecator - Rr</a></p>
 ```
 
-## Non-linear
-
-**Kplsr**
+**Non-linear**
 
 ```@raw html
     <p><a href="../assets/html/Regression/Prediction/predict_tecator_kplsr.html">Prediction - tecator - Kplsr</a></p>
-```
-
-**kNN-Lwplsr**
-
-```@raw html
+    <p><a href="../assets/html/Regression/Prediction/predict_tecator_krr.html">Prediction - tecator - Krr</a></p>
     <p><a href="../assets/html/Regression/Prediction/predict_tecator_lwplsr.html">Prediction - tecator - kNN-Lwplsr</a></p>
     <p><a href="../assets/html/Regression/Prediction/predict_tecator_lwplsravg.html">Prediction - tecator - kNN-LwplsrAvg</a></p>
-```
-
-**Others**
-
-```@raw html
-    <p><a href="../assets/html/Regression/Prediction/predict_tecator_krr.html">Prediction - tecator - Krr</a></p>
     <p><a href="../assets/html/Regression/Prediction/predict_tecator_rfr.html">Prediction - tecator - Rfr</a></p>
 ```
 
