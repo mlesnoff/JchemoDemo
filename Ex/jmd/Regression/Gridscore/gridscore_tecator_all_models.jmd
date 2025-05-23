@@ -1,5 +1,5 @@
 ---
-title: gridscore - tecator - Plsr
+title: gridscore - tecator - All models
 weave_options:
   error: true
   wrap: true
@@ -93,14 +93,12 @@ ncal = ntrain - nval
 
 ```julia results = "hidden"
 nlv = 0:20
-pars = mpar(scal = [false; true])
-length(pars[1])
 model = plskern()  
-res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv) 
-plotgrid(res.nlv, res.y1, res.scal; step = 2, xlabel ="Nb. LVs", ylabel = "RMSEP").f
+res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, nlv) 
+plotgrid(res.nlv, res.y1; step = 2, xlabel ="Nb. LVs", ylabel = "RMSEP").f
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :] 
-model = plskern(nlv = res.nlv[u], scal = res.scal[u])
+model = plskern(nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain) 
 pred = predict(model, Xtest).pred 
 rmsep(pred, ytest)
@@ -108,9 +106,11 @@ rmsep(pred, ytest)
 
 ```julia results = "hidden"
 nlv = 0:20
+pars = mpar(scal = [false; true])
+length(pars[1])
 model = plskern()  
-res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, nlv) 
-plotgrid(res.nlv, res.y1; step = 2, xlabel ="Nb. LVs", ylabel = "RMSEP").f
+res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv) 
+plotgrid(res.nlv, res.y1, res.scal; step = 2, xlabel ="Nb. LVs", ylabel = "RMSEP").f
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :] 
 model = plskern(nlv = res.nlv[u], scal = res.scal[u])

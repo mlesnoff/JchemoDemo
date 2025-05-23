@@ -17,7 +17,7 @@ path_scripts = joinpath(path_jmd, nam)
 nf = length(f) 
 for i = 1:nf 
     #i = 4
-    @show string("-------- script: ", i)
+    println(string("-------- script: ", i))
     @show f[i]
     f[i]
     nam_script = joinpath(path_scripts, f[i])
