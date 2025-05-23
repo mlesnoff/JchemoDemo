@@ -1,5 +1,5 @@
 ---
-title: gridcv - tecator - Plsr
+title: gridcv - tecator - Rr
 weave_options:
   error: true
   wrap: true
@@ -48,12 +48,6 @@ fit!(model, X)
 
 #### Split Train/Test of Tot
 
-The model is fitted on **Train**, and the generalization error is estimated on **Test**.
-In this example, the training set is already defined in variable `typ` of the dataset,
-and the test set is defined by the remaining samples. But **Tot** could also be split *a posteriori*, 
-for instance by sampling (random, systematic or any other designs). 
-See for instance functions `samprand`, `sampsys`, etc.
-
 ```julia term = true
 s = typ .== "train" ;
 Xtrain = Xp[s, :] ; 
@@ -78,68 +72,37 @@ ytest = Ytest[:, nam] ;
 
 #### CV-Segments for model tuning
 
-Two methods can be used to build the CV segments within **Train** (for the same total number of segments, 
-these two methods return close resuts):
-
-- (1) **Replicated K-fold CV**
-    - Train is splitted in a number of K folds (segments),
-    - and this split can be replicated (==> replicated K-Fold CV).
+**Replicated K-fold CV**
 
 ```julia term = true
 K = 3     # nb. folds (segments)
-rep = 25  # nb. replications
+rep = 10  # nb. replications
 segm = segmkf(ntrain, K; rep = rep)
-```
-
-- (2) **Replicated "Test-set" CV** 
-    - Train is split to Cal/Val (e.g. Cal = 70% of Train, Val = 30% of Train),
-        and this is replicated.
-
-```julia term = true
-#pct = .30
-#m = Int(round(pct * ntrain))
-#segm = segmts(ntrain, m; rep = 30)
-```
-
-Illustration of segments:
-
-```julia term = true
-i = 1  
-segm[i]      # the K segments of replication 'i'
-```
-
-```julia
-k = 1
-segm[i][k]   # segment 'k' of replication 'i'
 ```
 
 #### Grid-search 
 
-The best syntax to use function `gridcv` for models based on LVs (Plsr, Kplsr, Pcr, etc.) is to
-set parameter `nlv` outside of the generic argument `pars` defining the grid. In that case, the computation 
-time is reduced [See the naïve and non-optimized syntax at the end of this script]. This is the same principle 
-when definining the parameter `lb` in ridge models (eg. Rr, Krr, etc.).
-
 ```julia term = true
-nlv = 0:20
-model = plskern()
-rescv = gridcv(model, Xtrain, ytrain; segm, score = rmsep, nlv) ;
+lb = 10.0.^(-15:.1:3)
+model = rr()
+rescv = gridcv(model, Xtrain, ytrain; segm, score = rmsep, lb) ;
 @names rescv 
 res = rescv.res
 res_rep = rescv.res_rep
 ```
 
 ```julia term = true
-plotgrid(res.nlv, res.y1; step = 2, xlabel = "Nb. LVs", ylabel = "RMSEP-CV").f
+loglb = round.(log.(10, res.lb), digits = 3)
+plotgrid(loglb, res.y1; step = 2, xlabel ="lambda (log scale)", ylabel = "RMSEP-Val").f
 ```
 
 ```julia term = true
-f, ax = plotgrid(res.nlv, res.y1; step = 2, xlabel = "Nb. LVs", ylabel = "RMSEP-CV")
+f, ax = plotgrid(loglb, res.y1; step = 2, xlabel = "Nb. LVs", ylabel = "RMSEP-CV")
 for i = 1:rep, j = 1:K
     zres = res_rep[res_rep.rep .== i .&& res_rep.segm .== j, :]
-    lines!(ax, zres.nlv, zres.y1; color = (:grey, .2))
+    lines!(ax, loglb, zres.y1; color = (:grey, .2))
 end
-lines!(ax, res.nlv, res.y1; color = :red, linewidth = 1)
+lines!(ax, loglb, res.y1; color = :red, linewidth = 1)
 f
 ```
 
@@ -148,13 +111,14 @@ the example below.
 
 ```julia term = true
 pars = mpar(scal = [false; true])
-nlv = 0:20
-model = plskern()
-res = gridcv(model, Xtrain, ytrain; segm, score = rmsep, pars, nlv).res
+lb = 10.0.^(-15:.1:3)
+model = rr()
+res = gridcv(model, Xtrain, ytrain; segm, score = rmsep, pars, lb).res
 ```
 
 ```julia term = true
-plotgrid(res.nlv, res.y1, res.scal; step = 2, xlabel = "Nb. LVs", ylabel = "RMSEP-Val").f
+loglb = round.(log.(10, res.lb), digits = 3)
+plotgrid(loglb, res.y1, res.scal; step = 2, xlabel ="lambda (log scale)", ylabel = "RMSEP-Val").f
 ```
 
 **Selection of the best parameter combination**
@@ -167,7 +131,7 @@ res[u, :]
 #### Final prediction (Test) using the optimal model
 
 ```julia term = true
-model = plskern(nlv = res.nlv[u], scal = res.scal[u])
+model = rr(nlv = res.lb[u], scal = res.scal[u])
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
 ```
@@ -185,20 +149,20 @@ plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title 
     xlabel = "Prediction", ylabel = "Observed").f   
 ```
 
-#### Naïve syntax to use gridcv for LV-based functions 
+#### Naïve syntax to use gridcv for ridge-based functions 
 
-Parameter `nlv` can also be set in argument `pars` (wich is the generic approach to define the grid). 
+Parameter `lb` can also be set in argument `pars` (wich is the generic approach to define the grid). 
 This is strictly equivalent (gives the same results) but the computations are slower.
 
 ```julia term = true
-pars = mpar(nlv = 0:20)
-model = plskern()
+pars = mpar(lb = 10.0.^(-15:.1:3))
+model = rr()
 gridcv(model, Xtrain, ytrain; segm, score = rmsep, pars).res
 ```
 
 ```julia term = true
-pars = mpar(nlv = 0:20, scal = [false; true])
-model = plskern()
+pars = mpar(lb = 10.0.^(-15:.1:3), scal = [false; true])
+model = rr()
 gridcv(model, Xtrain, ytrain; segm, score = rmsep, pars).res
 ```
 

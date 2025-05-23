@@ -46,7 +46,7 @@ fit!(model, X)
 #plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
-#### Split Tot ==> Train + Test
+#### Split Train/Test of Tot
 
 ```julia term = true
 s = typ .== "train" ;
@@ -70,36 +70,14 @@ ytrain = Ytrain[:, nam] ;
 ytest = Ytest[:, nam] ;
 ```
 
-#### Split of Train for model tuning
+#### Split Cal/Val of Train for model tuning
+
+**Random sampling**
 
 ```julia term = true
 pct = .3  # proportion of Train for Val
 nval = round(Int, pct * ntrain)    
-```
-
-- (1) Random sampling:
-
-```julia term = true
 s = samprand(ntrain, nval)
-```
-
-- (2) Or  Kennard-Stone sampling (Warning: output `train` contains higher variability 
-    than output `test`, see function `sampks`):
-
-```julia
-#s = sampks(Xtrain, nval; metric = :eucl)
-```
-
-- (3) Or duplex sampling:
-
-```julia
-#s = sampdp(Xtrain, nval)
-```
-
-- (4) Or systematic sampling over variable `y`:
-
-```julia
-#s = sampsys(ytrain, nval)
 ```
 
 ```julia term = true
@@ -113,10 +91,10 @@ ncal = ntrain - nval
 
 #### Grid-search 
 
-The best syntax to use function `gridscore` for ridge-based models (Rr, Krr, etc.) is to
-set the parameter `lb` outside of the generic argument `pars` defining the grid. In that case, the computation 
+The best syntax to use function `gridscore` for ridge-based functions (`rr`, `krr`, etc.) is to
+set parameter `lb` outside of the generic argument `pars` defining the grid. In that case, the computation 
 time is reduced [See the naïve and non-optimized syntax at the end of this script]. This is the same principle 
-when definining the parameter `nlv` in LV-based models (eg. Plsr, Kplsr, etc.).
+when definining the parameter `nlv` in LV-based functions (eg. `plskern`, `kplsr`, `lwplsr`, etc.).
 
 ```julia term = true
 lb = 10.0.^(-15:.1:3)
@@ -172,7 +150,7 @@ plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title 
     xlabel = "Prediction", ylabel = "Observed").f   
 ```
 
-#### Naïve syntax to use gridscore for LV-based models 
+#### Naïve syntax to use gridscore for ridged-based functions 
 
 Parameter `lb` can also be set in argument `pars` (wich is the generic approach to define the grid). 
 This is strictly equivalent (gives the same results) but the computations are slower.
@@ -185,7 +163,7 @@ res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars)
 
 ```julia term = true
 pars = mpar(lb = 10.0.^(-15:.1:3), scal = [false; true])
-model = plskern()
+model = rr()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars)
 ```
 

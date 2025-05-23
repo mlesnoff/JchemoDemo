@@ -1,5 +1,5 @@
 ---
-title: gridscore - tecator - kNN-Lwplsr
+title: gridcv - tecator - Plsr
 weave_options:
   error: true
   wrap: true
@@ -70,23 +70,14 @@ ytrain = Ytrain[:, nam] ;
 ytest = Ytest[:, nam] ;
 ```
 
-#### Split Cal/Val of Train for model tuning
+#### CV-Segments for model tuning
 
-**Random sampling**
-
-```julia term = true
-pct = .3  # proportion of Train for Val
-nval = round(Int, pct * ntrain)    
-s = samprand(ntrain, nval)
-```
+**Replicated K-fold CV**
 
 ```julia term = true
-Xcal = Xtrain[s.train, :] ;
-ycal = ytrain[s.train] ;
-Xval = Xtrain[s.test, :] ;
-yval = ytrain[s.test] ;
-ncal = ntrain - nval 
-(ntot = ntot, ntrain, ncal, nval, ntest)
+K = 3     # nb. folds (segments)
+rep = 10   # nb. replications
+segm = segmkf(ntrain, K; rep = rep)
 ```
 
 #### Grid-search 
@@ -101,7 +92,10 @@ length(pars[1])
 
 ```julia term = true
 model = lwplsr()
-res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv)
+rescv = gridcv(model, Xtrain, ytrain; segm, score = rmsep, pars, nlv) ;
+@names rescv 
+res = rescv.res
+res_rep = rescv.res_rep
 ```
 
 ```julia term = true
@@ -137,4 +131,5 @@ rmsep(pred, ytest)
 plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title = string("Test set - variable ", nam), 
     xlabel = "Prediction", ylabel = "Observed").f   
 ```
+
 

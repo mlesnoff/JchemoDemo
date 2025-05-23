@@ -46,12 +46,13 @@ fit!(model, X)
 #plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
-#### Split Tot ==> Train + Test
+#### Split Train/Test of Tot
 
 The model is fitted on **Train**, and the generalization error is estimated on **Test**.
 In this example, the training set is already defined in variable `typ` of the dataset,
 and the test set is defined by the remaining samples. But **Tot** could also be split *a posteriori*, 
 for instance by sampling (random, systematic or any other designs). 
+See for instance functions `samprand`, `sampsys`, etc.
 
 ```julia term = true
 s = typ .== "train" ;

@@ -46,12 +46,13 @@ fit!(model, X)
 #plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
-#### Split Tot ==> Train + Test
+#### Split Train/Test of Tot
 
 The model is fitted on **Train**, and the generalization error is estimated on **Test**.
 In this example, the training set is already defined in variable `typ` of the dataset,
 and the test set is defined by the remaining samples. But **Tot** could also be split *a posteriori*, 
 for instance by sampling (random, systematic or any other designs). 
+See for instance functions `samprand`, `sampsys`, etc.
 
 ```julia term = true
 s = typ .== "train" ;
@@ -75,12 +76,12 @@ ytrain = Ytrain[:, nam] ;
 ytest = Ytest[:, nam] ;
 ```
 
-#### Split of Train for model tuning
+#### Split Cal/Val of Train for model tuning
 
 The training set (**Train**) is split to a calibration set (**Cal**) and a validation set (**Val**). 
 A grid search is implemented by fitting the model on **Cal** and computing a validation error on **Val**.   
 
-The split Cal/Val can be built from different sampling designs, such as examples (not exhaustive) given below.
+The split Cal/Val can be built from different sampling designs, such as the examples (not exhaustive) given below.
 
 ```julia term = true
 pct = .3  # proportion of Train for Val
@@ -123,10 +124,10 @@ ncal = ntrain - nval
 
 #### Grid-search 
 
-The best syntax to use function `gridscore` for models based on LVs (Plsr, Kplsr, Pcr, etc.) is to
-set the parameter `nlv` outside of the generic argument `pars` defining the grid. In that case, the computation 
+The best syntax to use function `gridscore` for LV-based functions (eg. `plskern`, `kplsr`, `lwplsr`, etc.) is to
+set parameter `nlv` outside of the generic argument `pars` defining the grid. In that case, the computation 
 time is reduced [See the naïve and non-optimized syntax at the end of this script]. This is the same principle 
-when definining the parameter `lb` in ridge models (eg. Rr, Krr, etc.).
+when definining the parameter `lb` in ridge-based functions (`rr`, `krr`, etc.).
 
 ```julia term = true
 nlv = 0:20
@@ -180,7 +181,7 @@ plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title 
     xlabel = "Prediction", ylabel = "Observed").f   
 ```
 
-#### Naïve syntax to use gridscore for LV-based models 
+#### Naïve syntax to use gridscore for LV-based functions 
 
 Parameter `nlv` can also be set in argument `pars` (wich is the generic approach to define the grid). 
 This is strictly equivalent (gives the same results) but the computations are slower.
