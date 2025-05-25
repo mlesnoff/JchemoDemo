@@ -28,7 +28,7 @@ nlev = length(lev)
 colm = (:red, :blue, :orange)
 f = Figure(size = (500, 300))
 ax = Axis(f[1, 1]; xlabel = "x")
-for i = 1:nlev
+for i in eachindex(lev)
     s = typ .== lev[i]
     hist!(ax, x[s] .+ i / 1.2; bins = 50, color = (colm[i], .5), label = string(lev[i]))
 end
@@ -45,7 +45,7 @@ f
 
 f = Figure(size = (500, 300))
 ax = Axis(f[1, 1]; xlabel = "x")
-for i = 1:nlev
+for i in eachindex(lev)
     s = typ .== lev[i]
     hist!(ax, x[s] .+ i / 1.2; bins = 50, color = (colm[i], .5), label = string(lev[i]))
 end

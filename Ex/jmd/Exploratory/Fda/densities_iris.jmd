@@ -1,0 +1,234 @@
+---
+title: Density estimations - iris
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  out_width: 60%
+  out_height: 30%
+---
+
+This example illustrates the underlying principles of the fit of three different probabilistic PLSDA models:
+PLS-LDA, PLS-QDA and PLS-KDEDA (see functions `plslda`, `plsqda`, `plskdeda`). 
+
+- PLS scores are computed on a training Y-dummy table, and then the training 
+    X-observations are projected on the score space. Then the probability densities of these projections are 
+    estimated assuming Gaussian distributions (LDA and QDA) or by non-parametric kernels (KDE). 
+
+- The new observations to predict are projected in the score space, and their location are compared the training 
+    density estimates of each class. This determines their probablilities of belonging to the classes.
+    The class showing the highest probability is chosen.
+
+In the example below, to simplify the graphical illustrations, the PLS score space is set to 2D (2 latent variables) 
+but, in general, the described methods are implemented on higher space dimensions.
+
+```julia term = true
+using Jchemo, JchemoData
+using JLD2, CairoMakie
+```
+
+#### Data importation
+
+```julia term = true
+path_jdat = dirname(dirname(pathof(JchemoData)))
+db = joinpath(path_jdat, "data", "iris.jld2") 
+@load db dat
+@names dat
+```
+
+```julia term = true
+summ(dat.X)
+```
+
+```julia term = true
+@head X = dat.X[:, 1:4] 
+@head y = dat.X[:, 5]    # the classes (species)
+ntot = nro(X)
+```
+  
+```julia term = true
+tab(y)
+```
+
+```julia term = true
+lev = mlev(y)
+nlev = length(lev)
+```
+
+#### Split Tot to Train/Test
+
+```julia term = true
+ntest = 30
+s = samprand(ntot, ntest)
+Xtrain = X[s.train, :] ;
+ytrain = y[s.train] ;
+Xtest = X[s.test, :] ;
+ytest = y[s.test] ;
+ntrain = ntot - ntest
+(ntot = ntot, ntrain, ntest)
+tab(ytrain)
+tab(ytest)
+```
+
+#### Computation of the Pls scores on the Y-dummy table
+
+```julia term = true
+Ytrain_dummy = dummy(ytrain).Y 
+```
+
+```julia term = true
+nlv = 2
+model = plskern(; nlv)
+fit!(model, Xtrain, Ytrain_dummy) 
+```
+
+**Scores**
+
+```julia term = true
+@head Ttrain = model.fitm.T
+@head Ttest = transf(model, Xtest)
+```
+
+```julia term = true
+i = 1
+plotxy(Ttrain[:, i], Ttrain[:, i + 1], ytrain; title = "PLS2 space -Train", xlabel = string("LV", i), 
+    ylabel = string("LV", i + 1), leg_title = "Species", zeros = true, ellipse = false).f
+```
+
+#### Projection of a new observation in the fitted score space 
+
+The new observation is projected in the score space (blue star in the figure below), and its location is compared 
+to the training observations (red points in the figure below) and densities.
+
+```julia term = true
+k = 1  # example of the projection of the first obs. of Test
+```
+
+```julia term = true, out_width = "90%"
+f = Figure(size = (900, 300)) ;
+ax = list(nlev) ;
+for i in eachindex(lev) 
+    zs = ytrain .== lev[i]
+    zT = Ttrain[zs, :]
+    ax[i] = Axis(f[1, i]; title = lev[i], xlabel = "PLS-LV1", ylabel = "PLS-LV2")
+    scatter!(ax[i], zT[:, 1], zT[:, 2], color = :red, markersize = 10)
+    ## New point to predict
+    scatter!(ax[i], Ttest[k, 1], Ttest[k, 2], color = :blue, marker = :star5, markersize = 15)
+    ## End
+    hlines!(ax[i], 0; linestyle = :dash, color = :grey)
+    vlines!(ax[i], 0; linestyle = :dash, color = :grey)
+    xlims!(ax[i], -4, 4) ; ylims!(ax[i], -1.7, 1.7)
+end
+f
+```
+
+The same graphic representation can be done  with the probability density (instead of the observations as 
+above) estimated for each class with the three methods.
+
+**LDA estimate**
+
+The Gaussian probability densities  (see function `dmnorm`) are estimated assuming that the classes 
+have the same PLS-score covariance matrix (`W`). 
+
+```julia term = true, out_width = "90%"
+weights = mweight(ones(ntrain))   # observation weights
+res = matW(Ttrain, ytrain, weights)
+W = res.W * ntrain / (ntrain - nlev)
+npoints = 2^7
+x1 = LinRange(-4, 4, npoints)
+x2 = LinRange(-2, 2, npoints)
+z = mpar(x1 = x1, x2 = x2)
+grid = reduce(hcat, z)
+f = Figure(size = (900, 400)) ;
+ax = list(nlev) ;
+for i in eachindex(lev) 
+    zs = ytrain .== lev[i]
+    zT = Ttrain[zs, :]
+    #lims = [[minimum(zT[:, j]) ; maximum(zT[:, j])] for j = 1:nlv]
+    #x1 = LinRange(lims[1][1], lims[1][2], npoints)
+    #x2 = LinRange(lims[2][1], lims[2][2], npoints)
+    zfitm = dmnorm(colmean(zT), W)   # Gaussian estimate
+    zres = predict(zfitm, grid) 
+    pred_grid = vec(zres.pred)
+    ax[i] = Axis(f[1, i]; title = lev[i], xlabel = "LV1", ylabel = "LV2")
+    co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
+    scatter!(ax[i], zT[:, 1], zT[:, 2], color = :red, markersize = 10)
+    scatter!(ax[i], Ttest[k, 1], Ttest[k, 2], color = :blue, marker = :star5, markersize = 15)
+    hlines!(ax[i], 0; linestyle = :dash, color = :grey)
+    vlines!(ax[i], 0; linestyle = :dash, color = :grey)
+    xlims!(ax[i], -4, 4) ; ylims!(ax[i], -1.7, 1.7)
+    Colorbar(f[2, i], co; label = "Density", vertical = false)
+end
+f
+```
+
+**QDA estimate**
+
+In this method, the classes are assumed to have different covariance matrices. 
+
+```julia term = true, out_width = "90%"
+res = matW(Ttrain, ytrain, weights)
+Wi = res.Wi
+ni = res.ni
+npoints = 2^7 ;
+x1 = LinRange(-4, 4, npoints) ;
+x2 = LinRange(-2, 2, npoints) ;
+z = mpar(x1 = x1, x2 = x2) ;
+grid = reduce(hcat, z) ;
+z = mpar(x1 = x1, x2 = x2) ;
+grid = reduce(hcat, z) ;
+f = Figure(size = (900, 400)) ;
+ax = list(nlev) ;
+for i in eachindex(lev) 
+    zs = ytrain .== lev[i]
+    zT = Ttrain[zs, :]
+    zS = Wi[i] * ni[i] / (ni[i] - 1)
+    zfitm = dmnorm(colmean(zT), zS) ;   # Gaussian estimate
+    zres = predict(zfitm, grid) ;
+    pred_grid = vec(zres.pred) 
+    ax[i] = Axis(f[1, i]; title = lev[i], xlabel = "LV1", ylabel = "LV2")
+    co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
+    scatter!(ax[i], zT[:, 1], zT[:, 2], color = :red, markersize = 10)
+    scatter!(ax[i], Ttest[k, 1], Ttest[k, 2], color = :blue, marker = :star5, markersize = 15)
+    hlines!(ax[i], 0; linestyle = :dash, color = :grey)
+    vlines!(ax[i], 0; linestyle = :dash, color = :grey)
+    xlims!(ax[i], -4, 4) ; ylims!(ax[i], -1.7, 1.7)
+    Colorbar(f[2, i], co; label = "Density", vertical = false)
+end
+f
+```
+
+**Non-parametric KDE estimate**
+
+In this method, the densities are estimated by kernel estimators (see function `dmkern`). 
+
+```julia term = true, out_width = "90%"
+npoints = 2^7
+x1 = LinRange(-4, 4, npoints)
+x2 = LinRange(-2, 2, npoints)
+z = mpar(x1 = x1, x2 = x2)
+grid = reduce(hcat, z)
+f = Figure(size = (900, 400)) ;
+ax = list(nlev) ;
+for i in eachindex(lev) 
+    zs = ytrain .== lev[i]
+    zT = Ttrain[zs, :]
+    zfitm = dmkern(zT; a = .5)   # KDE estimate
+    zres = predict(zfitm, grid) ;
+    pred_grid = vec(zres.pred)
+    ax[i] = Axis(f[1, i]; title = lev[i], xlabel = "LV1", ylabel = "LV2")
+    co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
+    scatter!(ax[i], zT[:, 1], zT[:, 2], color = :red, markersize = 10)
+    scatter!(ax[i], Ttest[k, 1], Ttest[k, 2], color = :blue, marker = :star5, markersize = 15)
+    hlines!(ax[i], 0; linestyle = :dash, color = :grey)
+    vlines!(ax[i], 0; linestyle = :dash, color = :grey)
+    xlims!(ax[i], -4, 4) ; ylims!(ax[i], -1.7, 1.7)
+    Colorbar(f[2, i], co; label = "Density", vertical = false)
+end
+f
+```
+
+It is clear from all the above figures that the new observation is located in the middle of the class 
+**'setosa'**, and therefore that PLSDA methods will predict it as belonging to this class.
+
+

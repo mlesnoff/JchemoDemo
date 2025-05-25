@@ -52,7 +52,7 @@ plotxy(T[:, 1], T[:, 2], year; zeros = true, xlabel = "PC1", ylabel = "PC2").f
 ```julia term = true
 lev = mlev(year)
 nlev = length(lev)
-color = cgrad(:Dark2_5, nlev; categorical = true, alpha = .7) #[1:nlev]
+color = cgrad(:Dark2_5, nlev; categorical = true, alpha = .7)
 plotlv(T[:, 1:6], year; size = (750, 400), shape = (2, 3), color = color, zeros = true, 
     xlabel = "PC", ylabel = "PC").f
 ```

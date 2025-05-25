@@ -6,10 +6,10 @@ makedocs(
         "Home" => "index.md",
         "Exploratory" => "exploratory.md",
         "Regression" => "regression.md"
+        "Discrimination" => "discrimination.md"
         ]
     )
 
 
 
 
-    

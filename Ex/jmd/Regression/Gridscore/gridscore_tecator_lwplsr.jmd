@@ -46,7 +46,7 @@ fit!(model, X)
 #plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
-#### Split Train/Test of Tot
+#### Split Tot to Train/Test
 
 ```julia term = true
 s = typ .== "train" ;
@@ -70,7 +70,7 @@ ytrain = Ytrain[:, nam] ;
 ytest = Ytest[:, nam] ;
 ```
 
-#### Split Cal/Val of Train for model tuning
+#### Split Train to Cal/Val for model tuning
 
 **Random sampling**
 

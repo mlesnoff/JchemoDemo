@@ -19,7 +19,7 @@
 
 ## Model tuning
 
-**Split Cal/Val of Train**
+**Split Train to Cal/Val**
 
 ```@raw html
     <p><a href="../assets/html/Regression/Gridscore/gridscore_tecator_plsr.html">gridscore - tecator - Plsr</a></p>

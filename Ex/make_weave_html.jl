@@ -7,6 +7,7 @@ path_html = joinpath(path, "JchemoDemo/docs/src/assets/html")
 ## End
 
 nam = "Exploratory/Pca"
+#nam = "Exploratory/Fda"
 #nam = "Regression/Prediction"
 #nam = "Regression/Gridscore"
 #nam = "Regression/Gridcv"
@@ -14,7 +15,7 @@ path_scripts = joinpath(path_jmd, nam)
 @show f = filter(endswith("jmd"), readdir(path_scripts))
 nf = length(f) 
 for i = 1:nf 
-    #i = 4
+    #i = 1
     println(string("-------- script: ", i))
     @show f[i]
     f[i]

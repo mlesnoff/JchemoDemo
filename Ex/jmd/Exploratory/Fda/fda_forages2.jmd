@@ -1,190 +1,192 @@
 ---
-title: forages2 - Fda
+title: Fda - cassav 
 weave_options:
   error: true
   wrap: true
   term: false
-  out_width: "60%" 
+  out_width: 60%
+  out_height: 30%
 ---
 
-```julia
+```julia term = true
 using Jchemo, JchemoData
-using JLD2, CairoMakie, FreqTables 
+using JLD2, CairoMakie
+using FreqTables 
 ```
 
 #### Data importation
 
-```julia
+```julia term = true
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/forages2.jld2") 
 @load db dat
 @names dat
 ```
-  
-#### Data preparation and short description
 
-```julia
+```julia term = true
 X = dat.X 
 Y = dat.Y
 ntot = nro(X)
-```
-
-```julia term = true
-@head X
-@head Y
-```
-
-```julia
-y = Y.typ
+y = Y.typ ;
+test = Y.test ;
 tab(y)
 ```
 
-```julia
-freqtable(y, Y.test)
+```julia term = true
+freqtable(y, test)
 ```
 
-```julia
+```julia term = true
 wlst = names(X)
-wl = parse.(Float64, wlst) 
+wl = parse.(Int, wlst) ;
+#plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
-**Note:**: X-data are already preprocessed (SNV + Savitsky-Golay).
+**Note:**: X-data are already preprocessed (SNV + Savitsky-Golay 2nd deriv).
 
-```julia
-plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
-```
+#### Split Tot to Train/Test
 
-#### Split Tot ==> Train + Test
+The model is fitted on **Train**, and a **Test** set is projected on the training space.
+In this example, **Train** is already defined in variable `test` of the dataset,
+and **Test** is defined by the remaining samples. But **Tot** could also be split *a posteriori*, 
+for instance by sampling (random, systematic or any other designs). 
+See for instance functions `samprand`, `sampsys`, etc.
 
-The model is fitted on **Train**, and the generalization error is estimated on **Test**.
-Here the split of **Tot** is already provided inside the dataset (= variable `test`), 
-but **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic 
-or any other designs). 
-
-```julia
-s = Bool.(Y.test)
-Xtrain = rmrow(X, s)
-ytrain = rmrow(y, s)
-Xtest = X[s, :]
-ytest = y[s]
+```julia term = true
+s = Bool.(test) ;
+Xtrain = rmrow(X, s) ;
+ytrain = rmrow(y, s) ;
+Xtest = X[s, :] ;
+ytest = y[s] ;
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 ```
 
-Since X-data contain high multicolinearities, a regularization is required 
-for the Fda, for instance: 
+Since X-columns are highly colinear, the Fda requires a regularization, for instance 1) by preliminary 
+dimension reduction, or 2) by using a ridge regularization.
 
-1) by preliminary dimension reduction,
+#### 1) Fda on preliminary computed Pca scores
 
-2) or by using a ridge regularization.
-
-#### 1) Fda on Pca scores
-
-```julia
+```julia term = true
 model0 = pcasvd(nlv = 10)
 fit!(model0, Xtrain)
 @names model0
 @names model0.fitm
 ```
 
-```julia
+```julia term = true
 @head Ttrain_pca = model0.fitm.T 
 ```
 
-```julia
+```julia term = true
 model = fda(nlv = 2)
 #model = fdasvd(nlv = 2)     # alternative algorithm (same result)
 fit!(model, Ttrain_pca, ytrain) 
-fitm = model.fitm 
+fitm = model.fitm ;
 @names fitm
 ```
 
-```julia
-Ttrain = model.fitm.T
+```julia term = true
+@head Ttrain = model.fitm.T
 ```
 
-```julia
+```julia term = true
 lev = fitm.lev
 nlev = length(lev)
 ```
 
-```julia
+```julia term = true
 ct = fitm.Tcenters
 ```
 
-```julia
+```julia term = true
 f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "Fda", ellipse = true)
 scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
 f
 ```
 
-**Projection of Xtest**
-
-```julia
-Ttest_pca = transf(model0, Xtest) 
-```
-
-```julia
-Ttest = transf(model, Ttest_pca)
-```
-
-```julia
-i = 1  # class "i" in test
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "Fda")
-scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
-s = ytest .== lev[i]
-zT = Ttest[s, :]
-scatter!(ax, zT[:, 1], zT[:, 2]; markersize = 10, color = (:purple, .8))
-f
-```
-
-#### 2) Fda directly on X but using a ridge regularization 
-
-**Note:** If the ridge parameter `lb` is too small (e.g. here from 
-around 1e-10), the model can be overfitted and the discrimination 
-of new observations is misleading.
-
-```julia
-lb = 1e-5
-model = fda(; nlv = 2, lb)
-#model = fdasvd(; nlv = 2, lb)
-fit!(model,Xtrain, ytrain)
-fitm = model.fitm ;
-```
-
-```julia
-lev = fitm.lev
-nlev = length(lev)
-```
-
-```julia
-ct = fitm.Tcenters
-```
-
-```julia
-@head Ttrain = fitm.T
-```
-
-```julia
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "Fda", ellipse = true)
+```julia term = true
+color = cgrad(:Dark2_5, nlev; categorical = true, alpha = .5) ;
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = "Fda", ellipse = true)
 scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
 f
 ```
 
 **Projection of Xtest**
 
-```julia
-Ttest = transf(model, Xtest)
+```julia term = true
+@head Ttest_pca = transf(model0, Xtest) 
 ```
 
-```julia
+```julia term = true
+@head Ttest = transf(model, Ttest_pca)
+```
+
+```julia term = true
 i = 1  # class "i" in test
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "Fda")
-scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
-s = ytest .== lev[i]
-zT = Ttest[s, :]
-scatter!(ax, zT[:, 1], zT[:, 2]; markersize = 10, color = (:purple, .8))
+color = cgrad(:Dark2_5, nlev; categorical = true, alpha = .5) ;
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = "Fda", ellipse = true)
+scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
+s = ytest .== lev[i] ;
+zT = Ttest[s, :] ;
+scatter!(ax, zT[:, 1], zT[:, 2]; markersize = 10, color = :blue)
+f
+```
+
+#### 2) Fda directly on X but using a ridge regularization 
+
+**Note:** If the ridge parameter `lb` is too small (e.g. here from around 1e-10), the model can 
+be overfitted and predictions of new observations is misleading.
+
+```julia term = true
+lb = 1e-5
+model = fda(; nlv = 2, lb)
+#model = fdasvd(; nlv = 2, lb)
+fit!(model, Xtrain, ytrain)
+fitm = model.fitm ;
+```
+
+```julia term = true
+lev = fitm.lev
+nlev = length(lev)
+```
+
+```julia term = true
+ct = fitm.Tcenters
+```
+
+```julia term = true
+@head Ttrain = fitm.T
+```
+
+```julia term = true
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "Fda", ellipse = true)
+scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
+f
+```
+
+```julia term = true
+color = cgrad(:Dark2_5, nlev; categorical = true, alpha = .5) ;
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = "Fda", ellipse = true)
+scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
+f
+```
+
+**Projection of Xtest**
+
+```julia term = true
+@head Ttest = transf(model, Xtest)
+```
+
+```julia term = true
+i = 1  # class "i" in test
+color = cgrad(:Dark2_5, nlev; categorical = true, alpha = .5) ;
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = "Fda", ellipse = true)
+scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
+s = ytest .== lev[i] ;
+zT = Ttest[s, :] ;
+scatter!(ax, zT[:, 1], zT[:, 2]; markersize = 10, color = :blue)
 f
 ```
 

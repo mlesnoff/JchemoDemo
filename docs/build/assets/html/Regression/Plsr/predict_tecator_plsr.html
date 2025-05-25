@@ -789,7 +789,7 @@ Jchemo.Pipeline((Jchemo.JchemoModel{typeof(snv), Base.Pairs{Symbol, Union{}, Tup
 </pre>
 
 <h4>Split Tot &#61;&#61;&gt; Train &#43; Test</h4>
-<p>The model is fitted on <strong>Train</strong>, and the generalization error is estimated on <strong>Test</strong>. In this example, the training set is already defined in variable <code>typ</code> of the dataset, and the test set is defined by the remaining samples. But <strong>Tot</strong> could also be split <em>a posteriori</em>,  for instance by sampling &#40;random, systematic or any other designs&#41;. </p>
+<p>The model is fitted on <strong>Train</strong>, and the generalization error is estimated on <strong>Test</strong>. In this example, the training set is already defined in variable <code>typ</code> of the dataset, and **Test** is defined by the remaining samples. But <strong>Tot</strong> could also be split <em>a posteriori</em>,  for instance by sampling &#40;random, systematic or any other designs&#41;. </p>
 
 <pre class='hljl'>
 <span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>s</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>typ</span><span class='hljl-t'> </span><span class='hljl-oB'>.==</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;train&quot;</span><span class='hljl-t'> </span><span class='hljl-p'>;</span><span class='hljl-t'>

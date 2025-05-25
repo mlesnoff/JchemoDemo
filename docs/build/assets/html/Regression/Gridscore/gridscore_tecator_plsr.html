@@ -788,8 +788,8 @@ Jchemo.Pipeline((Jchemo.JchemoModel{typeof(snv), Base.Pairs{Symbol, Union{}, Tup
 ... (178, 100)</span>
 </pre>
 
-<h4>Split Train/Test of Tot</h4>
-<p>The model is fitted on <strong>Train</strong>, and the generalization error is estimated on <strong>Test</strong>. In this example, the training set is already defined in variable <code>typ</code> of the dataset, and the test set is defined by the remaining samples. But <strong>Tot</strong> could also be split <em>a posteriori</em>,  for instance by sampling &#40;random, systematic or any other designs&#41;.  See for instance functions <code>samprand</code>, <code>sampsys</code>, etc.</p>
+<h4>Split Tot to Train/Test</h4>
+<p>The model is fitted on <strong>Train</strong>, and the generalization error is estimated on <strong>Test</strong>. In this example, the training set is already defined in variable <code>typ</code> of the dataset, and **Test** is defined by the remaining samples. But <strong>Tot</strong> could also be split <em>a posteriori</em>,  for instance by sampling &#40;random, systematic or any other designs&#41;.  See for instance functions <code>samprand</code>, <code>sampsys</code>, etc.</p>
 
 <pre class='hljl'>
 <span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>s</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>typ</span><span class='hljl-t'> </span><span class='hljl-oB'>.==</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;train&quot;</span><span class='hljl-t'> </span><span class='hljl-p'>;</span><span class='hljl-t'>
@@ -835,7 +835,7 @@ Jchemo.Pipeline((Jchemo.JchemoModel{typeof(snv), Base.Pairs{Symbol, Union{}, Tup
 </span><span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>ytest</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>Ytest</span><span class='hljl-p'>[</span><span class='hljl-oB'>:</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>nam</span><span class='hljl-p'>]</span><span class='hljl-t'> ;</span>
 </pre>
 
-<h4>Split Cal/Val of Train for model tuning</h4>
+<h4>Split Train to Cal/Val for model tuning</h4>
 <p>The training set &#40;<strong>Train</strong>&#41; is split to a calibration set &#40;<strong>Cal</strong>&#41; and a validation set &#40;<strong>Val</strong>&#41;.  A grid search is implemented by fitting the model on <strong>Cal</strong> and computing a validation error on <strong>Val</strong>.   </p>
 <p>The split Cal/Val can be built from different sampling designs, such as the examples &#40;not exhaustive&#41; given below.</p>
 
