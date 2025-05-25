@@ -1,5 +1,5 @@
 ---
-title: Fda - cassav 
+title: Fda - forages2 
 weave_options:
   error: true
   wrap: true
@@ -101,15 +101,15 @@ ct = fitm.Tcenters
 ```
 
 ```julia term = true
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "Fda", ellipse = true)
-scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "Fda", ellipse = true) ;
+scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red) ;
 f
 ```
 
 ```julia term = true
-color = cgrad(:Dark2_5, nlev; categorical = true, alpha = .5) ;
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = "Fda", ellipse = true)
-scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
+color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .5) ;
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = "Fda", ellipse = true) ;
+scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red) ;
 f
 ```
 
@@ -125,9 +125,9 @@ f
 
 ```julia term = true
 i = 1  # class "i" in test
-color = cgrad(:Dark2_5, nlev; categorical = true, alpha = .5) ;
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = "Fda", ellipse = true)
-scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
+color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .5) ;
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = "Fda", ellipse = true) ;
+scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red) ;
 s = ytest .== lev[i] ;
 zT = Ttest[s, :] ;
 scatter!(ax, zT[:, 1], zT[:, 2]; markersize = 10, color = :blue)
@@ -161,15 +161,15 @@ ct = fitm.Tcenters
 ```
 
 ```julia term = true
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "Fda", ellipse = true)
-scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "Fda", ellipse = true) ;
+scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red) ;
 f
 ```
 
 ```julia term = true
-color = cgrad(:Dark2_5, nlev; categorical = true, alpha = .5) ;
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = "Fda", ellipse = true)
-scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
+color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .7) ;
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = "Fda", ellipse = true) ;
+scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red) ;
 f
 ```
 
@@ -181,12 +181,13 @@ f
 
 ```julia term = true
 i = 1  # class "i" in test
-color = cgrad(:Dark2_5, nlev; categorical = true, alpha = .5) ;
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = "Fda", ellipse = true)
-scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
+color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .7) ;
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, 
+    title = string("Projection test-class ", lev[i], " (blue points)"), ellipse = true) ;
+scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red) ;
 s = ytest .== lev[i] ;
 zT = Ttest[s, :] ;
-scatter!(ax, zT[:, 1], zT[:, 2]; markersize = 10, color = :blue)
+scatter!(ax, zT[:, 1], zT[:, 2]; markersize = 10, color = :blue) ;
 f
 ```
 

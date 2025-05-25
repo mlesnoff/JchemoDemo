@@ -1,5 +1,5 @@
 ---
-title: iris - Fda
+title: Fda - iris
 weave_options:
   error: true
   wrap: true
@@ -14,62 +14,44 @@ using JLD2, CairoMakie
 
 #### Data importation
 
-```julia
+```julia term = true
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data", "iris.jld2") 
 @load db dat
 @names dat
 ```
 
-#### Data preparation and short description
-
-```julia
+```julia term = true
 summ(dat.X)
 ```
 
-```julia
-X = dat.X[:, 1:4] 
-y = dat.X[:, 5]
-n = nro(X)
+```julia term = true
+@head X = dat.X[:, 1:4] 
+@head y = dat.X[:, 5]    # the classes (species)
+ntot = nro(X)
 ```
   
 ```julia term = true
-@head X
-```
-
-```julia
 tab(y)
 ```
 
-```julia
+```julia term = true
 lev = mlev(y)
-```
-
-```julia
 nlev = length(lev)
 ```
 
-#### Split Tot ==> Train + Test
+#### Split Tot to Train/Test
 
-The model is fitted on **Train**, and the generalization error is estimated on **Test**.
-Here the split of **Tot** is already provided inside the dataset (= variable `test`), 
-but **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic 
-or any other designs). 
-
-```julia
+```julia term = true
 ntest = 30
-s = samprand(n, ntest)
-Xtrain = X[s.train, :]
-ytrain = y[s.train]
-Xtest = X[s.test, :]
-ytest = y[s.test]
-```
-
-```julia
+s = samprand(ntot, ntest)
+Xtrain = X[s.train, :] ;
+ytrain = y[s.train] ;
+Xtest = X[s.test, :] ;
+ytest = y[s.test] ;
+ntrain = ntot - ntest
+(ntot = ntot, ntrain, ntest)
 tab(ytrain)
-```
-
-```julia
 tab(ytest)
 ```
 
@@ -79,34 +61,68 @@ tab(ytest)
 model = fda(nlv = 2)
 #model = fdasvd(nlv = 2)     # alternative algorithm (same result)
 fit!(model, Xtrain, ytrain) 
-fitm = model.fitm 
+fitm = model.fitm ;
 @names fitm
 ```
 
 ```julia
 lev = fitm.lev
-```
-
-```julia
 nlev = length(lev)
 ```
 
 **Fda scores**
 
 ```julia term = true
-@head Ttrain = model.fitm.T
+@head Ttrain = fitm.T
 ```
 
 **Class centers projected on the score space**
 
 ```julia
-ct = model.fitm.Tcenters
+ct = fitm.Tcenters
+```
+
+```julia term = true
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "Fda", ellipse = true)
+scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
+f
+```
+
+```julia term = true
+color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .7) ;
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = "Fda", ellipse = true)
+scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
+f
+```
+
+#### X-loadings matrix
+
+Columns of matrix `V` are coefficients of the linear discriminant function, 
+corresponding to object `LD` of function `lda` of the R package `MASS`.
+
+```julia
+V = fitm.V
 ```
 
 ```julia
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; ellipse = true, title = "Fda", zeros = true)
-scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
-f
+V' * V    # not orthogonal
+```
+
+#### Explained variance 
+
+```julia
+fitm.eig
+```
+
+```julia
+fitm.sstot
+```
+
+Explained variance is computed from the Pca of the class centers in 
+the transformed scale.
+
+```julia
+summary(model)
 ```
 
 #### Projection of Xtest to the score space
@@ -115,34 +131,17 @@ f
 @head Ttest = transf(model, Xtest)
 ```
 
-#### X-loadings matrix
-
-Columns of matrix `V` = coefficients of the linear discriminant function 
-= "LD" of function lda of the R package MASS.
-
-```julia
-V = model.fitm.V
+```julia term = true
+i = 1  # class "i" in test
+color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .7) ;
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, 
+    title = string("Projection test-class ", lev[i], " (blue points)"), ellipse = true) ;
+scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red) ;
+s = ytest .== lev[i] ;
+zT = Ttest[s, :] ;
+scatter!(ax, zT[:, 1], zT[:, 2]; markersize = 10, color = :blue) ;
+f
 ```
 
-```julia
-V' * V    # not orthogonal
-```
 
-
-#### Explained variance 
-
-```julia
-model.fitm.eig
-```
-
-```julia
-model.fitm.sstot
-```
-
-Explained variance is computed from the Pca of the class centers 
-in the transformed scale.
-
-```julia
-summary(model)
-```
 

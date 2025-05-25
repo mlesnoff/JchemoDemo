@@ -10,7 +10,9 @@
 ## Fda
 
 ```@raw html
-    <p><a href="../assets/html/Exploratory/Pca/pca_cassav_intro_scores.html">Fda - forages2</a></p>
+    <p><a href="../assets/html/Exploratory/Fda/fda_iris.html">Fda - iris</a></p>
+    <p><a href="../assets/html/Exploratory/Fda/densities_iris.html">Density estimations - iris</a></p>
+    <p><a href="../assets/html/Exploratory/Fda/fda_forages2.html">Fda - forages2</a></p>
 ```
 
 
