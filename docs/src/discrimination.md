@@ -3,18 +3,14 @@
 **Linear**
 
 ```@raw html
-    <p><a href="../assets/html/Discrimination/Prediction/predict_tecator_plsr.html">Prediction - tecator - Plsr</a></p>
-    <p><a href="../assets/html/Discrimination/Prediction/predict_tecator_rr.html">Prediction - tecator - Rr</a></p>
+    <p><a href="../assets/html/Discrimination/Prediction/predict_forages2_plsda.html">Prediction - forages2 - Plsda</a></p>
+    <p><a href="../assets/html/Discrimination/Prediction/predict_forages2_rrda.html">Prediction - forages2 - Plsda</a></p>
 ```
 
 **Non-linear**
 
 ```@raw html
-    <p><a href="../assets/html/Discrimination/Prediction/predict_tecator_kplsr.html">Prediction - tecator - Kplsr</a></p>
-    <p><a href="../assets/html/Discrimination/Prediction/predict_tecator_krr.html">Prediction - tecator - Krr</a></p>
-    <p><a href="../assets/html/Discrimination/Prediction/predict_tecator_lwplsr.html">Prediction - tecator - kNN-Lwplsr</a></p>
-    <p><a href="../assets/html/Discrimination/Prediction/predict_tecator_lwplsravg.html">Prediction - tecator - kNN-LwplsrAvg</a></p>
-    <p><a href="../assets/html/Discrimination/Prediction/predict_tecator_rfr.html">Prediction - tecator - Rfr</a></p>
+    <p><a href="../assets/html/Discrimination/Prediction/predict_forages2_lwplsrda.html">Prediction - forages2 - kNN-Lwplsrda</a></p>
 ```
 
 ## Model tuning
@@ -22,19 +18,15 @@
 **Split Train to Cal/Val**
 
 ```@raw html
-    <p><a href="../assets/html/Discrimination/Gridscore/gridscore_tecator_plsr.html">gridscore - tecator - Plsr</a></p>
-    <p><a href="../assets/html/Discrimination/Gridscore/gridscore_tecator_rr.html">gridscore - tecator - Rr</a></p>
-    <p><a href="../assets/html/Discrimination/Gridscore/gridscore_tecator_lwplsr.html">gridscore - tecator - kNN-Lwplsr</a></p>
-    <p><a href="../assets/html/Discrimination/Gridscore/gridscore_tecator_all_models.html">gridscore - tecator - All models</a></p>
+    <p><a href="../assets/html/Discrimination/Gridscore/gridscore_forages2_plsrda.html">gridscore - forages2 - Plsr</a></p>
+    <p><a href="../assets/html/Discrimination/Gridscore/gridscore_forages2_plsqda.html">gridscore - forages2 - Plsqda</a></p>
+    <p><a href="../assets/html/Discrimination/Gridscore/gridscore_forages2_lwplsrda.html">gridscore - forages2 - kNN-Lwplsrda</a></p>
 ```
 
 **K-fold and test-set CV**
 
 ```@raw html
-    <p><a href="../assets/html/Discrimination/Gridcv/gridcv_tecator_plsr.html">gridcv - tecator - Plsr</a></p>
-    <p><a href="../assets/html/Discrimination/Gridcv/gridcv_tecator_rr.html">gridcv - tecator - Rr</a></p>
-    <p><a href="../assets/html/Discrimination/Gridcv/gridcv_tecator_lwplsr.html">gridcv - tecator - kNN-Lwplsr</a></p>
-    <p><a href="../assets/html/Discrimination/Gridcv/gridcv_tecator_all_models.html">gridcv - tecator - All models</a></p>
+    <p><a href="../assets/html/Discrimination/Gridcv/gridcv_forages2_plsrda.html">gridcv - forages2 - Plsr</a></p>
 ```
 
 

@@ -1,0 +1,112 @@
+---
+title: Prediction - forages2 - Rrda 
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  out_width: 60%
+  out_height: 30%
+---
+
+```julia term = true
+using Jchemo, JchemoData
+using JLD2, CairoMakie
+using FreqTables 
+```
+
+RR-DA is a alternative to PLSR-DA, where ridge regression is used instead of PLSR to predict the Y-dummy table.
+
+#### Data importation
+
+```julia term = true
+path_jdat = dirname(dirname(pathof(JchemoData)))
+db = joinpath(path_jdat, "data/forages2.jld2") 
+@load db dat
+@names dat
+```
+
+```julia term = true
+X = dat.X 
+Y = dat.Y
+ntot = nro(X)
+y = Y.typ ;
+test = Y.test ;
+tab(y)
+```
+
+```julia term = true
+freqtable(y, test)
+```
+
+```julia term = true
+wlst = names(X)
+wl = parse.(Int, wlst) ;
+#plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+```
+
+**Note:**: X-data are already preprocessed (SNV + Savitsky-Golay 2nd deriv).
+
+#### Split Tot to Train/Test
+
+```julia term = true
+s = Bool.(test) ;
+Xtrain = rmrow(X, s) ;
+ytrain = rmrow(y, s) ;
+Xtest = X[s, :] ;
+ytest = y[s] ;
+ntrain = nro(Xtrain)
+ntest = nro(Xtest)
+(ntot = ntot, ntrain, ntest)
+```
+
+```julia term = true
+tab(ytrain)
+tab(ytest)
+```
+
+#### Model fitting
+
+```julia term = true
+model = rrda(; lb = 1e-5)
+fit!(model, Xtrain, ytrain)
+@names model 
+fitm = model.fitm ;
+@names fitm
+typeof(fitm.fitm)
+@names fitm.fitm
+```
+
+```julia term = true
+res = predict(model, Xtest) ;
+@names res
+@head pred = res.pred
+@head res.posterior   # predicted posterior probabilities
+```
+
+```julia term = true
+@head predict(model, Xtest).pred
+```
+
+```julia term = true
+predict(model, Xtest; lb = [.1, .01]).pred
+```
+
+```julia term = true
+errp(pred, ytest)
+merrp(pred, ytest)
+```
+
+#### Confusion matrix
+
+```julia term = true
+cf = conf(pred, ytest) ;
+@names cf
+cf.cnt
+cf.pct
+```
+
+```julia term = true
+plotconf(cf).f
+```
+
+

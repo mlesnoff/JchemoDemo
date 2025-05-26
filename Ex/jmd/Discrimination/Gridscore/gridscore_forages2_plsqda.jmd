@@ -1,0 +1,123 @@
+---
+title: Gridscore - forages2 - Rrda 
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  out_width: 60%
+  out_height: 30%
+---
+
+```julia term = true
+using Jchemo, JchemoData
+using JLD2, CairoMakie
+using FreqTables 
+```
+
+#### Data importation
+
+```julia term = true
+path_jdat = dirname(dirname(pathof(JchemoData)))
+db = joinpath(path_jdat, "data/forages2.jld2") 
+@load db dat
+@names dat
+```
+
+```julia term = true
+X = dat.X 
+Y = dat.Y
+ntot = nro(X)
+y = Y.typ ;
+test = Y.test ;
+tab(y)
+```
+
+```julia term = true
+freqtable(y, test)
+```
+
+```julia term = true
+wlst = names(X)
+wl = parse.(Int, wlst) ;
+#plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
+```
+
+**Note:**: X-data are already preprocessed (SNV + Savitsky-Golay 2nd deriv).
+
+#### Split Tot to Train/Test
+
+```julia term = true
+s = Bool.(test) ;
+Xtrain = rmrow(X, s) ;
+ytrain = rmrow(y, s) ;
+Xtest = X[s, :] ;
+ytest = y[s] ;
+ntrain = nro(Xtrain)
+ntest = nro(Xtest)
+(ntot = ntot, ntrain, ntest)
+```
+
+```julia term = true
+tab(ytrain)
+tab(ytest)
+```
+
+#### Split Train to Cal/Val for model tuning
+
+```julia term = true
+pct = .3  # proportion of Train for Val
+nval = round(Int, pct * ntrain)    
+s = samprand(ntrain, nval)
+```
+
+```julia term = true
+Xcal = Xtrain[s.train, :] ;
+ycal = ytrain[s.train] ;
+Xval = Xtrain[s.test, :] ;
+yval = ytrain[s.test] ;
+ncal = ntrain - nval 
+(ntot = ntot, ntrain, ncal, nval, ntest)
+```
+
+#### Grid-search 
+
+```julia term = true
+alpha = [0, .25, .5, .75, 1]  # Continuum: alpha = 0 is equivalent to PLS-QDA, alpha = 1 is equivalent to PLS-LDA
+nlv = 1:20
+pars = mpar(alpha = alpha)
+model = plsqda()
+res = gridscore(model, Xcal, ycal, Xval, yval; score = errp, pars, nlv)    # could also use 'merrp' if heighly unbalanced classes in Val
+```
+
+```julia term = true
+plotgrid(res.nlv, res.y1, res.alpha; step = 2, xlabel = "Nb. LVs", ylabel = "ERRP-Val").f
+```
+
+**Selection of the best parameter combination**
+
+```julia term = true
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
+```
+
+#### Final prediction (Test) using the optimal model
+
+```julia term = true
+model = plsqda(alpha = res.alpha[u], nlv = res.nlv[u])
+fit!(model, Xtrain, ytrain)
+@head pred = predict(model, Xtest).pred
+```
+
+**Generalization error**
+
+```julia term = true
+errp(pred, ytest)
+merrp(pred, ytest)
+```
+
+```julia term = true
+cf = conf(pred, ytest) ;
+@names cf
+cf.cnt
+cf.pct
+```
