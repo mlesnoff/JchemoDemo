@@ -1,5 +1,5 @@
 ---
-title: Gridscore - forages2 - Rrda 
+title: Gridscore - forages2 - Pls-Qda 
 weave_options:
   error: true
   wrap: true
@@ -81,16 +81,20 @@ ncal = ntrain - nval
 
 #### Grid-search 
 
+The importance of each class is made equal, and a continuum between PLS-QDA and PLS-LDA
+is evaluated. 
+
 ```julia term = true
-alpha = [0, .25, .5, .75, 1]  # Continuum: alpha = 0 is equivalent to PLS-QDA, alpha = 1 is equivalent to PLS-LDA
-nlv = 1:20
-pars = mpar(alpha = alpha)
+prior = [:unif]
+alpha = [0, .25, .5, .75, 1]  # continuum parameter: from alpha = 0 (PLS-QDA) to alpha = 1 (PLS-LDA)
+nlv = 1:20    # here must be > 0
+pars = mpar(prior = prior, alpha = alpha)
 model = plsqda()
-res = gridscore(model, Xcal, ycal, Xval, yval; score = errp, pars, nlv)    # could also use 'merrp' if heighly unbalanced classes in Val
+res = gridscore(model, Xcal, ycal, Xval, yval; score = merrp, pars, nlv)   
 ```
 
 ```julia term = true
-plotgrid(res.nlv, res.y1, res.alpha; step = 2, xlabel = "Nb. LVs", ylabel = "ERRP-Val").f
+plotgrid(res.nlv, res.y1, res.alpha; step = 2, xlabel = "Nb. LVs", ylabel = "ERRP-Val", leg_title = "Continuum").f
 ```
 
 **Selection of the best parameter combination**
@@ -103,7 +107,7 @@ res[u, :]
 #### Final prediction (Test) using the optimal model
 
 ```julia term = true
-model = plsqda(alpha = res.alpha[u], nlv = res.nlv[u])
+model = plsqda(prior = res.prior[u], alpha = res.alpha[u], nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
 @head pred = predict(model, Xtest).pred
 ```

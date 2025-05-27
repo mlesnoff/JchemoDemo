@@ -91,7 +91,7 @@ length(pars[1])
 
 ```julia term = true
 model = lwplsrda()
-res = gridscore(model, Xcal, ycal, Xval, yval; score = errp, pars, nlv)    # could also use 'merrp' if heighly unbalanced classes in Val
+res = gridscore(model, Xcal, ycal, Xval, yval; score = errp, pars, nlv)    # could also use 'merrp' if classes in Val are highly unbalanced
 ```
 
 ```julia term = true

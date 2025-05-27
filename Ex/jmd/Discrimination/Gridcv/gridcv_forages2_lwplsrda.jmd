@@ -1,5 +1,5 @@
 ---
-title: Gridscore - forages2 - Plsrda 
+title: Gridcv - forages2 - Pls-Qda
 weave_options:
   error: true
   wrap: true
@@ -67,56 +67,30 @@ tab(ytrain)
 tab(ytest)
 ```
 
-#### Split Train to Cal/Val for model tuning
-
-The training set (**Train**) is split to a calibration set (**Cal**) and a validation set (**Val**). 
-A grid search is implemented by fitting the model on **Cal** and computing a validation error on **Val**.   
-
-The split Cal/Val can be built from different sampling designs. Below, a random sampling is used.
+#### K-fold CV
 
 ```julia term = true
-pct = .3  # proportion of Train for Val
-nval = round(Int, pct * ntrain)    
-s = samprand(ntrain, nval)
+K = 3     # nb. folds (segments)
+rep = 1   # nb. replications
+segm = segmkf(ntrain, K; rep = rep)
 ```
 
 ```julia term = true
-Xcal = Xtrain[s.train, :] ;
-ycal = ytrain[s.train] ;
-Xval = Xtrain[s.test, :] ;
-yval = ytrain[s.test] ;
-ncal = ntrain - nval 
-(ntot = ntot, ntrain, ncal, nval, ntest)
-```
-
-#### Grid-search 
-
-```julia term = true
-nlv = 0:20
-model = plsrda()
-res = gridscore(model, Xcal, ycal, Xval, yval; score = errp, nlv) 
+nlvdis = [15; 25] ; metric = [:mah]
+h = [1; 2; 4; 6; Inf] ; k = [30; 50; 100]  
+nlv = 0:15
+pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k) 
+length(pars[1])
 ```
 
 ```julia term = true
-plotgrid(res.nlv, res.y1; step = 2, xlabel = "Nb. LVs", ylabel = "ERRP-Val").f
-```
-
-If other parameters have to be defined in the grid, they have to be set in argument `pars`, such as in 
-the example below. 
-
-The importance of each class is made equal (recommended if classes are highly unbalnaced) and a X-scaling 
-is evaluated. 
-
-```julia term = true
-pars = mpar(prior = [:unif], scal = [false; true])
-nlv = 0:20
-model = plsrda()
-res = gridscore(model, Xcal, ycal, Xval, yval; score = merrp, pars, nlv)
+model = lwplsrda()
+res = gridcv(model, Xtrain, ytrain; segm, score = merrp, pars, nlv).res   
 ```
 
 ```julia term = true
-group = string.("prior=", res.prior, " scal=", res.scal)
-plotgrid(res.nlv, res.y1, group; step = 2, xlabel = "Nb. LVs", ylabel = "ERRP-Val").f
+group = string.("nvldis=", res.nlvdis, " h=", res.h, " k=", res.k)
+plotgrid(res.nlv, res.y1, group; step = 2, xlabel = "Nb. LVs", ylabel = "ERRP-CV", leg_title = "Continuum").f
 ```
 
 **Selection of the best parameter combination**
@@ -129,7 +103,8 @@ res[u, :]
 #### Final prediction (Test) using the optimal model
 
 ```julia term = true
-model = plsrda(prior = res.prior[u], nlv = res.nlv[u], scal = res.scal[u])
+model = lwplsrda(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
+    k = res.k[u], nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
 ```
@@ -147,3 +122,4 @@ cf = conf(pred, ytest) ;
 cf.cnt
 cf.pct
 ```
+
