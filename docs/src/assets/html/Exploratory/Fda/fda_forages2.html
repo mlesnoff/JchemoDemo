@@ -812,7 +812,7 @@ Legume forages           │ 167   57</span>
 
 <pre class='hljl'>
 <span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>model0</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>pcasvd</span><span class='hljl-p'>(</span><span class='hljl-n'>nlv</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>10</span><span class='hljl-p'>)</span><span class='hljl-t'>
-Jchemo.JchemoModel{typeof(pcasvd), Base.Pairs{Symbol, Int64, Tuple{Symbol}, @NamedTuple{nlv::Int64}}}(Jchemo.pcasvd, nothing, Base.Pairs(:nlv =&gt; 10))
+Jchemo.JchemoModel{typeof(Jchemo.pcasvd), Base.Pairs{Symbol, Int64, Tuple{Symbol}, @NamedTuple{nlv::Int64}}}(Jchemo.pcasvd, nothing, Base.Pairs(:nlv =&gt; 10))
 
 </span><span class='hljl-nB'>julia&gt; </span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>model0</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xtrain</span><span class='hljl-p'>)</span><span class='hljl-t'>
 
@@ -835,7 +835,7 @@ Jchemo.JchemoModel{typeof(pcasvd), Base.Pairs{Symbol, Int64, Tuple{Symbol}, @Nam
 <pre class='hljl'>
 <span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>model</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>fda</span><span class='hljl-p'>(</span><span class='hljl-n'>nlv</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>2</span><span class='hljl-p'>)</span><span class='hljl-t'>
        </span><span class='hljl-cs'>#model = fdasvd(nlv = 2)     # alternative algorithm (same result)</span><span class='hljl-t'>
-Jchemo.JchemoModel{typeof(fda), Base.Pairs{Symbol, Int64, Tuple{Symbol}, @NamedTuple{nlv::Int64}}}(Jchemo.fda, nothing, Base.Pairs(:nlv =&gt; 2))
+Jchemo.JchemoModel{typeof(Jchemo.fda), Base.Pairs{Symbol, Int64, Tuple{Symbol}, @NamedTuple{nlv::Int64}}}(Jchemo.fda, nothing, Base.Pairs(:nlv =&gt; 2))
 
 </span><span class='hljl-nB'>julia&gt; </span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Ttrain_pca</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>ytrain</span><span class='hljl-p'>)</span><span class='hljl-t'>
 
@@ -928,7 +928,7 @@ Jchemo.JchemoModel{typeof(fda), Base.Pairs{Symbol, Int64, Tuple{Symbol}, @NamedT
 </span><span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>zT</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>Ttest</span><span class='hljl-p'>[</span><span class='hljl-n'>s</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-oB'>:</span><span class='hljl-p'>]</span><span class='hljl-t'> </span><span class='hljl-p'>;</span><span class='hljl-t'>
 
 </span><span class='hljl-nB'>julia&gt; </span><span class='hljl-nf'>scatter!</span><span class='hljl-p'>(</span><span class='hljl-n'>ax</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>zT</span><span class='hljl-p'>[</span><span class='hljl-oB'>:</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-p'>],</span><span class='hljl-t'> </span><span class='hljl-n'>zT</span><span class='hljl-p'>[</span><span class='hljl-oB'>:</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-ni'>2</span><span class='hljl-p'>];</span><span class='hljl-t'> </span><span class='hljl-n'>markersize</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>10</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>color</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-sc'>:blue</span><span class='hljl-p'>)</span><span class='hljl-t'>
-Scatter{Tuple{Vector{Point{2, Float64}}}}
+MakieCore.Scatter{Tuple{Vector{GeometryBasics.Point{2, Float64}}}}
 
 </span><span class='hljl-nB'>julia&gt; </span><span class='hljl-t'>f</span>
 </pre>
@@ -943,7 +943,7 @@ Scatter{Tuple{Vector{Point{2, Float64}}}}
 
 </span><span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>model</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>fda</span><span class='hljl-p'>(;</span><span class='hljl-t'> </span><span class='hljl-n'>nlv</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>2</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>lb</span><span class='hljl-p'>)</span><span class='hljl-t'>
        </span><span class='hljl-cs'>#model = fdasvd(; nlv = 2, lb)</span><span class='hljl-t'>
-Jchemo.JchemoModel{typeof(fda), Base.Pairs{Symbol, Real, Tuple{Symbol, Symbol}, @NamedTuple{nlv::Int64, lb::Float64}}}(Jchemo.fda, nothing, Base.Pairs{Symbol, Real, Tuple{Symbol, Symbol}, @NamedTuple{nlv::Int64, lb::Float64}}(:nlv =&gt; 2, :lb =&gt; 1.0e-5))
+Jchemo.JchemoModel{typeof(Jchemo.fda), Base.Pairs{Symbol, Real, Tuple{Symbol, Symbol}, @NamedTuple{nlv::Int64, lb::Float64}}}(Jchemo.fda, nothing, Base.Pairs{Symbol, Real, Tuple{Symbol, Symbol}, @NamedTuple{nlv::Int64, lb::Float64}}(:nlv =&gt; 2, :lb =&gt; 1.0e-5))
 
 </span><span class='hljl-nB'>julia&gt; </span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xtrain</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>ytrain</span><span class='hljl-p'>)</span><span class='hljl-t'>
 
@@ -1035,7 +1035,7 @@ Jchemo.JchemoModel{typeof(fda), Base.Pairs{Symbol, Real, Tuple{Symbol, Symbol}, 
         <div class="footer">
           <p>
             Published from <a href="fda_forages2.jmd">fda_forages2.jmd</a>
-            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.12 on 2025-05-25.
+            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.12 on 2025-05-28.
           </p>
         </div>
       </div>

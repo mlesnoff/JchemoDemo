@@ -4,7 +4,7 @@
 
 ```@raw html
     <p><a href="../assets/html/Discrimination/Prediction/predict_forages2_plsda.html">Prediction - forages2 - Plsda</a></p>
-    <p><a href="../assets/html/Discrimination/Prediction/predict_forages2_rrda.html">Prediction - forages2 - Plsda</a></p>
+    <p><a href="../assets/html/Discrimination/Prediction/predict_forages2_rrda.html">Prediction - forages2 - Rrda</a></p>
 ```
 
 **Non-linear**

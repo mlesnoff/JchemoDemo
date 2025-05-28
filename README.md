@@ -6,7 +6,7 @@
 
 1. **Examples with Jchemo**  [Temporary not available - Re-building the examples]
     - [**Html**](https://mlesnoff.github.io/JchemoDemo/docs/build/) examples of data analyses 
-    - Corresponding [**scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Ex/src) 
+    - [**Scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Ex/src) of the examples 
 
 2. **Examples of general Julia syntax** (Does not use Jchemo)
     - [**Scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Misc/src) 

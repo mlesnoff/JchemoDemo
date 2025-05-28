@@ -1,5 +1,5 @@
 ---
-title: Prediction - tecator - Knn-LwplsrAvg 
+title: Prediction - tecator - kNN-LwplsrAvg 
 weave_options:
   error: true
   wrap: true
