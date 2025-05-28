@@ -4,7 +4,7 @@
 
 **What is provided:**
 
-1. **Examples with Jchemo**  [Temporary not available - Re-building the examples]
+1. **Examples with Jchemo** 
     - [**Html**](https://mlesnoff.github.io/JchemoDemo/docs/build/) examples of data analyses 
     - [**Scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Ex/src) of the examples 
 
