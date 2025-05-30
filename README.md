@@ -1,25 +1,26 @@
 # JchemoDemo
 
-**JchemoDemo** is a **Julia project** (with its [**environment**](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)) demonstrating basic functions of package [**Jchemo.jl**](https://github.com/mlesnoff/Jchemo.jl) and the general syntax. This project is also used to deliver ad'hoc **training sessions**. 
+**JchemoDemo** is a Julia project-[environment](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml) illustrating the general syntax for functions of package [**Jchemo.jl**](https://github.com/mlesnoff/Jchemo.jl). The project can for instance be used as tutorial materials for training sessions. 
 
-**What is provided:**
+**Contents**
 
-1. **Examples with Jchemo** 
-    - [**Html**](https://mlesnoff.github.io/JchemoDemo/docs/build/) examples of data analyses 
-    - [**Scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Ex/src) of the examples 
+1. **Numerical examples with Jchemo** 
+    - [**Html**](https://mlesnoff.github.io/JchemoDemo/docs/build/) 
+    - [**Scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Ex/src) corresponding to Html notes 
 
-2. **Examples of general Julia syntax** (Does not use Jchemo)
-    - [**Scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Misc/src) 
+    - Note: The datasets used in the numerical examples come from package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl) (contained in the **JchemoDemo**[ environment](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)).
 
-3. **About the Julia environment**
-    - [**Tips to start**](https://github.com/mlesnoff/JchemoDemo/blob/main/Misc/config.md)
+2. **Some general Julia syntax** 
+    - [**Scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Misc/src) (not using Jchemo)
 
-4. **Some methodological materials**
+3. **Tips to start with Julia**
+    - [**Html**](https://github.com/mlesnoff/JchemoDemo/blob/main/Misc/config.md)
+
+4. **Some methodology**
     - [**Slides**](https://github.com/mlesnoff/JchemoDemo/tree/main/Misc/annexes)
 
-The **datasets** used in the examples are stored in package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl), already installed in the [**JchemoDemo environment**](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml).
 
-
+ 
 ## <span style="color:green"> **Author** </span> 
 
 **Matthieu Lesnoff**
@@ -29,6 +30,4 @@ The **datasets** used in the examples are stored in package [**JchemoData.jl**](
 - [**ChemHouse**](https://www.chemproject.org/ChemHouse), Montpellier
 
 **matthieu.lesnoff@cirad.fr**
-
-
 
