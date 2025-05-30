@@ -1,6 +1,6 @@
 # JchemoDemo
 
-**JchemoDemo** is a Julia project-[environment](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml) illustrating the general syntax for functions of package [**Jchemo.jl**](https://github.com/mlesnoff/Jchemo.jl). The project can for instance be used as tutorial materials for training sessions. 
+**JchemoDemo** is a Julia project-[environment](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml) containing tutorial materials  on package [**Jchemo.jl**](https://github.com/mlesnoff/Jchemo.jl), in particular illustrating the general syntax of basic functions of the package. 
 
 **Contents**
 
