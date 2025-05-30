@@ -19,8 +19,6 @@
 4. **Some methodology**
     - [**Slides**](https://github.com/mlesnoff/JchemoDemo/tree/main/Misc/annexes)
 
-
- 
 ## <span style="color:green"> **Author** </span> 
 
 **Matthieu Lesnoff**
