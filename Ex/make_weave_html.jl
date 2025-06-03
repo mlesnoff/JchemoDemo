@@ -6,7 +6,8 @@ path_jmd = joinpath(path, "JchemoDemo/Ex/jmd")
 path_html = joinpath(path, "JchemoDemo/docs/src/assets/html")
 ## End
 
-nam = "Exploratory/Pca"
+nam = "ImportExport"
+#nam = "Exploratory/Pca"
 #nam = "Exploratory/Fda"
 #nam = "Regression/Prediction"
 #nam = "Regression/Gridscore"

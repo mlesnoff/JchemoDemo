@@ -3,7 +3,7 @@ using DataFrames, JchemoData
 path_jdat = dirname(dirname(pathof(JchemoData)))
 path_out = "D:/Mes Donnees/Tmp"
 ## Or (temporary path_out files)
-#path_out = tempname() 
+#path_out = tempdir() 
 
 ########### CSV
 using CSV
