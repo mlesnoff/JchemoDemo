@@ -7,6 +7,7 @@ path_src = joinpath(path, "JchemoDemo/Ex/src")
 ## End
 
 nam = "ImportExport"
+#nam = "Datasets"
 #nam = "Exploratory/Pca"
 #nam = "Exploratory/Fda"
 #nam = "Regression/Prediction"

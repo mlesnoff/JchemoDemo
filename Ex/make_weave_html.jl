@@ -7,6 +7,7 @@ path_html = joinpath(path, "JchemoDemo/docs/src/assets/html")
 ## End
 
 nam = "ImportExport"
+#nam = "Datasets"
 #nam = "Exploratory/Pca"
 #nam = "Exploratory/Fda"
 #nam = "Regression/Prediction"
