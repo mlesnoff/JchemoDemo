@@ -1,0 +1,175 @@
+---
+title: challenge2018 - Data description
+weave_options:
+  error: true
+  wrap: true
+  term: false
+  out_width: 60%
+  out_height: 30%
+---
+
+
+```julia term = true
+using Jchemo, JchemoData
+using JLD2, DataFrames, CairoMakie
+using FreqTables
+```
+
+#### Data importation
+
+```julia term = true
+path_jdat = dirname(dirname(pathof(JchemoData)))
+db = joinpath(path_jdat, "data/challenge2018.jld2") 
+@load db dat
+@names dat
+```
+
+```julia term = true
+X = dat.X ;
+Y = dat.Y ;
+@head X
+@head Y
+ntot = nro(X)
+```
+
+#### X data
+
+```julia term = true
+wlst = names(X) 
+wl = parse.(Int, wlst) ;
+```
+
+```julia term = true
+plotsp(X, wl; nsamp = 500, xlabel = "Wavelength (nm)").f
+```
+
+**Preprocessing by SNV and derivation**
+
+```julia term = true
+model1 = snv()
+model2 = savgol(npoint = 21, deriv = 2, degree = 3)
+model = pip(model1, model2) ;
+fit!(model, X)
+Xp = transf(model, X) ;
+@head Xp 
+```
+
+```julia term = true
+plotsp(Xp, wl; nsamp = 500, xlabel = "Wavelength (nm)").f
+```
+
+#### Y data
+
+```julia term = true
+freqtable(string.(Y.typ, " - ", Y.label))
+```
+
+```julia term = true
+test = Y.test ;  # training/test (0/1) observations
+tab(test) 
+freqtable(Y.typ, test)
+```
+
+```julia term = true
+y = Y.conc ; # protein concentration
+summ(y).res
+```
+
+```julia term = true
+summ(y, test)
+```
+
+```julia term = true
+s = test .== 0 ;
+ytrain = y[s] ;  
+ytest = rmrow(y, s) ; 
+```
+
+```julia 
+f = Figure(size = (400, 300))
+ax = Axis(f[1, 1]; xlabel = "Protein", ylabel = "Nb. observations")
+hist!(ax, ytrain; bins = 50, label = "Train")
+hist!(ax, ytest; bins = 50, label = "Test")
+axislegend(position = :rt)
+f
+```
+
+```julia 
+f = Figure(size = (500, 400))
+offs = [70; 0]
+ax = Axis(f[1, 1]; xlabel = "Protein",  ylabel = "Nb. observations", 
+    yticks = (offs, ["Train" ; "Test"]))
+hist!(ax, ytrain; offset = offs[1], bins = 50)
+hist!(ax, ytest; offset = offs[2], bins = 50)
+f
+```
+
+```julia 
+f = Figure(size = (400, 300))
+ax = Axis(f[1, 1]; xlabel = "Protein", ylabel = "Density")
+bdw = .5
+density!(ax, ytrain; bandwidth = bdw, color = :blue, label = "Train")
+density!(ax, ytest; bandwidth = bdw, color = (:red, .5), label = "Test")
+axislegend(position = :rt)  
+f
+```
+
+```julia 
+f = Figure(size = (400, 300))
+offs = [.10; 0]
+ax = Axis(f[1, 1]; xlabel = "Protein", ylabel = "Density", 
+    yticks = (offs, ["Train" ; "Test"]))
+bdw = .5
+density!(ax, ytrain; bandwidth = bdw, offset = offs[1], color = (:slategray, 0.5))
+density!(ax, ytest; bandwidth = bdw, offset = offs[2], color = (:slategray, 0.5))
+f
+```
+
+```julia
+f = Figure(size = (400, 300))
+ax = Axis(f[1, 1]; xticks = (0:1, ["Train", "Test"]), xlabel = "Group", ylabel = "Protein")
+boxplot!(ax, test, y; width = .3, show_notch = true)
+f
+```
+
+
+
+
+
+
+
+
+
+
+
+
+```julia term = true
+typ = Y.typ ;
+tab(typ)
+```
+
+Building a new variable, `typ2`, aggregating categories `test` and `validation` in a new categogry `test` 
+
+```julia term = true
+typ2 = copy(typ) ;
+typ2[typ2 .== "val"] .= "test" ;
+tab(typ2)
+```
+
+```julia term = true
+summ(Y, typ2)
+```
+
+**A given variable**
+
+```julia term = true
+namy = names(Y)[1:3]
+j = 2
+nam = namy[2]
+y = Y[:, nam] ;
+s = typ2 .== "train" ;
+ytrain = y[s] ;  # training observations
+ytest = rmrow(y, s) ; # remaing observations
+```
+
+
