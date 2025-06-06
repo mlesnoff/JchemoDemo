@@ -16,6 +16,7 @@ nam = "ImportExport"
 #nam = "Discrimination/Prediction"
 #nam = "Discrimination/Gridscore"
 #nam = "Discrimination/Gridcv"
+#nam = "Notes"
 path_scripts = joinpath(path_jmd, nam)
 @show f = filter(endswith("jmd"), readdir(path_scripts))
 nf = length(f) 

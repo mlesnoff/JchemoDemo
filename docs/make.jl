@@ -8,7 +8,8 @@ makedocs(;
         "Data_import/export" => "import_export.md",
         "Exploratory" => "exploratory.md",
         "Regression" => "regression.md",
-        "Discrimination" => "discrimination.md"
+        "Discrimination" => "discrimination.md",
+        "Notes" => "notes.md"
         ]
     )
 
