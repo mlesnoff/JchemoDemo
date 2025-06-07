@@ -15,4 +15,10 @@
     <p><a href="../assets/html/Exploratory/Fda/fda_forages2.html">Fda - forages2</a></p>
 ```
 
+## Manifold 
+
+```@raw html
+    <p><a href="../assets/html/Exploratory/Manifold/manifold_challenge2018.html">Manifold - challenge2018 - Pca</a></p>
+```
+
 

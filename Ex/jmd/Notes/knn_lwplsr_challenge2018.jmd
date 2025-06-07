@@ -382,7 +382,7 @@ freqtable(Y.test)
 The final data are given by
 
 ```julia term = true
-s = Bool.(Y.test) ;
+s = Bool.(Y.test) ;  # same as: s = Y.test .== 1
 Xtrain = rmrow(Xp, s) ;
 Ytrain = rmrow(Y, s) ;
 ytrain = rmrow(y, s) ;
