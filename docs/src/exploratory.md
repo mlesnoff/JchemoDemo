@@ -18,7 +18,9 @@
 ## Manifold 
 
 ```@raw html
-    <p><a href="../assets/html/Exploratory/Manifold/manifold_challenge2018.html">Manifold - challenge2018 - Pca</a></p>
+    <p><a href="../assets/html/Exploratory/Manifold/manifold_challenge2018_pca.html">Manifold - challenge2018 - Pca</a></p>
+    <p><a href="../assets/html/Exploratory/Manifold/manifold_challenge2018_umap.html">Manifold - challenge2018 - Umap</a></p>
+    <p><a href="../assets/html/Exploratory/Manifold/manifold_swissroll_misc.html">Manifold - swissroll - Various methods</a></p>
 ```
 
 

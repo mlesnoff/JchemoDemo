@@ -55,7 +55,9 @@ ntest = nro(Xtest) ;
 
 
 nlv = 3
-model = pcasvd(; nlv)
+n_neighbors = 40 ; min_dist = .4 
+model = umap(; nlv, n_neighbors, min_dist)
+#model = umap(; nlv, n_neighbors, min_dist, psamp = .5)  # faster but less accurate  
 fit!(model, Xtrain)
 @head T = model.fitm.T
 
@@ -66,8 +68,8 @@ CairoMakie.activate!()
 
 i = 1
 plotxyz(T[:, i], T[:, i + 1], T[:, i + 2]; size = (600, 500), color = (:red, .3), markersize = 10, 
-    xlabel = string("PC", i), ylabel = string("PC", i + 1), zlabel = string("PC", i + 2), 
-    title = "Pca score space").f
+    xlabel = string("LV", i), ylabel = string("LV", i + 1), zlabel = string("LV", i + 2), 
+    title = "Umap score space").f
 
 
 lev = mlev(typtrain)
@@ -75,16 +77,16 @@ nlev = length(lev)
 colm = cgrad(:tab10, nlev; categorical = true, alpha = .5) ;
 i = 1
 plotxyz(T[:, i], T[:, i + 1], T[:, i + 2], typtrain; size = (700, 500), color = colm, markersize = 10, 
-    xlabel = string("PC", i), ylabel = string("PC", i + 1), zlabel = string("PC", i + 2), 
-    title = "Pca score space").f
+    xlabel = string("LV", i), ylabel = string("LV", i + 1), zlabel = string("LV", i + 2), 
+    title = "Umap score space").f
 
 
 @head Ttest = transf(model, Xtest)
 
 
 f, ax = plotxyz(T[:, i], T[:, i + 1], T[:, i + 2], typtrain; size = (700, 500), color = colm, markersize = 10, 
-    xlabel = string("PC", i), ylabel = string("PC", i + 1), zlabel = string("PC", i + 2), 
-    title = "Pca score space") ;
+           xlabel = string("LV", i), ylabel = string("LV", i + 1), zlabel = string("LV", i + 2), 
+           title = "Umap score space") ;
 scatter!(ax, Ttest[:, i], Ttest[:, i + 1], Ttest[:, i + 2]; markersize = 6, color = :black)
 f
 
