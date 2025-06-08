@@ -13,6 +13,15 @@
     <p><a href="../assets/html/Discrimination/Prediction/predict_forages2_lwplsrda.html">Prediction - forages2 - kNN-Lwplsrda</a></p>
 ```
 
+**Confusion matrix**
+
+```@raw html
+    <p><a href="../assets/html/Discrimination/Prediction/predict_mnist20pct_confusion.html">Prediction - mnist20pct - Confusion matrix</a></p>
+```
+
+
+
+
 ## Model tuning
 
 **Split Train to Cal/Val**
