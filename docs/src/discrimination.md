@@ -19,9 +19,6 @@
     <p><a href="../assets/html/Discrimination/Prediction/predict_mnist20pct_confusion.html">Prediction - mnist20pct - Confusion matrix</a></p>
 ```
 
-
-
-
 ## Model tuning
 
 **Split Train to Cal/Val**
@@ -30,6 +27,7 @@
     <p><a href="../assets/html/Discrimination/Gridscore/gridscore_forages2_plsrda.html">gridscore - forages2 - Plsrda</a></p>
     <p><a href="../assets/html/Discrimination/Gridscore/gridscore_forages2_plsqda.html">gridscore - forages2 - Pls-Qda</a></p>
     <p><a href="../assets/html/Discrimination/Gridscore/gridscore_forages2_lwplsrda.html">gridscore - forages2 - kNN-Lwplsrda</a></p>
+    <p><a href="../assets/html/Discrimination/Gridscore/gridscore_mnist20pct_lwplsrda.html">gridscore - mnist20pct - kNN-Lwplsrda</a></p>
 ```
 
 **K-fold and test-set CV**

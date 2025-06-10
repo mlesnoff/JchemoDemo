@@ -70,7 +70,7 @@ model = lwplsr()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv)
 
 
-group = string.("nvldis=", res.nlvdis, " h=", res.h, " k=", res.k)
+group = string.("nvldis=", res.nlvdis, " h=", res.h, " k=", res.k) ;
 plotgrid(res.nlv, res.y1, group; step = 2, xlabel ="Nb. LVs", ylabel = "RMSEP-Val").f
 
 

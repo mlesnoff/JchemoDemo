@@ -56,7 +56,7 @@ model = lwplsrda()
 res = gridcv(model, Xtrain, ytrain; segm, score = merrp, pars, nlv).res
 
 
-group = string.("nvldis=", res.nlvdis, " h=", res.h, " k=", res.k)
+group = string.("nvldis=", res.nlvdis, " h=", res.h, " k=", res.k) ;
 plotgrid(res.nlv, res.y1, group; step = 2, xlabel = "Nb. LVs", ylabel = "ERRP-CV", leg_title = "Continuum").f
 
 

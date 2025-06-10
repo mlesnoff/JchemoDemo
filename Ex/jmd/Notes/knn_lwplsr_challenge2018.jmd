@@ -52,7 +52,7 @@ in the data. The general principle is, for each new observation to predict (*xne
 *k* nearest neighbors of the observation (the *kNN* selection step) and then to apply a PLSR to the neighborhood 
 (i.e. the *k* selected neighbors). Two illustrations of neighborhood selection are presented below
 
-```julia, echo = false, out_width = "70%"
+```julia echo = false, out_width = "70%"
 using Jchemo, JchemoData
 using JLD2, CairoMakie
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -101,7 +101,7 @@ Legend(f[1, 2], elt, lab; nbanks = 1, rowgap = 10, framevisible = false)
 f
 ```
 
-```julia, echo = false, out_width = "70%"
+```julia echo = false, out_width = "70%"
 i = 300
 res = getknn(T, Tnew[i:i, :]; k = k, metric = :mah)
 s = res.ind[1] 

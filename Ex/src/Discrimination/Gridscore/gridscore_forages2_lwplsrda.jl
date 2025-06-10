@@ -64,7 +64,7 @@ model = lwplsrda()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = errp, pars, nlv)    # could also use 'merrp' if classes in Val are highly unbalanced
 
 
-group = string.("nvldis=", res.nlvdis, " h=", res.h, " k=", res.k)
+group = string.("nvldis=", res.nlvdis, " h=", res.h, " k=", res.k) ;
 plotgrid(res.nlv, res.y1, group; step = 2, xlabel = "Nb. LVs", ylabel = "ERRP-Val").f
 
 
