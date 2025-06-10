@@ -27,7 +27,7 @@ For details on using dataframes and CSV files, see the documentation of packages
 - [DataFrames.jl](https://github.com/JuliaData/DataFrames.jl) 
 - [CSV.jl](https://github.com/JuliaData/CSV.jl) 
 
-#### Packages required for the examples
+**Packages required for the examples**
 
 ```julia term = true
 using Jchemo, JchemoData    
