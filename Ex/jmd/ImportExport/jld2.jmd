@@ -108,7 +108,7 @@ db = joinpath(path_jdat, "data/tecator.jld2") ;  # full path to the jld2 file; c
 @names dat  
 ```
 
-**Saving datasets X and Y**
+Saving datasets `X` and `Y`
 
 ```julia term = true
 path_out = tempdir() ;   # path that will receive the result file; can be changed to any other existing path
