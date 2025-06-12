@@ -3,6 +3,7 @@ using Jchemo, JchemoData
 using JLD2, CairoMakie, GLMakie
 
 
+using JchemoData, JLD2, CairoMakie, GLMakie
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/cassav.jld2")
 @load db dat
@@ -10,7 +11,11 @@ db = joinpath(path_jdat, "data/cassav.jld2")
 
 
 X = dat.X
+@head X
+
+
 Y = dat.Y
+@head Y
 
 
 year = Y.year
@@ -19,7 +24,7 @@ tab(year)
 
 model = pcasvd(nlv = 10)
 fit!(model, X)  
-fitm = model.fitm ;
+fitm = model.fitm
 @head T = fitm.T
 
 

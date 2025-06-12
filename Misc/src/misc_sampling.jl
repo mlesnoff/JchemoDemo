@@ -5,7 +5,7 @@ rand(5)
 rand(5, 3)
 
 rand(1:3, 10)
-rand([.3 ; 12 ; .8], 5)
+rand([.3; 12; .8], 5)
 
 randn(5)
 
@@ -13,7 +13,7 @@ rand(MersenneTwister(1), 1:3, 4)
 rand(MersenneTwister(1), 1:3, 4)
 
 X = zeros(5, 3)
-rand!(X) ;
+rand!(X)
 X
 
 rand(Uniform(-20, 20), 10)
@@ -41,11 +41,11 @@ function sample_wr!(x, n)
     end
     s
 end
-z = [1 ; 2; 21.1 ; 5 ; 32]
+z = [1; 2; 21.1; 5; 32]
 sample_wr!(z, 3)
 z
 
-n = 100 ; pq = 3 ; pz = 2
+n = 100; pq = 3; pz = 2
 X = randn(n, 3)
 μ = zeros(pq)
 Σ = .9 * ones(pq, pq)
@@ -70,11 +70,11 @@ for i = 1:rep
     println(s)
 end
 
-z = [1 ; 8; 4.]
+z = [1; 8; 4.]
 probs = [0, 0, 1] 
 sample(z, Weights(probs), 2)
 
-n = 10^6 ; x = collect(1:n) ;
+n = 10^6; x = collect(1:n)
 @b sample(1:n, 100, replace = false)  # ***
 @b sample!(1:n, Vector{Int}(undef, 100), replace = false) # same
 
@@ -96,7 +96,7 @@ x = collect(1:5)
 shuffle(x)
 
 y = copy(x)
-shuffle!(y) ;
+shuffle!(y)
 y
 
 n = 10^4 

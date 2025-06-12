@@ -10,16 +10,20 @@ db = joinpath(path_jdat, "data/mnist20pct.jld2")
 @names dat
 
 
-Xtrain = dat.Xtrain ;
-ytrain = dat.ytrain ;
-Xtest = dat.Xtest ;
-ytest = dat.ytest ;
-@head Xtrain
-@head Xtest
-ntrain, p = size(Xtrain) ;
-ntest = nro(Xtest) ;
-ntot = ntrain + ntest ;
+Xtrain = dat.Xtrain
+ytrain = dat.ytrain
+Xtest = dat.Xtest
+ytest = dat.ytest
+ntrain, p = size(Xtrain)
+ntest = nro(Xtest)
+ntot = ntrain + ntest
 (ntot = ntot, ntrain, ntest)
+
+
+@head Xtrain
+
+
+@head Xtest
 
 
 plotsp(Xtrain, 1:p; nsamp = 1, xlabel = "Pixel", ylabel = "Grey level (0-255)").f

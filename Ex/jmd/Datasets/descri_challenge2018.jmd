@@ -2,14 +2,14 @@
 title: challenge2018 - Data description
 weave_options:
   error: true
-  wrap: true
+  wrap: false
   term: false
   out_width: 60%
   out_height: 30%
 ---
 
 
-```julia term = true
+```julia
 using Jchemo, JchemoData
 using JLD2, DataFrames, CairoMakie
 using FreqTables
@@ -17,73 +17,75 @@ using FreqTables
 
 #### Data importation
 
-```julia term = true
+```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/challenge2018.jld2") 
 @load db dat
 @names dat
 ```
 
-```julia term = true
-X = dat.X ;
-Y = dat.Y ;
+```julia
+X = dat.X
 @head X
+```
+
+```julia
+Y = dat.Y
 @head Y
-ntot = nro(X)
 ```
 
 #### X data
 
-```julia term = true
+```julia
 wlst = names(X) 
-wl = parse.(Int, wlst) ;
+wl = parse.(Int, wlst)
 ```
 
-```julia term = true
+```julia
 plotsp(X, wl; nsamp = 500, xlabel = "Wavelength (nm)").f
 ```
 
 **Preprocessing by SNV and derivation**
 
-```julia term = true
+```julia
 model1 = snv()
 model2 = savgol(npoint = 21, deriv = 2, degree = 3)
-model = pip(model1, model2) ;
+model = pip(model1, model2)
 fit!(model, X)
-Xp = transf(model, X) ;
+Xp = transf(model, X)
 @head Xp 
 ```
 
-```julia term = true
+```julia
 plotsp(Xp, wl; nsamp = 500, xlabel = "Wavelength (nm)").f
 ```
 
 #### Y data
 
-```julia term = true
-typ = Y.typ ;
+```julia
+typ = Y.typ
 freqtable(string.(typ, " - ", Y.label))
 ```
 
-```julia term = true
-test = Y.test ;  # training/test (0/1) observations
+```julia
+test = Y.test  # training/test (0/1) observations
 tab(test) 
 freqtable(typ, test)
 ```
 
-```julia term = true
-y = Y.conc ; # protein concentration
+```julia
+y = Y.conc # protein concentration
 summ(y).res
 ```
 
-```julia term = true
+```julia
 summ(y, test)
 ```
 
-```julia term = true
-s = test .== 0 ;
-ytrain = y[s] ;  
-ytest = rmrow(y, s) ; 
+```julia
+s = test .== 0
+ytrain = y[s]  
+ytest = rmrow(y, s) 
 ```
 
 ```julia 
@@ -99,7 +101,7 @@ f
 f = Figure(size = (500, 400))
 offs = [70; 0]
 ax = Axis(f[1, 1]; xlabel = "Protein",  ylabel = "Nb. observations", 
-    yticks = (offs, ["Train" ; "Test"]))
+    yticks = (offs, ["Train"; "Test"]))
 hist!(ax, ytrain; offset = offs[1], bins = 50)
 hist!(ax, ytest; offset = offs[2], bins = 50)
 f
@@ -119,7 +121,7 @@ f
 f = Figure(size = (400, 300))
 offs = [.10; 0]
 ax = Axis(f[1, 1]; xlabel = "Protein", ylabel = "Density", 
-    yticks = (offs, ["Train" ; "Test"]))
+    yticks = (offs, ["Train"; "Test"]))
 bdw = .5
 density!(ax, ytrain; bandwidth = bdw, offset = offs[1], color = (:slategray, 0.5))
 density!(ax, ytest; bandwidth = bdw, offset = offs[2], color = (:slategray, 0.5))

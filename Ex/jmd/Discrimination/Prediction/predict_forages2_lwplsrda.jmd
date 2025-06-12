@@ -2,13 +2,13 @@
 title: Prediction - forages2 - kNN-Lwplsrda 
 weave_options:
   error: true
-  wrap: true
+  wrap: false
   term: false
   out_width: 60%
   out_height: 30%
 ---
 
-```julia term = true
+```julia
 using Jchemo, JchemoData
 using JLD2, CairoMakie
 using FreqTables 
@@ -16,29 +16,36 @@ using FreqTables
 
 #### Data importation
 
-```julia term = true
+```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/forages2.jld2") 
 @load db dat
 @names dat
 ```
 
-```julia term = true
+```julia
 X = dat.X 
+@head X 
+```
+
+```julia
 Y = dat.Y
-ntot = nro(X)
-y = Y.typ ;
-test = Y.test ;
+@head Y
+```
+
+```julia
+y = Y.typ
+test = Y.test
 tab(y)
 ```
 
-```julia term = true
+```julia
 freqtable(y, test)
 ```
 
-```julia term = true
+```julia
 wlst = names(X)
-wl = parse.(Int, wlst) ;
+wl = parse.(Int, wlst)
 #plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
@@ -46,53 +53,69 @@ wl = parse.(Int, wlst) ;
 
 #### Split Tot to Train/Test
 
-```julia term = true
-s = Bool.(test) ;
-Xtrain = rmrow(X, s) ;
-ytrain = rmrow(y, s) ;
-Xtest = X[s, :] ;
-ytest = y[s] ;
+```julia
+s = Bool.(test)
+Xtrain = rmrow(X, s)
+ytrain = rmrow(y, s)
+Xtest = X[s, :]
+ytest = y[s]
+ntot = nro(X)
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 ```
 
-```julia term = true
+```julia
 tab(ytrain)
+```
+
+```julia
 tab(ytest)
 ```
 
 #### Model fitting
 
-```julia term = true
-nlvdis = 20 ; metric = :mah 
-h = 1 ; k = 200
+```julia
+nlvdis = 20; metric = :mah 
+h = 1; k = 200
 nlv = 12
 model = lwplsrda(; nlvdis, metric, h, k, nlv)
 fit!(model, Xtrain, ytrain)
 ```
 
-```julia term = true
-res = predict(model, Xtest) ;
+```julia
+res = predict(model, Xtest)
 @names res
+```
+
+```julia 
 @head pred = res.pred
 ```
 
-```julia term = true
+```julia
 errp(pred, ytest)
+```
+
+```julia
 merrp(pred, ytest)
 ```
 
 #### Confusion matrix
 
-```julia term = true
-cf = conf(pred, ytest) ;
+```julia
+cf = conf(pred, ytest)
 @names cf
+```
+
+```julia
 cf.cnt
+```
+
+```julia
 cf.pct
 ```
 
-```julia term = true
+```julia
 plotconf(cf).f
 ```
 

@@ -2,7 +2,7 @@
 title: ComDim - wines_sensory - Hanafi2008
 weave_options:
   error: true
-  wrap: true
+  wrap: false
   term: false
   out_width: 60%
   out_height: 30%
@@ -27,27 +27,27 @@ and to assess the relationships among the eight wines.
 
 #### Data importation
 
-```julia term = true
+```julia
 using Jchemo, JchemoData
 using JLD2, CairoMakie
 ```
 
-```julia term = true
+```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/wines_sensory.jld2")
 @load db dat
 @names dat
 ```
 
-```julia term = true
+```julia
 X1 = dat.X1 
 X2 = dat.X2
 X3 = dat.X3
 X4 = dat.X4
-Xbl = [X1, X2, X3, X4] ;   # Same as: Xbl = [[X1]; [X2]; [X3]; [X4]]
+Xbl = [X1, X2, X3, X4]   # Same as: Xbl = [[X1]; [X2]; [X3]; [X4]]
 ```
 
-```julia term = true
+```julia
 n = nro(X1)
 nbl = length(Xbl)
 ```
@@ -56,18 +56,18 @@ nbl = length(Xbl)
 
 Below, each block is scaled by its Frobenius norm, and three global components (scores) are computed
 
-```julia term = true
+```julia
 nlv = 3
 bscal = :frob
 model = comdim(; nlv, bscal)
 fit!(model, Xbl)
-fitm = model.fitm ;
+fitm = model.fitm
 @names fitm
 ```
 
 - Global scores
 
-```julia term = true
+```julia
 @head T = fitm.T
 ```
 
@@ -80,41 +80,53 @@ f
 
 - Block scores and block loadings
 
-```julia term = true
+```julia
 Tbl = fitm.Tbl
+```
+
+```julia
 Vbl = fitm.Vbl
 ```
 - For block *k*
 
-```julia term = true
+```julia
 k = 1
 Tbl[k]
+```
+
+```julia
 Vbl[k]
 ```
 #### Summary outputs
 
-```julia term = true
-res = summary(model, Xbl) ;
+```julia
+res = summary(model, Xbl)
 @names res
 ```
 
 - Proportion of the total XX' inertia explained by the global scores
 
-```julia term = true
+```julia
 res.explvarxx
 ```
 
 - Proportion of the inertia of each block (= Xbl[k]) explained by the global scores
 
-```julia term = true
+```julia
 explxbl = res.explxbl  # = specific weights 'lb' when 'bscal = :frob'
+```
+
+```julia 
 rowsum(explxbl)
 ```
 
 - Contribution of each block to the global scores
 
-```julia term = true
+```julia
 contrxbl2t = res.contrxbl2t
+```
+
+```julia 
 colsum(contrxbl2t)
 ```
 
@@ -131,13 +143,13 @@ f
 
 - RV coefficients between each block and the global LVs
 
-```julia term = true
+```julia
 res.rvxbl2t
 ```
 
 - Correlation between the X-variables and the global scores
 
-```julia term = true
+```julia
 corx2t = res.corx2t
 ```
 
@@ -178,7 +190,7 @@ k = 4  # fourth block
 z = Tbl[k] 
 v = Vbl[k] 
 nam = names(Xbl[k]) 
-i = 1 ;
+i = 1
 f, ax = plotxy(z[:, i], z[:, i + 1]; zeros = true, xlabel = string("PC", i), 
     ylabel = string("PC", i + 1), title = string("Block ", k)) 
 text!(ax, z[:, i], z[:, i + 1]; text = string.("w", 1:n), fontsize = 15) 

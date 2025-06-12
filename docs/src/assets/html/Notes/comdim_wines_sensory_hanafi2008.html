@@ -3,7 +3,7 @@
 <HEAD>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Introduction to the kNN-LWPLSR algorithmn</title>
+  <title>ComDim - wines_sensory - Hanafi2008</title>
   
 
   <script type="text/x-mathjax-config">
@@ -653,7 +653,7 @@ div.title {text-align: center;}
     <div class = "row">
       <div class = "col-md-12 twelve columns">
         <div class="title">
-          <h1 class="title">Introduction to the kNN-LWPLSR algorithmn</h1>
+          <h1 class="title">ComDim - wines_sensory - Hanafi2008</h1>
           
           
         </div>
@@ -668,30 +668,41 @@ div.title {text-align: center;}
 <p>The goal of the ComDim study was to evaluate if there was an agreement between judges or groups of judges  and to assess the relationships among the eight wines.</p>
 <h4>Data importation</h4>
 
-<pre class='hljl'>
-<span class='hljl-nB'>julia&gt; </span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>Jchemo</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>JchemoData</span><span class='hljl-t'>
 
-</span><span class='hljl-nB'>julia&gt; </span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>JLD2</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>CairoMakie</span><span class='hljl-t'>e</span>
+<pre class='hljl'>
+<span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>Jchemo</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>JchemoData</span><span class='hljl-t'>
+</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>JLD2</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>CairoMakie</span>
 </pre>
 
+
+
+
 <pre class='hljl'>
-<span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>path_jdat</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>dirname</span><span class='hljl-p'>(</span><span class='hljl-nf'>dirname</span><span class='hljl-p'>(</span><span class='hljl-nf'>pathof</span><span class='hljl-p'>(</span><span class='hljl-n'>JchemoData</span><span class='hljl-p'>)))</span><span class='hljl-t'>
-&quot;C:\\Users\\lesnoff\\.julia\\packages\\JchemoData\\mSmTv&quot;
-
-</span><span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>db</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>joinpath</span><span class='hljl-p'>(</span><span class='hljl-n'>path_jdat</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;data/wines_sensory.jld2&quot;</span><span class='hljl-p'>)</span><span class='hljl-t'>
-&quot;C:\\Users\\lesnoff\\.julia\\packages\\JchemoData\\mSmTv\\data/wines_sensory.jld2&quot;
-
-</span><span class='hljl-nB'>julia&gt; </span><span class='hljl-nd'>@load</span><span class='hljl-t'> </span><span class='hljl-n'>db</span><span class='hljl-t'> </span><span class='hljl-n'>dat</span><span class='hljl-t'>
-1-element Vector{Symbol}:
- :dat
-
-</span><span class='hljl-nB'>julia&gt; </span><span class='hljl-nd'>@names</span><span class='hljl-t'> </span><span class='hljl-n'>dat</span><span class='hljl-t'>
-(:X1, :X2, :X3, :X4)</span>
+<span class='hljl-n'>path_jdat</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>dirname</span><span class='hljl-p'>(</span><span class='hljl-nf'>dirname</span><span class='hljl-p'>(</span><span class='hljl-nf'>pathof</span><span class='hljl-p'>(</span><span class='hljl-n'>JchemoData</span><span class='hljl-p'>)))</span><span class='hljl-t'>
+</span><span class='hljl-n'>db</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>joinpath</span><span class='hljl-p'>(</span><span class='hljl-n'>path_jdat</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;data/wines_sensory.jld2&quot;</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nd'>@load</span><span class='hljl-t'> </span><span class='hljl-n'>db</span><span class='hljl-t'> </span><span class='hljl-n'>dat</span><span class='hljl-t'>
+</span><span class='hljl-nd'>@names</span><span class='hljl-t'> </span><span class='hljl-n'>dat</span>
 </pre>
 
+
+<pre class="output">
+&#40;:X1, :X2, :X3, :X4&#41;
+</pre>
+
+
+
 <pre class='hljl'>
-<span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>X1</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>dat</span><span class='hljl-oB'>.</span><span class='hljl-n'>X1</span><span class='hljl-t'>
-8×4 DataFrame
+<span class='hljl-n'>X1</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>dat</span><span class='hljl-oB'>.</span><span class='hljl-n'>X1</span><span class='hljl-t'> 
+</span><span class='hljl-n'>X2</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>dat</span><span class='hljl-oB'>.</span><span class='hljl-n'>X2</span><span class='hljl-t'>
+</span><span class='hljl-n'>X3</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>dat</span><span class='hljl-oB'>.</span><span class='hljl-n'>X3</span><span class='hljl-t'>
+</span><span class='hljl-n'>X4</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>dat</span><span class='hljl-oB'>.</span><span class='hljl-n'>X4</span><span class='hljl-t'>
+</span><span class='hljl-n'>Xbl</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-n'>X1</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X2</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X3</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X4</span><span class='hljl-p'>]</span><span class='hljl-t'>   </span><span class='hljl-cs'># Same as: Xbl = [[X1]; [X2]; [X3]; [X4]]</span>
+</pre>
+
+
+<pre class="output">
+4-element Vector&#123;DataFrame&#125;:
+ 8×4 DataFrame
  Row │ red      gilded   soft     plum
      │ Float64  Float64  Float64  Float64
 ─────┼────────────────────────────────────
@@ -703,9 +714,7 @@ div.title {text-align: center;}
    6 │     6.0      8.0      6.0      1.0
    7 │     5.0      4.0     10.0      3.0
    8 │     6.0      6.0      6.0      5.0
-
-</span><span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>X2</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>dat</span><span class='hljl-oB'>.</span><span class='hljl-n'>X2</span><span class='hljl-t'>
-8×3 DataFrame
+ 8×3 DataFrame
  Row │ ruby     coloured  intensity
      │ Float64  Float64   Float64
 ─────┼──────────────────────────────
@@ -717,9 +726,7 @@ div.title {text-align: center;}
    6 │     1.0       5.0        4.0
    7 │     0.0       4.0        2.0
    8 │     2.0       6.0        4.0
-
-</span><span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>X3</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>dat</span><span class='hljl-oB'>.</span><span class='hljl-n'>X3</span><span class='hljl-t'>
-8×4 DataFrame
+ 8×4 DataFrame
  Row │ red      blue     gilded   intensity
      │ Float64  Float64  Float64  Float64
 ─────┼──────────────────────────────────────
@@ -731,9 +738,7 @@ div.title {text-align: center;}
    6 │     3.0      0.0      5.0        5.0
    7 │     2.0      0.0      4.0        3.0
    8 │     4.0      0.0      4.0        5.0
-
-</span><span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>X4</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>dat</span><span class='hljl-oB'>.</span><span class='hljl-n'>X4</span><span class='hljl-t'>
-8×3 DataFrame
+ 8×3 DataFrame
  Row │ deep     expenses  brilliant
      │ Float64  Float64   Float64
 ─────┼──────────────────────────────
@@ -745,52 +750,59 @@ div.title {text-align: center;}
    6 │     8.0       8.0       10.0
    7 │     6.0       5.0       10.0
    8 │     8.0       9.0       10.0
-
-</span><span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>Xbl</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-n'>X1</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X2</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X3</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>X4</span><span class='hljl-p'>]</span><span class='hljl-t'> </span><span class='hljl-p'>;</span><span class='hljl-t'>   </span><span class='hljl-cs'># Same as: Xbl = [[X1]; [X2]; [X3]; [X4]]</span><span class='hljl-t'>]</span>
 </pre>
+
+
 
 <pre class='hljl'>
-<span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>n</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>nro</span><span class='hljl-p'>(</span><span class='hljl-n'>X1</span><span class='hljl-p'>)</span><span class='hljl-t'>
-8
-
-</span><span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>nbl</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>length</span><span class='hljl-p'>(</span><span class='hljl-n'>Xbl</span><span class='hljl-p'>)</span><span class='hljl-t'>
-4</span>
+<span class='hljl-n'>n</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>nro</span><span class='hljl-p'>(</span><span class='hljl-n'>X1</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-n'>nbl</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>length</span><span class='hljl-p'>(</span><span class='hljl-n'>Xbl</span><span class='hljl-p'>)</span>
 </pre>
+
+
+<pre class="output">
+4
+</pre>
+
 
 <h4>Model fitting</h4>
 <p>Below, each block is scaled by its Frobenius norm, and three global components &#40;scores&#41; are computed</p>
 
+
 <pre class='hljl'>
-<span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>nlv</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>3</span><span class='hljl-t'>
-3
-
-</span><span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>bscal</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-sc'>:frob</span><span class='hljl-t'>
-:frob
-
-</span><span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>model</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>comdim</span><span class='hljl-p'>(;</span><span class='hljl-t'> </span><span class='hljl-n'>nlv</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>bscal</span><span class='hljl-p'>)</span><span class='hljl-t'>
-Jchemo.JchemoModel{typeof(comdim), Base.Pairs{Symbol, Any, Tuple{Symbol, Symbol}, @NamedTuple{nlv::Int64, bscal::Symbol}}}(Jchemo.comdim, nothing, Base.Pairs{Symbol, Any, Tuple{Symbol, Symbol}, @NamedTuple{nlv::Int64, bscal::Symbol}}(:nlv =&gt; 3, :bscal =&gt; :frob))
-
-</span><span class='hljl-nB'>julia&gt; </span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xbl</span><span class='hljl-p'>)</span><span class='hljl-t'>
-
-</span><span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>fitm</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>model</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-t'> </span><span class='hljl-p'>;</span><span class='hljl-t'>
-
-</span><span class='hljl-nB'>julia&gt; </span><span class='hljl-nd'>@names</span><span class='hljl-t'> </span><span class='hljl-n'>fitm</span><span class='hljl-t'>
-(:T, :U, :W, :Tb, :Tbl, :Vbl, :lb, :mu, :fitmbl, :weights, :niter, :par)</span>
+<span class='hljl-n'>nlv</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>3</span><span class='hljl-t'>
+</span><span class='hljl-n'>bscal</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-sc'>:frob</span><span class='hljl-t'>
+</span><span class='hljl-n'>model</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>comdim</span><span class='hljl-p'>(;</span><span class='hljl-t'> </span><span class='hljl-n'>nlv</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>bscal</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>fit!</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xbl</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-n'>fitm</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>model</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-t'>
+</span><span class='hljl-nd'>@names</span><span class='hljl-t'> </span><span class='hljl-n'>fitm</span>
 </pre>
+
+
+<pre class="output">
+&#40;:T, :U, :W, :Tb, :Tbl, :Vbl, :lb, :mu, :fitmbl, :weights, :niter, :par&#41;
+</pre>
+
 
 <ul>
 <li><p>Global scores</p>
 </li>
 </ul>
 
+
 <pre class='hljl'>
-<span class='hljl-nB'>julia&gt; </span><span class='hljl-nd'>@head</span><span class='hljl-t'> </span><span class='hljl-n'>T</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>fitm</span><span class='hljl-oB'>.</span><span class='hljl-n'>T</span><span class='hljl-t'>
-3×3 Matrix{Float64}:
+<span class='hljl-nd'>@head</span><span class='hljl-t'> </span><span class='hljl-n'>T</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>fitm</span><span class='hljl-oB'>.</span><span class='hljl-n'>T</span>
+</pre>
+
+
+<pre class="output">
+3×3 Matrix&#123;Float64&#125;:
  -2.50761    0.335161  -0.297369
   0.644503  -0.692286   0.247392
  -1.564     -0.540373   0.219861
-... (8, 3)</span>
+... &#40;8, 3&#41;
 </pre>
+
 
 
 <pre class='hljl'>
@@ -808,33 +820,50 @@ Jchemo.JchemoModel{typeof(comdim), Base.Pairs{Symbol, Any, Tuple{Symbol, Symbol}
 </li>
 </ul>
 
-<pre class='hljl'>
-<span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>Tbl</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>fitm</span><span class='hljl-oB'>.</span><span class='hljl-n'>Tbl</span><span class='hljl-t'>
-4-element Vector{Matrix}:
- [-1.7962627913744986 -0.008918615631455138 -0.22665348117393225; 0.3879039556775733 -0.1065661506250574 0.2127782058108359; … ; 0.30099461206273337 -0.585749646663945 -1.0867198878257494; 0.035545038805747414 0.3417179548041017 0.07458461012188208]
- [-1.7044871814196665 0.5357943376354091 -0.4170589964322815; 0.1995449497670047 -0.6605733548084997 0.400922304133755; … ; 0.6150299861716623 0.9086489000953766 -1.0021145160270302; 0.5308334812361191 -0.13762360842297028 0.5902444200693617]
- [-1.6933885952738224 0.2296343453843308 -0.2616132417652677; 0.7329488213391452 -0.5749914914629086 0.17354614604739924; … ; 0.7929766870562747 0.48867740320692926 -0.7455120724195884; 0.12923331248947625 0.32227484677350104 0.1879793984911528]
- [-0.40801692432226466 0.46884767588169035 -0.36141026079567345; -0.2773904635616495 -0.9746086560813164 0.26113408530961424; … ; 1.0769677647773832 -0.11436320965711218 -1.2895662379308004; 0.2856187372760472 1.1470867080820784 0.436153894141458]
 
-</span><span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>Vbl</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>fitm</span><span class='hljl-oB'>.</span><span class='hljl-n'>Vbl</span><span class='hljl-t'>
-4-element Vector{Matrix}:
- [-0.23221350649942402 0.5891168732065994 0.07642515391317986; 0.7607464762538525 0.6064931208295313 0.674847582189589; 0.3011913315908775 -0.13118586846138441 -0.7251746631780844; -0.5259519636251038 0.5175883229032195 -0.11340919075085852]
- [-0.4537703469097276 -0.3697957744699179 0.38548166419002783; 0.7769886790381423 -0.31753284623159983 0.625096894897853; -0.4363267868375587 -0.8731689279562419 0.6787177311389095]
- [-0.6612798979736141 0.4222002594039563 0.3219773142067391; -0.5710752899312963 -0.15488207530536102 -0.08580550040851531; 0.37567655711660647 -0.7638562292199929 0.48684592681033495; -0.30894827107285366 -0.46290619437435704 0.8074336311945677]
- [-0.9493374803550765 -0.08204958567684245 0.5908887482427636; 0.0743842707357129 0.6405670458917806 0.6692544240608542; 0.3053282310239113 0.7635062050879062 -0.45049861606343977]</span>
+<pre class='hljl'>
+<span class='hljl-n'>Tbl</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>fitm</span><span class='hljl-oB'>.</span><span class='hljl-n'>Tbl</span>
 </pre>
+
+
+<pre class="output">
+4-element Vector&#123;Matrix&#125;:
+ &#91;-1.7962627913744986 -0.008918615631455138 -0.22665348117393225; 0.3879039556775733 -0.1065661506250574 0.2127782058108359; … ; 0.30099461206273337 -0.585749646663945 -1.0867198878257494; 0.035545038805747414 0.3417179548041017 0.07458461012188208&#93;
+ &#91;-1.7044871814196665 0.5357943376354091 -0.4170589964322815; 0.1995449497670047 -0.6605733548084997 0.400922304133755; … ; 0.6150299861716623 0.9086489000953766 -1.0021145160270302; 0.5308334812361191 -0.13762360842297028 0.5902444200693617&#93;
+ &#91;-1.6933885952738224 0.2296343453843308 -0.2616132417652677; 0.7329488213391452 -0.5749914914629086 0.17354614604739924; … ; 0.7929766870562747 0.48867740320692926 -0.7455120724195884; 0.12923331248947625 0.32227484677350104 0.1879793984911528&#93;
+ &#91;-0.40801692432226466 0.46884767588169035 -0.36141026079567345; -0.2773904635616495 -0.9746086560813164 0.26113408530961424; … ; 1.0769677647773832 -0.11436320965711218 -1.2895662379308004; 0.2856187372760472 1.1470867080820784 0.436153894141458&#93;
+</pre>
+
+
+
+<pre class='hljl'>
+<span class='hljl-n'>Vbl</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>fitm</span><span class='hljl-oB'>.</span><span class='hljl-n'>Vbl</span>
+</pre>
+
+
+<pre class="output">
+4-element Vector&#123;Matrix&#125;:
+ &#91;-0.23221350649942402 0.5891168732065994 0.07642515391317986; 0.7607464762538525 0.6064931208295313 0.674847582189589; 0.3011913315908775 -0.13118586846138441 -0.7251746631780844; -0.5259519636251038 0.5175883229032195 -0.11340919075085852&#93;
+ &#91;-0.4537703469097276 -0.3697957744699179 0.38548166419002783; 0.7769886790381423 -0.31753284623159983 0.625096894897853; -0.4363267868375587 -0.8731689279562419 0.6787177311389095&#93;
+ &#91;-0.6612798979736141 0.4222002594039563 0.3219773142067391; -0.5710752899312963 -0.15488207530536102 -0.08580550040851531; 0.37567655711660647 -0.7638562292199929 0.48684592681033495; -0.30894827107285366 -0.46290619437435704 0.8074336311945677&#93;
+ &#91;-0.9493374803550765 -0.08204958567684245 0.5908887482427636; 0.0743842707357129 0.6405670458917806 0.6692544240608542; 0.3053282310239113 0.7635062050879062 -0.45049861606343977&#93;
+</pre>
+
 
 <ul>
 <li><p>For block <em>k</em></p>
 </li>
 </ul>
 
-<pre class='hljl'>
-<span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>k</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-t'>
-1
 
-</span><span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>Tbl</span><span class='hljl-p'>[</span><span class='hljl-n'>k</span><span class='hljl-p'>]</span><span class='hljl-t'>
-8×3 Matrix{Float64}:
+<pre class='hljl'>
+<span class='hljl-n'>k</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-t'>
+</span><span class='hljl-n'>Tbl</span><span class='hljl-p'>[</span><span class='hljl-n'>k</span><span class='hljl-p'>]</span>
+</pre>
+
+
+<pre class="output">
+8×3 Matrix&#123;Float64&#125;:
  -1.79626   -0.00891862  -0.226653
   0.387904  -0.106566     0.212778
  -0.945808  -0.110159     0.124653
@@ -843,86 +872,108 @@ Jchemo.JchemoModel{typeof(comdim), Base.Pairs{Symbol, Any, Tuple{Symbol, Symbol}
   1.03032    0.101524     0.470582
   0.300995  -0.58575     -1.08672
   0.035545   0.341718     0.0745846
+</pre>
 
-</span><span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>Vbl</span><span class='hljl-p'>[</span><span class='hljl-n'>k</span><span class='hljl-p'>]</span><span class='hljl-t'>
-4×3 Matrix{Float64}:
+
+
+<pre class='hljl'>
+<span class='hljl-n'>Vbl</span><span class='hljl-p'>[</span><span class='hljl-n'>k</span><span class='hljl-p'>]</span>
+</pre>
+
+
+<pre class="output">
+4×3 Matrix&#123;Float64&#125;:
  -0.232214   0.589117   0.0764252
   0.760746   0.606493   0.674848
   0.301191  -0.131186  -0.725175
- -0.525952   0.517588  -0.113409</span>
+ -0.525952   0.517588  -0.113409
 </pre>
+
 
 <h4>Summary outputs</h4>
 
-<pre class='hljl'>
-<span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>res</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>summary</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xbl</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-p'>;</span><span class='hljl-t'>
 
-</span><span class='hljl-nB'>julia&gt; </span><span class='hljl-nd'>@names</span><span class='hljl-t'> </span><span class='hljl-n'>res</span><span class='hljl-t'>
-(:explvarx, :explvarxx, :explxbl, :psal2, :contrxbl2t, :rvxbl2t, :rdxbl2t, :cortbl2t, :corx2t)</span>
+<pre class='hljl'>
+<span class='hljl-n'>res</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>summary</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xbl</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nd'>@names</span><span class='hljl-t'> </span><span class='hljl-n'>res</span>
 </pre>
+
+
+<pre class="output">
+&#40;:explvarx, :explvarxx, :explxbl, :psal2, :contrxbl2t, :rvxbl2t, :rdxbl2t, :cortbl2t, :corx2t&#41;
+</pre>
+
 
 <ul>
 <li><p>Proportion of the total XX&#39; inertia explained by the global scores</p>
 </li>
 </ul>
 
+
 <pre class='hljl'>
-<span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>res</span><span class='hljl-oB'>.</span><span class='hljl-n'>explvarxx</span><span class='hljl-t'>
-3×4 DataFrame
- Row │ lv     var       pvar       cumpvar
-     │ Int64  Float64   Float64    Float64
-─────┼──────────────────────────────────────
-   1 │     1  1.54101   0.681971   0.681971
-   2 │     2  0.229883  0.101734   0.783705
-   3 │     3  0.173808  0.0769181  0.860623</span>
+<span class='hljl-n'>res</span><span class='hljl-oB'>.</span><span class='hljl-n'>explvarxx</span>
 </pre>
+
+
+
+<div><div style = "float: left;"><span>3×4 DataFrame</span></div><div style = "clear: both;"></div></div><div class = "data-frame" style = "overflow-x: scroll;"><table class = "data-frame" style = "margin-bottom: 6px;"><thead><tr class = "header"><th class = "rowNumber" style = "font-weight: bold; text-align: right;">Row</th><th style = "text-align: left;">lv</th><th style = "text-align: left;">var</th><th style = "text-align: left;">pvar</th><th style = "text-align: left;">cumpvar</th></tr><tr class = "subheader headerLastRow"><th class = "rowNumber" style = "font-weight: bold; text-align: right;"></th><th title = "Int64" style = "text-align: left;">Int64</th><th title = "Float64" style = "text-align: left;">Float64</th><th title = "Float64" style = "text-align: left;">Float64</th><th title = "Float64" style = "text-align: left;">Float64</th></tr></thead><tbody><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">1</td><td style = "text-align: right;">1</td><td style = "text-align: right;">1.54101</td><td style = "text-align: right;">0.681971</td><td style = "text-align: right;">0.681971</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">2</td><td style = "text-align: right;">2</td><td style = "text-align: right;">0.229883</td><td style = "text-align: right;">0.101734</td><td style = "text-align: right;">0.783705</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">3</td><td style = "text-align: right;">3</td><td style = "text-align: right;">0.173808</td><td style = "text-align: right;">0.0769181</td><td style = "text-align: right;">0.860623</td></tr></tbody></table></div>
 
 <ul>
 <li><p>Proportion of the inertia of each block &#40;&#61; Xbl&#91;k&#93;&#41; explained by the global scores</p>
 </li>
 </ul>
 
-<pre class='hljl'>
-<span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>explxbl</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>res</span><span class='hljl-oB'>.</span><span class='hljl-n'>explxbl</span><span class='hljl-t'>  </span><span class='hljl-cs'># = specific weights &#39;lb&#39; when &#39;bscal = :frob&#39;</span><span class='hljl-t'>
-4×3 DataFrame
- Row │ lv1       lv2        lv3
-     │ Float64   Float64    Float64
-─────┼───────────────────────────────
-   1 │ 0.670406  0.0117629  0.191347
-   2 │ 0.663954  0.0408196  0.216385
-   3 │ 0.780095  0.0605821  0.109844
-   4 │ 0.20539   0.473718   0.279832
 
-</span><span class='hljl-nB'>julia&gt; </span><span class='hljl-nf'>rowsum</span><span class='hljl-p'>(</span><span class='hljl-n'>explxbl</span><span class='hljl-p'>)</span><span class='hljl-t'>
-4-element Vector{Float64}:
+<pre class='hljl'>
+<span class='hljl-n'>explxbl</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>res</span><span class='hljl-oB'>.</span><span class='hljl-n'>explxbl</span><span class='hljl-t'>  </span><span class='hljl-cs'># = specific weights &#39;lb&#39; when &#39;bscal = :frob&#39;</span>
+</pre>
+
+
+
+<div><div style = "float: left;"><span>4×3 DataFrame</span></div><div style = "clear: both;"></div></div><div class = "data-frame" style = "overflow-x: scroll;"><table class = "data-frame" style = "margin-bottom: 6px;"><thead><tr class = "header"><th class = "rowNumber" style = "font-weight: bold; text-align: right;">Row</th><th style = "text-align: left;">lv1</th><th style = "text-align: left;">lv2</th><th style = "text-align: left;">lv3</th></tr><tr class = "subheader headerLastRow"><th class = "rowNumber" style = "font-weight: bold; text-align: right;"></th><th title = "Float64" style = "text-align: left;">Float64</th><th title = "Float64" style = "text-align: left;">Float64</th><th title = "Float64" style = "text-align: left;">Float64</th></tr></thead><tbody><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">1</td><td style = "text-align: right;">0.670406</td><td style = "text-align: right;">0.0117629</td><td style = "text-align: right;">0.191347</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">2</td><td style = "text-align: right;">0.663954</td><td style = "text-align: right;">0.0408196</td><td style = "text-align: right;">0.216385</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">3</td><td style = "text-align: right;">0.780095</td><td style = "text-align: right;">0.0605821</td><td style = "text-align: right;">0.109844</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">4</td><td style = "text-align: right;">0.20539</td><td style = "text-align: right;">0.473718</td><td style = "text-align: right;">0.279832</td></tr></tbody></table></div>
+
+
+<pre class='hljl'>
+<span class='hljl-nf'>rowsum</span><span class='hljl-p'>(</span><span class='hljl-n'>explxbl</span><span class='hljl-p'>)</span>
+</pre>
+
+
+<pre class="output">
+4-element Vector&#123;Float64&#125;:
  0.8735162349324337
  0.9211580695715044
  0.9505211974172872
- 0.9589401500789885</span>
+ 0.9589401500789885
 </pre>
+
 
 <ul>
 <li><p>Contribution of each block to the global scores</p>
 </li>
 </ul>
 
-<pre class='hljl'>
-<span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>contrxbl2t</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>res</span><span class='hljl-oB'>.</span><span class='hljl-n'>contrxbl2t</span><span class='hljl-t'>
-4×3 DataFrame
- Row │ lv1        lv2        lv3
-     │ Float64    Float64    Float64
-─────┼────────────────────────────────
-   1 │ 0.288987   0.020043   0.239962
-   2 │ 0.286206   0.0695533  0.27136
-   3 │ 0.33627    0.103227   0.137751
-   4 │ 0.0885361  0.807177   0.350927
 
-</span><span class='hljl-nB'>julia&gt; </span><span class='hljl-nf'>colsum</span><span class='hljl-p'>(</span><span class='hljl-n'>contrxbl2t</span><span class='hljl-p'>)</span><span class='hljl-t'>
-3-element Vector{Float64}:
+<pre class='hljl'>
+<span class='hljl-n'>contrxbl2t</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>res</span><span class='hljl-oB'>.</span><span class='hljl-n'>contrxbl2t</span>
+</pre>
+
+
+
+<div><div style = "float: left;"><span>4×3 DataFrame</span></div><div style = "clear: both;"></div></div><div class = "data-frame" style = "overflow-x: scroll;"><table class = "data-frame" style = "margin-bottom: 6px;"><thead><tr class = "header"><th class = "rowNumber" style = "font-weight: bold; text-align: right;">Row</th><th style = "text-align: left;">lv1</th><th style = "text-align: left;">lv2</th><th style = "text-align: left;">lv3</th></tr><tr class = "subheader headerLastRow"><th class = "rowNumber" style = "font-weight: bold; text-align: right;"></th><th title = "Float64" style = "text-align: left;">Float64</th><th title = "Float64" style = "text-align: left;">Float64</th><th title = "Float64" style = "text-align: left;">Float64</th></tr></thead><tbody><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">1</td><td style = "text-align: right;">0.288987</td><td style = "text-align: right;">0.020043</td><td style = "text-align: right;">0.239962</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">2</td><td style = "text-align: right;">0.286206</td><td style = "text-align: right;">0.0695533</td><td style = "text-align: right;">0.27136</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">3</td><td style = "text-align: right;">0.33627</td><td style = "text-align: right;">0.103227</td><td style = "text-align: right;">0.137751</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">4</td><td style = "text-align: right;">0.0885361</td><td style = "text-align: right;">0.807177</td><td style = "text-align: right;">0.350927</td></tr></tbody></table></div>
+
+
+<pre class='hljl'>
+<span class='hljl-nf'>colsum</span><span class='hljl-p'>(</span><span class='hljl-n'>contrxbl2t</span><span class='hljl-p'>)</span>
+</pre>
+
+
+<pre class="output">
+3-element Vector&#123;Float64&#125;:
  0.9999999999999999
  1.0000000000000002
- 1.0000000000000002</span>
+ 1.0000000000000002
 </pre>
+
 
 
 <pre class='hljl'>
@@ -944,44 +995,28 @@ Jchemo.JchemoModel{typeof(comdim), Base.Pairs{Symbol, Any, Tuple{Symbol, Symbol}
 </li>
 </ul>
 
+
 <pre class='hljl'>
-<span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>res</span><span class='hljl-oB'>.</span><span class='hljl-n'>rvxbl2t</span><span class='hljl-t'>
-4×3 DataFrame
- Row │ lv1       lv2        lv3
-     │ Float64   Float64    Float64
-─────┼───────────────────────────────
-   1 │ 0.867627  0.0152298  0.247626
-   2 │ 0.895813  0.0550478  0.291952
-   3 │ 0.943026  0.0732225  0.132785
-   4 │ 0.313562  0.723312   0.42727</span>
+<span class='hljl-n'>res</span><span class='hljl-oB'>.</span><span class='hljl-n'>rvxbl2t</span>
 </pre>
+
+
+
+<div><div style = "float: left;"><span>4×3 DataFrame</span></div><div style = "clear: both;"></div></div><div class = "data-frame" style = "overflow-x: scroll;"><table class = "data-frame" style = "margin-bottom: 6px;"><thead><tr class = "header"><th class = "rowNumber" style = "font-weight: bold; text-align: right;">Row</th><th style = "text-align: left;">lv1</th><th style = "text-align: left;">lv2</th><th style = "text-align: left;">lv3</th></tr><tr class = "subheader headerLastRow"><th class = "rowNumber" style = "font-weight: bold; text-align: right;"></th><th title = "Float64" style = "text-align: left;">Float64</th><th title = "Float64" style = "text-align: left;">Float64</th><th title = "Float64" style = "text-align: left;">Float64</th></tr></thead><tbody><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">1</td><td style = "text-align: right;">0.867627</td><td style = "text-align: right;">0.0152298</td><td style = "text-align: right;">0.247626</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">2</td><td style = "text-align: right;">0.895813</td><td style = "text-align: right;">0.0550478</td><td style = "text-align: right;">0.291952</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">3</td><td style = "text-align: right;">0.943026</td><td style = "text-align: right;">0.0732225</td><td style = "text-align: right;">0.132785</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">4</td><td style = "text-align: right;">0.313562</td><td style = "text-align: right;">0.723312</td><td style = "text-align: right;">0.42727</td></tr></tbody></table></div>
 
 <ul>
 <li><p>Correlation between the X-variables and the global scores</p>
 </li>
 </ul>
 
+
 <pre class='hljl'>
-<span class='hljl-nB'>julia&gt; </span><span class='hljl-n'>corx2t</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>res</span><span class='hljl-oB'>.</span><span class='hljl-n'>corx2t</span><span class='hljl-t'>
-14×3 DataFrame
- Row │ lv1         lv2         lv3
-     │ Float64     Float64     Float64
-─────┼────────────────────────────────────
-   1 │ -0.835675    0.280847    0.14693
-   2 │  0.873758    0.0923135   0.414077
-   3 │  0.601193   -0.0347772  -0.773383
-   4 │ -0.826089    0.107675   -0.095143
-   5 │ -0.8111     -0.163856    0.393378
-   6 │  0.880278   -0.0891491   0.404286
-   7 │ -0.678057   -0.336407    0.602167
-   8 │ -0.931598    0.165772    0.170208
-   9 │ -0.983061   -0.0743055  -0.0554282
-  10 │  0.792075   -0.448744    0.385157
-  11 │ -0.665309   -0.277749    0.652515
-  12 │ -0.778559   -0.102133    0.56566
-  13 │  0.0585256   0.765167    0.614377
-  14 │  0.229752    0.872646   -0.395764</span>
+<span class='hljl-n'>corx2t</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>res</span><span class='hljl-oB'>.</span><span class='hljl-n'>corx2t</span>
 </pre>
+
+
+
+<div><div style = "float: left;"><span>14×3 DataFrame</span></div><div style = "clear: both;"></div></div><div class = "data-frame" style = "overflow-x: scroll;"><table class = "data-frame" style = "margin-bottom: 6px;"><thead><tr class = "header"><th class = "rowNumber" style = "font-weight: bold; text-align: right;">Row</th><th style = "text-align: left;">lv1</th><th style = "text-align: left;">lv2</th><th style = "text-align: left;">lv3</th></tr><tr class = "subheader headerLastRow"><th class = "rowNumber" style = "font-weight: bold; text-align: right;"></th><th title = "Float64" style = "text-align: left;">Float64</th><th title = "Float64" style = "text-align: left;">Float64</th><th title = "Float64" style = "text-align: left;">Float64</th></tr></thead><tbody><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">1</td><td style = "text-align: right;">-0.835675</td><td style = "text-align: right;">0.280847</td><td style = "text-align: right;">0.14693</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">2</td><td style = "text-align: right;">0.873758</td><td style = "text-align: right;">0.0923135</td><td style = "text-align: right;">0.414077</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">3</td><td style = "text-align: right;">0.601193</td><td style = "text-align: right;">-0.0347772</td><td style = "text-align: right;">-0.773383</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">4</td><td style = "text-align: right;">-0.826089</td><td style = "text-align: right;">0.107675</td><td style = "text-align: right;">-0.095143</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">5</td><td style = "text-align: right;">-0.8111</td><td style = "text-align: right;">-0.163856</td><td style = "text-align: right;">0.393378</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">6</td><td style = "text-align: right;">0.880278</td><td style = "text-align: right;">-0.0891491</td><td style = "text-align: right;">0.404286</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">7</td><td style = "text-align: right;">-0.678057</td><td style = "text-align: right;">-0.336407</td><td style = "text-align: right;">0.602167</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">8</td><td style = "text-align: right;">-0.931598</td><td style = "text-align: right;">0.165772</td><td style = "text-align: right;">0.170208</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">9</td><td style = "text-align: right;">-0.983061</td><td style = "text-align: right;">-0.0743055</td><td style = "text-align: right;">-0.0554282</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">10</td><td style = "text-align: right;">0.792075</td><td style = "text-align: right;">-0.448744</td><td style = "text-align: right;">0.385157</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">11</td><td style = "text-align: right;">-0.665309</td><td style = "text-align: right;">-0.277749</td><td style = "text-align: right;">0.652515</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">12</td><td style = "text-align: right;">-0.778559</td><td style = "text-align: right;">-0.102133</td><td style = "text-align: right;">0.56566</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">13</td><td style = "text-align: right;">0.0585256</td><td style = "text-align: right;">0.765167</td><td style = "text-align: right;">0.614377</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">14</td><td style = "text-align: right;">0.229752</td><td style = "text-align: right;">0.872646</td><td style = "text-align: right;">-0.395764</td></tr></tbody></table></div>
 
 
 <pre class='hljl'>
@@ -1034,7 +1069,7 @@ Jchemo.JchemoModel{typeof(comdim), Base.Pairs{Symbol, Any, Tuple{Symbol, Symbol}
 </span><span class='hljl-n'>z</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>Tbl</span><span class='hljl-p'>[</span><span class='hljl-n'>k</span><span class='hljl-p'>]</span><span class='hljl-t'> 
 </span><span class='hljl-n'>v</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>Vbl</span><span class='hljl-p'>[</span><span class='hljl-n'>k</span><span class='hljl-p'>]</span><span class='hljl-t'> 
 </span><span class='hljl-n'>nam</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>names</span><span class='hljl-p'>(</span><span class='hljl-n'>Xbl</span><span class='hljl-p'>[</span><span class='hljl-n'>k</span><span class='hljl-p'>])</span><span class='hljl-t'> 
-</span><span class='hljl-n'>i</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-p'>;</span><span class='hljl-t'>
+</span><span class='hljl-n'>i</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-t'>
 </span><span class='hljl-n'>f</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>ax</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>plotxy</span><span class='hljl-p'>(</span><span class='hljl-n'>z</span><span class='hljl-p'>[</span><span class='hljl-oB'>:</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>i</span><span class='hljl-p'>],</span><span class='hljl-t'> </span><span class='hljl-n'>z</span><span class='hljl-p'>[</span><span class='hljl-oB'>:</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>i</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-p'>];</span><span class='hljl-t'> </span><span class='hljl-n'>zeros</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-kc'>true</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>xlabel</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>string</span><span class='hljl-p'>(</span><span class='hljl-s'>&quot;PC&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>i</span><span class='hljl-p'>),</span><span class='hljl-t'> 
     </span><span class='hljl-n'>ylabel</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>string</span><span class='hljl-p'>(</span><span class='hljl-s'>&quot;PC&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>i</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-p'>),</span><span class='hljl-t'> </span><span class='hljl-n'>title</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>string</span><span class='hljl-p'>(</span><span class='hljl-s'>&quot;Block &quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>k</span><span class='hljl-p'>))</span><span class='hljl-t'> 
 </span><span class='hljl-nf'>text!</span><span class='hljl-p'>(</span><span class='hljl-n'>ax</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>z</span><span class='hljl-p'>[</span><span class='hljl-oB'>:</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>i</span><span class='hljl-p'>],</span><span class='hljl-t'> </span><span class='hljl-n'>z</span><span class='hljl-p'>[</span><span class='hljl-oB'>:</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>i</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-p'>];</span><span class='hljl-t'> </span><span class='hljl-n'>text</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>string</span><span class='hljl-oB'>.</span><span class='hljl-p'>(</span><span class='hljl-s'>&quot;w&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-oB'>:</span><span class='hljl-n'>n</span><span class='hljl-p'>),</span><span class='hljl-t'> </span><span class='hljl-n'>fontsize</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>15</span><span class='hljl-p'>)</span><span class='hljl-t'> 
@@ -1055,7 +1090,7 @@ Jchemo.JchemoModel{typeof(comdim), Base.Pairs{Symbol, Any, Tuple{Symbol, Symbol}
         <div class="footer">
           <p>
             Published from <a href="comdim_wines_sensory_hanafi2008.jmd">comdim_wines_sensory_hanafi2008.jmd</a>
-            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.12 on 2025-06-08.
+            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.12 on 2025-06-12.
           </p>
         </div>
       </div>

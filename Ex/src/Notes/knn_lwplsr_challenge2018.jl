@@ -27,11 +27,11 @@ model = plskern(nlv = 3)
 fit!(model, Xtrain, ytrain) 
 T = model.fitm.T
 Tnew = transf(model, Xtest)
-k = 100 ; i = 10 
+k = 100; i = 10 
 res = getknn(T, Tnew[i:i, :]; k = k, metric = :mah)
 s = res.ind[1]
-#CairoMakie.activate!() ;  
-#GLMakie.activate!() ;  
+#CairoMakie.activate!()  
+#GLMakie.activate!()  
 f = Figure(size = (700, 500))
 mks = 8
 ax = Axis3(f[1, 1]; xlabel = "LV1", ylabel = "LV2", zlabel = "LV3", perspectiveness = 0.5) 
@@ -107,9 +107,9 @@ using Jchemo
 
 
 using Distributions
-x1 = rand(Chisq(10), 100) ;
-x2 = rand(Chisq(40), 10) ;
-d = [sqrt.(x1) ; sqrt.(x2)]
+x1 = rand(Chisq(10), 100)
+x2 = rand(Chisq(40), 10)
+d = [sqrt.(x1); sqrt.(x2)]
 f = Figure(size = (1000, 200))
 ax1 = Axis(f, xlabel = "Distance", ylabel = "Nb. observations",)
 hist!(ax1, d, bins = 30)
@@ -149,19 +149,29 @@ using JLD2         # a Julia data format
 using CairoMakie   # making graphics 
 using FreqTables   # utilities for frequency tables
 
+
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/challenge2018.jld2") 
 @load db dat
 @names dat
 
-X = dat.X ;
-Y = dat.Y ;
-y = Y.conc ;        # variable to predict (protein concentration)
-wlst = names(X)     # wavelengths
-wl = parse.(Float64, wlst) ;
-ntot, p = size(X)
+
+X = dat.X
 @head X
+
+
+Y = dat.Y
 @head Y
+
+
+y = Y.conc        # variable to predict (protein concentration)
+
+
+wlst = names(X)     # wavelengths
+wl = parse.(Float64, wlst)
+
+
+ntot, p = size(X)
 
 
 freqtable(string.(Y.typ, " - ", Y.label))
@@ -174,7 +184,7 @@ model1 = snv()
 model2 = savgol(npoint = 21, deriv = 2, degree = 3)
 model = pip(model1, model2)
 fit!(model, X)
-Xp = transf(model, X) ;
+@head Xp = transf(model, X)
 
 
 plotsp(Xp, wl; size = (500, 300), nsamp = 30, xlabel = "Wavelength (nm)").f
@@ -204,17 +214,17 @@ f
 freqtable(Y.test)
 
 
-s = Bool.(Y.test) ;
-Xtrain = rmrow(Xp, s) ;
-Ytrain = rmrow(Y, s) ;
-ytrain = rmrow(y, s) ;
-typtrain = rmrow(Y.typ, s) ;
-Xtest = Xp[s, :] ;
-Ytest = Y[s, :] ;
-ytest = y[s] ;
-typtest = Y.typ[s] ;
-ntrain = nro(Xtrain) ;
-ntest = nro(Xtest) ;
+s = Bool.(Y.test)  # same as: s = Y.test .== 1
+Xtrain = rmrow(Xp, s)
+Ytrain = rmrow(Y, s)
+ytrain = rmrow(y, s)
+typtrain = rmrow(Y.typ, s)
+Xtest = Xp[s, :]
+Ytest = Y[s, :]
+ytest = y[s]
+typtest = Y.typ[s]
+ntrain = nro(Xtrain)
+ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
 
@@ -263,16 +273,16 @@ f
 
 nval = 300
 s = sampsys(1:ntrain, nval)
-Xcal = Xtrain[s.train, :] ;
-ycal = ytrain[s.train] ;
-Xval = Xtrain[s.test, :] ;
-yval = ytrain[s.test] ;
-ncal = ntrain - nval ;
+Xcal = Xtrain[s.train, :]
+ycal = ytrain[s.train]
+Xval = Xtrain[s.test, :]
+yval = ytrain[s.test]
+ncal = ntrain - nval
 (ntot = ntot, ntrain, ntest, ncal, nval)
 
 
 ## Below, more extended combinations could be considered (this is simplification for the example)
-nlvdis = [15] ; metric = [:mah] 
+nlvdis = [15]; metric = [:mah] 
 h = [1; 2; 4; 6; Inf]
 k = [200; 350; 500; 1000]  
 nlv = 0:15 
@@ -281,22 +291,22 @@ length(pars[1])  # nb. parameter combinations considered
 
 
 model = lwplsr()
-res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, verbose = false) ;
+res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, verbose = false)
 @head res   # first rows of the result table
 
 
-group = string.("nlvdis=", res.nlvdis, ", h=", res.h, ", k=", res.k) ;
+group = string.("nlvdis=", res.nlvdis, ", h=", res.h, ", k=", res.k)
 plotgrid(res.nlv, res.y1, group; step = 1, xlabel ="Nb. LVs", ylabel = "RMSEP (Validation)").f
 
 
-u = findall(res.y1 .== minimum(res.y1))[1] ;
+u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
 model = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
     k = res.k[u], nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
-pred = predict(model, Xtest).pred ;
+pred = predict(model, Xtest).pred
 @head pred
 
 

@@ -2,13 +2,13 @@
 title: Prediction - mnist20pct - Confusion matrix 
 weave_options:
   error: true
-  wrap: true
+  wrap: false
   term: false
   out_width: 60%
   out_height: 30%
 ---
 
-```julia term = true
+```julia
 using Jchemo, JchemoData
 using JLD2, CairoMakie
 using FreqTables 
@@ -17,52 +17,63 @@ using CodecZlib   # required since mnist20pct.jld2 is compressed
 
 #### Data importation
 
-```julia term = true
+```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/mnist20pct.jld2") 
 @load db dat
 @names dat
 ```
 
-```julia term = true
-Xtrain = dat.Xtrain ;
-ytrain = dat.ytrain ;
-Xtest = dat.Xtest ;
-ytest = dat.ytest ;
-@head Xtrain
-@head Xtest
-tab(ytrain)
-tab(ytest)
+```julia
+Xtrain = dat.Xtrain
+ytrain = dat.ytrain
+Xtest = dat.Xtest
+ytest = dat.ytest
 ntrain, p = size(Xtrain)
 ntest = nro(Xtest)
-ntot = ntrain + ntest ;
+ntot = ntrain + ntest
 (ntot = ntot, ntrain, ntest)  
+```
+
+```julia 
+tab(ytrain)
+```
+
+```julia
+tab(ytest)
 ```
 
 Grey levels 0-255 standardized between 0-1 (not required here but used when fitting deep learning models)
 
-```julia term = true
-Xtrain = Matrix(Xtrain) / 255 ;
-Xtest = Matrix(Xtest) / 255 ;
+```julia
+@head Xtrain = Matrix(Xtrain) / 255
 ```
+
+```julia
+@head Xtest = Matrix(Xtest) / 255
+```
+
 Example of one sample (= one unfolded image)
 
-```julia term = true
+```julia
 plotsp(Xtrain, 1:p; nsamp = 1, xlabel = "Pixel", ylabel = "Grey level").f
 ```
 
 #### Fitting a Pls-Qda and prediction of the test set
 
-```julia term = true
+```julia
 model = plsqda(nlv = 25)
 fit!(model, Xtrain, ytrain)
-pred = predict(model, Xtest).pred ;
+pred = predict(model, Xtest).pred
 ```
 
-Error rates (proportions)
+- Error rates (proportions)
 
-```julia term = true
+```julia
 errp(pred, ytest)  # overall
+```
+
+```julia
 merrp(pred, ytest) # average by class
 ```
 
@@ -72,54 +83,54 @@ Using function `freqtable` of package `FreqTables`
 
 - Counts
 
-```julia term = true
+```julia
 res = freqtable(ytest, vec(pred))
 ```
 
 - Row %
 
-```julia term = true
+```julia
 round.(100 * res ./ rowsum(res); digits = 1)
 ```
 
 Using function `conf` of package `Jchemo`
 
-```julia term = true
-cf = conf(pred, ytest) ;
+```julia
+cf = conf(pred, ytest)
 @names cf
 ```
 
 - Counts
 
-```julia term = true
+```julia
 cf.cnt
 ```
 
 - Row %
 
-```julia term = true
+```julia
 cf.pct
 ```
 
 - Total error rate (%) in each class
 
-```julia term = true
+```julia
 cf.diagpct
 ```
 
 - Accurary (%) 
 
-```julia term = true
+```julia
 cf.accpct
 ```
 
 - Plotting 
 
-```julia term = true
+```julia
 plotconf(cf).f
 ```
 
-```julia term = true
+```julia
 plotconf(cf; cnt = false).f
 ```
 

@@ -2,13 +2,13 @@
 title: mnist20pct - Data description 
 weave_options:
   error: true
-  wrap: true
+  wrap: false
   term: false
   out_width: 60%
   out_height: 30%
 ---
 
-```julia term = true
+```julia
 using Jchemo, JchemoData
 using JLD2, CairoMakie
 using CodecZlib   # required since mnist20pct.jld2 is compressed 
@@ -16,39 +16,45 @@ using CodecZlib   # required since mnist20pct.jld2 is compressed
 
 #### Data importation
 
-```julia term = true
+```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/mnist20pct.jld2") 
 @load db dat
 @names dat
 ```
 
-```julia term = true
-Xtrain = dat.Xtrain ;
-ytrain = dat.ytrain ;
-Xtest = dat.Xtest ;
-ytest = dat.ytest ;
-@head Xtrain
-@head Xtest
-ntrain, p = size(Xtrain) ;
-ntest = nro(Xtest) ;
-ntot = ntrain + ntest ;
+```julia
+Xtrain = dat.Xtrain
+ytrain = dat.ytrain
+Xtest = dat.Xtest
+ytest = dat.ytest
+ntrain, p = size(Xtrain)
+ntest = nro(Xtest)
+ntot = ntrain + ntest
 (ntot = ntot, ntrain, ntest)  
 ```
 
-## X-data
+```julia
+@head Xtrain
+```
 
-Grey levels 0-255 
+```julia
+@head Xtest
+```
 
-Example of one sample (= one unfolded image)
+#### X-data
 
-```julia term = true
+`X` contains grey levels between 0-255. Each `X`-row is an unfolded 28x28 image of a handwritten digit.
+
+Example of one `X`-row
+
+```julia
 plotsp(Xtrain, 1:p; nsamp = 1, xlabel = "Pixel", ylabel = "Grey level (0-255)").f
 ```
 
 #### Y data
 
-```julia term = true
+```julia
 tab(ytrain)
 tab(ytest)
 ```

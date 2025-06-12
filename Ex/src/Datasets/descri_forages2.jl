@@ -10,25 +10,26 @@ db = joinpath(path_jdat, "data/forages2.jld2")
 @names dat
 
 
-X = dat.X ;
-Y = dat.Y ;
+X = dat.X
 @head X
+
+
+Y = dat.Y
 @head Y
-ntot = nro(X)
 
 
 wlst = names(X) 
-wl = parse.(Int, wlst) ;
+wl = parse.(Int, wlst)
 
 
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-typ = Y.typ ;
+typ = Y.typ
 tab(typ)
 
 
-test = Y.test ;  # training/test (0/1) observations
+test = Y.test  # training/test (0/1) observations
 tab(test)
 freqtable(Y.typ, test)
 
@@ -42,10 +43,10 @@ summ(Y[:, namy], test)
 
 j = 2
 nam = namy[2]
-y = Y[:, nam] ;
-s = test .== 0 ;
-ytrain = y[s] ; 
-ytest = rmrow(y, s) ;
+y = Y[:, nam]
+s = test .== 0
+ytrain = y[s] 
+ytest = rmrow(y, s)
 
 
 f = Figure(size = (400, 300))

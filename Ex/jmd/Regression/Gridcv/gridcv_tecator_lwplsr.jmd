@@ -2,42 +2,50 @@
 title: gridcv - tecator - kNN-Lwplsr
 weave_options:
   error: true
-  wrap: true
+  wrap: false
   term: false
   out_width: 60%
   out_height: 30%
 ---
 
-```julia term = true
+```julia
 using Jchemo, JchemoData
 using JLD2, CairoMakie
 ```
 
 #### Data importation
 
-```julia term = true
+```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/tecator.jld2") 
 @load db dat
 @names dat
 ```
 
-```julia term = true
+```julia
 X = dat.X
+@head X 
+```
+
+```julia 
 Y = dat.Y 
-typ = Y.typ ;
+@head Y
+``` 
+
+```julia 
+typ = Y.typ
 tab(typ)
 ```
 
-```julia term = true
-wlst = names(X) ;
+```julia
+wlst = names(X)
 wl = parse.(Float64, wlst) 
 #plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
 **Preprocessing**
 
-```julia term = true
+```julia
 model1 = snv()
 model2 = savgol(npoint = 15, deriv = 2, degree = 3)
 model = pip(model1, model2)
@@ -48,12 +56,12 @@ fit!(model, X)
 
 #### Split Tot to Train/Test
 
-```julia term = true
-s = typ .== "train" ;
-Xtrain = Xp[s, :] ; 
-Ytrain = Y[s, :] ;
-Xtest = rmrow(Xp, s) ;
-Ytest = rmrow(Y, s) ;
+```julia
+s = typ .== "train"
+Xtrain = Xp[s, :] 
+Ytrain = Y[s, :]
+Xtest = rmrow(Xp, s)
+Ytest = rmrow(Y, s)
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 ntot = ntrain + ntest
@@ -62,19 +70,19 @@ ntot = ntrain + ntest
 
 **Working response y**
 
-```julia term = true
+```julia
 namy = names(Y)[1:3]
 j = 2  
 nam = namy[j]    # work on the j-th y-variable
-ytrain = Ytrain[:, nam] ;
-ytest = Ytest[:, nam] ;
+ytrain = Ytrain[:, nam]
+ytest = Ytest[:, nam]
 ```
 
 #### CV-Segments for model tuning
 
 **Replicated K-fold CV**
 
-```julia term = true
+```julia
 K = 3     # nb. folds (segments)
 rep = 10   # nb. replications
 segm = segmkf(ntrain, K; rep = rep)
@@ -82,37 +90,37 @@ segm = segmkf(ntrain, K; rep = rep)
 
 #### Grid-search 
 
-```julia term = true
-nlvdis = [5; 10; 15] ; metric = [:mah]   # here only Mahalanobis distance is considered
-h = [1; 2; 4; 6; Inf] ; k = [30; 50; 100]  
+```julia
+nlvdis = [5; 10; 15]; metric = [:mah]   # here only Mahalanobis distance is considered
+h = [1; 2; 4; 6; Inf]; k = [30; 50; 100]  
 nlv = 0:15
 pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k) 
 length(pars[1])
 ```
 
-```julia term = true
+```julia
 model = lwplsr()
-rescv = gridcv(model, Xtrain, ytrain; segm, score = rmsep, pars, nlv) ;
+rescv = gridcv(model, Xtrain, ytrain; segm, score = rmsep, pars, nlv)
 @names rescv 
 res = rescv.res
 res_rep = rescv.res_rep
 ```
 
-```julia term = true
-group = string.("nvldis=", res.nlvdis, " h=", res.h, " k=", res.k) ;
+```julia
+group = string.("nvldis=", res.nlvdis, " h=", res.h, " k=", res.k)
 plotgrid(res.nlv, res.y1, group; step = 2, xlabel ="Nb. LVs", ylabel = "RMSEP-Val").f
 ```
 
 **Selection of the best parameter combination**
 
-```julia term = true
+```julia
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 ```
 
 #### Final prediction (Test) using the optimal model
 
-```julia term = true
+```julia
 model = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
     k = res.k[u], nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
@@ -121,13 +129,13 @@ pred = predict(model, Xtest).pred
 
 **Generalization error**
 
-```julia term = true
+```julia
 rmsep(pred, ytest)
 ```
 
 **Plotting predictions vs. observed data**
 
-```julia term = true 
+```julia 
 plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title = string("Test set - variable ", nam), 
     xlabel = "Prediction", ylabel = "Observed").f   
 ```

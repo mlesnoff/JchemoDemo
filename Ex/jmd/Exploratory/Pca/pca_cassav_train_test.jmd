@@ -2,71 +2,81 @@
 title: Pca - cassav - train vs test 
 weave_options:
   error: true
-  wrap: true
+  wrap: false
   term: false
   out_width: 60%
   out_height: 30%
 ---
 
-```julia term = true
+```julia
 using Jchemo, JchemoData
 using JLD2, CairoMakie, GLMakie
 ```
 
 #### Data importation
 
-```julia term = true
+```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/cassav.jld2")
 @load db dat
 @names dat
 ```
 
-```julia term = true
-X = dat.X 
-Y = dat.Y 
+```julia
+X = dat.X
+@head X
+```
+
+```julia
+Y = dat.Y
+@head Y
+```
+
+```julia
 year = Y.year 
 tab(year)
 ```
 
-```julia term = true
+```julia
 s = year .<= 2012
-Xtrain = X[s, :]
-Xtest = rmrow(X, s)
+Xtrain = X[s, :] 
+Xtest = rmrow(X, s) 
+ntot = nro(X) 
 ntrain = nro(Xtrain) 
-ntest = nro(Xtest) 
+ntest = nro(Xtest)
+(ntot = ntot, ntrain, ntest)
 ```
 
 #### Model fitting and scores T
 
-```julia term = true
+```julia
 model = pcasvd(nlv = 10) 
 fit!(model, Xtrain)  
-fitm = model.fitm ; 
+fitm = model.fitm 
 @head Ttrain = fitm.T 
 ```
 
-```julia term = true
+```julia
 @head Ttest = transf(model, Xtest)
 ```
 
 #### 2-D score spaces 
 
-```julia term = true
+```julia
 CairoMakie.activate!()
-T = vcat(Ttrain, Ttest) ;  
-group = [repeat(["Train"], ntrain); repeat(["Test"], ntest)] ;
+T = vcat(Ttrain, Ttest)  
+group = [repeat(["Train"], ntrain); repeat(["Test"], ntest)]
 plotxy(T[:, 1], T[:, 2], group; zeros = true, xlabel = "PC1", ylabel = "PC2").f
 ```
 
-```julia term = true
+```julia
 color = [(:red, .5), (:blue, .5)]
 plotlv(T[:, 1:6], group; size = (750, 400), shape = (2, 3), color = color, zeros = true, xlabel = "PC", ylabel = "PC").f
 ```
 
 #### 3-D score spaces
 
-```julia term = true
+```julia
 CairoMakie.activate!()  
 #GLMakie.activate!()    # for interactive axe-rotation
 

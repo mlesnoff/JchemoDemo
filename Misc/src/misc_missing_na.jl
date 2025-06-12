@@ -1,11 +1,11 @@
 using DataFrames
 
-x = [rand(5) ; missing]
+x = [rand(5); missing]
 maximum(x)
 maximum(skipmissing(x))
 sum(skipmissing(x))
 
-x = [rand(5) ; missing]
+x = [rand(5); missing]
 y = copy(x)
 s = ismissing.(y)
 y[s] .= -100
@@ -16,7 +16,7 @@ replace(y, missing => -100)
 replace!(y, missing => -100)
 y
 
-x1 = [missing ; rand(5) ; missing]
+x1 = [missing; rand(5); missing]
 x2 = rand(7)
 X = hcat(x1, x2)
 maximum(X)
@@ -104,7 +104,7 @@ zdf = copy(df)
 ## but I haven’t been able to find one. Unsurprisingly, list comprehension 
 ## and map() return two vectors, instead of a DataFrame.
 
-x1 = [missing ; rand(5) ; missing]
+x1 = [missing; rand(5); missing]
 x2 = rand(7)
 df = DataFrame(hcat(x1, x2), :auto)
 for col in eachcol(df)
@@ -156,7 +156,7 @@ df
 
 ################# NaN 
 
-x = [rand(5) ; NaN]
+x = [rand(5); NaN]
 replace(x, NaN => -100)
 y = replace(x, NaN => missing)  # The inplace version does not accept to create missing 
                                 # in a Float64 object

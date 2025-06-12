@@ -10,12 +10,18 @@ db = joinpath(path_jdat, "data/tecator.jld2")
 
 
 X = dat.X
+@head X
+
+
 Y = dat.Y 
-typ = Y.typ ;
+@head Y
+
+
+typ = Y.typ
 tab(typ)
 
 
-wlst = names(X) ;
+wlst = names(X)
 wl = parse.(Float64, wlst) 
 #plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
@@ -28,11 +34,11 @@ fit!(model, X)
 #plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-s = typ .== "train" ;
-Xtrain = Xp[s, :] ; 
-Ytrain = Y[s, :] ;
-Xtest = rmrow(Xp, s) ;
-Ytest = rmrow(Y, s) ;
+s = typ .== "train"
+Xtrain = Xp[s, :] 
+Ytrain = Y[s, :]
+Xtest = rmrow(Xp, s)
+Ytest = rmrow(Y, s)
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 ntot = ntrain + ntest
@@ -42,8 +48,8 @@ ntot = ntrain + ntest
 namy = names(Y)[1:3]
 j = 2  
 nam = namy[j]    # work on the j-th y-variable
-ytrain = Ytrain[:, nam] ;
-ytest = Ytest[:, nam] ;
+ytrain = Ytrain[:, nam]
+ytest = Ytest[:, nam]
 
 
 pct = .3  # proportion of Train for Val
@@ -51,16 +57,16 @@ nval = round(Int, pct * ntrain)
 s = samprand(ntrain, nval)
 
 
-Xcal = Xtrain[s.train, :] ;
-ycal = ytrain[s.train] ;
-Xval = Xtrain[s.test, :] ;
-yval = ytrain[s.test] ;
+Xcal = Xtrain[s.train, :]
+ycal = ytrain[s.train]
+Xval = Xtrain[s.test, :]
+yval = ytrain[s.test]
 ncal = ntrain - nval 
 (ntot = ntot, ntrain, ncal, nval, ntest)
 
 
-nlvdis = [5; 10; 15] ; metric = [:mah]   # here only Mahalanobis distance is considered
-h = [1; 2; 4; 6; Inf] ; k = [30; 50; 100]  
+nlvdis = [5; 10; 15]; metric = [:mah]   # here only Mahalanobis distance is considered
+h = [1; 2; 4; 6; Inf]; k = [30; 50; 100]  
 nlv = 0:15
 pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k) 
 length(pars[1])
@@ -70,7 +76,7 @@ model = lwplsr()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv)
 
 
-group = string.("nvldis=", res.nlvdis, " h=", res.h, " k=", res.k) ;
+group = string.("nvldis=", res.nlvdis, " h=", res.h, " k=", res.k)
 plotgrid(res.nlv, res.y1, group; step = 2, xlabel ="Nb. LVs", ylabel = "RMSEP-Val").f
 
 

@@ -10,7 +10,7 @@ db = joinpath(path_jdat, "data/cassav.jld2")
 
 
 X = dat.X
-names(X)
+@head X
 
 
 model = pcasvd(nlv = 10)
@@ -18,7 +18,7 @@ fit!(model, X)
 @names model
 
 
-fitm = model.fitm ; 
+fitm = model.fitm 
 @names fitm
 
 
@@ -28,7 +28,7 @@ fitm = model.fitm ;
 @head transf(model, X)
 
 
-res = summary(model, X) ;
+res = summary(model, X)
 @names res
 
 

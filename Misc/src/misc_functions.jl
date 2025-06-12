@@ -57,8 +57,8 @@ h2 = function(x, y, args...)
   h1(x, y, args...)
 end
 
-x = [1.0 ; 2.0 ; 3.0]
-y = [4.0 ; 5.0 ; 6.0]
+x = [1.0; 2.0; 3.0]
+y = [4.0; 5.0; 6.0]
 h2(x, y, -2, -3)
 
 ## kwargs...
@@ -69,8 +69,8 @@ f2 = function(x, y; kwargs...)
   f1(x, y; kwargs...)
 end
 
-x = [1.0 ; 2.0 ; 3.0]
-y = [4.0 ; 5.0 ; 6.0]
+x = [1.0; 2.0; 3.0]
+y = [4.0; 5.0; 6.0]
 f2(x, y; a = 2, b = 3)
 
 ##################### Inplace 
@@ -121,8 +121,8 @@ predict(res, xnew)
 
 g(x, y) = 3 * x + 4 * y 
 
-A = [1.0 ; 2.0 ; 3.0]
-B = [4.0 ; 5.0 ; 6.0]
+A = [1.0; 2.0; 3.0]
+B = [4.0; 5.0; 6.0]
 g.(A, B)
 g.(pi, A)
 
@@ -171,8 +171,8 @@ g9(x, y, z) = sum(x[i] * y[i] * z[i] for i in eachindex(x, y, z))
 n = 10^5
 #n = 10^6
 #n = 3
-x = rand(n) ; y = rand(n) ; z = rand(n) ;
-vx = copy(x) ; vy = copy(y) ; vz = copy(z) ; 
+x = rand(n); y = rand(n); z = rand(n)
+vx = copy(x); vy = copy(y); vz = copy(z) 
 @b g1($x, $y, $z)  # ** for large n
 @b g2($x, $y, $z)
 @b g3($x, $y, $z)

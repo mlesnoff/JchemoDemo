@@ -73,7 +73,7 @@ sum(X, dims = 1)
 ############### If
 
 x = .3
-x < .5 ? y = -1. : y = 1. ;
+x < .5 ? y = -1. : y = 1.
 y
 
 ############### Is
@@ -122,7 +122,7 @@ repeat(v; inner = 5)
 
 repeat(1:2; outer = 2, inner = 3)
 
-repeat([1 2 ; 3 4], inner = (2, 1), outer = (1, 3))
+repeat([1 2; 3 4], inner = (2, 1), outer = (1, 3))
 
 ################ Isnan 
 
@@ -138,7 +138,7 @@ collect(range(-0.1, 0.3; length = 5))
 
 ############### Lowercase, Uppercase 
 
-x = ["a" ; "c"]
+x = ["a"; "c"]
 y = uppercase.(x) 
 lowercase.(y)
 
@@ -175,8 +175,8 @@ sqrt.(X)
 
 n = Int(1e4)
 X = rand(n, n) 
-@time map(sqrt, X) ;
-@time sqrt.(X) ; # Not faster
+@time map(sqrt, X)
+@time sqrt.(X) # Not faster
 
 x = [1, 2, 3]
 y = [10, 20, 30]
@@ -188,12 +188,12 @@ end
 fun(5)
 res = map(fun, collect(1:5))
 
-q = 3 ;
+q = 3
 map(string, repeat(["y"], q), 1:q)
 
 X = rand(5, 3)
 mapslices(mean, X; dims = 1)
-mapslices(function g(x) ; sum(x) / length(x) ; end, X; dims = 1)
+mapslices(function g(x); sum(x) / length(x); end, X; dims = 1)
 
 mapslices(argmax, X; dims = 2) 
 # same as (but faster)
@@ -204,23 +204,23 @@ map(i -> argmax(X[i, :]), 1:size(X, 1))
 ## reduce(f, A; dims=:, [init])
 ## Reduce 2-argument function f along dimensions of A. 
 
-reduce(-, [1 ; 2 ; 5])
-map(-, [1 ; 2 ; 5])
+reduce(-, [1; 2; 5])
+map(-, [1; 2; 5])
 
 X = rand(5, 3)
 reduce(max, X; dims = 1)
 mapslices(maximum, X; dims = 1) 
 
-n = 1000 ; p = 100 ; m = 100
+n = 1000; p = 100; m = 100
 zX = Vector{Matrix}(undef, m)  
-for i = 1:m ; zX[i] = rand(n, p) ; end
+for i = 1:m; zX[i] = rand(n, p); end
 @time let
     X = zX[1]
     for i = 2:m
         X = hcat(X, zX[i])
     end
 end
-@time reduce(vcat, zX) ;  # faster
+@time reduce(vcat, zX)  # faster
 
 ## mapreduce(f, op, itrs...; [init])
 ## Apply function f to each element(s) in itrs, and then reduce the result 
@@ -231,7 +231,7 @@ end
 ## Evaluates to the same as reduce(op, map(f, A...); dims=dims, init=init), 
 ## but is generally faster because the intermediate array is avoided.
 
-x = [1:3 ;]
+x = [1:3;]
 reduce(+, map(v -> v^2, x))
 mapreduce(v -> v^2, +, x)
 
@@ -261,7 +261,7 @@ parse.(Float64, wlst)
 
 eval(Meta.parse("1:5"))
 
-id = ["hh123" ; "gg27"]
+id = ["hh123"; "gg27"]
 z = SubString.(id, 3)
 parse.(Int, z) 
 Meta.parse.(z)   
@@ -283,7 +283,7 @@ Symbol.(z)
 ## https://docs.julialang.org/en/v1/manual/performance-tips/
 
 X = rand(1000, 100)
-@time mean(X) ;
+@time mean(X)
 @time let 
     mean(X)
     var(X)
@@ -328,19 +328,19 @@ X[setdiff(1:end, 2:3), :]
 ## setdiff(s, itrs...)
 ## Construct the set of elements in s but not in any of the iterables in itrs.
 setdiff(1:10, 2:3)
-setdiff([3 ; 7 ; 1], [3 ; 7 ; 1 ; 18])
-setdiff([3 ; 7 ; 1], [1 ; 18])
+setdiff([3; 7; 1], [3; 7; 1; 18])
+setdiff([3; 7; 1], [1; 18])
 
 ############### Sort 
 
-x = [5 ; 4 ; 200]
+x = [5; 4; 200]
 sort(x)
 sort(x, rev = true)
 
 ## sortperm(v; alg::Algorithm=DEFAULT_UNSTABLE, lt=isless, by=identity, rev::Bool=false, order::Ordering=Forward)
 ## Return a permutation vector I that puts v[I] in sorted order. 
 ## The order is specified using the same keywords as sort!. 
-x = [5 ; 4 ; 200]
+x = [5; 4; 200]
 id = sortperm(x)
 x[id]
 # "sortperm(x) = 3 7 etc." means
@@ -362,7 +362,7 @@ X = rand(5, 2)
 string.(X)
 repr.(X)
 
-nam = ["fgvvh" ; "nngfjkjjk"]
+nam = ["fgvvh"; "nngfjkjjk"]
 SubString.(nam, 2, 4)
 SubString.(nam, 2)
 

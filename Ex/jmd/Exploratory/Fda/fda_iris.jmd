@@ -2,7 +2,7 @@
 title: Fda - iris
 weave_options:
   error: true
-  wrap: true
+  wrap: false
   term: false
   out_width: "60%" 
 ---
@@ -14,44 +14,53 @@ using JLD2, CairoMakie
 
 #### Data importation
 
-```julia term = true
+```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data", "iris.jld2") 
 @load db dat
 @names dat
 ```
 
-```julia term = true
+```julia
 summ(dat.X)
 ```
 
-```julia term = true
+```julia
 @head X = dat.X[:, 1:4] 
+```
+
+```julia
 @head y = dat.X[:, 5]    # the classes (species)
-ntot = nro(X)
 ```
   
-```julia term = true
+```julia
 tab(y)
 ```
 
-```julia term = true
+```julia
 lev = mlev(y)
 nlev = length(lev)
 ```
 
 #### Split Tot to Train/Test
 
-```julia term = true
+```julia
+ntot = nro(X)
 ntest = 30
 s = samprand(ntot, ntest)
-Xtrain = X[s.train, :] ;
-ytrain = y[s.train] ;
-Xtest = X[s.test, :] ;
-ytest = y[s.test] ;
+Xtrain = X[s.train, :]
+ytrain = y[s.train]
+Xtest = X[s.test, :]
+ytest = y[s.test]
 ntrain = ntot - ntest
 (ntot = ntot, ntrain, ntest)
+```
+
+```julia
 tab(ytrain)
+```
+
+```julia
 tab(ytest)
 ```
 
@@ -61,7 +70,7 @@ tab(ytest)
 model = fda(nlv = 2)
 #model = fdasvd(nlv = 2)     # alternative algorithm (same result)
 fit!(model, Xtrain, ytrain) 
-fitm = model.fitm ;
+fitm = model.fitm
 @names fitm
 ```
 
@@ -72,7 +81,7 @@ nlev = length(lev)
 
 **Fda scores**
 
-```julia term = true
+```julia
 @head Ttrain = fitm.T
 ```
 
@@ -82,14 +91,14 @@ nlev = length(lev)
 ct = fitm.Tcenters
 ```
 
-```julia term = true
+```julia
 f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "Fda", ellipse = true)
 scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
 f
 ```
 
-```julia term = true
-color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .7) ;
+```julia
+color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .7)
 f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = "Fda", ellipse = true)
 scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
 f
@@ -131,15 +140,15 @@ summary(model)
 @head Ttest = transf(model, Xtest)
 ```
 
-```julia term = true
+```julia
 i = 1  # class "i" in test
-color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .7) ;
+color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .7)
 f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, 
-    title = string("Projection test-class ", lev[i], " (blue points)"), ellipse = true) ;
-scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red) ;
-s = ytest .== lev[i] ;
-zT = Ttest[s, :] ;
-scatter!(ax, zT[:, 1], zT[:, 2]; markersize = 10, color = :blue) ;
+    title = string("Projection test-class ", lev[i], " (blue points)"), ellipse = true)
+scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
+s = ytest .== lev[i]
+zT = Ttest[s, :]
+scatter!(ax, zT[:, 1], zT[:, 2]; markersize = 10, color = :blue)
 f
 ```
 

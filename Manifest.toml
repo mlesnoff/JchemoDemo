@@ -1,4 +1,4 @@
-# This file is machine-generated - editing it directly is not advised 
+# This file is machine-generated - editing it directly is not advised
 
 julia_version = "1.11.5"
 manifest_format = "2.0"
@@ -1151,7 +1151,7 @@ uuid = "fbca9394-dd0a-4d1c-b066-ae75f6ef1ad5"
 version = "0.8.11"
 
 [[deps.JchemoData]]
-git-tree-sha1 = "832be33a072bf498d584e03db32d0e418e7ea727"
+git-tree-sha1 = "17d06f8dd864e06aa12c835d22e67cbffa2de2c6"
 repo-rev = "main"
 repo-url = "https://github.com/mlesnoff/JchemoData.jl.git"
 uuid = "3440f217-e3fb-4eda-bd77-d99cfb805e7c"

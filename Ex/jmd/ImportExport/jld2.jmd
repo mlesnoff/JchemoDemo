@@ -2,7 +2,7 @@
 title: JLD2 dataset format
 weave_options:
   error: true
-  wrap: true
+  wrap: false
   term: false
   out_width: 60%
   out_height: 30%
@@ -29,7 +29,7 @@ For details on using dataframes and CSV files, see the documentation of packages
 
 **Packages required for the examples**
 
-```julia term = true
+```julia
 using Jchemo, JchemoData    
 using JLD2, CSV, DataFrames              
 ```
@@ -38,23 +38,26 @@ using JLD2, CSV, DataFrames
 
 The example below loads dataset `tecator.jld2` stored in package [JchemoData](https://github.com/mlesnoff/JchemoData.jl).
 
-```julia term = true
-path_jdat = dirname(dirname(pathof(JchemoData))) ;   # automatically detect the path where Julia has installed package JchemoData
-db = joinpath(path_jdat, "data/tecator.jld2") ;      # full path to the jld2 file; can be changed to any other existing .jld2 file 
-## Same as:   db = string(path_jdat, "\\data\\tecator.jld2") ;
+```julia
+path_jdat = dirname(dirname(pathof(JchemoData)))   # automatically detect the path where Julia has installed package JchemoData
+db = joinpath(path_jdat, "data/tecator.jld2")      # full path to the jld2 file; can be changed to any other existing .jld2 file 
+## Same as:   db = string(path_jdat, "\\data\\tecator.jld2")
 ```
 
 - **Situation 1**
 
  The name of the object contained in the `.jl2` file is known. In this example, the name is `dat`
 
-```julia term = true
+```julia
 @load db dat   # same as:    dat = load(db, "dat") 
 @names dat     # @names is a Jchemo function
 ```
 
-```julia term = true
+```julia
 @head dat.X
+```
+
+```julia 
 @head dat.Y
 ```
 
@@ -62,10 +65,13 @@ db = joinpath(path_jdat, "data/tecator.jld2") ;      # full path to the jld2 fil
 
 The name of the object contained in the `.jl2` file is unknown
 
-```julia term = true
+```julia
 res = load(db)  
 keys(res)
-dat = res["dat"]  ;
+```
+
+```julia
+dat = res["dat"] 
 @names dat
 ```
 
@@ -73,28 +79,30 @@ dat = res["dat"]  ;
 
 In this example, two CSV files are imported, transformed to dataframes and saved to a JLD2 file (.jld2)
 
-```julia term = true
-db = joinpath(path_jdat, "data/cassav_X.csv") ;       # full path to the CSV file; can be changed to any other existing .CSV file 
-X = CSV.read(db, DataFrame; header = 1, decimal = '.', delim = ';') ;  # same as below:
-#X = CSV.File(db; header = 1, delim = ';') |> DataFrame ; 
-#X = DataFrame(CSV.File(db, header = 1, delim = ';')) ;
+```julia
+db = joinpath(path_jdat, "data/cassav_X.csv")       # full path to the CSV file; can be changed to any other existing .CSV file 
+X = CSV.read(db, DataFrame; header = 1, decimal = '.', delim = ';')  # same as below:
+#X = CSV.File(db; header = 1, delim = ';') |> DataFrame 
+#X = DataFrame(CSV.File(db, header = 1, delim = ';'))
+@head X
 ```
 
-```julia term = true
-db = joinpath(path_jdat, "data/cassav_Y.csv") ;      # full path to the CSV file; can be changed to any other existing .CSV file 
-Y = CSV.read(db, DataFrame; header = 1, decimal = '.', delim = ';') ;
+```julia
+db = joinpath(path_jdat, "data/cassav_Y.csv")      # full path to the CSV file; can be changed to any other existing .CSV file 
+Y = CSV.read(db, DataFrame; header = 1, decimal = '.', delim = ';')
+@head Y
 ```
 
-```julia term = true
-dat = (X = X, Y) ;  # create a tuple with the dataframes
+```julia
+dat = (X = X, Y)  # create a tuple with the dataframes
 @names dat
 ```
 
 Saving dataset `my_cassav`
 
-```julia term = true
-path_out = tempdir() ;   # path receiving the result file; can be changed to any other existing path
-db_out = joinpath(path_out, "my_cassav.jld2")  ; 
+```julia
+path_out = tempdir()   # path receiving the result file; can be changed to any other existing path
+db_out = joinpath(path_out, "my_cassav.jld2")  
 @save db_out dat       # same as below:
 #jldsave(db_out; dat)  
 #jldsave(db_out, true; dat)  # 'true" ==> compression   
@@ -102,21 +110,21 @@ db_out = joinpath(path_out, "my_cassav.jld2")  ;
 
 #### 3. Building CSV files from a JL2 dataset
 
-```julia term = true
-db = joinpath(path_jdat, "data/tecator.jld2") ;  # full path to the jld2 file; can be changed to any other existing .jld2 file 
+```julia
+db = joinpath(path_jdat, "data/tecator.jld2")  # full path to the jld2 file; can be changed to any other existing .jld2 file 
 @load db dat
 @names dat  
 ```
 
 Saving datasets `X` and `Y`
 
-```julia term = true
-path_out = tempdir() ;   # path that will receive the result file; can be changed to any other existing path
-db_out = joinpath(path_out, "X.csv") ;
-CSV.write(db_out, dat.X; delim = ";") ; # same as:  :dat.X |> CSV.write(db_out; delim = ";")
+```julia
+path_out = tempdir()   # path that will receive the result file; can be changed to any other existing path
+db_out = joinpath(path_out, "X.csv")
+CSV.write(db_out, dat.X; delim = ";") # same as:  :dat.X |> CSV.write(db_out; delim = ";")
 ```
 
-```julia term = true
-db_out = joinpath(path_out, "Y.csv") ;
-CSV.write(db_out, dat.X; delim = ";") ;
+```julia
+db_out = joinpath(path_out, "Y.csv")
+CSV.write(db_out, dat.X; delim = ";")
 ```

@@ -12,11 +12,13 @@ db = joinpath(path_jdat, "data/tecator.jld2")
 X = dat.X
 Y = dat.Y 
 ntot, p = size(X)
-typ = Y.typ ;
+
+
+typ = Y.typ
 tab(typ)
 
 
-wlst = names(X) ;
+wlst = names(X)
 wl = parse.(Float64, wlst) 
 #plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
@@ -29,11 +31,11 @@ fit!(model, X)
 #plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-s = typ .== "train" ;
-Xtrain = Xp[s, :] ; 
-Ytrain = Y[s, :] ;
-Xtest = rmrow(Xp, s) ;
-Ytest = rmrow(Y, s) ;
+s = typ .== "train"
+Xtrain = Xp[s, :] 
+Ytrain = Y[s, :]
+Xtest = rmrow(Xp, s)
+Ytest = rmrow(Y, s)
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
@@ -42,8 +44,8 @@ ntest = nro(Xtest)
 namy = names(Y)[1:3]
 j = 2  
 nam = namy[j]    # work on the j-th y-variable
-ytrain = Ytrain[:, nam] ;
-ytest = Ytest[:, nam] ;
+ytrain = Ytrain[:, nam]
+ytest = Ytest[:, nam]
 
 
 pct = .3  # proportion of Train for Val
@@ -51,10 +53,10 @@ nval = round(Int, pct * ntrain)
 s = samprand(ntrain, nval)
 
 
-Xcal = Xtrain[s.train, :] ;
-ycal = ytrain[s.train] ;
-Xval = Xtrain[s.test, :] ;
-yval = ytrain[s.test] ;
+Xcal = Xtrain[s.train, :]
+ycal = ytrain[s.train]
+Xval = Xtrain[s.test, :]
+yval = ytrain[s.test]
 ncal = ntrain - nval 
 (ntot = ntot, ntrain, ncal, nval, ntest)
 
@@ -105,7 +107,7 @@ loglb = round.(log.(10, res.lb), digits = 3)
 plotgrid(loglb, res.y1; step = 2, xlabel ="Lambda", ylabel = "RMSEP").f
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-model = rr(lb = res.lb[u]) ;
+model = rr(lb = res.lb[u])
 fit!(model, Xtrain, ytrain) 
 pred = predict(model, Xtest).pred 
 rmsep(pred, ytest)
@@ -144,7 +146,7 @@ pars = mpar(gamma = gamma)
 length(pars[1])
 model = kplsr()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv)
-u = findall(res.y1 .== minimum(res.y1))[1] ;
+u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 model = kplsr(nlv = res.nlv[u], gamma = res.gamma[u])
 fit!(model, Xtrain, ytrain) 
@@ -158,7 +160,7 @@ pars = mpar(gamma = gamma)
 length(pars[1])
 model = dkplsr()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv)
-u = findall(res.y1 .== minimum(res.y1))[1] ;
+u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 model = dkplsr(nlv = res.nlv[u], gamma = res.gamma[u])
 fit!(model, Xtrain, ytrain) 
@@ -166,7 +168,7 @@ pred = predict(model, Xtest).pred
 rmsep(pred, ytest)
 
 
-nlvdis = [10; 15] ; metric = [:mah] 
+nlvdis = [10; 15]; metric = [:mah] 
 h = [1; 2; 4; 6; Inf]
 k = [30; 50; 100]  
 nlv = 0:15 
@@ -185,8 +187,8 @@ pred = predict(model, Xtest).pred
 rmsep(pred, ytest)
 
 
-nlvdis = [10; 15] ; metric = [:mah] 
-h = [1; 2; 5; Inf] ; k = [30; 50; 100]  
+nlvdis = [10; 15]; metric = [:mah] 
+h = [1; 2; 5; Inf]; k = [30; 50; 100]  
 nlv = [0:5, 0:10, 1:5, 1:10]
 pars = mpar(nlv = nlv, nlvdis = nlvdis, metric = metric, h = h, k = k) 
 length(pars[1])
@@ -195,13 +197,13 @@ res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars)
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 model = lwplsravg(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
-    k = res.k[u], nlv = res.nlv[u]) ;
+    k = res.k[u], nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
-pred = predict(model, Xtest).pred ;
+pred = predict(model, Xtest).pred
 rmsep(pred, ytest)
 
 
-nlvdis = [15; 20]  ; metric = [:eucl, :mah] 
+nlvdis = [15; 20]; metric = [:eucl, :mah] 
 h = [1; 2; 4; 6; Inf] 
 k = [1; collect(5:10:50)] 
 pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k) 

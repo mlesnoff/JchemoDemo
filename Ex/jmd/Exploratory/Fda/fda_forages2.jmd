@@ -2,13 +2,13 @@
 title: Fda - forages2 
 weave_options:
   error: true
-  wrap: true
+  wrap: false
   term: false
   out_width: 60%
   out_height: 30%
 ---
 
-```julia term = true
+```julia
 using Jchemo, JchemoData
 using JLD2, CairoMakie
 using FreqTables 
@@ -16,29 +16,36 @@ using FreqTables
 
 #### Data importation
 
-```julia term = true
+```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/forages2.jld2") 
 @load db dat
 @names dat
 ```
 
-```julia term = true
-X = dat.X 
+```julia
+X = dat.X
+@head X
+```
+
+```julia
 Y = dat.Y
-ntot = nro(X)
-y = Y.typ ;
-test = Y.test ;
+@head Y
+```
+
+```julia
+y = Y.typ  # the classes 
+test = Y.test
 tab(y)
 ```
 
-```julia term = true
+```julia
 freqtable(y, test)
 ```
 
-```julia term = true
+```julia
 wlst = names(X)
-wl = parse.(Int, wlst) ;
+wl = parse.(Int, wlst)
 #plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
@@ -52,12 +59,13 @@ and **Test** is defined by the remaining samples. But **Tot** could also be spli
 for instance by sampling (random, systematic or any other designs). 
 See for instance functions `samprand`, `sampsys`, etc.
 
-```julia term = true
-s = Bool.(test) ;
-Xtrain = rmrow(X, s) ;
-ytrain = rmrow(y, s) ;
-Xtest = X[s, :] ;
-ytest = y[s] ;
+```julia
+s = Bool.(test)
+Xtrain = rmrow(X, s)
+ytrain = rmrow(y, s)
+Xtest = X[s, :]
+ytest = y[s]
+ntot = nro(X)
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
@@ -68,68 +76,68 @@ dimension reduction, or 2) by using a ridge regularization.
 
 #### 1) Fda on preliminary computed Pca scores
 
-```julia term = true
+```julia
 model0 = pcasvd(nlv = 10)
 fit!(model0, Xtrain)
 @names model0
 @names model0.fitm
 ```
 
-```julia term = true
+```julia
 @head Ttrain_pca = model0.fitm.T 
 ```
 
-```julia term = true
+```julia
 model = fda(nlv = 2)
 #model = fdasvd(nlv = 2)     # alternative algorithm (same result)
 fit!(model, Ttrain_pca, ytrain) 
-fitm = model.fitm ;
+fitm = model.fitm
 @names fitm
 ```
 
-```julia term = true
+```julia
 @head Ttrain = model.fitm.T
 ```
 
-```julia term = true
+```julia
 lev = fitm.lev
 nlev = length(lev)
 ```
 
-```julia term = true
+```julia
 ct = fitm.Tcenters
 ```
 
-```julia term = true
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "Fda", ellipse = true) ;
-scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red) ;
+```julia
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "Fda", ellipse = true)
+scatter!(ax, ct[:, 1], ct[:, 2], markersize = 10, color = :red)
 f
 ```
 
-```julia term = true
-color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .5) ;
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = "Fda", ellipse = true) ;
-scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red) ;
+```julia
+color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .5)
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = "Fda", ellipse = true)
+scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
 f
 ```
 
 **Projection of Xtest**
 
-```julia term = true
+```julia
 @head Ttest_pca = transf(model0, Xtest) 
 ```
 
-```julia term = true
+```julia
 @head Ttest = transf(model, Ttest_pca)
 ```
 
-```julia term = true
+```julia
 i = 1  # class "i" in test
-color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .5) ;
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = "Fda", ellipse = true) ;
-scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red) ;
-s = ytest .== lev[i] ;
-zT = Ttest[s, :] ;
+color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .5)
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = "Fda", ellipse = true)
+scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
+s = ytest .== lev[i]
+zT = Ttest[s, :]
 scatter!(ax, zT[:, 1], zT[:, 2]; markersize = 10, color = :blue)
 f
 ```
@@ -139,55 +147,55 @@ f
 **Note:** If the ridge parameter `lb` is too small (e.g. here from around 1e-10), the model can 
 be overfitted and predictions of new observations is misleading.
 
-```julia term = true
+```julia
 lb = 1e-5
 model = fda(; nlv = 2, lb)
 #model = fdasvd(; nlv = 2, lb)
 fit!(model, Xtrain, ytrain)
-fitm = model.fitm ;
+fitm = model.fitm
 ```
 
-```julia term = true
+```julia
 lev = fitm.lev
 nlev = length(lev)
 ```
 
-```julia term = true
+```julia
 ct = fitm.Tcenters
 ```
 
-```julia term = true
+```julia
 @head Ttrain = fitm.T
 ```
 
-```julia term = true
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "Fda", ellipse = true) ;
-scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red) ;
+```julia
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; title = "Fda", ellipse = true)
+scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
 f
 ```
 
-```julia term = true
-color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .7) ;
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = "Fda", ellipse = true) ;
-scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red) ;
+```julia
+color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .7)
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = "Fda", ellipse = true)
+scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
 f
 ```
 
 **Projection of Xtest**
 
-```julia term = true
+```julia
 @head Ttest = transf(model, Xtest)
 ```
 
-```julia term = true
+```julia
 i = 1  # class "i" in test
-color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .7) ;
+color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .7)
 f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, 
-    title = string("Projection test-class ", lev[i], " (blue points)"), ellipse = true) ;
-scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red) ;
-s = ytest .== lev[i] ;
-zT = Ttest[s, :] ;
-scatter!(ax, zT[:, 1], zT[:, 2]; markersize = 10, color = :blue) ;
+    title = string("Projection test-class ", lev[i], " (blue points)"), ellipse = true)
+scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
+s = ytest .== lev[i]
+zT = Ttest[s, :]
+scatter!(ax, zT[:, 1], zT[:, 2]; markersize = 10, color = :blue)
 f
 ```
 

@@ -9,15 +9,16 @@ db = joinpath(path_jdat, "data/cassav.jld2")
 @names dat
 
 
-X = dat.X ;
-Y = dat.Y ;
+X = dat.X
 @head X
+
+
+Y = dat.Y
 @head Y
-ntot = nro(X)
 
 
 wlst = names(X) 
-wl = parse.(Int, wlst) ;
+wl = parse.(Int, wlst)
 
 
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
@@ -25,9 +26,9 @@ plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 model1 = snv()
 model2 = savgol(npoint = 15, deriv = 2, degree = 3)
-model = pip(model1, model2) ;
+model = pip(model1, model2)
 fit!(model, X)
-Xp = transf(model, X) ;
+Xp = transf(model, X)
 @head Xp
 
 
@@ -37,11 +38,11 @@ plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 summ(Y).res
 
 
-year = Y.year ;
+year = Y.year
 tab(year)
 
 
-y = Y.tbc ;
+y = Y.tbc
 summ(y).res
 
 
@@ -57,7 +58,7 @@ density!(ax, y; bandwidth = .2, color = (:red, .5))
 f
 
 
-y = Y.tbc ;
+y = Y.tbc
 summ(y, year)
 
 

@@ -127,7 +127,7 @@ heatmap!(ax, x, y, z; colormap = cmp)
 Colorbar(f[:, end + 1]; colorrange = rg, colormap = cmp)
 f
 
-n = 100 ; p = 200 
+n = 100; p = 200 
 X = 20 * rand(n, p) 
 f = Figure(backgroundcolor = :lightgrey)
 ax = f[1, 1]
@@ -203,7 +203,7 @@ f
 f = Figure(size = (800, 500))
 colsh = :default #:tab10
 colm = cgrad(colsh, nlev; alpha = .7, categorical = true) 
-mks = 10 ; i = 1
+mks = 10; i = 1
 ax = Axis3(f[1, 1]; aspect = (1, 1, 1), perspectiveness = .1)  
 for j = 1:nlev
     s = group .== lev[j]

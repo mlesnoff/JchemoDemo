@@ -2,14 +2,14 @@
 title: forages2 - Data description
 weave_options:
   error: true
-  wrap: true
+  wrap: false
   term: false
   out_width: 60%
   out_height: 30%
 ---
 
 
-```julia term = true
+```julia
 using Jchemo, JchemoData
 using JLD2, DataFrames, CairoMakie
 using FreqTables
@@ -17,64 +17,66 @@ using FreqTables
 
 #### Data importation
 
-```julia term = true
+```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/forages2.jld2") 
 @load db dat
 @names dat
 ```
 
-```julia term = true
-X = dat.X ;
-Y = dat.Y ;
+```julia
+X = dat.X
 @head X
+```
+
+```julia
+Y = dat.Y
 @head Y
-ntot = nro(X)
 ```
 
 #### X data
 
-```julia term = true
+```julia
 wlst = names(X) 
-wl = parse.(Int, wlst) ;
+wl = parse.(Int, wlst)
 ```
 The X-data are already preprocessed by SNV and second derivation.
 
-```julia term = true
+```julia
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
 #### Y data
 
-```julia term = true
-typ = Y.typ ;
+```julia
+typ = Y.typ
 tab(typ)
 ```
 
-```julia term = true
-test = Y.test ;  # training/test (0/1) observations
+```julia
+test = Y.test  # training/test (0/1) observations
 tab(test)
 freqtable(Y.typ, test)
 ```
 
-```julia term = true
+```julia
 namy = names(Y)[1:2]
 summ(Y[:, namy]).res
 ```
 
-```julia term = true
+```julia
 summ(Y[:, namy], test)
 ```
 
 **A given variable**
 
-```julia term = true
+```julia
 j = 2
 nam = namy[2]
-y = Y[:, nam] ;
-s = test .== 0 ;
-ytrain = y[s] ; 
-ytest = rmrow(y, s) ;
+y = Y[:, nam]
+s = test .== 0
+ytrain = y[s] 
+ytest = rmrow(y, s)
 ```
 
 ```julia 

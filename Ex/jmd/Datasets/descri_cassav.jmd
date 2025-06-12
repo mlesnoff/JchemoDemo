@@ -2,74 +2,76 @@
 title: cassav - Data description
 weave_options:
   error: true
-  wrap: true
+  wrap: false
   term: false
   out_width: 60%
   out_height: 30%
 ---
 
 
-```julia term = true
+```julia
 using Jchemo, JchemoData
 using JLD2, DataFrames, CairoMakie
 ```
 
 #### Data importation
 
-```julia term = true
+```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/cassav.jld2")
 @load db dat
 @names dat
 ```
 
-```julia term = true
-X = dat.X ;
-Y = dat.Y ;
+```julia
+X = dat.X
 @head X
+```
+
+```julia
+Y = dat.Y
 @head Y
-ntot = nro(X)
 ```
 
 #### X data
 
-```julia term = true
+```julia
 wlst = names(X) 
-wl = parse.(Int, wlst) ;
+wl = parse.(Int, wlst)
 ```
 
-```julia term = true
+```julia
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
 **Preprocessing by SNV and derivation**
 
-```julia term = true
+```julia
 model1 = snv()
 model2 = savgol(npoint = 15, deriv = 2, degree = 3)
-model = pip(model1, model2) ;
+model = pip(model1, model2)
 fit!(model, X)
-Xp = transf(model, X) ;
+Xp = transf(model, X)
 @head Xp 
 ```
 
-```julia term = true
+```julia
 plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
 #### Y data
 
-```julia term = true
+```julia
 summ(Y).res
 ```
 
-```julia term = true
-year = Y.year ;
+```julia
+year = Y.year
 tab(year)
 ```
 
-```julia term = true
-y = Y.tbc ;
+```julia
+y = Y.tbc
 summ(y).res 
 ```
 
@@ -87,8 +89,8 @@ density!(ax, y; bandwidth = .2, color = (:red, .5))
 f
 ```
 
-```julia term = true
-y = Y.tbc ;
+```julia
+y = Y.tbc
 summ(y, year)
 ```
 

@@ -10,13 +10,13 @@ noise = .5  # "vertical" noise (axis3)
 #noise = 2
 segments = 4
 hlims = (-10.0, 10.0)  # seems to impact only axis2
-rng = TaskLocalRNG() ;
+rng = TaskLocalRNG()
 #rng = MersenneTwister(1234)
 Xt, L = ManifoldLearning.swiss_roll(n, noise; segments, hlims, rng)
 @head X = Xt'
 
 
-labs = vec(L) ;
+labs = vec(L)
 tab(labs)
 
 
@@ -43,7 +43,7 @@ plotxy(T[:, i], T[:, i + 1]; color = labs,
 
 
 nlv = 2
-n_neighbors = 15 ; min_dist = .5 
+n_neighbors = 15; min_dist = .5 
 model = umap(; nlv, n_neighbors, min_dist)
 fit!(model, X)
 @head T = model.fitm.T
@@ -67,7 +67,7 @@ plotxy(T[:, i], T[:, i + 1]; color = labs,
 
 
 nlv = 2
-kern = :krbf ; gamma = 1e-2
+kern = :krbf; gamma = 1e-2
 model = kpca(; nlv, kern, gamma)
 fit!(model, X)
 @head T = model.fitm.T
@@ -80,7 +80,7 @@ plotxy(T[:, i], T[:, i + 1]; color = labs,
 
 nlv = 2
 kern = :kpol
-gamma = 1 ; degree = 3 ; coef0 = 10
+gamma = 1; degree = 3; coef0 = 10
 model = kpca(; nlv, kern, degree, gamma, coef0)
 fit!(model, X)
 @head T = model.fitm.T  

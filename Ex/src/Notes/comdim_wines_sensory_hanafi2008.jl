@@ -13,7 +13,7 @@ X1 = dat.X1
 X2 = dat.X2
 X3 = dat.X3
 X4 = dat.X4
-Xbl = [X1, X2, X3, X4] ;   # Same as: Xbl = [[X1]; [X2]; [X3]; [X4]]
+Xbl = [X1, X2, X3, X4]   # Same as: Xbl = [[X1]; [X2]; [X3]; [X4]]
 
 
 n = nro(X1)
@@ -24,7 +24,7 @@ nlv = 3
 bscal = :frob
 model = comdim(; nlv, bscal)
 fit!(model, Xbl)
-fitm = model.fitm ;
+fitm = model.fitm
 @names fitm
 
 
@@ -38,15 +38,19 @@ f
 
 
 Tbl = fitm.Tbl
+
+
 Vbl = fitm.Vbl
 
 
 k = 1
 Tbl[k]
+
+
 Vbl[k]
 
 
-res = summary(model, Xbl) ;
+res = summary(model, Xbl)
 @names res
 
 
@@ -54,10 +58,14 @@ res.explvarxx
 
 
 explxbl = res.explxbl  # = specific weights 'lb' when 'bscal = :frob'
+
+
 rowsum(explxbl)
 
 
 contrxbl2t = res.contrxbl2t
+
+
 colsum(contrxbl2t)
 
 
@@ -105,7 +113,7 @@ k = 4  # fourth block
 z = Tbl[k] 
 v = Vbl[k] 
 nam = names(Xbl[k]) 
-i = 1 ;
+i = 1
 f, ax = plotxy(z[:, i], z[:, i + 1]; zeros = true, xlabel = string("PC", i), 
     ylabel = string("PC", i + 1), title = string("Block ", k)) 
 text!(ax, z[:, i], z[:, i + 1]; text = string.("w", 1:n), fontsize = 15) 

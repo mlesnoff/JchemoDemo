@@ -9,22 +9,30 @@ db = joinpath(path_jdat, "data/cassav.jld2")
 @names dat
 
 
-X = dat.X 
-Y = dat.Y 
+X = dat.X
+@head X
+
+
+Y = dat.Y
+@head Y
+
+
 year = Y.year 
 tab(year)
 
 
 s = year .<= 2012
-Xtrain = X[s, :]
-Xtest = rmrow(X, s)
+Xtrain = X[s, :] 
+Xtest = rmrow(X, s) 
+ntot = nro(X) 
 ntrain = nro(Xtrain) 
 ntest = nro(Xtest)
+(ntot = ntot, ntrain, ntest)
 
 
 model = pcasvd(nlv = 10) 
 fit!(model, Xtrain)  
-fitm = model.fitm ; 
+fitm = model.fitm 
 @head Ttrain = fitm.T
 
 
@@ -32,8 +40,8 @@ fitm = model.fitm ;
 
 
 CairoMakie.activate!()
-T = vcat(Ttrain, Ttest) ;  
-group = [repeat(["Train"], ntrain); repeat(["Test"], ntest)] ;
+T = vcat(Ttrain, Ttest)  
+group = [repeat(["Train"], ntrain); repeat(["Test"], ntest)]
 plotxy(T[:, 1], T[:, 2], group; zeros = true, xlabel = "PC1", ylabel = "PC2").f
 
 

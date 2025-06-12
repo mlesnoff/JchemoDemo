@@ -80,7 +80,7 @@ X
 
 ################ Replace 
 
-x = [rand(3) ; 0 ; 1]
+x = [rand(3); 0; 1]
 replace(x, 0 => missing)
 replace(x, 0 => missing, 1 => 200)
 
@@ -99,7 +99,7 @@ u
 ############### Within
 
 nam = string.(350:2500) 
-z = ["1000" ; "1800"] ;
+z = ["1000"; "1800"]
 f = in(nam)    # function
 f.(z)          # is z[i] in nam?
 # same as:
@@ -119,7 +119,7 @@ occursin.("D", z)
 occursin.("K", z)
 
 nam = string.(350:2500) 
-z = ["1000" ; "1800"] ;
+z = ["1000"; "1800"]
 s = in(z).(nam)     # is nam[i] in z?
 findall(s)
 
@@ -129,8 +129,8 @@ s = in(u).(x)
 findall(s)
 findall(s .== 0)
 
-x = ["a" ; "b" ; "c" ; "d" ; "e"]
-y = ["b" ; "a" ; "a" ; "c"]
+x = ["a"; "b"; "c"; "d"; "e"]
+y = ["b"; "a"; "a"; "c"]
 indexin(y, x)  # returns where is y[i] in x
 
 x = rand(Int(1e6))

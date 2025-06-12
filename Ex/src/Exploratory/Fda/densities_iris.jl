@@ -12,8 +12,8 @@ db = joinpath(path_jdat, "data", "iris.jld2")
 summ(dat.X)
 
 
-@head X = dat.X[:, 1:4] 
-@head y = dat.X[:, 5]    # the classes (species)
+X = dat.X[:, 1:4] 
+y = dat.X[:, 5]    # the classes (species)
 ntot = nro(X)
 
 
@@ -26,10 +26,10 @@ nlev = length(lev)
 
 ntest = 30
 s = samprand(ntot, ntest)
-Xtrain = X[s.train, :] ;
-ytrain = y[s.train] ;
-Xtest = X[s.test, :] ;
-ytest = y[s.test] ;
+Xtrain = X[s.train, :]
+ytrain = y[s.train]
+Xtest = X[s.test, :]
+ytest = y[s.test]
 ntrain = ntot - ntest
 (ntot = ntot, ntrain, ntest)
 tab(ytrain)
@@ -56,8 +56,8 @@ plotxy(Ttrain[:, i], Ttrain[:, i + 1], ytrain; title = "PLS2 space -Train", xlab
 k = 1  # example of the projection of the first obs. of Test
 
 
-f = Figure(size = (900, 300)) ;
-ax = list(nlev) ;
+f = Figure(size = (900, 300))
+ax = list(nlev)
 for i in eachindex(lev) 
     zs = ytrain .== lev[i]
     zT = Ttrain[zs, :]
@@ -68,7 +68,8 @@ for i in eachindex(lev)
     ## End
     hlines!(ax[i], 0; linestyle = :dash, color = :grey)
     vlines!(ax[i], 0; linestyle = :dash, color = :grey)
-    xlims!(ax[i], -4, 4) ; ylims!(ax[i], -1.7, 1.7)
+    xlims!(ax[i], -4, 4)
+    ylims!(ax[i], -1.7, 1.7)
 end
 f
 
@@ -81,12 +82,12 @@ x1 = LinRange(-4, 4, npoints)
 x2 = LinRange(-2, 2, npoints)
 z = mpar(x1 = x1, x2 = x2)
 grid = reduce(hcat, z)
-f = Figure(size = (900, 400)) ;
-ax = list(nlev) ;
+f = Figure(size = (900, 400))
+ax = list(nlev)
 for i in eachindex(lev) 
     zs = ytrain .== lev[i]
     zT = Ttrain[zs, :]
-    #lims = [[minimum(zT[:, j]) ; maximum(zT[:, j])] for j = 1:nlv]
+    #lims = [[minimum(zT[:, j]) maximum(zT[:, j])] for j = 1:nlv]
     #x1 = LinRange(lims[1][1], lims[1][2], npoints)
     #x2 = LinRange(lims[2][1], lims[2][2], npoints)
     zfitm = dmnorm(colmean(zT), W)   # Gaussian estimate
@@ -98,7 +99,8 @@ for i in eachindex(lev)
     scatter!(ax[i], Ttest[k, 1], Ttest[k, 2], color = :blue, marker = :star5, markersize = 15)
     hlines!(ax[i], 0; linestyle = :dash, color = :grey)
     vlines!(ax[i], 0; linestyle = :dash, color = :grey)
-    xlims!(ax[i], -4, 4) ; ylims!(ax[i], -1.7, 1.7)
+    xlims!(ax[i], -4, 4)
+    ylims!(ax[i], -1.7, 1.7)
     Colorbar(f[2, i], co; label = "Density", vertical = false)
 end
 f
@@ -107,21 +109,21 @@ f
 res = matW(Ttrain, ytrain, weights)
 Wi = res.Wi
 ni = res.ni
-npoints = 2^7 ;
-x1 = LinRange(-4, 4, npoints) ;
-x2 = LinRange(-2, 2, npoints) ;
-z = mpar(x1 = x1, x2 = x2) ;
-grid = reduce(hcat, z) ;
-z = mpar(x1 = x1, x2 = x2) ;
-grid = reduce(hcat, z) ;
-f = Figure(size = (900, 400)) ;
-ax = list(nlev) ;
+npoints = 2^7
+x1 = LinRange(-4, 4, npoints)
+x2 = LinRange(-2, 2, npoints)
+z = mpar(x1 = x1, x2 = x2)
+grid = reduce(hcat, z)
+z = mpar(x1 = x1, x2 = x2)
+grid = reduce(hcat, z)
+f = Figure(size = (900, 400))
+ax = list(nlev)
 for i in eachindex(lev) 
     zs = ytrain .== lev[i]
     zT = Ttrain[zs, :]
     zS = Wi[i] * ni[i] / (ni[i] - 1)
-    zfitm = dmnorm(colmean(zT), zS) ;   # Gaussian estimate
-    zres = predict(zfitm, grid) ;
+    zfitm = dmnorm(colmean(zT), zS)   # Gaussian estimate
+    zres = predict(zfitm, grid)
     pred_grid = vec(zres.pred) 
     ax[i] = Axis(f[1, i]; title = lev[i], xlabel = "LV1", ylabel = "LV2")
     co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
@@ -129,7 +131,8 @@ for i in eachindex(lev)
     scatter!(ax[i], Ttest[k, 1], Ttest[k, 2], color = :blue, marker = :star5, markersize = 15)
     hlines!(ax[i], 0; linestyle = :dash, color = :grey)
     vlines!(ax[i], 0; linestyle = :dash, color = :grey)
-    xlims!(ax[i], -4, 4) ; ylims!(ax[i], -1.7, 1.7)
+    xlims!(ax[i], -4, 4)
+    ylims!(ax[i], -1.7, 1.7)
     Colorbar(f[2, i], co; label = "Density", vertical = false)
 end
 f
@@ -140,13 +143,13 @@ x1 = LinRange(-4, 4, npoints)
 x2 = LinRange(-2, 2, npoints)
 z = mpar(x1 = x1, x2 = x2)
 grid = reduce(hcat, z)
-f = Figure(size = (900, 400)) ;
-ax = list(nlev) ;
+f = Figure(size = (900, 400))
+ax = list(nlev)
 for i in eachindex(lev) 
     zs = ytrain .== lev[i]
     zT = Ttrain[zs, :]
     zfitm = dmkern(zT; a = .5)   # KDE estimate
-    zres = predict(zfitm, grid) ;
+    zres = predict(zfitm, grid)
     pred_grid = vec(zres.pred)
     ax[i] = Axis(f[1, i]; title = lev[i], xlabel = "LV1", ylabel = "LV2")
     co = contourf!(ax[i], grid[:, 1], grid[:, 2], pred_grid; levels = 10)
@@ -154,7 +157,8 @@ for i in eachindex(lev)
     scatter!(ax[i], Ttest[k, 1], Ttest[k, 2], color = :blue, marker = :star5, markersize = 15)
     hlines!(ax[i], 0; linestyle = :dash, color = :grey)
     vlines!(ax[i], 0; linestyle = :dash, color = :grey)
-    xlims!(ax[i], -4, 4) ; ylims!(ax[i], -1.7, 1.7)
+    xlims!(ax[i], -4, 4)
+    ylims!(ax[i], -1.7, 1.7)
     Colorbar(f[2, i], co; label = "Density", vertical = false)
 end
 f

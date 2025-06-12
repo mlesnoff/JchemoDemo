@@ -10,12 +10,18 @@ db = joinpath(path_jdat, "data/tecator.jld2")
 
 
 X = dat.X
+@head X
+
+
 Y = dat.Y 
-typ = Y.typ ;
+@head Y
+
+
+typ = Y.typ
 tab(typ)
 
 
-wlst = names(X) ;
+wlst = names(X)
 wl = parse.(Float64, wlst) 
 #plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
@@ -28,11 +34,11 @@ fit!(model, X)
 #plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-s = typ .== "train" ;
-Xtrain = Xp[s, :] ; 
-Ytrain = Y[s, :] ;
-Xtest = rmrow(Xp, s) ;
-Ytest = rmrow(Y, s) ;
+s = typ .== "train"
+Xtrain = Xp[s, :] 
+Ytrain = Y[s, :]
+Xtest = rmrow(Xp, s)
+Ytest = rmrow(Y, s)
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 ntot = ntrain + ntest
@@ -42,8 +48,8 @@ ntot = ntrain + ntest
 namy = names(Y)[1:3]
 j = 2  
 nam = namy[j]    # work on the j-th y-variable
-ytrain = Ytrain[:, nam] ;
-ytest = Ytest[:, nam] ;
+ytrain = Ytrain[:, nam]
+ytest = Ytest[:, nam]
 
 
 K = 3     # nb. folds (segments)
@@ -66,7 +72,7 @@ segm[i][k]   # segment 'k' of replication 'i'
 
 nlv = 0:20
 model = plskern()
-rescv = gridcv(model, Xtrain, ytrain; segm, score = rmsep, nlv) ;
+rescv = gridcv(model, Xtrain, ytrain; segm, score = rmsep, nlv)
 @names rescv 
 res = rescv.res
 res_rep = rescv.res_rep

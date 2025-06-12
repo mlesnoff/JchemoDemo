@@ -59,11 +59,11 @@ describe(x)
 ## Use push! to add individual items to collection which are not already themselves in another collection. 
 ## The result of the preceding example is equivalent to push!([1, 2, 3], 4, 5, 6).
 
-append!([1 ; 2 ; 3], [4 ; 5 ; 6])
-push!([1 ; 2 ; 3], 4, 5, 6)
+append!([1; 2; 3], [4; 5; 6])
+push!([1; 2; 3], 4, 5, 6)
 
-x = [1 ; 2 ; 3]
-push!(x, 4, 5, 6) ;
+x = [1; 2; 3]
+push!(x, 4, 5, 6)
 x
 
 ## hcat, vcat
@@ -77,7 +77,7 @@ reduce(vcat, [X1, X2])
 reduce(vcat, (X1, X2, X1))
 
 z = Vector{Matrix}(undef, 3)
-z[1] = X1 ; z[2] = X2 ; z[3] = X1  
+z[1] = X1; z[2] = X2; z[3] = X1  
 reduce(vcat, z)
 
 z = ((1, 2, 3), (5, 6, 7), (10, 11, 12))
@@ -112,11 +112,11 @@ X[diagind(X)] .= 1
 X
 
 X = .9 * ones(n, n)
-for i in 1:4 ; X[i, i] = 1 ; end
+for i in 1:4; X[i, i] = 1; end
 X
 
 X = .9 * ones(4, 4)
-for i in zip(1:4, 1:4) ; X[i...] = 1 ; end 
+for i in zip(1:4, 1:4); X[i...] = 1; end 
 X
 
 ## Speed
@@ -124,14 +124,14 @@ n = 2000 # medium-size problem to illustrate the differences
 M = diagm(0 => 1:n) 
 D = Diagonal(1:n) 
 S = spdiagm(0 => 1:n) 
-x = rand(n) ; # random test vector
-@time y = M * x ; # >100× slower!
-@time y = D * x ; # fastest
-@time y = S * x ; # 3× slower
+x = rand(n) # random test vector
+@time y = M * x # >100× slower!
+@time y = D * x # fastest
+@time y = S * x # 3× slower
 # Here is a faster version that overwrites y each time:
-@time mul!(y, M, x) ; 
-@time mul!(y, D, x) ; 
-@time mul!(y, S, x) ; 
+@time mul!(y, M, x) 
+@time mul!(y, D, x) 
+@time mul!(y, S, x) 
 
 X = rand(5, 4)
 diag(X)
@@ -149,9 +149,9 @@ n = 5000
 X = rand(n, n)
 d = rand(n)
 D = Diagonal(d)
-@time D * X ;
-@time d .* X ;
-@time (*).(d, X) ; # slow
+@time D * X
+@time d .* X
+@time (*).(d, X) # slow
 
 ############ Products
 
@@ -168,19 +168,19 @@ mul!(C, A, B)
 # Same as:
 C .= A * B
 
-X = [1. 2 ; 3  4]
-ldiv!(2., X) ;
+X = [1. 2; 3  4]
+ldiv!(2., X)
 X
 
-X = [1. 2 ; 3  4]
-rdiv!(X, 2.0) ;
+X = [1. 2; 3  4]
+rdiv!(X, 2.0)
 X
 
 ## Product of rows/columns
 X = rand(1000, 1000)
-@time prod(X, dims = 2) ;    # best
-@time map(prod, eachrow(X)) ;
-@time prod.(eachrow(X)) ;
+@time prod(X, dims = 2)    # best
+@time map(prod, eachrow(X))
+@time prod.(eachrow(X))
 
 ## Dot products
 n = 10
@@ -191,9 +191,9 @@ sum(w .* w)
 
 n = Int(1e7)
 w = rand(n) 
-@time w' * w ;      ## Same as dot
-@time dot(w, w) ;
-@time sum(w .* w) ; ## Much slower
+@time w' * w      ## Same as dot
+@time dot(w, w)
+@time sum(w .* w) ## Much slower
 
 ############### Tuple
 

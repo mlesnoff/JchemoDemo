@@ -19,7 +19,7 @@ df = CSV.read(db, DataFrame; header = 1, decimal = '.', delim = ';')
 #df = DataFrame(CSV.File(db, header = 1, delim = ';'))
 
 ## Exportation
-X = reshape([missing ; rand(9)], 5, 2)
+X = reshape([missing; rand(9)], 5, 2)
 X = DataFrame(X, :auto)
 
 db = joinpath(path_out, "res.csv")
@@ -94,17 +94,17 @@ using JLD2
 
 ## Importation
 db = joinpath(path_jdat, "data/cassav.jld2") 
-@load db dat ;
+@load db dat
 keys(dat)
 X = dat.X
 Y = dat.Y
 ## Or:
-res = load(db) ;
+res = load(db)
 keys(res)
 dat = res["dat"]
 keys(dat)
 ## Or:
-dat = load(db, "dat") ;
+dat = load(db, "dat")
 keys(dat)
 
 ## Exportation
@@ -176,7 +176,7 @@ Xcal = z["calibration"]
 Xcal = reduce(vcat, Xcal)
 close(dat)
 ## Same as:
-dat = matread(db) ;
+dat = matread(db)
 keys(dat)
 z = dat["LAMDATA"] 
 keys(z)
@@ -189,16 +189,16 @@ using CodecXz # required to read XZ-compressed RData files
 db = joinpath(path_jdat, "data/octane.rda") 
 dat = load(db)
 keys(dat)
-z = dat["octane"] ;
+z = dat["octane"]
 keys(z)
 ## Same as
-#z = get(dat, "datoctane", nothing) ;
+#z = get(dat, "datoctane", nothing)
 X = z["X"] 
 
 db = joinpath(path_jdat, "data/cassav.rda") 
 dat = load(db)
 keys(dat)
-z = dat["dat"] ;
+z = dat["dat"]
 keys(z)
 X = z["X"]
 Y = z["Y"] 

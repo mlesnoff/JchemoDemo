@@ -2,41 +2,41 @@
 title: Pca - cassav - introduction - scores 
 weave_options:
   error: true
-  wrap: true
+  wrap: false
   term: false
   out_width: 60%
   out_height: 30%
 ---
 
-```julia term = true
+```julia
 using Jchemo, JchemoData
 using JLD2, CairoMakie, GLMakie
 ```
 
 #### Data importation
 
-```julia term = true
+```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/cassav.jld2")
 @load db dat
 @names dat
 ```
 
-```julia term = true
+```julia
 X = dat.X
-names(X)
+@head X
 ```
 
 #### Model fitting
 
-```julia term = true
+```julia
 model = pcasvd(nlv = 10)
 fit!(model, X)  
 @names model
 ```
 
-```julia term = true
-fitm = model.fitm ; 
+```julia
+fitm = model.fitm 
 @names fitm
 ```
 
@@ -44,29 +44,29 @@ fitm = model.fitm ;
 
 The scores are already computed and returned in sub-object `fitm` 
 
-```julia term = true
+```julia
 @head T = fitm.T 
 ```
 
 but can also be computed by projecting the data on the loadings
 (more generally, this projection is done to compute the scores of new data not used in the model fitting)
 
-```julia term = true
+```julia
 @head transf(model, X) 
 ```
 
 #### % Variance explained
 
-```julia term = true
-res = summary(model, X) ;
+```julia
+res = summary(model, X)
 @names res
 ```
 
-```julia term = true
+```julia
 pcts = res.explvarx
 ```
 
-```julia term = true
+```julia
 CairoMakie.activate!()
 plotgrid(pcts.nlv, 100 * pcts.pvar; step = 1, xlabel = "nb. PCs", ylabel = "% variance explained").f
 ```
@@ -75,13 +75,13 @@ plotgrid(pcts.nlv, 100 * pcts.pvar; step = 1, xlabel = "nb. PCs", ylabel = "% va
 
 For instance, the space PC1-PC2 can be plotted by
 
-```julia term = true
+```julia
 plotxy(T[:, 1], T[:, 2]; zeros = true, xlabel = "PC1", ylabel = "PC2").f
 ```
 
 More information (recommended in practice) can be displayed using function `plotlv`
 
-```julia term = true
+```julia
 plotlv(T[:, 1:6]; shape = (2, 3), color = (:blue, .5), zeros = true, xlabel = "PC", 
     ylabel = "PC").f
 ```
@@ -93,7 +93,7 @@ See functions `plotxy` and `plotlv` for more options.
 3D representations of the score space are often more informative than 2D representations,
 especially when using interactive axe-rotation.
 
-```julia term = true
+```julia
 CairoMakie.activate!()  
 #GLMakie.activate!()    # for interactive axe-rotation
 

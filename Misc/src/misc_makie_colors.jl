@@ -5,8 +5,8 @@ using CairoMakie, Jchemo
 ## https://docs.juliaplots.org/latest/generated/colorschemes/
 ## http://juliagraphics.github.io/Colors.jl/stable/
 
-n = 500 ; m = 50
-x = rand(n) ; y = rand(n)
+n = 500; m = 50
+x = rand(n); y = rand(n)
 z = vcat(repeat(["B"], m), repeat(["A"], n - m))
 group = recod_catbyint(z)
 lev = mlev(z)

@@ -11,13 +11,13 @@ X = dat.X
 model = pcasvd(nlv = 3) 
 fit!(model, X) 
 T = model.fitm.T
-i = 10 ; k = 50
+i = 10; k = 50
 res = getknn(T, T[i:i, :]; k = k, metric = :mah)
 s = res.ind[1]
-CairoMakie.activate!() ;  
-#GLMakie.activate!() ;  
+CairoMakie.activate!()  
+#GLMakie.activate!()  
 f = Figure(size = (600, 500))
-mks = 15 ; tsp = .5
+mks = 15; tsp = .5
 ax = Axis3(f[1, 1]; xlabel = "PC1", ylabel = "PC2", zlabel = "PC3", perspectiveness = 0.5) 
 scatter!(ax, T[:, 1], T[:, 2], T[:, 3]; markersize = mks, color = (:grey, tsp))
 scatter!(ax, T[s, 1], T[s, 2], T[s, 3]; markersize = mks, color = (:blue, tsp))

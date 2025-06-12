@@ -11,10 +11,15 @@ db = joinpath(path_jdat, "data/forages2.jld2")
 
 
 X = dat.X 
+@head X
+
+
 Y = dat.Y
-ntot = nro(X)
-y = Y.typ ;
-test = Y.test ;
+@head Y
+
+
+y = Y.typ
+test = Y.test
 tab(y)
 
 
@@ -22,32 +27,35 @@ freqtable(y, test)
 
 
 wlst = names(X)
-wl = parse.(Int, wlst) ;
+wl = parse.(Int, wlst)
 #plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-s = Bool.(test) ;
-Xtrain = rmrow(X, s) ;
-ytrain = rmrow(y, s) ;
-Xtest = X[s, :] ;
-ytest = y[s] ;
+s = Bool.(test)
+Xtrain = rmrow(X, s)
+ytrain = rmrow(y, s)
+Xtest = X[s, :]
+ytest = y[s]
+ntot = nro(X)
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 
 
 tab(ytrain)
+
+
 tab(ytest)
 
 
 K = 3     # nb. folds (segments)
 rep = 25  # nb. replications
-segm = segmkf(ntrain, K; rep = rep) ;
+segm = segmkf(ntrain, K; rep = rep)
 
 
 nlv = 0:30
 model = plsrda()
-rescv = gridcv(model, Xtrain, ytrain; segm, score = errp, nlv) ;
+rescv = gridcv(model, Xtrain, ytrain; segm, score = errp, nlv)
 @names rescv 
 res = rescv.res
 res_rep = rescv.res_rep
@@ -82,11 +90,17 @@ pred = predict(model, Xtest).pred
 
 
 errp(pred, ytest)
+
+
 merrp(pred, ytest)
 
 
-cf = conf(pred, ytest) ;
+cf = conf(pred, ytest)
 @names cf
+
+
 cf.cnt
+
+
 cf.pct
 

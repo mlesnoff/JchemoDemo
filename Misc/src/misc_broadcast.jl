@@ -29,7 +29,7 @@ sqrt.(z)
 mapslices(mean, z, dims = 1)
 
 A = rand(5, 3)
-mapslices(function g(x) ; x / sum(x) ; end, A, dims = 2)
+mapslices(function g(x); x / sum(x) end, A, dims = 2)
 
 A = rand(10, 3)
 mapslices(argmax, A; dims = 2) 
@@ -38,8 +38,8 @@ map(i -> argmax(A[i, :]), 1:size(A, 1))
 
 n = 10000 
 X = rand(n, n) 
-@time map(sqrt, X) ;
-@time sqrt.(X) ; ## Not faster
+@time map(sqrt, X)
+@time sqrt.(X) ## Not faster
 
 X = rand(5, 3)
 mapslices(mean, X, dims = 1)
@@ -52,7 +52,7 @@ StatsBase.mean(X, dims = 1) # much faster
 
 #### reduce
 
-n = 1000 ; p = 1000 ; m = 100
+n = 1000; p = 1000; m = 100
 X = Vector{Matrix{Float64}}(undef, m)
 for i = 1:m
     X[i] = rand(n, p)
@@ -64,9 +64,9 @@ end
     end
 end
 # Much faster:
-@time zX = reduce(hcat, X) ;  
+@time zX = reduce(hcat, X)  
 
-n = 1000 ; m = 100
+n = 1000; m = 100
 x = Vector{Vector{Float64}}(undef, m)
 for i = 1:m
     x[i] = rand(n)
@@ -84,6 +84,6 @@ end
     end
 end
 # Much faster
-@time zx = reduce(vcat, x) ;
+@time zx = reduce(vcat, x)
 
 

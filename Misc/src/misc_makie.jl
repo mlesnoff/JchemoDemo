@@ -33,7 +33,7 @@ propertynames(res)
 ############# Ablines, Vlines, Hlines 
 
 n = 10
-x = rand(n) ; y = rand(n)
+x = rand(n); y = rand(n)
 f, ax = scatter(x, y)
 hlines!(ax, 0)
 vlines!(ax, [0; 1]; color = [:green, :purple])
@@ -122,7 +122,7 @@ f
 ############# Boxplots
 
 n = 200
-x = rand(1:3, n) ; y = randn(n)
+x = rand(1:3, n); y = randn(n)
 grp = rand(1:2, n)
 boxplot(x, y)
 
@@ -215,7 +215,7 @@ end
 f
 
 n = 300
-y = rand(n) ; year = sample(2000:2002, n)
+y = rand(n); year = sample(2000:2002, n)
 years = sort(unique(year))
 
 f = Figure(size = (500, 400))
@@ -331,7 +331,7 @@ end
 n = 1000
 x = rand(n) 
 y = 5 * x + 10 * rand(n) 
-z = [x ; y] 
+z = [x; y] 
 
 f, ax = scatter(x, y)
 xlims!(ax, minimum(z), maximum(z))
@@ -351,7 +351,7 @@ f, ax = lines(x, y1; color = :red, linewidth = 2)
 lines!(ax, x, y2; color = :blue, linestyle = :dot) 
 f
 
-n = 10 ; p = 100
+n = 10; p = 100
 X = randn(n, p)
 w = collect(1:p) 
 f, ax = lines(w, X[1, :])
@@ -389,7 +389,7 @@ f
 ## https://docs.makie.org/stable/examples/plotting_functions/scatter/
 
 n = 10
-x = rand(n) ; y = rand(n)
+x = rand(n); y = rand(n)
 z = 1:n
 
 scatter(x, y; marker = '1', markersize = 30)
@@ -476,8 +476,8 @@ f = FigGridScatters()
 
 ############## Tooltip 
 
-x = [1. ; 2]
-y = [0. ; 4]
+x = [1.; 2]
+y = [0.; 4]
 
 f = Figure()
 ax = Axis(f[1, 1])
@@ -487,7 +487,7 @@ f
 
 ############## Transparency 
 
-n = 10000 ; p = 2 
+n = 10000; p = 2 
 X = randn(n, p) 
 scatter(X[:, 1], X[:, 2]; color = (:blue, .3))
 

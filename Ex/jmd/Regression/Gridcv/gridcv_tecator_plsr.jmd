@@ -2,42 +2,50 @@
 title: gridcv - tecator - Plsr
 weave_options:
   error: true
-  wrap: true
+  wrap: false
   term: false
   out_width: 60%
   out_height: 30%
 ---
 
-```julia term = true
+```julia
 using Jchemo, JchemoData
 using JLD2, CairoMakie
 ```
 
 #### Data importation
 
-```julia term = true
+```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/tecator.jld2") 
 @load db dat
 @names dat
 ```
 
-```julia term = true
+```julia
 X = dat.X
+@head X 
+```
+
+```julia 
 Y = dat.Y 
-typ = Y.typ ;
+@head Y
+``` 
+
+```julia 
+typ = Y.typ
 tab(typ)
 ```
 
-```julia term = true
-wlst = names(X) ;
+```julia
+wlst = names(X)
 wl = parse.(Float64, wlst) 
 #plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
 **Preprocessing**
 
-```julia term = true
+```julia
 model1 = snv()
 model2 = savgol(npoint = 15, deriv = 2, degree = 3)
 model = pip(model1, model2)
@@ -54,12 +62,12 @@ and **Test** is defined by the remaining samples. But **Tot** could also be spli
 for instance by sampling (random, systematic or any other designs). 
 See for instance functions `samprand`, `sampsys`, etc.
 
-```julia term = true
-s = typ .== "train" ;
-Xtrain = Xp[s, :] ; 
-Ytrain = Y[s, :] ;
-Xtest = rmrow(Xp, s) ;
-Ytest = rmrow(Y, s) ;
+```julia
+s = typ .== "train"
+Xtrain = Xp[s, :] 
+Ytrain = Y[s, :]
+Xtest = rmrow(Xp, s)
+Ytest = rmrow(Y, s)
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 ntot = ntrain + ntest
@@ -68,12 +76,12 @@ ntot = ntrain + ntest
 
 **Working response y**
 
-```julia term = true
+```julia
 namy = names(Y)[1:3]
 j = 2  
 nam = namy[j]    # work on the j-th y-variable
-ytrain = Ytrain[:, nam] ;
-ytest = Ytest[:, nam] ;
+ytrain = Ytrain[:, nam]
+ytest = Ytest[:, nam]
 ```
 
 #### CV-Segments for model tuning
@@ -85,7 +93,7 @@ these two methods return close resuts):
     - Train is splitted in a number of K folds (segments),
     - and this split can be replicated (==> replicated K-Fold CV).
 
-```julia term = true
+```julia
 K = 3     # nb. folds (segments)
 rep = 25  # nb. replications
 segm = segmkf(ntrain, K; rep = rep)
@@ -95,7 +103,7 @@ segm = segmkf(ntrain, K; rep = rep)
     - Train is split to Cal/Val (e.g. Cal = 70% of Train, Val = 30% of Train),
         and this is replicated.
 
-```julia term = true
+```julia
 #pct = .30
 #m = Int(round(pct * ntrain))
 #segm = segmts(ntrain, m; rep = 30)
@@ -103,7 +111,7 @@ segm = segmkf(ntrain, K; rep = rep)
 
 Illustration of segments:
 
-```julia term = true
+```julia
 i = 1  
 segm[i]      # the K segments of replication 'i'
 ```
@@ -120,20 +128,20 @@ set parameter `nlv` outside of the generic argument `pars` defining the grid. In
 time is reduced [See the naïve and non-optimized syntax at the end of this script]. This is the same principle 
 when definining the parameter `lb` in ridge models (eg. Rr, Krr, etc.).
 
-```julia term = true
+```julia
 nlv = 0:20
 model = plskern()
-rescv = gridcv(model, Xtrain, ytrain; segm, score = rmsep, nlv) ;
+rescv = gridcv(model, Xtrain, ytrain; segm, score = rmsep, nlv)
 @names rescv 
 res = rescv.res
 res_rep = rescv.res_rep
 ```
 
-```julia term = true
+```julia
 plotgrid(res.nlv, res.y1; step = 2, xlabel = "Nb. LVs", ylabel = "RMSEP-CV").f
 ```
 
-```julia term = true
+```julia
 f, ax = plotgrid(res.nlv, res.y1; step = 2, xlabel = "Nb. LVs", ylabel = "RMSEP-CV")
 for i = 1:rep, j = 1:K
     zres = res_rep[res_rep.rep .== i .&& res_rep.segm .== j, :]
@@ -146,27 +154,27 @@ f
 If other parameters have to be defined in the grid, they have to be set in argument `pars`, such as in 
 the example below.
 
-```julia term = true
+```julia
 pars = mpar(scal = [false; true])
 nlv = 0:20
 model = plskern()
 res = gridcv(model, Xtrain, ytrain; segm, score = rmsep, pars, nlv).res
 ```
 
-```julia term = true
+```julia
 plotgrid(res.nlv, res.y1, res.scal; step = 2, xlabel = "Nb. LVs", ylabel = "RMSEP-Val").f
 ```
 
 **Selection of the best parameter combination**
 
-```julia term = true
+```julia
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 ```
 
 #### Final prediction (Test) using the optimal model
 
-```julia term = true
+```julia
 model = plskern(nlv = res.nlv[u], scal = res.scal[u])
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
@@ -174,13 +182,13 @@ pred = predict(model, Xtest).pred
 
 **Generalization error**
 
-```julia term = true
+```julia
 rmsep(pred, ytest)
 ```
 
 **Plotting predictions vs. observed data**
 
-```julia term = true 
+```julia 
 plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title = string("Test set - variable ", nam), 
     xlabel = "Prediction", ylabel = "Observed").f   
 ```
@@ -190,13 +198,13 @@ plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title 
 Parameter `nlv` can also be set in argument `pars` (wich is the generic approach to define the grid). 
 This is strictly equivalent (gives the same results) but the computations are slower.
 
-```julia term = true
+```julia
 pars = mpar(nlv = 0:20)
 model = plskern()
 gridcv(model, Xtrain, ytrain; segm, score = rmsep, pars).res
 ```
 
-```julia term = true
+```julia
 pars = mpar(nlv = 0:20, scal = [false; true])
 model = plskern()
 gridcv(model, Xtrain, ytrain; segm, score = rmsep, pars).res

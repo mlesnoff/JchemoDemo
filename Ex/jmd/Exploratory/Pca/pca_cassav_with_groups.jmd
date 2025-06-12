@@ -2,20 +2,20 @@
 title: Pca - cassav - with groups 
 weave_options:
   error: true
-  wrap: true
+  wrap: false
   term: false
   out_width: 60%
   out_height: 30%
 ---
 
-```julia term = true
+```julia
 using Jchemo, JchemoData
 using JLD2, CairoMakie, GLMakie
 ```
 
 #### Data importation
 
-```julia term = true
+```julia
 using JchemoData, JLD2, CairoMakie, GLMakie
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/cassav.jld2")
@@ -23,33 +23,38 @@ db = joinpath(path_jdat, "data/cassav.jld2")
 @names dat
 ```
 
-```julia term = true
+```julia
 X = dat.X
-Y = dat.Y
+@head X
 ```
 
-```julia term = true
+```julia
+Y = dat.Y
+@head Y
+```
+
+```julia
 year = Y.year
 tab(year)
 ```
 
 #### Model fitting and scores T
 
-```julia term = true
+```julia
 model = pcasvd(nlv = 10)
 fit!(model, X)  
-fitm = model.fitm ;
+fitm = model.fitm
 @head T = fitm.T
 ```
 
 #### 2-D score spaces 
 
-```julia term = true
+```julia
 CairoMakie.activate!()  
 plotxy(T[:, 1], T[:, 2], year; zeros = true, xlabel = "PC1", ylabel = "PC2").f
 ```
 
-```julia term = true
+```julia
 lev = mlev(year)
 nlev = length(lev)
 color = cgrad(:Dark2_5, nlev; categorical = true, alpha = .7)
@@ -59,7 +64,7 @@ plotlv(T[:, 1:6], year; size = (750, 400), shape = (2, 3), color = color, zeros 
 
 #### 3-D score spaces
 
-```julia term = true
+```julia
 CairoMakie.activate!()  
 #GLMakie.activate!()    # for interactive axe-rotation
 

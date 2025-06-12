@@ -2,13 +2,13 @@
 title: gridscore - forages2 - Plsrda 
 weave_options:
   error: true
-  wrap: true
+  wrap: false
   term: false
   out_width: 60%
   out_height: 30%
 ---
 
-```julia term = true
+```julia
 using Jchemo, JchemoData
 using JLD2, CairoMakie
 using FreqTables 
@@ -16,29 +16,36 @@ using FreqTables
 
 #### Data importation
 
-```julia term = true
+```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/forages2.jld2") 
 @load db dat
 @names dat
 ```
 
-```julia term = true
+```julia
 X = dat.X 
+@head X 
+```
+
+```julia
 Y = dat.Y
-ntot = nro(X)
-y = Y.typ ;
-test = Y.test ;
+@head Y
+```
+
+```julia
+y = Y.typ
+test = Y.test
 tab(y)
 ```
 
-```julia term = true
+```julia
 freqtable(y, test)
 ```
 
-```julia term = true
+```julia
 wlst = names(X)
-wl = parse.(Int, wlst) ;
+wl = parse.(Int, wlst)
 #plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
@@ -51,19 +58,23 @@ In this example, **Train** is already defined in variable `typ` of the dataset, 
 samples. But **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic or any other designs). 
 See for instance functions `samprand`, `sampsys`, etc.
 
-```julia term = true
-s = Bool.(test) ;
-Xtrain = rmrow(X, s) ;
-ytrain = rmrow(y, s) ;
-Xtest = X[s, :] ;
-ytest = y[s] ;
+```julia
+s = Bool.(test)
+Xtrain = rmrow(X, s)
+ytrain = rmrow(y, s)
+Xtest = X[s, :]
+ytest = y[s]
+ntot = nro(X)
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 ```
 
-```julia term = true
+```julia
 tab(ytrain)
+```
+
+```julia
 tab(ytest)
 ```
 
@@ -74,30 +85,30 @@ A grid search is implemented by fitting the model on **Cal** and computing a val
 
 The split Cal/Val can be built from different sampling designs. Below, a random sampling is used.
 
-```julia term = true
+```julia
 pct = .3  # proportion of Train for Val
 nval = round(Int, pct * ntrain)    
 s = samprand(ntrain, nval)
 ```
 
-```julia term = true
-Xcal = Xtrain[s.train, :] ;
-ycal = ytrain[s.train] ;
-Xval = Xtrain[s.test, :] ;
-yval = ytrain[s.test] ;
+```julia
+Xcal = Xtrain[s.train, :]
+ycal = ytrain[s.train]
+Xval = Xtrain[s.test, :]
+yval = ytrain[s.test]
 ncal = ntrain - nval 
 (ntot = ntot, ntrain, ncal, nval, ntest)
 ```
 
 #### Grid-search 
 
-```julia term = true
+```julia
 nlv = 0:20
 model = plsrda()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = errp, nlv) 
 ```
 
-```julia term = true
+```julia
 plotgrid(res.nlv, res.y1; step = 2, xlabel = "Nb. LVs", ylabel = "ERRP-Val").f
 ```
 
@@ -107,28 +118,28 @@ the example below.
 The importance of each class is made equal (recommended if classes are highly unbalnaced) and a X-scaling 
 is evaluated. 
 
-```julia term = true
+```julia
 pars = mpar(prior = [:unif], scal = [false; true])
 nlv = 0:20
 model = plsrda()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = merrp, pars, nlv)
 ```
 
-```julia term = true
+```julia
 group = string.("prior=", res.prior, " scal=", res.scal)
 plotgrid(res.nlv, res.y1, group; step = 2, xlabel = "Nb. LVs", ylabel = "ERRP-Val").f
 ```
 
 **Selection of the best parameter combination**
 
-```julia term = true
+```julia
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 ```
 
 #### Final prediction (Test) using the optimal model
 
-```julia term = true
+```julia
 model = plsrda(prior = res.prior[u], nlv = res.nlv[u], scal = res.scal[u])
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
@@ -136,14 +147,23 @@ pred = predict(model, Xtest).pred
 
 **Generalization error**
 
-```julia term = true
+```julia
 errp(pred, ytest)
+```
+
+```julia
 merrp(pred, ytest)
 ```
 
-```julia term = true
-cf = conf(pred, ytest) ;
+```julia
+cf = conf(pred, ytest)
 @names cf
+```
+
+```julia
 cf.cnt
+```
+
+```julia
 cf.pct
 ```

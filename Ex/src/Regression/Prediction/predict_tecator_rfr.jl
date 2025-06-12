@@ -12,11 +12,11 @@ db = joinpath(path_jdat, "data/tecator.jld2")
 X = dat.X
 Y = dat.Y 
 ntot, p = size(X)
-typ = Y.typ ;
+typ = Y.typ
 tab(typ)
 
 
-wlst = names(X) ;
+wlst = names(X)
 wl = parse.(Float64, wlst) 
 #plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
@@ -29,11 +29,11 @@ fit!(model, X)
 #plotsp(Xp, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 
 
-s = typ .== "train" ;
-Xtrain = Xp[s, :] ; 
-Ytrain = Y[s, :] ;
-Xtest = rmrow(Xp, s) ;
-Ytest = rmrow(Y, s) ;
+s = typ .== "train"
+Xtrain = Xp[s, :] 
+Ytrain = Y[s, :]
+Xtest = rmrow(Xp, s)
+Ytest = rmrow(Y, s)
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
@@ -42,8 +42,8 @@ ntest = nro(Xtest)
 namy = names(Y)[1:3]
 j = 2  
 nam = namy[j]    # work on the j-th y-variable
-ytrain = Ytrain[:, nam] ;
-ytest = Ytest[:, nam] ;
+ytrain = Ytrain[:, nam]
+ytest = Ytest[:, nam]
 
 
 n_trees = 100
@@ -53,7 +53,7 @@ max_depth = 20
 model = rfr(; n_trees, partial_sampling, n_subfeatures, max_depth)
 fit!(model, Xtrain, ytrain)
 @names model
-fitm = model.fitm ;
+fitm = model.fitm
 @names fitm
 
 
@@ -69,7 +69,7 @@ bias(pred, ytest)
 mse(pred, ytest)
 
 
-r = residreg(pred, ytest) # residuals
+@head r = residreg(pred, ytest) # residuals
 
 
 plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title = string("Test set - variable ", nam), 
@@ -80,24 +80,24 @@ plotxy(ytest, r; size = (500, 400), color = (:red, .5), zeros = true, title = st
     xlabel = "Observed (Test)", ylabel = "Residuals").f
 
 
-zpred = vec(pred) ;
-zr = vec(r) ;
+zpred = vec(pred)
+zr = vec(r)
 
 
 model_lo = loessr(span = 1/2) 
 fit!(model_lo, zpred, ytest)
-pred_lo = predict(model_lo, sort(zpred)).pred ;
+pred_lo = predict(model_lo, sort(zpred)).pred
 f, ax = plotxy(zpred, ytest; size = (500, 400), bisect = true, title = string("Test set - variable ", nam), 
-    xlabel = "Predicted", ylabel = "Observed") ;
+    xlabel = "Predicted", ylabel = "Observed")
 lines!(ax, sort(zpred), vec(pred_lo); color = :red)
 f
 
 
 model_lo = loessr(span = 1/2) 
 fit!(model_lo, zpred, zr)
-pred_lo = predict(model_lo, sort(zpred)).pred ;
+pred_lo = predict(model_lo, sort(zpred)).pred
 f, ax = plotxy(zpred, zr; size = (500, 400), title = string("Test set - variable ", nam), 
-    xlabel = "Predictions", ylabel = "Residuals") ;
+    xlabel = "Predictions", ylabel = "Residuals")
 lines!(ax, sort(zpred), vec(pred_lo); color = :red)
 hlines!(ax, 0; color = :grey)
 f
