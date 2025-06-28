@@ -52,7 +52,7 @@ nlv = 15
 model = plsrda(; nlv) 
 #model = plslda(; nlv) 
 #model = plsqda(; nlv) 
-#model = plsqda(; nlv, alpha = 0.5)   # 'alpha' = regularization parameter
+#model = plsqda(; nlv, alpha = 0.5)   # 'alpha' = continuum parameter
 #model = plskdeda(; nlv) 
 #model = plskdeda(; nlv, a = .5)    # 'a' = bandwidth parameter (see also parameter 'h')
 

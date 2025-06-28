@@ -74,6 +74,22 @@ loglb = round.(log.(10, res.lb), digits = 3)
 plotgrid(loglb, res.y1; step = 2, xlabel ="lambda (log scale)", ylabel = "RMSEP-Val").f
 
 
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
+
+
+model = rr(lb = res.lb[u])
+fit!(model, Xtrain, ytrain)
+pred = predict(model, Xtest).pred
+
+
+rmsep(pred, ytest)
+
+
+plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title = string("Test set - variable ", nam), 
+    xlabel = "Prediction", ylabel = "Observed").f
+
+
 pars = mpar(scal = [false; true])
 lb = 10.0.^(-15:.1:3)
 model = rr()
@@ -84,20 +100,9 @@ loglb = round.(log.(10, res.lb), digits = 3)
 plotgrid(loglb, res.y1, res.scal; step = 2, xlabel ="lambda (log scale)", ylabel = "RMSEP-Val").f
 
 
-u = findall(res.y1 .== minimum(res.y1))[1] 
-res[u, :]
-
-
 model = rr(lb = res.lb[u], scal = res.scal[u])
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
-
-
-rmsep(pred, ytest)
-
-
-plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title = string("Test set - variable ", nam), 
-    xlabel = "Prediction", ylabel = "Observed").f
 
 
 pars = mpar(lb = 10.0.^(-15:.1:3))

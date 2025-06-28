@@ -92,7 +92,7 @@ ncal = ntrain - nval
 
 #### Grid-search 
 
-The importance of each class is made equal, and a continuum between PLS-QDA and PLS-LDA
+Below, the importance of each class is made equal, and a continuum between PLS-QDA and PLS-LDA
 is evaluated. 
 
 ```julia

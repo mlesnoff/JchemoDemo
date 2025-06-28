@@ -19,7 +19,7 @@ of the help pages of package [Jchemo](https://github.com/mlesnoff/Jchemo.jl) and
 [JchemoDemo](https://github.com/mlesnoff/JchemoDemo). 
 
 This note illustrates how to
-1. Load a JL2 dataset already existing
+1. Load a JLD2 dataset already existing
 2. Build a JLD2 dataset from CSV files
 3. Save a JLD2 dataset to CSV files
 
@@ -34,7 +34,7 @@ using Jchemo, JchemoData
 using JLD2, CSV, DataFrames              
 ```
 
-#### 1. Loading a JL2 dataset already existing
+#### 1. Loading a JLD2 dataset already existing
 
 The example below loads dataset `tecator.jld2` stored in package [JchemoData](https://github.com/mlesnoff/JchemoData.jl).
 
@@ -75,7 +75,7 @@ dat = res["dat"]
 @names dat
 ```
 
-#### 2. Building a JL2 dataset from CSV files
+#### 2. Building a JLD2 dataset from CSV files
 
 In this example, two CSV files are imported, transformed to dataframes and saved to a JLD2 file (.jld2)
 
@@ -108,7 +108,7 @@ db_out = joinpath(path_out, "my_cassav.jld2")
 #jldsave(db_out, true; dat)  # 'true" ==> compression   
 ```
 
-#### 3. Building CSV files from a JL2 dataset
+#### 3. Building CSV files from a JLD2 dataset
 
 ```julia
 db = joinpath(path_jdat, "data/tecator.jld2")  # full path to the jld2 file; can be changed to any other existing .jld2 file 

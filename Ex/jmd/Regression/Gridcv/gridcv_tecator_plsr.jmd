@@ -123,10 +123,10 @@ segm[i][k]   # segment 'k' of replication 'i'
 
 #### Grid-search 
 
-The best syntax to use function `gridcv` for models based on LVs (Plsr, Kplsr, Pcr, etc.) is to
-set parameter `nlv` outside of the generic argument `pars` defining the grid. In that case, the computation 
-time is reduced [See the naïve and non-optimized syntax at the end of this script]. This is the same principle 
-when definining the parameter `lb` in ridge models (eg. Rr, Krr, etc.).
+The best syntax to use function `gridcv` for LV-based functions (eg. `plskern`, `kplsr`, `lwplsr`, etc.) is to
+set parameter `nlv` outside its argument `pars` defining the grid (in general with function `mpar`). In that case, 
+the computation time is reduced [See the naïve and non-optimized syntax at the end of this script]. This is the same 
+principle when definining the parameter `lb` in ridge-based functions (`rr`, `krr`, etc.).
 
 ```julia
 nlv = 0:20
@@ -151,20 +151,6 @@ lines!(ax, res.nlv, res.y1; color = :red, linewidth = 1)
 f
 ```
 
-If other parameters have to be defined in the grid, they have to be set in argument `pars`, such as in 
-the example below.
-
-```julia
-pars = mpar(scal = [false; true])
-nlv = 0:20
-model = plskern()
-res = gridcv(model, Xtrain, ytrain; segm, score = rmsep, pars, nlv).res
-```
-
-```julia
-plotgrid(res.nlv, res.y1, res.scal; step = 2, xlabel = "Nb. LVs", ylabel = "RMSEP-Val").f
-```
-
 **Selection of the best parameter combination**
 
 ```julia
@@ -175,7 +161,7 @@ res[u, :]
 #### Final prediction (Test) using the optimal model
 
 ```julia
-model = plskern(nlv = res.nlv[u], scal = res.scal[u])
+model = plskern(nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
 ```
@@ -191,6 +177,33 @@ rmsep(pred, ytest)
 ```julia 
 plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title = string("Test set - variable ", nam), 
     xlabel = "Prediction", ylabel = "Observed").f   
+```
+
+#### Additional parameters in the grid
+
+If other parameters have to be defined in the grid, they have to be set in argument `pars` built with 
+function `mpar`, such as in the example below.
+
+```julia
+pars = mpar(scal = [false; true])
+nlv = 0:20
+model = plskern()
+res = gridcv(model, Xtrain, ytrain; segm, score = rmsep, pars, nlv).res
+```
+
+```julia
+plotgrid(res.nlv, res.y1, res.scal; step = 2, xlabel = "Nb. LVs", ylabel = "RMSEP-Val").f
+```
+
+```julia
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
+```
+
+```julia
+model = plskern(nlv = res.nlv[u], scal = res.scal[u])
+fit!(model, Xtrain, ytrain)
+pred = predict(model, Xtest).pred
 ```
 
 #### Naïve syntax to use gridcv for LV-based functions 

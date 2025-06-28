@@ -90,6 +90,11 @@ segm = segmkf(ntrain, K; rep = rep)
 
 #### Grid-search 
 
+The best syntax to use function `gridcv` for LV-based functions (e.g. `rr`, `krr`, etc.) is to
+set parameter `lb` outside its argument `pars` defining the grid (in general with function `mpar`). In that case, 
+the computation time is reduced [See the naïve and non-optimized syntax at the end of this script]. This is the same 
+principle when definining the parameter `nlv` in LV-based functions (eg. `plskern`, `kplsr`, `lwplsr`, etc.).
+
 ```julia
 lb = 10.0.^(-15:.1:3)
 model = rr()

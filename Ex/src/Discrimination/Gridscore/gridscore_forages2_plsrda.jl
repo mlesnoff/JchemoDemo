@@ -61,14 +61,6 @@ ncal = ntrain - nval
 (ntot = ntot, ntrain, ncal, nval, ntest)
 
 
-nlv = 0:20
-model = plsrda()
-res = gridscore(model, Xcal, ycal, Xval, yval; score = errp, nlv)
-
-
-plotgrid(res.nlv, res.y1; step = 2, xlabel = "Nb. LVs", ylabel = "ERRP-Val").f
-
-
 pars = mpar(prior = [:unif], scal = [false; true])
 nlv = 0:20
 model = plsrda()

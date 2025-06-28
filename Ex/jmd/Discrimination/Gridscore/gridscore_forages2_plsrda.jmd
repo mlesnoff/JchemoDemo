@@ -102,20 +102,7 @@ ncal = ntrain - nval
 
 #### Grid-search 
 
-```julia
-nlv = 0:20
-model = plsrda()
-res = gridscore(model, Xcal, ycal, Xval, yval; score = errp, nlv) 
-```
-
-```julia
-plotgrid(res.nlv, res.y1; step = 2, xlabel = "Nb. LVs", ylabel = "ERRP-Val").f
-```
-
-If other parameters have to be defined in the grid, they have to be set in argument `pars`, such as in 
-the example below. 
-
-The importance of each class is made equal (recommended if classes are highly unbalnaced) and a X-scaling 
+Below, the importance of each class is made equal (recommended if classes are highly unbalnaced) and a X-scaling 
 is evaluated. 
 
 ```julia

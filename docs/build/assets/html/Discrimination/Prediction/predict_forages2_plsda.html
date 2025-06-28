@@ -843,14 +843,14 @@ OrderedCollections.OrderedDict&#123;String, Int64&#125; with 3 entries:
 </span><span class='hljl-n'>model</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>plsrda</span><span class='hljl-p'>(;</span><span class='hljl-t'> </span><span class='hljl-n'>nlv</span><span class='hljl-p'>)</span><span class='hljl-t'> 
 </span><span class='hljl-cs'>#model = plslda(; nlv) </span><span class='hljl-t'>
 </span><span class='hljl-cs'>#model = plsqda(; nlv) </span><span class='hljl-t'>
-</span><span class='hljl-cs'>#model = plsqda(; nlv, alpha = 0.5)   # &#39;alpha&#39; = regularization parameter</span><span class='hljl-t'>
+</span><span class='hljl-cs'>#model = plsqda(; nlv, alpha = 0.5)   # &#39;alpha&#39; = continuum parameter</span><span class='hljl-t'>
 </span><span class='hljl-cs'>#model = plskdeda(; nlv) </span><span class='hljl-t'>
 </span><span class='hljl-cs'>#model = plskdeda(; nlv, a = .5)    # &#39;a&#39; = bandwidth parameter (see also parameter &#39;h&#39;)</span>
 </pre>
 
 
 <pre class="output">
-Jchemo.JchemoModel&#123;typeof&#40;plsrda&#41;, Base.Pairs&#123;Symbol, Int64, Tuple&#123;Symbol&#125;, @NamedTuple&#123;nlv::Int64&#125;&#125;&#125;&#40;Jchemo.plsrda, nothing, Base.Pairs&#40;:nlv &#61;&gt; 15&#41;&#41;
+Jchemo.JchemoModel&#123;typeof&#40;Jchemo.plsrda&#41;, Base.Pairs&#123;Symbol, Int64, Tuple&#123;Symbol&#125;, @NamedTuple&#123;nlv::Int64&#125;&#125;&#125;&#40;Jchemo.plsrda, nothing, Base.Pairs&#40;:nlv &#61;&gt; 15&#41;&#41;
 </pre>
 
 
@@ -1074,7 +1074,7 @@ Jchemo.Plsr
         <div class="footer">
           <p>
             Published from <a href="predict_forages2_plsda.jmd">predict_forages2_plsda.jmd</a>
-            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.12 on 2025-06-12.
+            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.12 on 2025-06-28.
           </p>
         </div>
       </div>

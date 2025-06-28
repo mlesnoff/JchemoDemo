@@ -90,6 +90,22 @@ lines!(ax, res.nlv, res.y1; color = :red, linewidth = 1)
 f
 
 
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
+
+
+model = plskern(nlv = res.nlv[u])
+fit!(model, Xtrain, ytrain)
+pred = predict(model, Xtest).pred
+
+
+rmsep(pred, ytest)
+
+
+plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title = string("Test set - variable ", nam), 
+    xlabel = "Prediction", ylabel = "Observed").f
+
+
 pars = mpar(scal = [false; true])
 nlv = 0:20
 model = plskern()
@@ -106,13 +122,6 @@ res[u, :]
 model = plskern(nlv = res.nlv[u], scal = res.scal[u])
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
-
-
-rmsep(pred, ytest)
-
-
-plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title = string("Test set - variable ", nam), 
-    xlabel = "Prediction", ylabel = "Observed").f
 
 
 pars = mpar(nlv = 0:20)
