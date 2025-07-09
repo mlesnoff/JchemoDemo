@@ -237,3 +237,19 @@ fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred 
 rmsep(pred, ytest)
 
+
+kern = [:krbf]  # Gaussian kernel
+cost = 10.0.^(-4:4)
+epsilon = (.1, .25)
+gamma = 10.0.^(-3:3)
+pars = mpar(kern = kern, cost = cost, epsilon = epsilon, gamma = gamma)
+length(pars[1])
+model = svmr()
+res = gridcv(model, Xtrain, ytrain; segm, score = rmsep, pars).res 
+u = findall(res.y1 .== minimum(res.y1))[1]
+res[u, :]
+model = svmr(kern = res.kern[u], cost = res.cost[u], epsilon = res.epsilon[u], gamma = res.gamma[u])
+fit!(model, Xtrain, ytrain) 
+pred = predict(model, Xtest).pred 
+rmsep(pred, ytest)
+
