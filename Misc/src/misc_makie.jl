@@ -145,6 +145,7 @@ f
 
 #### Rainclouds, jitter plots
 ## https://docs.makie.org/dev/reference/plots/rainclouds
+## https://discourse.julialang.org/t/algebraofgraphics-jl-adding-jitter-to-a-scatter-plot-points/97310/8
 
 rainclouds(x, y; clouds = hist, markersize = 10, color = (:blue, .3), 
     axis = (xticks = (1:3, ["A", "B", "C"]), title = "Rainclouds"))
