@@ -143,6 +143,12 @@ title = "Groups"
 Legend(f[1, 2], elt, lab, title)
 f
 
+#### Rainclouds, jitter plots
+## https://docs.makie.org/dev/reference/plots/rainclouds
+
+rainclouds(x, y; clouds = hist, markersize = 10, color = (:blue, .3), 
+    axis = (xticks = (1:3, ["A", "B", "C"]), title = "Rainclouds"))
+
 ############# Ecdf 
 
 n = 500
@@ -202,7 +208,7 @@ f
 x = randn(1000)
 f = Figure()
 hist(f[1, 1], x; bins = 10)
-hist(f[1, 2], x; bins = 20, color = :red, strokewidth = 1, strokecolor = :black)
+hist(f[1, 2], x; bins = 20, color = :red, strokewidth = 1, strokecolor = :grey)
 hist(f[2, 1], x; bins = [-5, -2, -1, 0, 1, 2, 5], color = :gray)
 hist(f[2, 2], x; normalization = :pdf)
 f
