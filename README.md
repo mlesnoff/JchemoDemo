@@ -4,13 +4,13 @@
 
 **Contents**
 
-1. **Numerical examples with Jchemo** 
+1. **Examples on datasets with Jchemo** 
 
     - [**Html**](https://mlesnoff.github.io/JchemoDemo/docs/build/) 
     
     - [**Scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Ex/src) corresponding to the above Html 
 
-Note: The datasets used in the numerical examples come from package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl) (contained in the **JchemoDemo**[ environment](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)).
+Note: The datasets used in the examples are part of package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl) (that is contained in the **JchemoDemo**[environment](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)).
 
 2. **Annexes**
 
