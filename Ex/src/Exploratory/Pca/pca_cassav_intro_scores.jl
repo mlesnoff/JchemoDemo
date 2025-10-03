@@ -52,6 +52,6 @@ CairoMakie.activate!()
 i = 1
 size = (600, 350)
 plotxyz(T[:, i], T[:, i + 1], T[:, i + 2]; size, color = (:red, .3), markersize = 10, 
-    xlabel = string("PC", i), ylabel = string("PC", i + 1), zlabel = string("PC", i + 2), 
+    xlabel = "PC$i", ylabel = "PC$(i + 1)", zlabel = string("PC", i + 2), 
     title = "Pca score space").f
 

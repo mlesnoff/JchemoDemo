@@ -32,7 +32,7 @@ fitm = model.fitm
 
 
 i = 1 
-f, ax = plotxy(T[:, i], T[:, i + 1]; zeros = true, xlabel = string("PC", i), ylabel = string("PC", i + 1)) 
+f, ax = plotxy(T[:, i], T[:, i + 1]; zeros = true, xlabel = "PC$i", ylabel = "PC$(i + 1)") 
 text!(ax, T[:, i], T[:, i + 1]; text = string.("w", 1:n), fontsize = 15)
 f
 
@@ -71,8 +71,8 @@ colsum(contrxbl2t)
 
 z = contrxbl2t
 i = 1
-f, ax = plotxy(z[:, i], z[:, i + 1]; zeros = true, xlabel = string("PC", i), 
-    ylabel = string("PC", i + 1)) 
+f, ax = plotxy(z[:, i], z[:, i + 1]; zeros = true, xlabel = "PC$i", 
+    ylabel = "PC$(i + 1)") 
 text!(ax, z[:, i], z[:, i + 1]; text = string.("j", 1:nbl), fontsize = 15) 
 xlims!(ax, [0, .4]) 
 ylims!(ax, [0, .9]) 
@@ -88,8 +88,8 @@ corx2t = res.corx2t
 z = corx2t 
 nvar = nro(z) 
 i = 1
-f, ax = plotxy(z[:, i], z[:, i + 1]; zeros = true, xlabel = string("PC", i), 
-    ylabel = string("PC", i + 1)) 
+f, ax = plotxy(z[:, i], z[:, i + 1]; zeros = true, xlabel = "PC$i", 
+    ylabel = "PC$(i + 1)") 
 text!(ax, z[:, i], z[:, i + 1]; text = string.("v", 1:nvar), fontsize = 15) 
 xlims!(ax, [-1, 1]) 
 ylims!(ax, [-1, 1]) 
@@ -100,8 +100,8 @@ k = 4
 v = Vbl[k]
 nam = names(Xbl[k])
 i = 1
-f, ax = plotxy(T[:, i], T[:, i + 1]; zeros = true, xlabel = string("PC", i), 
-    ylabel = string("PC", i + 1)) 
+f, ax = plotxy(T[:, i], T[:, i + 1]; zeros = true, xlabel = "PC$i", 
+    ylabel = "PC$(i + 1)") 
 text!(ax, T[:, i], T[:, i + 1]; text = string.("w", 1:n), fontsize = 15) 
 scatter!(ax, v[:, i], v[:, i + 1]) 
 text!(ax, v[:, i], v[:, i + 1]; text = nam, fontsize = 15) 
@@ -114,8 +114,8 @@ z = Tbl[k]
 v = Vbl[k] 
 nam = names(Xbl[k]) 
 i = 1
-f, ax = plotxy(z[:, i], z[:, i + 1]; zeros = true, xlabel = string("PC", i), 
-    ylabel = string("PC", i + 1), title = string("Block ", k)) 
+f, ax = plotxy(z[:, i], z[:, i + 1]; zeros = true, xlabel = "PC$i", 
+    ylabel = "PC$(i + 1)", title = string("Block ", k)) 
 text!(ax, z[:, i], z[:, i + 1]; text = string.("w", 1:n), fontsize = 15) 
 scatter!(ax, v[:, i], v[:, i + 1]) 
 text!(ax, v[:, i], v[:, i + 1]; text = nam, fontsize = 15) 
