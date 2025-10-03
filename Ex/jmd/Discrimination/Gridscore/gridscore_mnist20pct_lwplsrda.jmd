@@ -38,13 +38,14 @@ ntot = ntrain + ntest
 (ntot = ntot, ntrain, ntest)  
 ```
 
-Grey levels 0-255 standardized between 0-1 (not required here but used when fitting deep learning models)
+Grey levels 0-255 are standardized between 0-1 (the standardization is not required here but used when fitting deep 
+learning models).
 
 ```julia
 Xtrain = Matrix(Xtrain) / 255
 Xtest = Matrix(Xtest) / 255
 ```
-Example of one sample (= one unfolded image)
+Example of one observation (= one unfolded image):
 
 ```julia
 plotsp(Xtrain, 1:p; nsamp = 1, xlabel = "Pixel", ylabel = "Grey level").f
@@ -52,7 +53,7 @@ plotsp(Xtrain, 1:p; nsamp = 1, xlabel = "Pixel", ylabel = "Grey level").f
 
 #### Split Train to Cal/Val for model tuning
 
-Below, Cal and Val are built by random sampling (other designs could be used)
+Below, Cal and Val sets are built by random sampling (other designs could be used).
 
 ```julia
 nval = 1000
@@ -99,8 +100,7 @@ res[u, :]
 #### Final prediction (Test) using the optimal model
 
 ```julia
-model = lwplsrda(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
-    k = res.k[u], nlv = res.nlv[u])
+model = lwplsrda(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], k = res.k[u], nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
 @head pred = predict(model, Xtest).pred
 ```

@@ -93,6 +93,6 @@ pred = predict(model, Xtest).pred
 rmsep(pred, ytest)
 
 
-plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title = string("Test set - variable ", nam), 
+plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title = "Test set - variable $nam", 
     xlabel = "Prediction", ylabel = "Observed").f
 

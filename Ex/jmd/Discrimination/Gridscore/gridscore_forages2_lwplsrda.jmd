@@ -34,7 +34,7 @@ Y = dat.Y
 ```
 
 ```julia
-y = Y.typ
+y = Y.typ   # response variable (class membership)
 test = Y.test
 tab(y)
 ```

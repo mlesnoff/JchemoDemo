@@ -34,7 +34,7 @@ Y = dat.Y
 ```
 
 ```julia
-y = Y.typ
+y = Y.typ   # response variable (class membership)
 test = Y.test
 tab(y)
 ```
@@ -53,10 +53,10 @@ wl = parse.(Int, wlst)
 
 #### Split Tot to Train/Test
 
-The model is fitted on **Train**, and the generalization error is estimated on **Test**.
-In this example, **Train** is already defined in variable `typ` of the dataset, and **Test** is defined by the remaining 
-samples. But **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic or any other designs). 
-See for instance functions `samprand`, `sampsys`, etc.
+The model is fitted on **Train**, and the generalization error is estimated on **Test**. In this example, **Train** is 
+already defined in variable `typ` of the dataset, and **Test** is defined by the remaining samples. But **Tot** could 
+also be split *a posteriori*, for instance by sampling (random, systematic or any other designs). See for instance 
+functions `samprand`, `sampsys`, etc.
 
 ```julia
 s = Bool.(test)

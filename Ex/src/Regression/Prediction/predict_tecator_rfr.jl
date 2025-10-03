@@ -72,11 +72,11 @@ mse(pred, ytest)
 @head r = residreg(pred, ytest) # residuals
 
 
-plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title = string("Test set - variable ", nam), 
+plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title = "Test set - variable $nam", 
     xlabel = "Prediction", ylabel = "Observed").f
 
 
-plotxy(ytest, r; size = (500, 400), color = (:red, .5), zeros = true, title = string("Test set - variable ", nam), 
+plotxy(ytest, r; size = (500, 400), color = (:red, .5), zeros = true, title = "Test set - variable $nam", 
     xlabel = "Observed (Test)", ylabel = "Residuals").f
 
 
@@ -87,7 +87,7 @@ zr = vec(r)
 model_lo = loessr(span = 1/2) 
 fit!(model_lo, zpred, ytest)
 pred_lo = predict(model_lo, sort(zpred)).pred
-f, ax = plotxy(zpred, ytest; size = (500, 400), bisect = true, title = string("Test set - variable ", nam), 
+f, ax = plotxy(zpred, ytest; size = (500, 400), bisect = true, title = "Test set - variable $nam", 
     xlabel = "Predicted", ylabel = "Observed")
 lines!(ax, sort(zpred), vec(pred_lo); color = :red)
 f
@@ -96,8 +96,8 @@ f
 model_lo = loessr(span = 1/2) 
 fit!(model_lo, zpred, zr)
 pred_lo = predict(model_lo, sort(zpred)).pred
-f, ax = plotxy(zpred, zr; size = (500, 400), title = string("Test set - variable ", nam), 
-    xlabel = "Predictions", ylabel = "Residuals")
+f, ax = plotxy(zpred, zr; size = (500, 400), title = "Test set - variable $nam", xlabel = "Predictions", 
+    ylabel = "Residuals")
 lines!(ax, sort(zpred), vec(pred_lo); color = :red)
 hlines!(ax, 0; color = :grey)
 f

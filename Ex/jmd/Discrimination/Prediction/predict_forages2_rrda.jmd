@@ -14,7 +14,7 @@ using JLD2, CairoMakie
 using FreqTables 
 ```
 
-RR-DA is a alternative to PLSR-DA, where ridge regression is used instead of PLSR to predict the Y-dummy table.
+RR-DA is a alternative to PLSR-DA, where a ridge regression (RR) is used instead of a PLSR to predict the Y-dummy table.
 
 #### Data importation
 
@@ -36,7 +36,7 @@ Y = dat.Y
 ```
 
 ```julia
-y = Y.typ
+y = Y.typ   # response variable (class membership)
 test = Y.test
 tab(y)
 ```

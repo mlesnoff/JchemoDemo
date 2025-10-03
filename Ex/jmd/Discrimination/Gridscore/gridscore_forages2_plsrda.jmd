@@ -34,7 +34,7 @@ Y = dat.Y
 ```
 
 ```julia
-y = Y.typ
+y = Y.typ   # response variable (class membership)
 test = Y.test
 tab(y)
 ```
@@ -53,10 +53,10 @@ wl = parse.(Int, wlst)
 
 #### Split Tot to Train/Test
 
-The model is fitted on **Train**, and the generalization error is estimated on **Test**.
-In this example, **Train** is already defined in variable `typ` of the dataset, and **Test** is defined by the remaining 
-samples. But **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic or any other designs). 
-See for instance functions `samprand`, `sampsys`, etc.
+The model is fitted on **Train**, and the generalization error is estimated on **Test**. In this example, **Train** is 
+already defined in variable `typ` of the dataset, and **Test** is defined by the remaining samples. But **Tot** could 
+also be split *a posteriori*, for instance by sampling (random, systematic or any other designs). See for instance 
+functions `samprand`, `sampsys`, etc.
 
 ```julia
 s = Bool.(test)
@@ -80,10 +80,10 @@ tab(ytest)
 
 #### Split Train to Cal/Val for model tuning
 
-The training set (**Train**) is split to a calibration set (**Cal**) and a validation set (**Val**). 
-A grid search is implemented by fitting the model on **Cal** and computing a validation error on **Val**.   
+The training set **Train** is split to a calibration set **Cal** and a validation set **Val**. A grid search is 
+implemented by fitting the model on **Cal** and computing a validation error on **Val**.   
 
-The split Cal/Val can be built from different sampling designs. Below, a random sampling is used.
+The split Cal/Val can be built from different types of sampling designs. Below, a random sampling is used.
 
 ```julia
 pct = .3  # proportion of Train for Val
@@ -102,8 +102,7 @@ ncal = ntrain - nval
 
 #### Grid-search 
 
-Below, the importance of each class is made equal (recommended if classes are highly unbalnaced) and a X-scaling 
-is evaluated. 
+Below, the importance of each class is made equal (recommended if classes are unbalnaced) and a X-scaling is evaluated. 
 
 ```julia
 pars = mpar(prior = [:unif], scal = [false; true])

@@ -56,11 +56,10 @@ fit!(model, X)
 
 #### Split Tot to Train/Test
 
-The model is fitted on **Train**, and the generalization error is estimated on **Test**.
-In this example, **Train** is already defined in variable `typ` of the dataset,
-and **Test** is defined by the remaining samples. But **Tot** could also be split *a posteriori*, 
-for instance by sampling (random, systematic or any other designs). 
-See for instance functions `samprand`, `sampsys`, etc.
+The model is fitted on **Train**, and the generalization error is estimated on **Test**. In this example, **Train** is 
+already defined in variable `typ` of the dataset, and **Test** is defined by the remaining samples. But **Tot** could 
+also be split *a posteriori*, for instance by sampling (random, systematic or any other designs). See for instance 
+functions `samprand`, `sampsys`, etc.
 
 ```julia
 s = typ .== "train"
@@ -102,8 +101,8 @@ nval = round(Int, pct * ntrain)
 s = samprand(ntrain, nval)
 ```
 
-- (2) Or  Kennard-Stone sampling (Warning: output `train` contains higher variability 
-    than output `test`, see function `sampks`):
+- (2) Or  Kennard-Stone sampling (Warning: output `train` contains higher variability than output `test`, 
+    see function `sampks`):
 
 ```julia
 #s = sampks(Xtrain, nval; metric = :eucl)
@@ -132,10 +131,10 @@ ncal = ntrain - nval
 
 #### Grid-search 
 
-The best syntax to use function `gridscore` for LV-based functions (eg. `plskern`, `kplsr`, `lwplsr`, etc.) is to
-set parameter `nlv` outside its argument `pars` defining the grid (in general with function `mpar`). In that case, 
-the computation time is reduced [See the naïve and non-optimized syntax at the end of this script]. This is the same 
-principle when definining the parameter `lb` in ridge-based functions (`rr`, `krr`, etc.).
+The best syntax to use function `gridscore` for LV-based functions (eg. `plskern`, `kplsr`, `lwplsr`, etc.) is to set 
+parameter `nlv` outside argument `pars` that defines the grid (in general with function `mpar`). In that case, the 
+computation time is reduced [See the naïve and non-optimized syntax at the end of this script]. This is the same principle 
+when definining the parameter `lb` in ridge-based functions (`rr`, `krr`, etc.).
 
 ```julia
 nlv = 0:20
@@ -171,14 +170,14 @@ rmsep(pred, ytest)
 **Plotting predictions vs. observed data**
 
 ```julia 
-plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title = string("Test set - variable ", nam), 
+plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title = "Test set - variable $nam", 
     xlabel = "Prediction", ylabel = "Observed").f   
 ```
 
 #### Additional parameters in the grid
 
-If other parameters have to be defined in the grid, they have to be set in argument `pars` built with 
-function `mpar`, such as in the example below.
+If other parameters have to be defined in the grid, they have to be set in argument `pars` built with function `mpar`, 
+such as in the example below.
 
 ```julia
 pars = mpar(scal = [false; true])
@@ -197,11 +196,10 @@ fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
 ```
 
-#### Naïve syntax to use gridscore for LV-based functions 
+#### Naïve (not time-effcient) syntax to use gridscore for LV-based functions 
 
-Parameter `nlv` can also be set in argument `pars` (which is the generic approach to define the grid). 
-This is strictly equivalent (gives the same results) as when `nlv` is set outside of `pars` but
-the computations are slower.
+Parameter `nlv` can also be set in argument `pars` (which is the generic approach to define the grid). This is strictly 
+equivalent (gives the same results) as when `nlv` is set outside of `pars` but the computations are slower.
 
 ```julia
 pars = mpar(nlv = 0:20)

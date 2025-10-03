@@ -127,8 +127,7 @@ res[u, :]
 #### Final prediction (Test) using the optimal model
 
 ```julia
-model = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
-    k = res.k[u], nlv = res.nlv[u])
+model = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], k = res.k[u], nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
 ```
@@ -142,7 +141,7 @@ rmsep(pred, ytest)
 **Plotting predictions vs. observed data**
 
 ```julia 
-plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title = string("Test set - variable ", nam), 
+plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title = "Test set - variable $nam", 
     xlabel = "Prediction", ylabel = "Observed").f   
 ```
 

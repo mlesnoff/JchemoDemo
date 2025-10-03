@@ -18,7 +18,7 @@ Y = dat.Y
 @head Y
 
 
-y = Y.typ  # the classes 
+y = Y.typ   # response variable (class membership)  # the classes 
 test = Y.test
 tab(y)
 

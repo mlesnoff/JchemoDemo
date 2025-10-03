@@ -34,7 +34,7 @@ Y = dat.Y
 ```
 
 ```julia
-y = Y.typ
+y = Y.typ   # response variable (class membership)
 test = Y.test
 tab(y)
 ```
@@ -53,10 +53,10 @@ wl = parse.(Int, wlst)
 
 #### Split Tot to Train/Test
 
-The model is fitted on **Train**, and the generalization error is estimated on **Test**.
-In this example, **Train** is already defined in variable `typ` of the dataset, and **Test** is defined by the remaining 
-samples. But **Tot** could also be split *a posteriori*, for instance by sampling (random, systematic or any other designs). 
-See for instance functions `samprand`, `sampsys`, etc.
+The model is fitted on **Train**, and the generalization error is estimated on **Test**. In this example, **Train** is 
+already defined in variable `typ` of the dataset, and **Test** is defined by the remaining samples. But **Tot** could 
+also be split *a posteriori*, for instance by sampling (random, systematic or any other designs). See for instance 
+functions `samprand`, `sampsys`, etc.
 
 ```julia
 s = Bool.(test)
@@ -80,14 +80,14 @@ tab(ytest)
 
 #### Model fitting
 
-**'PLSDA'** can represent different methods, e.g. PLS-MLR-DA (or PLSR-DA), PLS-LDA, PLS-QDA or PLS-KDA-DA. 
+**'PLSDA'** is a family of methods, for instance PLS-MLR-DA (or PLSR-DA), PLS-LDA, PLS-QDA or PLS-KDE-DA. 
 
 **Note:** 
-- In the functions below, the default value for argument `prior` is set to `:prop`. If the classes are highly unbalanced,
-    it is recommended to set `prior = :unif` to avoid bias in the predictions (especially when using function `plsrda`). 
-    See the help of the respective functions for more details.
+- In the functions below, the default value for argument `prior` is set to `:prop`. If the classes to discriminate are highly 
+    unbalanced, it is recommended to set `prior = :unif` to avoid bias in the predictions (especially when using function 
+    `plsrda` that is very sensitive to unbalanced classes). See the help of the respective functions for more details.
 - For unbalanced classes, it is also recommended to use `merrp` instead of `errp` (see the respectve help pages) to compute 
-    the global prediction error rates in CV processes or on test sets. 
+    the overall prediction-error rates in CV processes and/or on test sets. 
   
 ```julia
 nlv = 15

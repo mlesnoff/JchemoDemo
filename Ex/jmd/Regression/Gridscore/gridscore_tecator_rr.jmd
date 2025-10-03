@@ -99,13 +99,14 @@ ncal = ntrain - nval
 
 #### Grid-search 
 
-The best syntax to use function `gridscore` for LV-based functions (e.g. `rr`, `krr`, etc.) is to
-set parameter `lb` outside its argument `pars` defining the grid (in general with function `mpar`). In that case, 
-the computation time is reduced [See the naïve and non-optimized syntax at the end of this script]. This is the same 
-principle when definining the parameter `nlv` in LV-based functions (eg. `plskern`, `kplsr`, `lwplsr`, etc.).
+The best syntax to use function `gridscore` for LV-based functions (e.g. `rr`, `krr`, etc.) is to set parameter `lb` 
+outside argument `pars` defining the grid (in general with function `mpar`). In that case, the computation time is reduced 
+[See the naïve and non-optimized syntax at the end of this script]. This is the same principle when definining the parameter
+`nlv` in LV-based functions (eg. `plskern`, `kplsr`, `lwplsr`, etc.).
 
 ```julia
 lb = 10.0.^(-15:.1:3)
+#lb = logrange(1e-15, 1e3, 50)   # alternative syntax
 model = rr()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, lb) 
 ```
@@ -139,14 +140,14 @@ rmsep(pred, ytest)
 **Plotting predictions vs. observed data**
 
 ```julia 
-plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title = string("Test set - variable ", nam), 
+plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title = "Test set - variable $nam", 
     xlabel = "Prediction", ylabel = "Observed").f   
 ```
 
 #### Additional parameters in the grid
 
-If other parameters have to be defined in the grid, they have to be set in argument `pars` built with 
-function `mpar`, such as in the example below.
+If other parameters have to be defined in the grid, they have to be set in argument `pars` built with function `mpar`, 
+such as in the example below.
 
 ```julia
 pars = mpar(scal = [false; true])
@@ -166,10 +167,10 @@ fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
 ```
 
-#### Naïve syntax to use gridscore for ridged-based functions 
+#### Naïve (not time-efficient) syntax to use gridscore for ridged-based functions 
 
-Parameter `lb` can also be set in argument `pars` (wich is the generic approach to define the grid). 
-This is strictly equivalent (gives the same results) but the computations are slower.
+Parameter `lb` can also be set in argument `pars` (wich is the generic approach to define the grid). This is strictly 
+equivalent (gives the same results) but the computations are slower.
 
 ```julia
 pars = mpar(lb = 10.0.^(-15:.1:3))

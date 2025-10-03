@@ -34,7 +34,7 @@ Y = dat.Y
 ```
 
 ```julia
-y = Y.typ
+y = Y.typ   # response variable (class membership)
 test = Y.test
 tab(y)
 ```
@@ -92,8 +92,7 @@ ncal = ntrain - nval
 
 #### Grid-search 
 
-Below, the importance of each class is made equal, and a continuum between PLS-QDA and PLS-LDA
-is evaluated. 
+Below, the importance of each class is made equal, and a continuum between PLS-QDA and PLS-LDA is evaluated. 
 
 ```julia
 prior = [:unif]

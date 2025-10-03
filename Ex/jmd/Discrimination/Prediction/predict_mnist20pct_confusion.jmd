@@ -43,7 +43,8 @@ tab(ytrain)
 tab(ytest)
 ```
 
-Grey levels 0-255 standardized between 0-1 (not required here but used when fitting deep learning models)
+Grey levels 0-255 are standardized between 0-1 (the standardization is not required here but used when fitting deep 
+learning models).
 
 ```julia
 @head Xtrain = Matrix(Xtrain) / 255
@@ -53,7 +54,7 @@ Grey levels 0-255 standardized between 0-1 (not required here but used when fitt
 @head Xtest = Matrix(Xtest) / 255
 ```
 
-Example of one sample (= one unfolded image)
+Example of one observation (= one unfolded image):
 
 ```julia
 plotsp(Xtrain, 1:p; nsamp = 1, xlabel = "Pixel", ylabel = "Grey level").f
