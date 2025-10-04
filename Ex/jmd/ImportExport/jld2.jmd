@@ -11,11 +11,11 @@ weave_options:
 [JLD2](https://github.com/JuliaIO/JLD2.jl) is a structured Julia data format comprising a subset of 
 [HDF5](https://fr.wikipedia.org/wiki/Hierarchical_Data_Format), without any dependency on the HDF5 C library.
 
-JLD2 files have extension `.jld2` and are binary files that can be read and written by Julia,
-which requires to load package [JLD2.jl](https://github.com/JuliaIO/JLD2.jl) in the Julia environment.
+JLD2 files have extension `.jld2`. They are binary files that can be read and written by Julia, which requires to load 
+package [JLD2.jl](https://github.com/JuliaIO/JLD2.jl) in the Julia environment.
 
-Package [JchemoData](https://github.com/mlesnoff/JchemoData.jl) uses JLD2 format, as well as the examples 
-of the help pages of package [Jchemo](https://github.com/mlesnoff/Jchemo.jl) and the project-environment 
+Package [JchemoData](https://github.com/mlesnoff/JchemoData.jl) uses JLD2 format, as well as the examples of the help 
+pages of package [Jchemo](https://github.com/mlesnoff/Jchemo.jl) and the project-environment 
 [JchemoDemo](https://github.com/mlesnoff/JchemoDemo). 
 
 This note illustrates how to

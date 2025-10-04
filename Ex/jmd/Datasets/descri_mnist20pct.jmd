@@ -46,7 +46,7 @@ ntot = ntrain + ntest
 
 `X` contains grey levels between 0-255. Each `X`-row is an unfolded 28x28 image of a handwritten digit.
 
-Example of one `X`-row
+Example of one `X`-row (randomly chosen):
 
 ```julia
 plotsp(Xtrain, 1:p; nsamp = 1, xlabel = "Pixel", ylabel = "Grey level (0-255)").f

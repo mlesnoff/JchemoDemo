@@ -32,10 +32,9 @@ CSV.write(db, X; delim = ';',  missingstring =  "0.0")
 #X |> CSV.write(file; kwargs...)
 
 ########### HDF5
-## HDF5 stands for Hierarchical Data Format v5 and is closely 
-## modeled on file systems. In HDF5, a "group" is analogous to a directory, 
-## a "dataset" is like a file. HDF5 also uses "attributes" to associate metadata 
-## with a particular group or dataset. 
+## HDF5 stands for Hierarchical Data Format v5 and is closely modeled on file systems. 
+## In HDF5, a "group" is analogous to a directory, a "dataset" is like a file. HDF5 also uses "attributes"
+## to associate metadata with a particular group or dataset. 
 using HDF5 
 
 ## h5open()
@@ -150,8 +149,7 @@ res[!, 2:end] = convert.(Float64, res[:, 2:end])
 res
 
 ########### MATLAB (.mat)
-## Package MAT can only read Matlab files, 
-## not save data in the Matlab format  
+## Package MAT can only read Matlab files, not save data in the Matlab format  
 using MAT
 
 ## Importation
