@@ -8,19 +8,21 @@ weave_options:
   out_height: 30%
 ---
 
-This example illustrates the underlying principles of the fit of three different probabilistic PLSDA models:
-PLS-LDA, PLS-QDA and PLS-KDEDA (see functions `plslda`, `plsqda`, `plskdeda`). 
+This example illustrates the principles underlying the fit of three different probabilistic PLSDA models: PLS-LDA, 
+PLS-QDA and PLS-KDEDA (see functions `plslda`, `plsqda`, `plskdeda`). 
 
-- PLS scores are computed on a training Y-dummy table, and then the training 
-    X-observations are projected on the score space. Then the probability densities of these projections are 
-    estimated assuming Gaussian distributions (LDA and QDA) or by non-parametric kernels (KDE). 
+- *Step-1:* PLS scores are computed on the training data {X, Y-dummy} (where Y-dummy is the table of the binary-coded variables 
+    of the classes contained in the categorical response variable y). Then the observations X are projected on this score 
+    space, and the multivariate probability density distribution of these projections are estimated for each class. The 
+    estimations assume Gaussian distributions for LDA and QDA (parametric methods), and use non-parametric kernels for KDE. 
 
-- The new observations to predict are projected in the score space, and their location are compared the training 
-    density estimates of each class. This determines their probablilities of belonging to the classes.
-    The class showing the highest probability is chosen.
+-  *Step-2:* The prediction of a given new observation, xnew, is as follows. Observation xnew is projected on the training 
+    score space computed in step-1 and, for each class, its location is compared to the density distribution estimated for 
+    the class. This determines the probability of xnew to belong to the given class. The class showing the highest probability 
+    is chosen as prediction.
 
-To simplify the graphical illustrations in the example, the PLS score space is set to 2D (2 latent variables) 
-but in prcatice the described methods are often implemented on higher space dimensions.
+In practice, the PLS score space used for discrimination can have many dimensions. In the present example, to simplify the 
+graphical illustrations, a 2-D PLS score space (2 latent variables) is considered. 
 
 ```julia
 using Jchemo, JchemoData
@@ -97,8 +99,8 @@ plotxy(Ttrain[:, i], Ttrain[:, i + 1], ytrain; title = "PLS2 space -Train", xlab
 
 #### Projection of a new observation in the fitted score space 
 
-The new observation is projected in the score space (blue star in the figure below), and its location is compared 
-to the training observations (red points in the figure below) and densities.
+The new observation is projected on the score space (blue star in the figure below), and its location is compared to the 
+training observations (red points in the figure below) and densities.
 
 ```julia
 k = 1  # example of the projection of the first obs. of Test
@@ -123,13 +125,13 @@ end
 f
 ```
 
-The same graphic representation can be done  with the probability density (instead of the observations as 
-above) estimated for each class with the three methods.
+The same graphical representation can be done with the probability density (instead of the observations as above) estimated 
+for each class with the three methods.
 
 **LDA estimate**
 
-The Gaussian probability densities  (see function `dmnorm`) are estimated assuming that the classes 
-have the same PLS-score covariance matrix (`W`). 
+In LDA, the Gaussian probability densities are estimated assuming that the classes have the same PLS-score covariance matrix 
+(`W`) (see function `dmnorm`). 
 
 ```julia out_width = "90%"
 weights = mweight(ones(ntrain))   # observation weights
@@ -166,7 +168,7 @@ f
 
 **QDA estimate**
 
-In this method, the classes are assumed to have different covariance matrices. 
+In QDA, the classes are assumed to have different covariance matrices. 
 
 ```julia out_width = "90%"
 res = matW(Ttrain, ytrain, weights)
@@ -203,7 +205,7 @@ f
 
 **Non-parametric KDE estimate**
 
-In this method, the densities are estimated by kernel estimators (see function `dmkern`). 
+In KDE, the densities are estimated by kernel estimators (see function `dmkern`). 
 
 ```julia out_width = "90%"
 npoints = 2^7
@@ -232,7 +234,7 @@ end
 f
 ```
 
-It is clear from all the above figures that the new observation is located in the middle of the class 
-**'setosa'**, and therefore that PLSDA methods will predict it as belonging to this class.
+In the present example, it is clear from all the above figures that the new observation is located in the middle of the class 
+**'setosa'**, and therefore that the considered PLSDA methods will predict it as belonging to this class.
 
 

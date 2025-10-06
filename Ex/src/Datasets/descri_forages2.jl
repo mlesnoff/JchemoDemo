@@ -43,7 +43,7 @@ summ(Y[:, namy], test)
 
 j = 2
 nam = namy[2]
-y = Y[:, nam]
+y = Float64.(Y[:, nam])
 s = test .== 0
 ytrain = y[s] 
 ytest = rmrow(y, s)
@@ -59,8 +59,7 @@ f
 
 f = Figure(size = (500, 400))
 offs = [20; 0]
-ax = Axis(f[1, 1]; xlabel = uppercase(nam),  ylabel = "Nb. observations", 
-    yticks = (offs, ["Train" ; "Test"]))
+ax = Axis(f[1, 1]; xlabel = uppercase(nam),  ylabel = "Nb. observations", yticks = (offs, ["Train" ; "Test"]))
 hist!(ax, ytrain; offset = offs[1], bins = 50)
 hist!(ax, ytest; offset = offs[2], bins = 50)
 f
@@ -77,8 +76,7 @@ f
 
 f = Figure(size = (500, 400))
 offs = [.1; 0]
-ax = Axis(f[1, 1]; xlabel = uppercase(nam), ylabel = "Density", 
-    yticks = (offs, ["Train" ; "Test"]))
+ax = Axis(f[1, 1]; xlabel = uppercase(nam), ylabel = "Density", yticks = (offs, ["Train" ; "Test"]))
 bdw = 1
 density!(ax, ytrain; offset = offs[1], color = (:slategray, 0.5), bandwidth = bdw)
 density!(ax, ytest; offset = offs[2], color = (:slategray, 0.5), bandwidth = bdw)
@@ -88,5 +86,18 @@ f
 f = Figure(size = (400, 300))
 ax = Axis(f[1, 1]; xticks = (0:1, ["Train", "Test"]), xlabel = "Group", ylabel = uppercase(nam))
 boxplot!(ax, test, y; width = .3, show_notch = true)
+f
+
+
+lev = mlev(test)
+nlev = length(lev)
+tsp = .5
+#colm = [(:blue, tsp), (:orange, tsp)]
+colm = cgrad(:Dark2_5; categorical = true, alpha = .8)[1:nlev]
+cols = colm[indexin(test, unique(test))]
+#cols = (:red, .5)
+f = Figure(size = (600, 300))
+ax = Axis(f[1, 1]; xticks = (0:1, ["Train", "Test"]), ylabel = uppercase(nam))
+rainclouds!(ax, test, y; clouds = hist, markersize = 5, color = cols, gap = .3)
 f
 

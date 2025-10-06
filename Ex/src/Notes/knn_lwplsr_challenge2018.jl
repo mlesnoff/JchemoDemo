@@ -63,6 +63,9 @@ Legend(f[1, 2], elt, lab; nbanks = 1, rowgap = 10, framevisible = false)
 f
 
 
+using Jchemo   # if not loaded before
+
+
 ?lwplsr
 
   lwplsr(; kwargs...)
@@ -98,12 +101,11 @@ f
   [...]
 
 
-using Jchemo
 @pars lwplsr
 
 
-•  metric : Type of distance used for the query. Possible values are :eucl (Euclidean), :mah (Mahalanobis), :sam (spectral angular
-       distance), :cor (correlation distance).
+•  metric : Type of distance used for the query. Possible values are :eucl (Euclidean), :mah (Mahalanobis), 
+    :sam (spectral angular distance), :cos (cosine distance), :cor (correlation distance).
 
 
 using Distributions
@@ -145,8 +147,8 @@ f
 ## Preliminary loading of packages
 using Jchemo       # if not loaded before
 using JchemoData   # a library of various benchmark datasets
-using JLD2         # a Julia data format 
-using CairoMakie   # making graphics 
+using JLD2         # package for loading/saving JLD2 data  
+using CairoMakie   # plotting backend 
 using FreqTables   # utilities for frequency tables
 
 
@@ -177,6 +179,7 @@ ntot, p = size(X)
 freqtable(string.(Y.typ, " - ", Y.label))
 
 
+## For illustration purpose, only 30 spectra (randomly chosen) are plotted 
 plotsp(X, wl; size = (500, 300), nsamp = 30, xlabel = "Wavelength (nm)", ylabel = "Reflectance").f
 
 
@@ -199,16 +202,8 @@ fit!(model, X)
 T = model.fitm.T
 colm = cgrad(:tab10, nlev; categorical = true, alpha = .5)
 i = 1
-f = Figure(size = (700, 500))
-ax = Axis3(f[1, 1]; xlabel = string("LV", i), ylabel = string("LV", i + 1), 
-        zlabel = string("LV", i + 2), title = "PCA", perspectiveness = .3) 
-scatter!(ax, T[:, i], T[:, i + 1], T[:, i + 2]; markersize = 6, 
-    color = ztyp, colormap = colm)   
-elt = [MarkerElement(color = colm[i], marker = '●', markersize = 10) for i in 1:nlev]
-#elt = [PolyElement(polycolor = colm[i]) for i in 1:nlev]
-title = "Type"
-Legend(f[1, 2], elt, lev, title; nbanks = 1, rowgap = 10, framevisible = false)
-f
+plotxyz(T[:, i], T[:, i + 1], T[:, i + 2], Y.typ; size = (700, 500), leg_title = "Type", color = colm, 
+    xlabel = "PC$i", ylabel = "PC$(i + 1)", zlabel = string("PC", i + 2), title = "PCA").f
 
 
 freqtable(Y.test)
@@ -239,20 +234,23 @@ i = 1
 plotxy(T[:, i], T[:, i + 1], group; size = (500, 300), color = colm, xlabel = "PC1", ylabel = "PC2").f
 
 
+## SD
 model_sd = occsd() 
 fit!(model_sd, model.fitm)
 @names model_sd
 sdtrain = model_sd.fitm.d
 sdtest = predict(model_sd, Xtest).d
+## OD 
 model_od = occod() 
 fit!(model_od, model.fitm, Xtrain)
 @names model_od
 odtrain = model_od.fitm.d
 odtest = predict(model_od, Xtest).d
+## Plot
 f = Figure(size = (500, 300))
 ax = Axis(f; xlabel = "SD", ylabel = "OD")
 scatter!(ax, sdtrain.dstand, odtrain.dstand, label = "Train")
-scatter!(ax, sdtest.dstand, odtest.dstand, color = (:red, .5), label = "Test")
+scatter!(ax, sdtest.dstand, odtest.dstand, label = "Test")
 hlines!(ax, 1; color = :grey, linestyle = :dash)
 vlines!(ax, 1; color = :grey, linestyle = :dash)
 axislegend(position = :rt)
@@ -281,7 +279,8 @@ ncal = ntrain - nval
 (ntot = ntot, ntrain, ntest, ncal, nval)
 
 
-## Below, more extended combinations could be considered (this is simplification for the example)
+## For this illustration, the grid has been built with a relatively low number of parameter combinations.
+## More extended combinations could be considered. 
 nlvdis = [15]; metric = [:mah] 
 h = [1; 2; 4; 6; Inf]
 k = [200; 350; 500; 1000]  
@@ -291,20 +290,23 @@ length(pars[1])  # nb. parameter combinations considered
 
 
 model = lwplsr()
-res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv, verbose = false)
+res = gridscore(model, Xcal, ycal, Xval, yval; 
+    score = rmsep,  # performance criterion computed on VAL 
+    pars,           # defined grid of parameters 
+    nlv             # parameter 'nlv' has been set out of 'pars' to decrease the computation time (see gridscore help-page)  
+    )
 @head res   # first rows of the result table
 
 
 group = string.("nlvdis=", res.nlvdis, ", h=", res.h, ", k=", res.k)
-plotgrid(res.nlv, res.y1, group; step = 1, xlabel ="Nb. LVs", ylabel = "RMSEP (Validation)").f
+plotgrid(res.nlv, res.y1, group; step = 1, xlabel ="Nb. LVs", ylabel = "RMSEP (Validation set)").f
 
 
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 
 
-model = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
-    k = res.k[u], nlv = res.nlv[u])
+model = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], k = res.k[u], nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
 @head pred
@@ -314,6 +316,6 @@ mse(pred, ytest)
 rmsep(pred, ytest)    # estimate of generalization error
 
 
-plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Predictions", 
-    ylabel = "Observed test data", title = "Protein concentration (%)").f
+plotxy(pred, ytest; color = (:red, .5), bisect = true, xlabel = "Predictions (Test)", 
+    ylabel = "Observed data (Test)", title = "Protein concentration (%)").f
 

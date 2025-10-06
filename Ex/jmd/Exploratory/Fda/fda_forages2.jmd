@@ -53,11 +53,10 @@ wl = parse.(Int, wlst)
 
 #### Split Tot to Train/Test
 
-The model is fitted on **Train**, and a **Test** set is projected on the training space.
-In this example, **Train** is already defined in variable `test` of the dataset,
-and **Test** is defined by the remaining samples. But **Tot** could also be split *a posteriori*, 
-for instance by sampling (random, systematic or any other designs). 
-See for instance functions `samprand`, `sampsys`, etc.
+The model is fitted on **Train**, and the generalization error is estimated on **Test**. In this example, **Train** is 
+already defined in variable `typ` of the dataset, and **Test** is defined by the remaining samples. But **Tot** could 
+also be split *a posteriori*, for instance by sampling (random, systematic or any other designs). See for instance 
+functions `samprand`, `sampsys`, etc.
 
 ```julia
 s = Bool.(test)
@@ -71,7 +70,7 @@ ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 ```
 
-Since X-columns are highly colinear, the Fda requires a regularization, for instance 1) by preliminary 
+Since X-columns are highly colinear, the Fda requires a regularization. It can be reached for instance 1) by preliminary 
 dimension reduction, or 2) by using a ridge regularization.
 
 #### 1) Fda on preliminary computed Pca scores
@@ -144,8 +143,8 @@ f
 
 #### 2) Fda directly on X but using a ridge regularization 
 
-**Note:** If the ridge parameter `lb` is too small (e.g. here from around 1e-10), the model can 
-be overfitted and predictions of new observations is misleading.
+**Note:** If the ridge parameter `lb` is too small (e.g. here from around 1e-10), the model can be overfitted and predictions 
+of new observations are misleading.
 
 ```julia
 lb = 1e-5
@@ -190,8 +189,8 @@ f
 ```julia
 i = 1  # class "i" in test
 color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .7)
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, 
-    title = string("Projection test-class ", lev[i], " (blue points)"), ellipse = true)
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = "Projection test-class $(lev[i]) (blue points)", 
+    ellipse = true)
 scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
 s = ytest .== lev[i]
 zT = Ttest[s, :]

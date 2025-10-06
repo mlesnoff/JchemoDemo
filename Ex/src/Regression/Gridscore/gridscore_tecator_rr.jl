@@ -66,6 +66,7 @@ ncal = ntrain - nval
 
 
 lb = 10.0.^(-15:.1:3)
+#lb = logrange(1e-15, 1e3, 50)   # alternative syntax
 model = rr()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, lb)
 

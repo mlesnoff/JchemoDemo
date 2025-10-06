@@ -106,8 +106,8 @@ f
 
 #### X-loadings matrix
 
-Columns of matrix `V` are coefficients of the linear discriminant function, 
-corresponding to object `LD` of function `lda` of the R package `MASS`.
+Columns of matrix `V` are coefficients of the linear discriminant function, corresponding to object `LD` of function 
+`lda` of the R package [`MASS`](https://cran.r-project.org/web/packages/MASS/index.html).
 
 ```julia
 V = fitm.V
@@ -127,8 +127,7 @@ fitm.eig
 fitm.sstot
 ```
 
-Explained variance is computed from the Pca of the class centers in 
-the transformed scale.
+Explained variance is computed from the Pca of the class centers in the transformed scale.
 
 ```julia
 summary(model)
@@ -143,8 +142,8 @@ summary(model)
 ```julia
 i = 1  # class "i" in test
 color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .7)
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, 
-    title = string("Projection test-class ", lev[i], " (blue points)"), ellipse = true)
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = title = "Projection test-class $(lev[i]) (blue points)", 
+    ellipse = true)
 scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
 s = ytest .== lev[i]
 zT = Ttest[s, :]

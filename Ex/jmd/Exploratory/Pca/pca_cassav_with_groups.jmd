@@ -58,8 +58,7 @@ plotxy(T[:, 1], T[:, 2], year; zeros = true, xlabel = "PC1", ylabel = "PC2").f
 lev = mlev(year)
 nlev = length(lev)
 color = cgrad(:Dark2_5, nlev; categorical = true, alpha = .7)
-plotlv(T[:, 1:6], year; size = (750, 400), shape = (2, 3), color = color, zeros = true, 
-    xlabel = "PC", ylabel = "PC").f
+plotlv(T[:, 1:6], year; size = (750, 400), shape = (2, 3), color = color, zeros = true, xlabel = "PC", ylabel = "PC").f
 ```
 
 #### 3-D score spaces
@@ -70,8 +69,7 @@ CairoMakie.activate!()
 
 i = 1
 size = (600, 350)
-plotxyz(T[:, i], T[:, i + 1], T[:, i + 2], year; size, color, markersize = 10, 
-    xlabel = "PC$i", ylabel = "PC$(i + 1)", zlabel = string("PC", i + 2), 
-    title = "Pca score space").f
+plotxyz(T[:, i], T[:, i + 1], T[:, i + 2], year; size, color, markersize = 10, xlabel = "PC$i", ylabel = "PC$(i + 1)", 
+    zlabel = string("PC", i + 2), title = "Pca score space").f
 ```
 

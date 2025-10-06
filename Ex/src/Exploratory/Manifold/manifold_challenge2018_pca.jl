@@ -67,26 +67,23 @@ CairoMakie.activate!()
 
 
 i = 1
-plotxyz(T[:, i], T[:, i + 1], T[:, i + 2]; size = (600, 500), color = (:red, .3), markersize = 10, 
-    xlabel = "PC$i", ylabel = "PC$(i + 1)", zlabel = string("PC", i + 2), 
-    title = "Pca score space").f
+plotxyz(T[:, i], T[:, i + 1], T[:, i + 2]; size = (600, 500), color = (:red, .3), markersize = 10, xlabel = "PC$i", 
+    ylabel = "PC$(i + 1)", zlabel = string("PC", i + 2), title = "Pca score space").f
 
 
 lev = mlev(typtrain)
 nlev = length(lev)
 colm = cgrad(:tab10, nlev; categorical = true, alpha = .5)
 i = 1
-plotxyz(T[:, i], T[:, i + 1], T[:, i + 2], typtrain; size = (700, 500), color = colm, markersize = 10, 
-    xlabel = "PC$i", ylabel = "PC$(i + 1)", zlabel = string("PC", i + 2), 
-    title = "Pca score space").f
+plotxyz(T[:, i], T[:, i + 1], T[:, i + 2], typtrain; size = (700, 500), color = colm, markersize = 10, xlabel = "PC$i", 
+    ylabel = "PC$(i + 1)", zlabel = string("PC", i + 2), title = "Pca score space").f
 
 
 @head Ttest = transf(model, Xtest)
 
 
-f, ax = plotxyz(T[:, i], T[:, i + 1], T[:, i + 2], typtrain; size = (700, 500), color = colm, markersize = 10, 
-    xlabel = "PC$i", ylabel = "PC$(i + 1)", zlabel = string("PC", i + 2), 
-    title = "Pca score space")
+f, ax = plotxyz(T[:, i], T[:, i + 1], T[:, i + 2], typtrain; size = (700, 500), color = colm, markersize = 10, xlabel = "PC$i", 
+    ylabel = "PC$(i + 1)", zlabel = string("PC", i + 2), title = "Pca score space")
 scatter!(ax, Ttest[:, i], Ttest[:, i + 1], Ttest[:, i + 2]; markersize = 6, color = :black)
 f
 

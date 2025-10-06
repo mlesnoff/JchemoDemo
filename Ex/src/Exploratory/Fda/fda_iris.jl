@@ -90,8 +90,8 @@ summary(model)
 
 i = 1  # class "i" in test
 color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .7)
-f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, 
-    title = string("Projection test-class ", lev[i], " (blue points)"), ellipse = true)
+f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = title = "Projection test-class $(lev[i]) (blue points)", 
+    ellipse = true)
 scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
 s = ytest .== lev[i]
 zT = Ttest[s, :]

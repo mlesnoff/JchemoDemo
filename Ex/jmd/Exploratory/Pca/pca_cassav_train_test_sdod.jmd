@@ -58,9 +58,8 @@ fitm0 = model0.fitm
 ```
 #### SD-OD space
 
-It can be useful to plot the score (SD) vs. orthogonal (OD) distances to check that the training 
-and test sets share the same space. This can be implemented by using the `occsdod` function (one-class 
-classification with SD-OD space). 
+It can be useful to plot the score vs. orthogonal distances (SD and OD, respectively) to check that the training and test sets share the same 
+space. This can be implemented by using function `occsdod` (one-class classification with SD and OD). 
 
 **OCC model fitting** 
 

@@ -67,3 +67,16 @@ ax = Axis(f[1, 1]; xlabel = "Year", ylabel = "TBC")
 boxplot!(ax, year, y; width = .7, show_notch = true)
 f
 
+
+lev = mlev(year)
+nlev = length(lev)
+tsp = .5
+colm = [(:blue, tsp), (:orange, tsp), (:green, tsp), (:red, tsp), (:purple, tsp)]
+#colm = cgrad(:Dark2_5; categorical = true, alpha = .8)[1:nlev]
+cols = colm[indexin(year, unique(year))]
+#cols = (:red, .5)
+f = Figure(size = (600, 250))
+ax = Axis(f[1, 1]; xlabel = "Year", ylabel = "TBC") 
+rainclouds!(ax, year, y; clouds = hist, jitter_width = .1, markersize = 10, color = cols)
+f
+

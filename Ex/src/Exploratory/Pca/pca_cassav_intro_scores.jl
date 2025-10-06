@@ -42,8 +42,7 @@ plotgrid(pcts.nlv, 100 * pcts.pvar; step = 1, xlabel = "nb. PCs", ylabel = "% va
 plotxy(T[:, 1], T[:, 2]; zeros = true, xlabel = "PC1", ylabel = "PC2").f
 
 
-plotlv(T[:, 1:6]; shape = (2, 3), color = (:blue, .5), zeros = true, xlabel = "PC", 
-    ylabel = "PC").f
+plotlv(T[:, 1:6]; shape = (2, 3), color = (:blue, .5), zeros = true, xlabel = "PC", ylabel = "PC").f
 
 
 CairoMakie.activate!()  
@@ -51,7 +50,6 @@ CairoMakie.activate!()
 
 i = 1
 size = (600, 350)
-plotxyz(T[:, i], T[:, i + 1], T[:, i + 2]; size, color = (:red, .3), markersize = 10, 
-    xlabel = "PC$i", ylabel = "PC$(i + 1)", zlabel = string("PC", i + 2), 
-    title = "Pca score space").f
+plotxyz(T[:, i], T[:, i + 1], T[:, i + 2]; size, color = (:red, .3), markersize = 10, xlabel = "PC$i", ylabel = "PC$(i + 1)", 
+    zlabel = string("PC", i + 2), title = "Pca score space").f
 

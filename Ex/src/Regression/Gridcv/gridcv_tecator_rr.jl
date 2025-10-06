@@ -80,6 +80,7 @@ f
 
 pars = mpar(scal = [false; true])
 lb = 10.0.^(-15:.1:3)
+#lb = logrange(1e-15, 1e3, 50)   # alternative syntax
 model = rr()
 res = gridcv(model, Xtrain, ytrain; segm, score = rmsep, pars, lb).res
 

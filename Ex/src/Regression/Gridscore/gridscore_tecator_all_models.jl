@@ -114,10 +114,10 @@ rmsep(pred, ytest)
 
 
 nlv = 0:20
-pars = mpar(meth = [:hard], nvar = [1])
+pars = mpar(meth = [:soft], nvar = [1; 5; 10; 30])
 model = splsr()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv)
-plotgrid(res.nlv, res.y1; step = 2, xlabel ="Lambda", ylabel = "RMSEP").f
+plotgrid(res.nlv, res.y1, res.nvar; step = 2, xlabel ="Nb. LVs", ylabel = "RMSEP").f
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 model = splsr(meth = res.meth[u], nvar = res.nvar[u], nlv = res.nlv[u])
@@ -180,8 +180,7 @@ group = string.(res.nlvdis, "-", res.h, "-", res.k)
 plotgrid(res.nlv, res.y1, group; xlabel ="Nb. LVs", ylabel = "RMSEP").f
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-model = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], 
-    h = res.h[u], k = res.k[u], nlv = res.nlv[u])
+model = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], k = res.k[u], nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred 
 rmsep(pred, ytest)
@@ -196,8 +195,7 @@ model = lwplsravg()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars)
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
-model = lwplsravg(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
-    k = res.k[u], nlv = res.nlv[u])
+model = lwplsravg(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], k = res.k[u], nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
 rmsep(pred, ytest)
@@ -212,8 +210,7 @@ model = knnr()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars)
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
-model = knnr(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], 
-    k = res.k[u])
+model = knnr(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], k = res.k[u])
 fit!(model, Xtrain, ytrain) 
 pred = predict(model, Xtest).pred 
 rmsep(pred, ytest)
@@ -228,8 +225,7 @@ length(pars[1])
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars) 
 u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
-model = rfr(n_trees = res.n_trees[u], n_subfeatures = res.n_subfeatures[u], 
-    max_depth = res.max_depth[u])
+model = rfr(n_trees = res.n_trees[u], n_subfeatures = res.n_subfeatures[u], max_depth = res.max_depth[u])
 fit!(model, Xtrain, ytrain) 
 pred = predict(model, Xtest).pred 
 rmsep(pred, ytest)
