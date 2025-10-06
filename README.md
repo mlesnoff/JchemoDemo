@@ -1,7 +1,8 @@
 # JchemoDemo
 
-**JchemoDemo** is a Julia [project-environment](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml) of tutorials on package [**Jchemo.jl**](https://github.com/mlesnoff/Jchemo.jl). It illustrates the general syntax of basic functions of the package.
-The contents are regularly updated.  
+**JchemoDemo** is a Julia [project-environment](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml) of tutorials 
+on package [**Jchemo.jl**](https://github.com/mlesnoff/Jchemo.jl). It illustrates the general syntax of basic functions of the package.
+The contents of the project are regularly updated.  
 
 **Contents**
 
@@ -11,7 +12,8 @@ The contents are regularly updated.
     
     - [**Scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Ex/src) corresponding to the above Html 
 
-Note: The datasets used in the examples are part of package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl) (that is contained in the **JchemoDemo**[environment](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)).
+Note: The datasets used in the examples are part of package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl) (that is 
+contained in the **JchemoDemo**[environment](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)).
 
 2. **Annexes**
 
