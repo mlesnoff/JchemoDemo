@@ -1,4 +1,4 @@
-This note provides some tips, for **Windows users**, on how to start with Julia when using the editor Visual Studio Code (VsCode).  
+This note provides some tips -- **for Windows users** -- on how to start with Julia when using the editor Visual Studio Code (VsCode).  
 
 ### **INSTALL VsCode**
 
@@ -9,50 +9,41 @@ This note provides some tips, for **Windows users**, on how to start with Julia 
 #### **Where is installed VsCode**
 
 - By default, VsCode is installed at
-*C:/Users/your_user_name/AppData/Local/Programs/Microsoft VS Code*
+*C:/Users/your_user_name/AppData/Local/Programs/Microsoft VS Code*.
 
 
 ### **INSTALL Julia** 
 
-The official installation procedure uses the `juliaup` installer
-
-- https://julialang.org/install/
-
-that can be directly downloaded [here](https://www.microsoft.com/store/apps/9NJNWW8PVKMN).
+The official installation procedure (https://julialang.org/install) uses the `juliaup` installer that can be directly downloaded [here](https://www.microsoft.com/store/apps/9NJNWW8PVKMN).
 
 A manual download is also available [here](https://julialang.org/downloads/) but this is not the recommended installation procedure anymore.
 
 #### **Where is installed Julia**
 
-- By default, Julia is installed at (e.g. for release 1.11.5)  
-*C:/Users/your_user_name/AppData/Local/Programs/Julia 1.11.5*
+- By default, Julia is installed inside *C:/Users/your_user_name/.julia/juliaup*.
 
-- Packages are installed at 
-*C:/Users/your_user_name/.julia/packages*. 
-
-- The pre-compiled packages are at
-*C:/Users/your_user_name/.julia/compiled/v1.11*
+- Packages and pre-compiled packagesare installed inside *C:/Users/your_user_name/.julia*. 
 
 #### **Link Julia and Vscode**
 
-Before to be able to use Julia within VsCode, some configuration is needed
+Before to be able to use Julia within VsCode, some configuration is needed:
 
-- Open VsCode
+- Open VsCode.
 
-- Install the Julia extension 
-    - Go to the 'Manage' icone (= **toothed wheel** at the bottom left of the screen)
-    - Go to 'Extensions'
-    - Search 'Julia' in the marketplace and install it   
+- Install the Julia extension: 
+    - Go to the 'Manage' icone (= **toothed wheel** at the bottom left of the screen).
+    - Go to 'Extensions'.
+    - Search 'Julia' in the marketplace and install it.   
 
-- Connect VsCode and a given release of Julia 
-    - 'Manage' icone ==> Settings ==> Commonly used ==> Extensions ==> Julia ==> Executable path
+- Connect VsCode and a given release of Julia: 
+    - 'Manage' icone ==> Settings ==> Commonly used ==> Extensions ==> Julia ==> Executable path.
     - Copy the full path of the file *julia.exe* of the release that has to be used, 
-        e.g.: *C:/Users/your_user_name/AppData/Local/Programs/Julia 1.11.5/bin/julia.exe*
-    - If another release (e.g. 1.8.4) has to be used in future sessions, replace the new path in the same way, and re-run VsCode 
+        e.g. for version 1.11.7: *C:\Users\your_user_name\.julia\juliaup\julia-1.11.7+0.x64.w64.mingw32\bin*
+    - If another release has to be used in future sessions, replace the new path in the same way, and re-run VsCode. 
 
-- Then a [REPL](https://docs.julialang.org/en/v1/stdlib/REPL/) (= Julia command console) can be open 
+- Then a [REPL](https://docs.julialang.org/en/v1/stdlib/REPL/) (= Julia command console) can be open: 
     - 'Manage' icone ==> Command Palette ==> Start REPL 
-        (or Alt+J Alt+O)
+        (or Alt+J Alt+O).
 
 ### **Julia REPL**
 
@@ -67,7 +58,7 @@ julia>
 (@v.1.11)  pkg> 
 ```
 
-**Command REPL** is the usual mode for computations. **Pkg REPL** is used to manage packages and project-environments.
+The **Command REPL** is the usual mode for computations. The **Pkg REPL** is used to manage packages and project-environments.
 
 Typing `]` in the command REPL makes switch to the Pkg REPL, and the backslash makes return to the command REPL.
 
@@ -93,7 +84,7 @@ only few packages in the global environment.
 - The global environment (files *Project.toml* and *Manifest.toml*) of all 
 the [*patch releases*](https://julialang.org/blog/2019/08/release-process/#minor_releases) 
 of Julia (e.g. 1.11.0, 1.11.1, etc.) of a given [*minor version*](https://julialang.org/blog/2019/08/release-process/#minor_releases) of Julia (e.g. 1.11) is located (for the example of 1.11) at 
-*C:/Users/your_user_name/.julia/environments/v1.11*
+*C:/Users/your_user_name/.julia/environments/v1.11*.
 
 #### **Upgrade to a new minor version of Julia**
 
@@ -101,24 +92,24 @@ When upgrading to a new minor version (e.g. from 1.11 to 1.12), the new global e
 
 **Examples of how to upgrade the global environment from Julia 1.11.5 to 1.12.1**
 
-- Install 1.12.2 (1.11.5 is already installed)
-- Update the executable path in the settings of VsCode (as indicated in a previous section) and re-run VsCode
+- Install 1.12.2 (1.11.5 is already installed).
+- Update the executable path in the settings of VsCode (as indicated in a previous section) and re-run VsCode.
 - A new directory 'v1.12' should be created under 
-    *C:/Users/your_user_name/.julia/environments/*. If not, create it
+    *C:/Users/your_user_name/.julia/environments/*. If not, create it.
 
 Then:
 - **First option (safer)**
     - Copy file *Project.toml* from 
         *C:/Users/your_user_name/.julia/environments/v1.11/* to 
-        *C:/Users/your_user_name/.julia/environments/v1.12/*
+        *C:/Users/your_user_name/.julia/environments/v1.12/*.
     - Then type in Pkg REPL: 
         ```julia 
         (@v1.12) pkg> instantiate
         ```
-    - This creates file *Manifest.toml* corresponding to the contents of *Project.toml* and resolves automatically eventual compatibility constraints within the new Julia version
+    - This creates file *Manifest.toml* corresponding to the contents of *Project.toml* and resolves automatically eventual compatibility constraints within the new Julia version.
 - **Second option**
     - Copy both files *Project.toml* and *Manifest.toml* from *C:/Users/your_user_name/.julia/environments/v1.11/* to *C:/Users/your_user_name/.julia/environments/v1.12/*
-    - This will define for 1.12 the same environment as under 1.11 (exactly the same package versions). Nevertheless, this does not protect against eventual compatibility problems with the use of 1.12
+    - This will define for 1.12 the same environment as under 1.11 (exactly the same package versions). Nevertheless, this does not protect against eventual compatibility problems with the use of 1.12.
 
 Other information are given [here](https://docs.julialang.org/en/v1/manual/faq/#How-can-I-transfer-the-list-of-installed-packages-after-updating-my-version-of-Julia?).
 
@@ -131,25 +122,25 @@ It is recommended to create such a project-environment for each new operational 
 
 #### **How to open a project already existing in a given path** 
 
-- In VsCode, menu 'File' ==> 'Open Folder' or 'Open Recent' 
-- Select the directory of the project
+- In VsCode, menu 'File' ==> 'Open Folder' or 'Open Recent'. 
+- Select the directory of the project.
 - ==> VsCode locates in the corresponding path. This can be checked by typing in the command REPL:
 ```julia 
     julia> pwd()
 ```
-- If files *Project.toml* and *Manifest.toml* are present in the directory, the environment of the project is loaded (if the dependent packages of this environment have never been installed, use the command `instantiate` as explained in the next section)
-- If they are not present, the folder is a simple project (not a project-environment) and VsCode loads the global environment 
+- If files *Project.toml* and *Manifest.toml* are present in the directory, the environment of the project is loaded (if the dependent packages of this environment have never been installed, use the command `instantiate` as explained in the next section).
+- If they are not present, the folder is a simple project (not a project-environment) and VsCode loads the global environment. 
 
 #### **How to install an external project-environment**
 
 As an example, this section shows how to install the external project-environment [JchemoDemo](https://github.com/mlesnoff/JchemoDemo).
 
-- Go to this [address](https://github.com/mlesnoff/JchemoDemo)
-- Green button 'Code' ==> Download ZIP
-- Create a working directory on your PC and unzip the zip file. A new unzipped directory is created, in this example *JchemoDemo-main*. The name of this new directory can be modified at will, for instance here to *JchemoDemo*; it will be the name of the project
-- In VsCode, menu 'File' ==> Open Folder 
-- Select the directory of the project *JchemoDemo*
-- ==> VsCode locates in the corresponding path
+- Go to this [address](https://github.com/mlesnoff/JchemoDemo).
+- Green button 'Code' ==> Download ZIP.
+- Create a working directory on your PC and unzip the zip file. A new unzipped directory is created, in this example *JchemoDemo-main*. The name of this new directory can be modified at will, for instance here to *JchemoDemo*; it will be the name of the project:
+- In VsCode, menu 'File' ==> Open Folder. 
+- Select the directory of the project *JchemoDemo*.
+- ==> VsCode locates in the corresponding path.
 - Check the dependent packages by typing in Pkg REPL:
 ```julia 
     (JchemoDemo) pkg> status
@@ -166,13 +157,13 @@ The `instantiate` step needs only to be done **at the first installation**. For 
 
 #### **How to create a project-environment from scratch**
 
-An easy way is the following (many other ways are possible)
+An easy way is the following (many other ways are possible):
 
-- Let us assume that Julia 1.11.5 is used
-- Create an empty directory that will receive the given project, for instance here named 'StudyTrees', then *D:/Users/Tmp/StudyTrees/* 
-- In VsCode, menu 'File' ==> Open Folder
-- Select the directory *D:/Users/Tmp/StudyTrees/*
-- ==> VsCode locates in the corresponding path
+- Let us assume that Julia 1.11.5 is used.
+- Create an empty directory that will receive the given project, for instance here named 'StudyTrees', then *D:/Users/Tmp/StudyTrees/*. 
+- In VsCode, menu 'File' ==> Open Folder.
+- Select the directory *D:/Users/Tmp/StudyTrees/*.
+- ==> VsCode locates in the corresponding path.
 - Type in the Pkg REPL:
 ```julia 
     (@v1.8) pkg> activate .
@@ -180,12 +171,12 @@ An easy way is the following (many other ways are possible)
 
 (the **dot** at the end of the above command means that VsCode will load the project of where VsCode locates; if the dot is removed after command `activate`, the command loads the global environment)
 
-- Install one package (any package can be chosen), for instance package *StatsBase.jl*, from the official Julia packages repository 
-    - In the Pkg REPL, type
+- Install one package (any package can be chosen), for instance package *StatsBase.jl*, from the official Julia packages repository: 
+    - In the Pkg REPL, type:
     ```julia 
         (StudyTrees) pkg> add StatsBase
     ```
-    - This installs *StatsBase.jl* in the environment, and creates the corresponding files *Project.toml* and *Manifest.toml* in the *StudyTree* directory. The project-environment *StudyTrees* is now created
+    - This installs *StatsBase.jl* in the environment, and creates the corresponding files *Project.toml* and *Manifest.toml* in the *StudyTree* directory. The project-environment *StudyTrees* is now created.
 - To check the installed package in the project-environment *StudyTrees*, type in Pkg REPL:  
 ```julia 
     (StudyTrees) pkg> status
@@ -193,7 +184,7 @@ An easy way is the following (many other ways are possible)
 
 #### **General commands to activate an environment** 
 
-Any project-environment can be loaded using command `activate` in the Pkg REPL. For instance, let us assume that project-environment *StudyTrees* already exists at location *D:/Users/Tmp/StudyTrees/*. Then
+Any project-environment can be loaded using command `activate` in the Pkg REPL. For instance, let us assume that project-environment *StudyTrees* already exists at location *D:/Users/Tmp/StudyTrees/*. Then:
 
 - From any path location, *StudyTrees* can be loaded by typing
     in Pkg REPL:
@@ -207,7 +198,7 @@ Any project-environment can be loaded using command `activate` in the Pkg REPL. 
     (@v.1.11) pkg> activate .
 ```
 
-To locate in *StudyTrees* directory, type in command REPL
+To locate in *StudyTrees* directory, type in command REPL:
 ```julia 
     julia> path = "D:/Users/Tmp/StudyTrees/"
     julia> cd(path)
@@ -218,18 +209,18 @@ or locate above the directory of project *StudyTrees* and type in Pkg REPL:
     (@v.1.11) pkg> activate StudyTrees
 ```
 
-To locate above *StyTrees* directory, type in command REPL
+To locate above *StyTrees* directory, type in command REPL:
 ```julia 
     julia> path = "D:/Users/Tmp/"
     julia> cd(path)
 ```
 
-An easy way to **switch from a local environment (e.g. *StudyTrees*) to the global environment** is as follows 
-- Assume that VsCode is located at *D:/Users/Tmp/StudyTrees/*. In the Pkg REPL, typing
-    - `activate` loads the global environment
-    - `activate .` comes back to the local enviroment *StudyTrees*
+An easy way to **switch from a local environment (e.g. *StudyTrees*) to the global environment** is as follows. 
+- Assume that VsCode is located at *D:/Users/Tmp/StudyTrees/*. In the Pkg REPL, typing:
+    - `activate` loads the global environment.
+    - `activate .` comes back to the local enviroment *StudyTrees*.
 
-See also (not exhaustive)
+See also (not exhaustive):
 - [here](https://pkgdocs.julialang.org/v1/) , [here](https://pkgdocs.julialang.org/v1/getting-started/),  [here](https://pkgdocs.julialang.org/v1/environments/), [here](https://towardsdatascience.com/how-to-setup-project-environments-in-julia-ec8ae73afe9c) 
 
 ### **FEW USEFUL COMMANDS**
@@ -250,9 +241,9 @@ See also (not exhaustive)
 
 #### **Pkg REPL**
 
-In a project environmenet
-- `instantiate` regenerates Manifest.toml from the existing Project.toml
-- `status` shows the installed packages
-- `update` updates the packages
-- `gc` cleans up any packages that aren’t used by any environment
+In a project environmenet:
+- `instantiate` regenerates Manifest.toml from the existing Project.toml.
+- `status` shows the installed packages.
+- `update` updates the packages.
+- `gc` cleans up any packages that aren’t used by any environment.
 
