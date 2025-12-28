@@ -83,9 +83,19 @@ title = "Type"
 Legend(f[1, 2], elt, lab, title; framevisible = false)
 f
 
-##############
+## Colorbar
+
+n = 100
+x = rand(n)
+y = 5 * rand(n)
+f = Figure()
+ax = Axis(f[1, 1]; xlabel = "x", ylabel = "y")
+scatter!(ax, x, y; color = y)
+Colorbar(f[1, 2]; colormap = :viridis, label = "y", limits = (minimum(y), maximum(y)), 
+    height = Relative(0.7), flipaxis = true)
+f
 
 f = Figure()
-Axis3(f[1, 1])
-Colorbar(f[1, 2]; colormap = :viridis, limits = (0, 10), flipaxis = false)
+ax = Axis3(f[1, 1])
+Colorbar(f[1, 2]; colormap = :viridis, limits = (-10, 10), height = Relative(0.7), flipaxis = true)
 f
