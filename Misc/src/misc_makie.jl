@@ -163,7 +163,7 @@ ecdfplot!(ax, y; label = "Normal")
 axislegend(position = :rb)
 f
 
-############# Error bars 
+############# Error bars, arrows
 ## See also function rangebars
 
 x = 0:0.5:10
@@ -177,7 +177,7 @@ f = Figure()
 Axis(f[1, 1])
 scatter!(x, y; markersize = 25, color = :green)
 scatter!(x, y; markersize = 15, color = :lightgrey)
-errorbars!(x, y, higherrors; color = :red) 
+errorbars!(x, y, higherrors; color = :red)  # low is set as high error
 f
 
 # Different low and high errors
@@ -185,7 +185,7 @@ f = Figure()
 Axis(f[1, 1])
 scatter!(x, y; markersize = 25, color = :green)
 scatter!(x, y; markersize = 15, color = :lightgrey)
-errorbars!(x, y, higherrors; color = :red) # same low and high error
+errorbars!(x, y, lowerrors, higherrors; color = :red)
 f
 
 # Horizontal
