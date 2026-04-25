@@ -99,8 +99,11 @@ ncal = ntrain - nval
 
 #### Grid-search 
 
+This example only considers the Mahalanobis distance. Other metrics are available, 
+such as the Euclidean distance (see function `lwplsr`).
+
 ```julia
-nlvdis = [5; 10; 15]; metric = [:mah]   # here only Mahalanobis distance is considered
+nlvdis = [5; 10; 15]; metric = [:mah]   
 h = [1; 2; 4; 6; Inf]; k = [30; 50; 100]  
 nlv = 0:15
 pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k) 
@@ -117,6 +120,8 @@ group = string.("nvldis=", res.nlvdis, " h=", res.h, " k=", res.k)
 plotgrid(res.nlv, res.y1, group; step = 2, xlabel ="Nb. LVs", ylabel = "RMSEP-Val").f
 ```
 
+#### Final prediction (Test) using the optimal model
+
 **Selection of the best parameter combination**
 
 ```julia
@@ -124,7 +129,6 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 ```
 
-#### Final prediction (Test) using the optimal model
 
 ```julia
 model = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], k = res.k[u], nlv = res.nlv[u])

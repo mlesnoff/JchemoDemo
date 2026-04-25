@@ -142,6 +142,7 @@ rmsep(pred, ytest)
 
 ```julia results = "hidden"
 lb = 10.0.^(-15:.1:3)
+#lb = logrange(1e-15, 1e3, 50)   # alternative syntax
 model = rr()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, lb) 
 loglb = round.(log.(10, res.lb), digits = 3)
@@ -174,7 +175,9 @@ rmsep(pred, ytest)
 
 ```julia results = "hidden"
 lb = 10.0.^(-15:5) 
+#lb = logrange(1e-15, 1e3, 50)   # alternative syntax
 gamma = 10.0.^(-3:5) 
+#gamma = logrange(1e-3, 1e5, 10)   # alternative syntax
 pars = mpar(gamma = gamma) 
 length(pars[1])
 model = krr()

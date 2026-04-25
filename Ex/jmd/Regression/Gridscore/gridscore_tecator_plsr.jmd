@@ -56,10 +56,11 @@ fit!(model, X)
 
 #### Split Tot to Train/Test
 
-The model is fitted on **Train**, and the generalization error is estimated on **Test**. In this example, **Train** is 
-already defined in variable `typ` of the dataset, and **Test** is defined by the remaining samples. But **Tot** could 
-also be split *a posteriori*, for instance by sampling (random, systematic or any other designs). See for instance 
-functions `samprand`, `sampsys`, etc.
+The model is fitted on **Train**, and the generalization error is estimated on **Test**. 
+In this example, **Train** is already defined in variable `typ` of the dataset, and **Test** is 
+defined by the remaining samples. But **Tot** could also be split *a posteriori*, for instance by 
+sampling (random, systematic or any other designs). See for instance functions 
+`samprand`, `sampsys`, etc.
 
 ```julia
 s = typ .== "train"
@@ -85,10 +86,12 @@ ytest = Ytest[:, nam]
 
 #### Split Train to Cal/Val for model tuning
 
-The training set (**Train**) is split to a calibration set (**Cal**) and a validation set (**Val**). 
-A grid search is implemented by fitting the model on **Cal** and computing a validation error on **Val**.   
+The training set (**Train**) is split to a calibration set (**Cal**) and a validation 
+set (**Val**). A grid search is implemented by fitting the model on **Cal** and computing 
+a validation error on **Val**.   
 
-The split Cal/Val can be built from different sampling designs, such as the examples (not exhaustive) given below.
+The split Cal/Val can be built from different sampling designs, such as the examples 
+(not exhaustive) given below.
 
 ```julia
 pct = .3  # proportion of Train for Val
@@ -131,20 +134,37 @@ ncal = ntrain - nval
 
 #### Grid-search 
 
-The best syntax to use function `gridscore` for LV-based functions (eg. `plskern`, `kplsr`, `lwplsr`, etc.) is to set 
-parameter `nlv` outside argument `pars` that defines the grid (in general with function `mpar`). In that case, the 
-computation time is reduced [See the naïve and non-optimized syntax at the end of this script]. This is the same principle 
-when definining the parameter `lb` in ridge-based functions (`rr`, `krr`, etc.).
+The generic syntax to use function `gridscore` is to set all parameters of the grid
+in argument `pars` built with function `mpar`. But for LV-based functions (eg. `plskern`, 
+`kplsr`, `lwplsr`, etc.) it is more efficient to set parameter `nlv` outside argument `pars`. 
+This optimizes the computation time.
+
+The same principle applies when defining parameter `lb` in ridge-based functions 
+(`rr`, `krr`, etc.). To set parameter `lb` outside argument `pars` optimizes the 
+computation time.
 
 ```julia
 nlv = 0:20
 model = plskern()
-res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, nlv)
+@head res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, nlv)
 ```
 
 ```julia
 plotgrid(res.nlv, res.y1; step = 2, xlabel = "Nb. LVs", ylabel = "RMSEP-Val").f
 ```
+
+**Naïve syntax (not efficient for computation time)**
+
+To set `nlv` in argument `pars` is strictly equivalent (gives the same results) but 
+is less efficient for computation time. 
+
+```julia
+pars = mpar(nlv = 0:20)
+model = plskern()
+@head res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars)
+```
+
+#### Final prediction (Test) using the optimal model
 
 **Selection of the best parameter combination**
 
@@ -153,12 +173,12 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 ```
 
-#### Final prediction (Test) using the optimal model
+**Fitting the optimal model on the whole Train set**
 
 ```julia
 model = plskern(nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
-pred = predict(model, Xtest).pred
+@head pred = predict(model, Xtest).pred
 ```
 
 **Generalization error**
@@ -176,8 +196,8 @@ plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title 
 
 #### Additional parameters in the grid
 
-If other parameters have to be defined in the grid, they have to be set in argument `pars` built with function `mpar`, 
-such as in the example below.
+If other parameters have to be defined in the grid, they must be set in argument 
+`pars` built with function `mpar`, such as in the example below.
 
 ```julia
 pars = mpar(scal = [false; true])
@@ -191,26 +211,12 @@ plotgrid(res.nlv, res.y1, res.scal; step = 2, xlabel = "Nb. LVs", ylabel = "RMSE
 ```
 
 ```julia
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
+```
+
+```julia
 model = plskern(nlv = res.nlv[u], scal = res.scal[u])
 fit!(model, Xtrain, ytrain)
-pred = predict(model, Xtest).pred
+@head pred = predict(model, Xtest).pred
 ```
-
-#### Naïve (not time-effcient) syntax to use gridscore for LV-based functions 
-
-Parameter `nlv` can also be set in argument `pars` (which is the generic approach to define the grid). This is strictly 
-equivalent (gives the same results) as when `nlv` is set outside of `pars` but the computations are slower.
-
-```julia
-pars = mpar(nlv = 0:20)
-model = plskern()
-res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars)
-```
-
-```julia
-pars = mpar(nlv = 0:20, scal = [false; true])
-model = plskern()
-res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars)
-```
-
-

@@ -204,7 +204,7 @@ fit!(model, Xtrain, ytrain)
 pred = predict(model, Xtest).pred
 ```
 
-#### Naïve (not time-efficient) syntax to use gridcv for LV-based functions 
+#### Naïve syntax (not efficient for computation time) to use gridcv for LV-based functions 
 
 Parameter `nlv` can also be set in argument `pars` (wich is the generic approach to define the grid). This is strictly 
 equivalent (gives the same results) but the computations are slower.

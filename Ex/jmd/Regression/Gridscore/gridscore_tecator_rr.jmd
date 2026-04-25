@@ -99,22 +99,28 @@ ncal = ntrain - nval
 
 #### Grid-search 
 
-The best syntax to use function `gridscore` for LV-based functions (e.g. `rr`, `krr`, etc.) is to set parameter `lb` 
-outside argument `pars` defining the grid (in general with function `mpar`). In that case, the computation time is reduced 
-[See the naïve and non-optimized syntax at the end of this script]. This is the same principle when definining the parameter
-`nlv` in LV-based functions (eg. `plskern`, `kplsr`, `lwplsr`, etc.).
-
 ```julia
 lb = 10.0.^(-15:.1:3)
 #lb = logrange(1e-15, 1e3, 50)   # alternative syntax
 model = rr()
-res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, lb) 
+@head res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, lb) 
 ```
 
 ```julia
 loglb = round.(log.(10, res.lb), digits = 3)
-plotgrid(loglb, res.y1; step = 2, xlabel ="lambda (log scale)", ylabel = "RMSEP-Val").f
+plotgrid(loglb, res.y1; step = 2, xlabel ="log-lambda", ylabel = "RMSEP-Val").f
 ```
+
+**Naïve syntax (not efficient for computation time)**
+
+```julia
+lb = 10.0.^(-15:.1:3)
+pars = mpar(lb = lb)
+model = rr()
+@head res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars)
+```
+
+#### Final prediction (Test) using the optimal model
 
 **Selection of the best parameter combination**
 
@@ -123,7 +129,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 ```
 
-#### Final prediction (Test) using the optimal model
+**Fitting the optimal model on the whole Train set**
 
 ```julia
 model = rr(lb = res.lb[u])
@@ -146,14 +152,11 @@ plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title 
 
 #### Additional parameters in the grid
 
-If other parameters have to be defined in the grid, they have to be set in argument `pars` built with function `mpar`, 
-such as in the example below.
-
 ```julia
 pars = mpar(scal = [false; true])
 lb = 10.0.^(-15:.1:3)
 model = rr()
-res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, lb)
+@head res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, lb)
 ```
 
 ```julia
@@ -162,26 +165,13 @@ plotgrid(loglb, res.y1, res.scal; step = 2, xlabel ="lambda (log scale)", ylabel
 ```
 
 ```julia
+u = findall(res.y1 .== minimum(res.y1))[1] 
+res[u, :]
+```
+
+```julia
 model = rr(lb = res.lb[u], scal = res.scal[u])
 fit!(model, Xtrain, ytrain)
-pred = predict(model, Xtest).pred
+@head pred = predict(model, Xtest).pred
 ```
-
-#### Naïve (not time-efficient) syntax to use gridscore for ridged-based functions 
-
-Parameter `lb` can also be set in argument `pars` (wich is the generic approach to define the grid). This is strictly 
-equivalent (gives the same results) but the computations are slower.
-
-```julia
-pars = mpar(lb = 10.0.^(-15:.1:3))
-model = rr()
-res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars)
-```
-
-```julia
-pars = mpar(lb = 10.0.^(-15:.1:3), scal = [false; true])
-model = rr()
-res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars)
-```
-
 
