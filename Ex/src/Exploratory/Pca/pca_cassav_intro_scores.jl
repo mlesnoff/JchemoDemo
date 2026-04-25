@@ -18,7 +18,7 @@ fit!(model, X)
 @names model
 
 
-fitm = model.fitm 
+fitm = model.fitm ; 
 @names fitm
 
 

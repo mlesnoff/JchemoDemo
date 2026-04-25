@@ -56,10 +56,11 @@ fit!(model, X)
 
 #### Split Tot to Train/Test
 
-The model is fitted on **Train**, and the generalization error is estimated on **Test**. In this example, **Train** is 
-already defined in variable `typ` of the dataset, and **Test** is defined by the remaining samples. But **Tot** could 
-also be split *a posteriori*, for instance by sampling (random, systematic or any other designs). See for instance 
-functions `samprand`, `sampsys`, etc.
+The model is fitted on **Train**, and the generalization error is estimated on **Test**. 
+In this example, **Train** is already defined in variable `typ` of the dataset, and **Test** is 
+defined by the remaining samples. But **Tot** could also be split *a posteriori*, for instance by 
+sampling (random, systematic or any other designs). See for instance functions 
+`samprand`, `sampsys`, etc.
 
 ```julia
 s = typ .== "train"
@@ -91,7 +92,7 @@ model = plskern(; nlv)    # which is the same as below:
 #model = plskern(nlv = 15)
 fit!(model, Xtrain, ytrain)
 @names model
-fitm = model.fitm
+fitm = model.fitm ;
 @names fitm
 ```
 

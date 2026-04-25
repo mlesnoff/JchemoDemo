@@ -24,7 +24,7 @@ tab(year)
 
 model = pcasvd(nlv = 10)
 fit!(model, X)  
-fitm = model.fitm
+fitm = model.fitm ;
 @head T = fitm.T
 
 

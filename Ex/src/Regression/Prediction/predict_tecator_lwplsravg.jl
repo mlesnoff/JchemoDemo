@@ -58,7 +58,7 @@ nlv = 1:5
 model = lwplsravg(; nlvdis, metric, h, k, nlv) 
 fit!(model, Xtrain, ytrain)
 @names model
-fitm = model.fitm
+fitm = model.fitm ;
 @names fitm
 
 

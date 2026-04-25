@@ -39,7 +39,7 @@ fitm0 = model0.fitm
 
 model = occsdod()
 fit!(model, fitm0, Xtrain)
-fitm = model.fitm
+fitm = model.fitm ;
 @names fitm
 @head dtrain = fitm.d
 

@@ -24,7 +24,7 @@ nlv = 3
 bscal = :frob
 model = comdim(; nlv, bscal)
 fit!(model, Xbl)
-fitm = model.fitm
+fitm = model.fitm ;
 @names fitm
 
 

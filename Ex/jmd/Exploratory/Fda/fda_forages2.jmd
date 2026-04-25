@@ -90,7 +90,7 @@ fit!(model0, Xtrain)
 model = fda(nlv = 2)
 #model = fdasvd(nlv = 2)     # alternative algorithm (same result)
 fit!(model, Ttrain_pca, ytrain) 
-fitm = model.fitm
+fitm = model.fitm ;
 @names fitm
 ```
 
@@ -151,7 +151,7 @@ lb = 1e-5
 model = fda(; nlv = 2, lb)
 #model = fdasvd(; nlv = 2, lb)
 fit!(model, Xtrain, ytrain)
-fitm = model.fitm
+fitm = model.fitm ;
 ```
 
 ```julia

@@ -80,7 +80,7 @@ max_depth = 20
 model = rfr(; n_trees, partial_sampling, n_subfeatures, max_depth)
 fit!(model, Xtrain, ytrain)
 @names model
-fitm = model.fitm
+fitm = model.fitm ;
 @names fitm
 ```
 

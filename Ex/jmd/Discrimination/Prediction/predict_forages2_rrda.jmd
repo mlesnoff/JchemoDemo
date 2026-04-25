@@ -84,7 +84,7 @@ fit!(model, Xtrain, ytrain)
 ```
 
 ```julia
-fitm = model.fitm
+fitm = model.fitm ;
 @names fitm
 ```
 

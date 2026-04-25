@@ -32,7 +32,7 @@ ntest = nro(Xtest)
 
 model = pcasvd(nlv = 10) 
 fit!(model, Xtrain)  
-fitm = model.fitm 
+fitm = model.fitm ; 
 @head Ttrain = fitm.T
 
 

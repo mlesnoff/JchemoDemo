@@ -53,7 +53,7 @@ fit!(model, Xtrain, ytrain)
 @names model
 
 
-fitm = model.fitm
+fitm = model.fitm ;
 @names fitm
 
 

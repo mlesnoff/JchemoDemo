@@ -57,7 +57,7 @@ model = plskern(; nlv)    # which is the same as below:
 #model = plskern(nlv = 15)
 fit!(model, Xtrain, ytrain)
 @names model
-fitm = model.fitm
+fitm = model.fitm ;
 @names fitm
 
 

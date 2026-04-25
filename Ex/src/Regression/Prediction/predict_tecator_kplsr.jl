@@ -58,7 +58,7 @@ model = kplsr(; gamma, nlv)   # For direct KPLSR (Bennett & Embrechts, 2003), us
 #model = dkplsr(; gamma, nlv)  
 fit!(model, Xtrain, ytrain)
 @names model
-fitm = model.fitm
+fitm = model.fitm ;
 @names fitm
 
 
