@@ -25,7 +25,6 @@ db = joinpath(path_jdat, "data/tecator.jld2")
 ```julia results = "hidden"
 X = dat.X
 Y = dat.Y 
-ntot, p = size(X)
 ```
 
 ```julia results = "hidden" 
@@ -285,6 +284,7 @@ rmsep(pred, ytest)
 
 ```julia results = "hidden"
 n_trees = [200]
+p = nco(Xcal)
 n_subfeatures = LinRange(10, p, 10)
 max_depth = [6; 10; 20; 50; 2000]
 model = rfr()

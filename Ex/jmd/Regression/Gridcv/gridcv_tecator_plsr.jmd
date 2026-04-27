@@ -56,10 +56,11 @@ fit!(model, X)
 
 #### Split Tot to Train/Test
 
-The model is fitted on **Train**, and the generalization error is estimated on **Test**. In this example, **Train** is 
-already defined in variable `typ` of the dataset, and **Test** is defined by the remaining samples. But **Tot** could 
-also be split *a posteriori*, for instance by sampling (random, systematic or any other designs). See for instance 
-functions `samprand`, `sampsys`, etc.
+The model is fitted on **Train**, and the generalization error is estimated on **Test**. 
+In this example, **Train** is already defined in variable `typ` of the dataset, and **Test** is 
+defined by the remaining samples. But **Tot** could also be split *a posteriori*, for instance by 
+sampling (random, systematic or any other designs). See for instance functions 
+`samprand`, `sampsys`, etc.
 
 ```julia
 s = typ .== "train"
@@ -85,12 +86,12 @@ ytest = Ytest[:, nam]
 
 #### CV-Segments for model tuning
 
-Two methods can be used to build the CV segments within **Train** (for the same total number of segments, these two 
-methods return close resuts):
+Two methods can be used to build the CV segments within **Train** (for the same number of segments,
+these two methods return close resuts):
 
 - (1) **Replicated K-fold CV**
-    - Train is splitted in a number of K folds (segments),
-    - and this split can be replicated (==> replicated K-Fold CV).
+    - Train is splitted in a number of K folds (segments).
+    - This split can be replicated (==> replicated K-Fold CV).
 
 ```julia
 K = 3     # nb. folds (segments)
@@ -98,8 +99,13 @@ rep = 25  # nb. replications
 segm = segmkf(ntrain, K; rep = rep)
 ```
 
+```julia
+length(segm)
+```
+
 - (2) **Replicated "Test-set" CV** 
-    - Train is split to Cal/Val (e.g. Cal = 70% of Train, Val = 30% of Train), and this is replicated.
+    - Train is split to Cal/Val (e.g. Cal = 70% of Train, Val = 30% of Train).
+    - This split can be replicated (==> replicated test-set CV). 
 
 ```julia
 #pct = .30
@@ -110,29 +116,39 @@ segm = segmkf(ntrain, K; rep = rep)
 Illustration of segments:
 
 ```julia
+## The K segments of replication 'i'
 i = 1  
-segm[i]      # the K segments of replication 'i'
+segm[i]  
 ```
 
 ```julia
+## Segment 'k' (k = 1, ..., K) of replication 'i''
 k = 1
-segm[i][k]   # segment 'k' of replication 'i'
+segm[i][k]
 ```
 
 #### Grid-search 
 
-The best syntax to use function `gridcv` for LV-based functions (eg. `plskern`, `kplsr`, `lwplsr`, etc.) is to
-set parameter `nlv` outside argument `pars` defining the grid (in general with function `mpar`). In that case, 
-the computation time is reduced [See the naïve and non-optimized syntax at the end of this script]. This is the same 
-principle when definining the parameter `lb` in ridge-based functions (`rr`, `krr`, etc.).
+The generic syntax to use function `gridcv` is to set all parameters of the grid
+in argument `pars` built with function `mpar`. But for LV-based functions (eg. `plskern`, 
+`kplsr`, `lwplsr`, etc.) it is more efficient to set parameter `nlv` outside argument `pars`. 
+This optimizes the computation time.
+
+The same principle applies when defining parameter `lb` in ridge-based functions 
+(`rr`, `krr`, etc.). To set parameter `lb` outside argument `pars` optimizes the 
+computation time.
 
 ```julia
 nlv = 0:20
 model = plskern()
 rescv = gridcv(model, Xtrain, ytrain; segm, score = rmsep, nlv)
 @names rescv 
-res = rescv.res
-res_rep = rescv.res_rep
+
+@head res = rescv.res            # Averages over the replicatins and segments
+
+@head res_rep = rescv.res_rep  # Results for each replication and segment (useful 
+                               # to visualize the variability of the results across segments 
+                               # and replications)
 ```
 
 ```julia
@@ -149,6 +165,19 @@ lines!(ax, res.nlv, res.y1; color = :red, linewidth = 1)
 f
 ```
 
+**Naïve syntax (not efficient for computation time)**
+
+To set `nlv` in argument `pars` is strictly equivalent (gives the same results) but 
+is less efficient for computation time. 
+
+```julia
+pars = mpar(nlv = 0:20)
+model = plskern()
+@head gridcv(model, Xtrain, ytrain; segm, score = rmsep, pars).res
+```
+
+#### Final prediction (Test) using the optimal model
+
 **Selection of the best parameter combination**
 
 ```julia
@@ -156,12 +185,11 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 ```
 
-#### Final prediction (Test) using the optimal model
-
+**Fitting the optimal model on the whole Train set**
 ```julia
 model = plskern(nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
-pred = predict(model, Xtest).pred
+@head pred = predict(model, Xtest).pred
 ```
 
 **Generalization error**
@@ -179,18 +207,18 @@ plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title 
 
 #### Additional parameters in the grid
 
-If other parameters have to be defined in the grid, they have to be set in argument `pars` built with function `mpar`, 
-such as in the example below.
+If other parameters have to be defined in the grid, they must be set in argument 
+`pars` built with function `mpar`, such as in the example below.
 
 ```julia
 pars = mpar(scal = [false; true])
 nlv = 0:20
 model = plskern()
-res = gridcv(model, Xtrain, ytrain; segm, score = rmsep, pars, nlv).res
+@head res = gridcv(model, Xtrain, ytrain; segm, score = rmsep, pars, nlv).res
 ```
 
 ```julia
-plotgrid(res.nlv, res.y1, res.scal; step = 2, xlabel = "Nb. LVs", ylabel = "RMSEP-Val").f
+plotgrid(res.nlv, res.y1, res.scal; step = 2, xlabel = "Nb. LVs", ylabel = "RMSEP-CV").f
 ```
 
 ```julia
@@ -201,23 +229,6 @@ res[u, :]
 ```julia
 model = plskern(nlv = res.nlv[u], scal = res.scal[u])
 fit!(model, Xtrain, ytrain)
-pred = predict(model, Xtest).pred
-```
-
-#### Naïve syntax (not efficient for computation time) to use gridcv for LV-based functions 
-
-Parameter `nlv` can also be set in argument `pars` (wich is the generic approach to define the grid). This is strictly 
-equivalent (gives the same results) but the computations are slower.
-
-```julia
-pars = mpar(nlv = 0:20)
-model = plskern()
-gridcv(model, Xtrain, ytrain; segm, score = rmsep, pars).res
-```
-
-```julia
-pars = mpar(nlv = 0:20, scal = [false; true])
-model = plskern()
-gridcv(model, Xtrain, ytrain; segm, score = rmsep, pars).res
+@head pred = predict(model, Xtest).pred
 ```
 

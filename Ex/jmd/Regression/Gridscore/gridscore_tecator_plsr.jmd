@@ -161,7 +161,7 @@ is less efficient for computation time.
 ```julia
 pars = mpar(nlv = 0:20)
 model = plskern()
-@head res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars)
+@head gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars)
 ```
 
 #### Final prediction (Test) using the optimal model

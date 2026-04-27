@@ -83,16 +83,19 @@ ytest = Ytest[:, nam]
 **Replicated K-fold CV**
 
 ```julia
-K = 3     # nb. folds (segments)
+K = 3      # nb. folds (segments)
 rep = 10   # nb. replications
 segm = segmkf(ntrain, K; rep = rep)
 ```
 
 #### Grid-search 
 
+This example only considers the Mahalanobis distance. Other metrics are available, 
+such as the Euclidean distance (see function `lwplsr`).
+
 ```julia
-nlvdis = [5; 10; 15]; metric = [:mah]   # here only Mahalanobis distance is considered
-h = [1; 2; 4; 6; Inf]; k = [30; 50; 100]  
+nlvdis = [5; 10; 15] ; metric = [:mah]   
+h = [1; 2; 4; 6; Inf] ; k = [30; 50; 100]  
 nlv = 0:15
 pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k) 
 length(pars[1])
@@ -102,14 +105,15 @@ length(pars[1])
 model = lwplsr()
 rescv = gridcv(model, Xtrain, ytrain; segm, score = rmsep, pars, nlv)
 @names rescv 
-res = rescv.res
-res_rep = rescv.res_rep
+@head res = rescv.res
 ```
 
 ```julia
 group = string.("nvldis=", res.nlvdis, " h=", res.h, " k=", res.k)
 plotgrid(res.nlv, res.y1, group; step = 2, xlabel ="Nb. LVs", ylabel = "RMSEP-Val").f
 ```
+
+#### Final prediction (Test) using the optimal model
 
 **Selection of the best parameter combination**
 
@@ -118,7 +122,7 @@ u = findall(res.y1 .== minimum(res.y1))[1]
 res[u, :]
 ```
 
-#### Final prediction (Test) using the optimal model
+**Fitting the optimal model on the whole Train set**
 
 ```julia
 model = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], k = res.k[u], nlv = res.nlv[u])
@@ -138,5 +142,4 @@ rmsep(pred, ytest)
 plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title = "Test set - variable $nam", 
     xlabel = "Prediction", ylabel = "Observed").f   
 ```
-
 

@@ -112,7 +112,7 @@ length(pars[1])
 
 ```julia
 model = lwplsr()
-res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv)
+@head res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv)
 ```
 
 ```julia
@@ -128,7 +128,7 @@ plotgrid(res.nlv, res.y1, group; step = 2, xlabel ="Nb. LVs", ylabel = "RMSEP-Va
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 ```
-
+**Fitting the optimal model on the whole Train set**
 
 ```julia
 model = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], k = res.k[u], nlv = res.nlv[u])

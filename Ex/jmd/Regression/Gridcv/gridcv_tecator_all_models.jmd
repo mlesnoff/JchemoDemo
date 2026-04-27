@@ -75,7 +75,7 @@ ytest = Ytest[:, nam]
 **Replicated K-fold CV**
 
 ```julia results = "hidden"
-K = 3     # nb. folds (segments)
+K = 3      # nb. folds (segments)
 rep = 10   # nb. replications
 segm = segmkf(ntrain, K; rep = rep)
 ```
@@ -131,6 +131,7 @@ rmsep(pred, ytest)
 
 ```julia results = "hidden"
 lb = 10.0.^(-15:.1:3)
+#lb = logrange(1e-15, 1e3, 50)   # alternative syntax
 model = rr()
 res = gridcv(model, Xtrain, ytrain; segm, score = rmsep, lb).res 
 loglb = round.(log.(10, res.lb), digits = 3)

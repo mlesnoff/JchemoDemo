@@ -117,7 +117,7 @@ plotgrid(loglb, res.y1; step = 2, xlabel ="log-lambda", ylabel = "RMSEP-Val").f
 lb = 10.0.^(-15:.1:3)
 pars = mpar(lb = lb)
 model = rr()
-@head res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars)
+@head gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars)
 ```
 
 #### Final prediction (Test) using the optimal model
