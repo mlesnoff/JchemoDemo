@@ -10,6 +10,9 @@ The contents of this project are regularly updated.
 1. **Examples of data anlyses with Jchemo** 
 
     - [**Html**](https://mlesnoff.github.io/JchemoDemo/docs/build/) 
+
+        - a) [Datasets](https://mlesnoff.github.io/JchemoDemo/docs/build/datasets/)
+        - b) [Data_import_export](https://mlesnoff.github.io/JchemoDemo/docs/build/import_export/)
     
     - [**Julia markdown scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Ex/jmd) corresponding to the above Html 
 
