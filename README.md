@@ -11,14 +11,14 @@ The contents of the project are regularly updated.
 
     - [**Html**](https://mlesnoff.github.io/JchemoDemo/docs/build/) 
     
-    - [**Scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Ex/src) corresponding to the above Html 
+    - [**Julia markdown scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Ex/jmd) corresponding to the above Html 
 
 Note: The datasets used in the examples are part of package [**JchemoData.jl**](https://github.com/mlesnoff/JchemoData.jl) (that is 
 contained in the **JchemoDemo** [environment](https://github.com/mlesnoff/JchemoDemo/blob/master/Project.toml)).
 
 2. **Annexes**
 
-    - [**Tips**](https://github.com/mlesnoff/JchemoDemo/blob/main/Misc/config.md) to start with Julia
+    - [**Tips**](https://github.com/mlesnoff/JchemoDemo/blob/main/Misc/tips_config_julia.md) to start with Julia
 
     - [**Scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Misc/src) about general Julia syntax (not using Jchemo)
 
