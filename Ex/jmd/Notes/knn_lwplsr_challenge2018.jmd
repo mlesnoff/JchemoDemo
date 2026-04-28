@@ -363,7 +363,7 @@ Y = dat.Y
 ```
 
 ```julia
-y = Y.conc        # variable to predict (protein concentration)
+y = Y.conc ;       # variable to predict (protein concentration)
 ```
 
 ```julia
