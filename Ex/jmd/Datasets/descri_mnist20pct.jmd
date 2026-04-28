@@ -14,7 +14,7 @@ using JLD2, CairoMakie
 using CodecZlib   # required since mnist20pct.jld2 is compressed 
 ```
 
-#### Data importation
+#### Import data
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))

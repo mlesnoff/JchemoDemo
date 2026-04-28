@@ -35,14 +35,14 @@ Y = dat.Y
 
 ```julia
 wlst = names(X) 
-wl = parse.(Int, wlst)
+wl = parse.(Int, wlst) ;
 ```
 
 ```julia
 plotsp(X, wl; nsamp = 500, xlabel = "Wavelength (nm)").f
 ```
 
-**Preprocessing by SNV and derivation**
+**Preprocess by SNV and derivation**
 
 ```julia
 model1 = snv()
@@ -95,7 +95,7 @@ fit!(model, Xtrain)
 
 ```julia
 CairoMakie.activate!()  
-#GLMakie.activate!()    # for interactive axe-rotation
+#GLMakie.activate!()    # for interactive plot
 ```
 
 ```julia
@@ -114,7 +114,7 @@ plotxyz(T[:, i], T[:, i + 1], T[:, i + 2], typtrain; size = (700, 500), color = 
     ylabel = "PC$(i + 1)", zlabel = string("PC", i + 2), title = "Pca score space").f
 ```
 
-#### Projection of the test observations 
+#### Project test observations 
 
 ```julia
 @head Ttest = transf(model, Xtest)

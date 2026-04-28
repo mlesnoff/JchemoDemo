@@ -15,7 +15,7 @@ using JLD2, DataFrames, CairoMakie
 using FreqTables
 ```
 
-#### Data importation
+#### Import data
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -38,7 +38,7 @@ Y = dat.Y
 
 ```julia
 wlst = names(X) 
-wl = parse.(Int, wlst)
+wl = parse.(Int, wlst) ;
 ```
 The X-data are already preprocessed by SNV and second derivation.
 

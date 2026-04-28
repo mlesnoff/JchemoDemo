@@ -14,7 +14,7 @@ using Jchemo, JchemoData
 using JLD2, DataFrames, CairoMakie
 ```
 
-#### Data importation
+#### Import data
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -37,14 +37,14 @@ Y = dat.Y
 
 ```julia
 wlst = names(X) 
-wl = parse.(Int, wlst)
+wl = parse.(Int, wlst) ;
 ```
 
 ```julia
 plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
-**Preprocessing by SNV and derivation**
+**Preprocess by SNV and derivation**
 
 ```julia
 model1 = snv()
