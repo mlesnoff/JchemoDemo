@@ -1,20 +1,21 @@
 # JchemoDemo
 
-**JchemoDemo** is a Julia project-environment of tutorials on package [**Jchemo**](https://github.com/mlesnoff/Jchemo.jl). 
+**JchemoDemo** is a Julia project-environment providing tutorials on package [**Jchemo**](https://github.com/mlesnoff/Jchemo.jl). 
 It illustrates the general syntax of basic functions of the package.
 
-The contents of the project are regularly updated.  
+The contents of this project are regularly updated.  
 
 **Contents**
 
-1. **Examples on datasets with Jchemo** 
+1. **Examples of data anlyses with Jchemo** 
 
     - [**Html**](https://mlesnoff.github.io/JchemoDemo/docs/build/) 
     
     - [**Julia markdown scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Ex/jmd) corresponding to the above Html 
 
-Note: The datasets used in the examples are part of package [**JchemoData**](https://github.com/mlesnoff/JchemoData.jl) (that is 
-contained in the **JchemoDemo** [environment](https://github.com/mlesnoff/JchemoDemo/blob/main/Project.toml)).
+Note: The datasets used in the examples are part of package [**JchemoData**](https://github.com/mlesnoff/JchemoData.jl). This package 
+is contained in the **JchemoDemo** [environment](https://github.com/mlesnoff/JchemoDemo/blob/main/Project.toml)) (no need to 
+install it).
 
 2. **Annexes**
 
