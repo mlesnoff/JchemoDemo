@@ -13,6 +13,10 @@ The contents of this project are regularly updated.
 
         - a) [Datasets](https://mlesnoff.github.io/JchemoDemo/docs/build/datasets/)
         - b) [Data_import_export](https://mlesnoff.github.io/JchemoDemo/docs/build/import_export/)
+        - c) [Exploratory](https://mlesnoff.github.io/JchemoDemo/docs/build/exploratory/)
+        - d) [Regression](https://mlesnoff.github.io/JchemoDemo/docs/build/regression/)
+        - e) [Discrimination](https://mlesnoff.github.io/JchemoDemo/docs/build/discrimination/)
+        - f) [Notes](https://mlesnoff.github.io/JchemoDemo/docs/build/notes/)
     
     - [**Julia markdown scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Ex/jmd) corresponding to the above Html 
 
