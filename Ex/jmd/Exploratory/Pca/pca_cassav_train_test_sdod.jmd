@@ -4,8 +4,8 @@ weave_options:
   error: true
   wrap: false
   term: false
-  out_width: 60%
-  out_height: 30%
+  out_width: 50%
+  out_height: 20%
 ---
 
 When the dataset is split to a training and a test set, it can be relevant to check that the two 

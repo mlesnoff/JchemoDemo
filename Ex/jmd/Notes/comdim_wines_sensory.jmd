@@ -9,24 +9,25 @@ weave_options:
 ---
 
 This note replicates the analysis of the **wines sensory dataset** presented 
-by [Hanafi & Quanari (2008)](https://www.numdam.org/item/JSFS_2008__149_2_75_0/)
+by [Hanafi & Quanari (2008)](https://www.numdam.org/item/JSFS_2008__149_2_75_0/):
 
-* Hanafi, M., Qannari, E.M., 2008. Nouvelles propriétés de l’analyse en composantes communes 
-    et poids spécifiques. Journal de la société française de statistique 149, 75–97
+* Hanafi, M., Qannari, E.M., 2008. Nouvelles propriétés de l’analyse en composantes 
+    communes et poids spécifiques. Journal de la société française de statistique 149, 75–97
 
-where the **ComDim** method (Common components and specific weights analysis, *aka* CCSWA) was used to 
-explore the data.
+where the **ComDim** method (Common components and specific weights analysis, *aka* CCSWA) was
+used to explore the data.
 
 [Wines sensory dataset](https://github.com/mlesnoff/JchemoData.jl/tree/main?tab=readme-ov-file#wines_sensory): 
-A jury of four expert tasters ("judges") evaluated the appearance of eight wines according to the procedure 
-known as *free profile*. Each judge noted on a scale from 0 to 10 the products according to his/her **own** variables. 
-For a product and a given variable, the note given by a judge was the intensity on which
-he/she perceives the variable. Each matrix Xk (k = 1, ..., 4) was associated to one judge. 
+A jury of four expert tasters ("judges") evaluated the appearance of eight wines according 
+to the procedure known as *free profile*. Each judge noted on a scale from 0 to 10 the products according 
+to his/her **own** variables. For a product and a given variable, the note given by a judge was 
+the intensity on which he/she perceives the variable. Each matrix of notes, Xk (k = 1, ..., 4), was associated 
+to one judge. 
 
 The goal of the ComDim study was to evaluate if there was an agreement between judges (or groups of judges), 
 and to evaluate the relationships potentially existing among the eight wines.
 
-#### Data importation
+#### Import data
 
 ```julia
 using Jchemo, JchemoData
@@ -53,10 +54,10 @@ n = nro(X1)
 nbl = length(Xbl)
 ```
 
-#### Model fitting
+#### Model fit
 
-In the ComDim analysis below, each block is scaled by its Frobenius norm (to equalize the group importances 
-in regards to their total inertia), and three global components (scores) are computed
+In the ComDim analysis below, each block is scaled by its Frobenius norm (to equalize the group 
+importances in regards to their total inertia), and three global components (scores) are computed
 
 ```julia
 nlv = 3
@@ -167,7 +168,7 @@ ylims!(ax, [-1, 1])
 f
 ```
 
-#### Simultaneous representation of observations and loadings
+#### Represent simultaneously observations and loadings
 
 - Block *k* in the global score space 
 
@@ -202,7 +203,8 @@ f
 
 #### Main conclusion of the study
 
-Judge *4* was atypical from the other judges and determined the global score *2*. In contrast to judges *1-2-3*, 
-judge *4* gave high ratings to wines *wi6* and *wi8* (variables *v13: expenses* *v14: brilliant*).
+Judge *4* was atypical from the other judges and determined the global score *2*. In contrast 
+to judges *1-2-3*, judge *4* gave high ratings to wines *wi6* and *wi8* (variables *v13: expenses*
+and *v14: brilliant*).
 
 

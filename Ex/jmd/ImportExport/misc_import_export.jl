@@ -1,8 +1,7 @@
 using DataFrames, JchemoData
  
 path_jdat = dirname(dirname(pathof(JchemoData)))
-path_out = "D:/Mes Donnees/Tmp"
-## Or (temporary path_out files)
+path_out = tempdir()   # path that will receive the result file; can be changed to any other existing path
 #path_out = tempname() 
 
 ########### CSV

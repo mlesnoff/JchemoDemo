@@ -4,8 +4,8 @@ weave_options:
   error: true
   wrap: false
   term: false
-  out_width: 60%
-  out_height: 30%
+  out_width: 50%
+  out_height: 20%
 ---
 
 ```julia
@@ -85,7 +85,6 @@ plotlv(T[:, i:(i + 5)], group; size = (750, 400), shape = (2, 3), color = color,
 ```julia
 CairoMakie.activate!()  
 #GLMakie.activate!()    # for interactive plot
-
 i = 1
 plotxyz(T[:, i], T[:, i + 1], T[:, i + 2], group; size = (600, 350), color, markersize = 10, xlabel = "PC$i", ylabel = "PC$(i + 1)", 
     zlabel = string("PC", i + 2), title = "Pca score space").f

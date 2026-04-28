@@ -4,24 +4,25 @@ weave_options:
   error: true
   wrap: false
   term: false
-  out_width: 60%
-  out_height: 30%
+  out_width: 50%
+  out_height: 20%
 ---
 
-[JLD2](https://github.com/JuliaIO/JLD2.jl) is a structured Julia data format comprising a subset of 
-[HDF5](https://fr.wikipedia.org/wiki/Hierarchical_Data_Format), without any dependency on the HDF5 C library.
+[JLD2](https://github.com/JuliaIO/JLD2.jl) is a structured Julia data format comprising 
+a subset of [HDF5](https://fr.wikipedia.org/wiki/Hierarchical_Data_Format), without any dependency 
+on the HDF5 C library.
 
-JLD2 files have extension `.jld2`. They are binary files that can be read and written by Julia, which requires to load 
-package [JLD2.jl](https://github.com/JuliaIO/JLD2.jl) in the Julia environment.
+JLD2 files have extension `.jld2`. They are binary files that can be read and written by Julia, 
+which requires to load package [JLD2.jl](https://github.com/JuliaIO/JLD2.jl) in the Julia environment.
 
-Package [JchemoData](https://github.com/mlesnoff/JchemoData.jl) uses JLD2 format, as well as the examples of the help 
-pages of package [Jchemo](https://github.com/mlesnoff/Jchemo.jl) and the project-environment 
-[JchemoDemo](https://github.com/mlesnoff/JchemoDemo). 
+Package [JchemoData](https://github.com/mlesnoff/JchemoData.jl) uses JLD2 format, as well as 
+the examples of the help pages of package [Jchemo](https://github.com/mlesnoff/Jchemo.jl) and 
+the project-environment [JchemoDemo](https://github.com/mlesnoff/JchemoDemo). 
 
 This note illustrates how to
-1. Load a JLD2 dataset already existing
-2. Build a JLD2 dataset from CSV files
-3. Save a JLD2 dataset to CSV files
+1. Load a JLD2 dataset already existing,
+2. Build a JLD2 dataset from CSV files,
+3. Save a JLD2 dataset to CSV files.
 
 For details on using dataframes and CSV files, see the documentation of packages
 - [DataFrames.jl](https://github.com/JuliaData/DataFrames.jl) 
@@ -46,7 +47,7 @@ db = joinpath(path_jdat, "data/tecator.jld2")      # full path to the jld2 file;
 
 - **Situation 1**
 
- The name of the object contained in the `.jl2` file is known. In this example, the name is `dat`
+The name of the object contained in the `.jl2` file is known. In this example, the name is `dat`.
 
 ```julia
 @load db dat   # same as:    dat = load(db, "dat") 
@@ -63,7 +64,7 @@ db = joinpath(path_jdat, "data/tecator.jld2")      # full path to the jld2 file;
 
 - **Situation 2**
 
-The name of the object contained in the `.jl2` file is unknown
+The name of the object contained in the `.jl2` file is unknown.
 
 ```julia
 res = load(db)  
@@ -77,11 +78,11 @@ dat = res["dat"]
 
 #### 2. Building a JLD2 dataset from CSV files
 
-In this example, two CSV files are imported, transformed to dataframes and saved to a JLD2 file (.jld2)
+In this example, two CSV files are imported, transformed to dataframes and saved to a JLD2 file (.jld2).
 
 ```julia
 db = joinpath(path_jdat, "data/cassav_X.csv")       # full path to the CSV file; can be changed to any other existing .CSV file 
-X = CSV.read(db, DataFrame; header = 1, decimal = '.', delim = ';')  # same as below:
+X = CSV.read(db, DataFrame; header = 1, decimal = '.', delim = ';')  # same as the two alternative commands below:
 #X = CSV.File(db; header = 1, delim = ';') |> DataFrame 
 #X = DataFrame(CSV.File(db, header = 1, delim = ';'))
 @head X
@@ -98,12 +99,12 @@ dat = (X = X, Y)  # create a tuple with the dataframes
 @names dat
 ```
 
-Saving dataset `my_cassav`
+**Save dataset `my_cassav` to a JLD2 file**
 
 ```julia
 path_out = tempdir()   # path receiving the result file; can be changed to any other existing path
 db_out = joinpath(path_out, "my_cassav.jld2")  
-@save db_out dat       # same as below:
+@save db_out dat       # same as the two alternative commands below:
 #jldsave(db_out; dat)  
 #jldsave(db_out, true; dat)  # 'true" ==> compression   
 ```
@@ -116,7 +117,7 @@ db = joinpath(path_jdat, "data/tecator.jld2")  # full path to the jld2 file; can
 @names dat  
 ```
 
-Saving datasets `X` and `Y`
+**Save datasets `X` and `Y`**
 
 ```julia
 path_out = tempdir()   # path that will receive the result file; can be changed to any other existing path
