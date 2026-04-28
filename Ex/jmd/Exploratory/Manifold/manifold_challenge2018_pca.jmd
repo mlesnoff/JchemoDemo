@@ -14,7 +14,7 @@ using JLD2, DataFrames, CairoMakie, GLMakie
 using FreqTables
 ```
 
-#### Data importation
+#### Import data
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))

@@ -1,11 +1,11 @@
 ---
-title: gridcv - tecator - All models
+title: Grid-search (gridcv) - tecator - All models
 weave_options:
   error: true
   wrap: false
   term: false
-  out_width: 60%
-  out_height: 30%
+  out_width: 50%
+  out_height: 20%
 ---
 
 ```julia results = "hidden"
@@ -13,7 +13,7 @@ using Jchemo, JchemoData
 using JLD2, CairoMakie
 ```
 
-#### Data importation
+#### Import data
 
 ```julia results = "hidden"
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -32,7 +32,7 @@ tab(typ)
 
 ```julia results = "hidden"
 wlst = names(X)
-wl = parse.(Float64, wlst) 
+wl = parse.(Float64, wlst) ;
 #plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
@@ -67,7 +67,7 @@ namy = names(Y)[1:3]
 j = 2  
 nam = namy[j]    # work on the j-th y-variable
 ytrain = Ytrain[:, nam]
-ytest = Ytest[:, nam]
+ytest = Ytest[:, nam] ;
 ```
 
 #### CV-Segments for model tuning

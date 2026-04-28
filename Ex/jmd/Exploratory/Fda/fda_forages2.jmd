@@ -14,7 +14,7 @@ using JLD2, CairoMakie
 using FreqTables 
 ```
 
-#### Data importation
+#### Import data
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -45,7 +45,7 @@ freqtable(y, test)
 
 ```julia
 wlst = names(X)
-wl = parse.(Int, wlst)
+wl = parse.(Int, wlst) ;
 #plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
@@ -53,10 +53,11 @@ wl = parse.(Int, wlst)
 
 #### Split Tot to Train/Test
 
-The model is fitted on **Train**, and the generalization error is estimated on **Test**. In this example, **Train** is 
-already defined in variable `typ` of the dataset, and **Test** is defined by the remaining samples. But **Tot** could 
-also be split *a posteriori*, for instance by sampling (random, systematic or any other designs). See for instance 
-functions `samprand`, `sampsys`, etc.
+The model is fitted on **Train**, and the generalization error is estimated on **Test**. 
+In this example, **Train** is already defined in variable `test` of the dataset, and **Test** is 
+defined by the remaining samples. But **Tot** could also be split *a posteriori*, for instance by 
+sampling (random, systematic or any other designs). See for instance functions 
+`samprand`, `sampsys`, etc.
 
 ```julia
 s = Bool.(test)
@@ -70,10 +71,12 @@ ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 ```
 
-Since X-columns are highly colinear, the Fda requires a regularization. It can be reached for instance 1) by preliminary 
-dimension reduction, or 2) by using a ridge regularization.
+Since X-columns are highly colinear, the Fda requires a regularization. It can be done 
+for instance by 1) a preliminary dimension reduction, or 2) using a ridge regularization.
 
 #### 1) Fda on preliminary computed Pca scores
+
+**Preliminary Pca**
 
 ```julia
 model0 = pcasvd(nlv = 10)
@@ -85,6 +88,8 @@ fit!(model0, Xtrain)
 ```julia
 @head Ttrain_pca = model0.fitm.T 
 ```
+
+**Fda**
 
 ```julia
 model = fda(nlv = 2)
@@ -120,7 +125,7 @@ scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
 f
 ```
 
-**Projection of Xtest**
+**Project Xtest**
 
 ```julia
 @head Ttest_pca = transf(model0, Xtest) 
@@ -130,24 +135,26 @@ f
 @head Ttest = transf(model, Ttest_pca)
 ```
 
+**Plot test observations of class 'i'**
+
 ```julia
-i = 1  # class "i" in test
+i = 1  # class 'i' in test
 color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .5)
 f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = "Fda", ellipse = true)
 scatter!(ax, ct[:, 1], ct[:, 2]; markersize = 10, color = :red)
-s = ytest .== lev[i]
-zT = Ttest[s, :]
+zT = Ttest[ytest .== lev[i], :]
 scatter!(ax, zT[:, 1], zT[:, 2]; markersize = 10, color = :blue)
 f
 ```
 
 #### 2) Fda directly on X but using a ridge regularization 
 
-**Note:** If the ridge parameter `lb` is too small (e.g. here from around 1e-10), the model can be overfitted and predictions 
-of new observations are misleading.
+**Note:** If the ridge parameter `lb` is too small (e.g. here around <= 1e-10), 
+the model can overfit and generate misleading predictions of new observations.
 
 ```julia
 lb = 1e-5
+#lb = 1e-11
 model = fda(; nlv = 2, lb)
 #model = fdasvd(; nlv = 2, lb)
 fit!(model, Xtrain, ytrain)
@@ -186,8 +193,10 @@ f
 @head Ttest = transf(model, Xtest)
 ```
 
+**Plot test observations of class 'i'**
+
 ```julia
-i = 1  # class "i" in test
+i = 1  # class 'i' in test
 color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .7)
 f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = "Projection test-class $(lev[i]) (blue points)", 
     ellipse = true)

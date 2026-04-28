@@ -1,11 +1,11 @@
 ---
-title: gridscore - tecator - kNN-Lwplsr
+title: Grid-search (gridscore) - tecator - kNN-Lwplsr
 weave_options:
   error: true
   wrap: false
   term: false
-  out_width: 60%
-  out_height: 30%
+  out_width: 50%
+  out_height: 20%
 ---
 
 ```julia
@@ -13,7 +13,7 @@ using Jchemo, JchemoData
 using JLD2, CairoMakie
 ```
 
-#### Data importation
+#### Import data
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -39,7 +39,7 @@ tab(typ)
 
 ```julia
 wlst = names(X)
-wl = parse.(Float64, wlst) 
+wl = parse.(Float64, wlst) ;
 #plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
@@ -75,7 +75,7 @@ namy = names(Y)[1:3]
 j = 2  
 nam = namy[j]    # work on the j-th y-variable
 ytrain = Ytrain[:, nam]
-ytest = Ytest[:, nam]
+ytest = Ytest[:, nam] ;
 ```
 
 #### Split Train to Cal/Val for model tuning
@@ -103,8 +103,8 @@ This example only considers the Mahalanobis distance. Other metrics are availabl
 such as the Euclidean distance (see function `lwplsr`).
 
 ```julia
-nlvdis = [5; 10; 15]; metric = [:mah]   
-h = [1; 2; 4; 6; Inf]; k = [30; 50; 100]  
+nlvdis = [5; 10; 15] ; metric = [:mah]   
+h = [1; 2; 4; 6; Inf] ; k = [30; 50; 100]  
 nlv = 0:15
 pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k) 
 length(pars[1])
@@ -122,21 +122,21 @@ plotgrid(res.nlv, res.y1, group; step = 2, xlabel ="Nb. LVs", ylabel = "RMSEP-Va
 
 #### Final prediction (Test) using the optimal model
 
-**Selection of the best parameter combination**
+**Select the best parameter combination**
 
 ```julia
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 ```
-**Fitting the optimal model on the whole Train set**
+**Fit the optimal model on the whole Train set**
 
 ```julia
 model = lwplsr(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], k = res.k[u], nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
-pred = predict(model, Xtest).pred
+@head pred = predict(model, Xtest).pred
 ```
 
-**Generalization error**
+**Generalization error (Test set)**
 
 ```julia
 rmsep(pred, ytest)

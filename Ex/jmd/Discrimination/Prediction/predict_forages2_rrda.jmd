@@ -4,8 +4,8 @@ weave_options:
   error: true
   wrap: false
   term: false
-  out_width: 60%
-  out_height: 30%
+  out_width: 50%
+  out_height: 20%
 ---
 
 ```julia
@@ -14,9 +14,10 @@ using JLD2, CairoMakie
 using FreqTables 
 ```
 
-RR-DA is a alternative to PLSR-DA, where a ridge regression (RR) is used instead of a PLSR to predict the Y-dummy table.
+RR-DA is an alternative to PLSR-DA where a ridge regression (RR) is used instead of a PLSR 
+to predict the Y-dummy table.
 
-#### Data importation
+#### Import data
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -47,11 +48,9 @@ freqtable(y, test)
 
 ```julia
 wlst = names(X)
-wl = parse.(Int, wlst)
+wl = parse.(Int, wlst) ;
 #plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
-
-**Note:**: X-data are already preprocessed (SNV + Savitsky-Golay 2nd deriv).
 
 #### Split Tot to Train/Test
 
@@ -75,7 +74,7 @@ tab(ytrain)
 tab(ytest)
 ```
 
-#### Model fitting
+#### Model fit
 
 ```julia
 model = rrda(; lb = 1e-5)

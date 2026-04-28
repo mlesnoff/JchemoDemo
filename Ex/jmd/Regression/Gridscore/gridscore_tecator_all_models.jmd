@@ -1,11 +1,11 @@
 ---
-title: gridscore - tecator - All models
+title: Grid-search (gridscore) - tecator - All models
 weave_options:
   error: true
   wrap: false
   term: false
-  out_width: 60%
-  out_height: 30%
+  out_width: 50%
+  out_height: 20%
 ---
 
 ```julia results = "hidden"
@@ -13,7 +13,7 @@ using Jchemo, JchemoData
 using JLD2, CairoMakie
 ```
 
-#### Data importation
+#### Import data
 
 ```julia results = "hidden"
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -34,7 +34,7 @@ tab(typ)
 
 ```julia results = "hidden"
 wlst = names(X)
-wl = parse.(Float64, wlst) 
+wl = parse.(Float64, wlst) ;
 #plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
@@ -59,6 +59,7 @@ Xtest = rmrow(Xp, s)
 Ytest = rmrow(Y, s)
 ntrain = nro(Xtrain)
 ntest = nro(Xtest)
+ntot = ntrain + ntest
 (ntot = ntot, ntrain, ntest)
 ```
 
@@ -69,7 +70,7 @@ namy = names(Y)[1:3]
 j = 2  
 nam = namy[j]    # work on the j-th y-variable
 ytrain = Ytrain[:, nam]
-ytest = Ytest[:, nam]
+ytest = Ytest[:, nam] ;
 ```
 
 #### Split Train to Cal/Val for model tuning
@@ -226,7 +227,7 @@ rmsep(pred, ytest)
 #### kNN-Lwplsr
 
 ```julia results = "hidden"
-nlvdis = [10; 15]; metric = [:mah] 
+nlvdis = [10; 15] ; metric = [:mah] 
 h = [1; 2; 4; 6; Inf]
 k = [30; 50; 100]  
 nlv = 0:15 
@@ -247,8 +248,8 @@ rmsep(pred, ytest)
 #### kNN-Lwplsr-Avg 
 
 ```julia results = "hidden"
-nlvdis = [10; 15]; metric = [:mah] 
-h = [1; 2; 5; Inf]; k = [30; 50; 100]  
+nlvdis = [10; 15] ; metric = [:mah] 
+h = [1; 2; 5; Inf] ; k = [30; 50; 100]  
 nlv = [0:5, 0:10, 1:5, 1:10]
 pars = mpar(nlv = nlv, nlvdis = nlvdis, metric = metric, h = h, k = k) 
 length(pars[1])
@@ -265,7 +266,7 @@ rmsep(pred, ytest)
 #### Knnr
 
 ```julia results = "hidden"
-nlvdis = [15; 20]; metric = [:eucl, :mah] 
+nlvdis = [15; 20] ; metric = [:eucl, :mah] 
 h = [1; 2; 4; 6; Inf] 
 k = [1; collect(5:10:50)] 
 pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k) 
@@ -299,7 +300,7 @@ pred = predict(model, Xtest).pred
 rmsep(pred, ytest)
 ```
 
-#### SVMR
+#### Svmr
 
 ```julia results = "hidden"
 kern = [:krbf]  # Gaussian kernel

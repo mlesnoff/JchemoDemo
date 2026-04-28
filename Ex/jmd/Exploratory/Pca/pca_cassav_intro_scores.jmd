@@ -13,7 +13,7 @@ using Jchemo, JchemoData
 using JLD2, CairoMakie, GLMakie
 ```
 
-#### Data importation
+#### Import data
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -27,7 +27,7 @@ X = dat.X
 @head X
 ```
 
-#### Model fitting
+#### Model fit
 
 ```julia
 model = pcasvd(nlv = 10)
@@ -48,8 +48,8 @@ The scores are already computed and returned in sub-object `fitm`
 @head T = fitm.T 
 ```
 
-but can also be computed by projecting the data on the loadings (in practice, this projection is generally done to compute the scores of 
-new data not used in the model fitting)
+but can also be computed by projecting the data on the loadings (in practice, this projection 
+is generally done to compute the scores of new data not used in the model fitting)
 
 ```julia
 @head transf(model, X) 

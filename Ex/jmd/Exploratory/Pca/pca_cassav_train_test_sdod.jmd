@@ -8,12 +8,18 @@ weave_options:
   out_height: 30%
 ---
 
+When the dataset is split to a training and a test set, it can be relevant to check that the two 
+sets share the same space. From a PCA, this can be done by plotting the score vs. orthogonal 
+distances (SD and OD, respectively). This can be implemented for instance by using function `occsdod` 
+that also returns a one-class classification (OCC) index as a compromise between SD and OD. 
+
+
 ```julia
 using Jchemo, JchemoData
 using JLD2, CairoMakie
 ```
 
-#### Data importation
+#### Import data
 
 ```julia
 using JchemoData, JLD2, CairoMakie
@@ -38,6 +44,8 @@ year = Y.year
 tab(year)
 ```
 
+#### Split Tot to Train/Test
+
 ```julia
 s = year .<= 2012
 Xtrain = X[s, :] 
@@ -48,7 +56,10 @@ ntest = nro(Xtest)
 (ntot = ntot, ntrain, ntest)
 ```
 
-#### Model fitting and scores T
+#### Model fit and scores T
+
+Preliminary PCA model fit on the training set to compute the scores T and the loadings P
+that will be used in the SD-OD space computation.
 
 ```julia
 model0 = pcasvd(nlv = 10) 
@@ -58,10 +69,7 @@ fitm0 = model0.fitm
 ```
 #### SD-OD space
 
-It can be useful to plot the score vs. orthogonal distances (SD and OD, respectively) to check that the training and test sets share the same 
-space. This can be implemented by using function `occsdod` (one-class classification with SD and OD). 
-
-**OCC model fitting** 
+**OCC model fit** 
 
 ```julia
 model = occsdod()
@@ -79,12 +87,26 @@ res = predict(model, Xtest)
 @head dtest = res.d
 ```
 
-**Final graph** 
+**Final graphs** 
 
 ```julia 
 d = vcat(dtrain, dtest)
 group = [repeat(["Train"], ntrain); repeat(["Test"], ntest)]
-color = [(:red, .5), (:blue, .5)]
-plotxy(d.d_sd, d.d_od, group; zeros = true, color, xlabel = "SD", ylabel = "OD").f
+color = [:purple, (:red, .3)]
+f, ax = plotxy(1:length(d.dstand), d.dstand, group; color = color, size = (500, 300), leg_title = "Type of obs.", 
+  title = "SD-OD", xlabel = "Observation index", ylabel = "Standardized distance")
+hlines!(ax, 1; linestyle = :dot)
+f
+```
+
+```julia 
+s = dtrain.d .> fitm.cutoff
+a = fitm.coefs[1]
+b = fitm.coefs[2]
+f, ax = plotxy(dtrain.sdsigma, dtrain.odsigma; color = (:red, .3), xlabel = "SD / sigma", ylabel = "OD / sigma")
+scatter!(ax, dtest.sdsigma, dtest.odsigma; color = :purple, label = "Test")
+ablines!(ax, a, b; linewidth = .7, linestyle = :dash)
+axislegend(ax; position = :rb)
+f
 ```
 

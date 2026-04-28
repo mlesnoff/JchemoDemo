@@ -1,11 +1,11 @@
 ---
-title: gridcv - tecator - Plsr
+title: Grid-search (gridcv) - tecator - Plsr
 weave_options:
   error: true
   wrap: false
   term: false
-  out_width: 60%
-  out_height: 30%
+  out_width: 50%
+  out_height: 20%
 ---
 
 ```julia
@@ -13,7 +13,7 @@ using Jchemo, JchemoData
 using JLD2, CairoMakie
 ```
 
-#### Data importation
+#### Import data
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -39,7 +39,7 @@ tab(typ)
 
 ```julia
 wlst = names(X)
-wl = parse.(Float64, wlst) 
+wl = parse.(Float64, wlst) ;
 #plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
@@ -81,7 +81,7 @@ namy = names(Y)[1:3]
 j = 2  
 nam = namy[j]    # work on the j-th y-variable
 ytrain = Ytrain[:, nam]
-ytest = Ytest[:, nam]
+ytest = Ytest[:, nam] ;
 ```
 
 #### CV-Segments for model tuning
@@ -178,21 +178,21 @@ model = plskern()
 
 #### Final prediction (Test) using the optimal model
 
-**Selection of the best parameter combination**
+**Select the best parameter combination**
 
 ```julia
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 ```
 
-**Fitting the optimal model on the whole Train set**
+**Fit the optimal model on the whole Train set**
 ```julia
 model = plskern(nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
 @head pred = predict(model, Xtest).pred
 ```
 
-**Generalization error**
+**Generalization error (Test set)**
 
 ```julia
 rmsep(pred, ytest)

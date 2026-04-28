@@ -12,7 +12,7 @@ using Jchemo, JchemoData
 using JLD2, CairoMakie
 ```
 
-#### Data importation
+#### Import data
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -64,7 +64,7 @@ tab(ytrain)
 tab(ytest)
 ```
 
-#### Model fitting
+#### Model fit
 
 ```julia
 model = fda(nlv = 2)
@@ -76,6 +76,9 @@ fitm = model.fitm ;
 
 ```julia
 lev = fitm.lev
+```
+
+```julia
 nlev = length(lev)
 ```
 
@@ -83,6 +86,12 @@ nlev = length(lev)
 
 ```julia
 @head Ttrain = fitm.T
+```
+
+Scores can also be computed using function `transf`:
+
+```julia
+@head transf(model, Xtrain)
 ```
 
 **Class centers projected on the score space**
@@ -106,15 +115,17 @@ f
 
 #### X-loadings matrix
 
-Columns of matrix `V` are coefficients of the linear discriminant function, corresponding to object `LD` of function 
-`lda` of the R package [`MASS`](https://cran.r-project.org/web/packages/MASS/index.html).
+Columns of loadings matrix, `V`, are the coefficients of the linear discriminant function, 
+corresponding to object `LD` of function `lda` of the R package [`MASS`](https://cran.r-project.org/web/packages/MASS/index.html).
 
 ```julia
 V = fitm.V
 ```
 
+Note that this matrix is not orthogonal: 
+
 ```julia
-V' * V    # not orthogonal
+V' * V  
 ```
 
 #### Explained variance 
@@ -127,20 +138,21 @@ fitm.eig
 fitm.sstot
 ```
 
-Explained variance is computed from the Pca of the class centers in the transformed scale.
+Explained variance is computed from the Pca of the class centers in the 
+transformed scale.
 
 ```julia
 summary(model)
 ```
 
-#### Projection of Xtest to the score space
+#### Project Xtest to the score space
 
 ```julia
 @head Ttest = transf(model, Xtest)
 ```
 
 ```julia
-i = 1  # class "i" in test
+i = 1  # class 'i' in test
 color = cgrad(:lightrainbow, nlev; categorical = true, alpha = .7)
 f, ax = plotxy(Ttrain[:, 1], Ttrain[:, 2], ytrain; color, title = title = "Projection test-class $(lev[i]) (blue points)", 
     ellipse = true)

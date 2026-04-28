@@ -1,11 +1,11 @@
 ---
-title: gridcv - forages2 - kNN-Lwplsrda
+title: Grid-search (gridcv) - forages2 - kNN-Lwplsrda
 weave_options:
   error: true
   wrap: false
   term: false
-  out_width: 60%
-  out_height: 30%
+  out_width: 50%
+  out_height: 20%
 ---
 
 ```julia
@@ -14,7 +14,7 @@ using JLD2, CairoMakie
 using FreqTables 
 ```
 
-#### Data importation
+#### Import data
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -45,18 +45,11 @@ freqtable(y, test)
 
 ```julia
 wlst = names(X)
-wl = parse.(Int, wlst)
+wl = parse.(Int, wlst) ;
 #plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
-**Note:**: X-data are already preprocessed (SNV + Savitsky-Golay 2nd deriv).
-
 #### Split Tot to Train/Test
-
-The model is fitted on **Train**, and the generalization error is estimated on **Test**. In this example, **Train** is 
-already defined in variable `typ` of the dataset, and **Test** is defined by the remaining samples. But **Tot** could 
-also be split *a posteriori*, for instance by sampling (random, systematic or any other designs). See for instance 
-functions `samprand`, `sampsys`, etc.
 
 ```julia
 s = Bool.(test)
@@ -104,22 +97,23 @@ group = string.("nvldis=", res.nlvdis, " h=", res.h, " k=", res.k)
 plotgrid(res.nlv, res.y1, group; step = 2, xlabel = "Nb. LVs", ylabel = "ERRP-CV", leg_title = "Continuum").f
 ```
 
-**Selection of the best parameter combination**
+#### Final prediction (Test) using the optimal model
+
+**Select the best parameter combination**
 
 ```julia
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 ```
 
-#### Final prediction (Test) using the optimal model
-
+**Fit the optimal model on the whole Train set**
 ```julia
 model = lwplsrda(nlvdis = res.nlvdis[u], metric = res.metric[u], h = res.h[u], k = res.k[u], nlv = res.nlv[u])
 fit!(model, Xtrain, ytrain)
-pred = predict(model, Xtest).pred
+@head pred = predict(model, Xtest).pred
 ```
 
-**Generalization error**
+**Generalization error (Test set)**
 
 ```julia
 errp(pred, ytest)

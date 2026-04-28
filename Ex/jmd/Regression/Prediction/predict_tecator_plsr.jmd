@@ -4,8 +4,8 @@ weave_options:
   error: true
   wrap: false
   term: false
-  out_width: 60%
-  out_height: 30%
+  out_width: 50%
+  out_height: 20%
 ---
 
 ```julia
@@ -13,7 +13,7 @@ using Jchemo, JchemoData
 using JLD2, CairoMakie
 ```
 
-#### Data importation
+#### Import data
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -39,7 +39,7 @@ tab(typ)
 
 ```julia
 wlst = names(X)
-wl = parse.(Float64, wlst) 
+wl = parse.(Float64, wlst) ;
 #plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
@@ -81,10 +81,10 @@ namy = names(Y)[1:3]
 j = 2  
 nam = namy[j]    # work on the j-th y-variable
 ytrain = Ytrain[:, nam]
-ytest = Ytest[:, nam]
+ytest = Ytest[:, nam] ;
 ```
 
-#### Model fitting
+#### Model fit
 
 ```julia
 nlv = 15
@@ -126,7 +126,7 @@ mse(pred, ytest)
 @head r = residreg(pred, ytest) # residuals
 ```
 
-#### Plotting predictions vs. observed data
+#### Plot predictions vs. observed data
 
 ```julia 
 plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title = "Test set - variable $nam", 
@@ -140,7 +140,7 @@ plotxy(ytest, r; size = (500, 400), color = (:red, .5), zeros = true, title = "T
     xlabel = "Observed (Test)", ylabel = "Residuals").f   
 ```
 
-#### Adding a smoothing
+#### Add a smoothing
 
 ```julia
 zpred = vec(pred)

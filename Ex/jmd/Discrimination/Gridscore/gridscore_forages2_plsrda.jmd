@@ -1,11 +1,11 @@
 ---
-title: gridscore - forages2 - Plsrda 
+title: Grid-search (gridscore) - forages2 - Plsrda 
 weave_options:
   error: true
   wrap: false
   term: false
-  out_width: 60%
-  out_height: 30%
+  out_width: 50%
+  out_height: 20%
 ---
 
 ```julia
@@ -14,7 +14,7 @@ using JLD2, CairoMakie
 using FreqTables 
 ```
 
-#### Data importation
+#### Import data
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -45,7 +45,7 @@ freqtable(y, test)
 
 ```julia
 wlst = names(X)
-wl = parse.(Int, wlst)
+wl = parse.(Int, wlst) ;
 #plotsp(X, wl; xlabel = "Wavelength (nm)", ylabel = "Absorbance").f
 ```
 
@@ -53,10 +53,11 @@ wl = parse.(Int, wlst)
 
 #### Split Tot to Train/Test
 
-The model is fitted on **Train**, and the generalization error is estimated on **Test**. In this example, **Train** is 
-already defined in variable `typ` of the dataset, and **Test** is defined by the remaining samples. But **Tot** could 
-also be split *a posteriori*, for instance by sampling (random, systematic or any other designs). See for instance 
-functions `samprand`, `sampsys`, etc.
+The model is fitted on **Train**, and the generalization error is estimated on **Test**. 
+In this example, **Train** is already defined in variable `test` of the dataset, and **Test** is 
+defined by the remaining samples. But **Tot** could also be split *a posteriori*, for instance by 
+sampling (random, systematic or any other designs). See for instance functions 
+`samprand`, `sampsys`, etc.
 
 ```julia
 s = Bool.(test)
@@ -80,10 +81,12 @@ tab(ytest)
 
 #### Split Train to Cal/Val for model tuning
 
-The training set **Train** is split to a calibration set **Cal** and a validation set **Val**. A grid search is 
-implemented by fitting the model on **Cal** and computing a validation error on **Val**.   
+The training set (**Train**) is split to a calibration set (**Cal**) and a validation 
+set (**Val**). A grid search is implemented by fitting the model on **Cal** and computing 
+a validation error on **Val**.   
 
-The split Cal/Val can be built from different types of sampling designs. Below, a random sampling is used.
+The split Cal/Val can be built from different sampling designs, such as the examples 
+(not exhaustive) given below.
 
 ```julia
 pct = .3  # proportion of Train for Val
@@ -102,7 +105,8 @@ ncal = ntrain - nval
 
 #### Grid-search 
 
-Below, the importance of each class is made equal (recommended if classes are unbalnaced) and a X-scaling is evaluated. 
+Below, the importance of each class is made equal and the error is measured with `merrp` 
+(recommended if classes are unbalanced) and a X-scaling is evaluated. 
 
 ```julia
 pars = mpar(prior = [:unif], scal = [false; true])
@@ -116,22 +120,24 @@ group = string.("prior=", res.prior, " scal=", res.scal)
 plotgrid(res.nlv, res.y1, group; step = 2, xlabel = "Nb. LVs", ylabel = "ERRP-Val").f
 ```
 
-**Selection of the best parameter combination**
+#### Final prediction (Test) using the optimal model
+
+**Select the best parameter combination**
 
 ```julia
 u = findall(res.y1 .== minimum(res.y1))[1] 
 res[u, :]
 ```
 
-#### Final prediction (Test) using the optimal model
+**Fit the optimal model on the whole Train set**
 
 ```julia
 model = plsrda(prior = res.prior[u], nlv = res.nlv[u], scal = res.scal[u])
 fit!(model, Xtrain, ytrain)
-pred = predict(model, Xtest).pred
+@head pred = predict(model, Xtest).pred
 ```
 
-**Generalization error**
+**Generalization error (Test set)**
 
 ```julia
 errp(pred, ytest)

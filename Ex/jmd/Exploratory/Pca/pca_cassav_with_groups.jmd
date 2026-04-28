@@ -13,7 +13,7 @@ using Jchemo, JchemoData
 using JLD2, CairoMakie, GLMakie
 ```
 
-#### Data importation
+#### Import data
 
 ```julia
 using JchemoData, JLD2, CairoMakie, GLMakie
@@ -38,7 +38,7 @@ year = Y.year
 tab(year)
 ```
 
-#### Model fitting and scores T
+#### Model fit and scores T
 
 ```julia
 model = pcasvd(nlv = 10)

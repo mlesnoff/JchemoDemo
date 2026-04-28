@@ -4,8 +4,8 @@ weave_options:
   error: true
   wrap: false
   term: false
-  out_width: 60%
-  out_height: 30%
+  out_width: 50%
+  out_height: 20%
 ---
 
 ```julia
@@ -15,7 +15,7 @@ using FreqTables
 using CodecZlib   # required since mnist20pct.jld2 is compressed 
 ```
 
-#### Data importation
+#### Import data
 
 ```julia
 path_jdat = dirname(dirname(pathof(JchemoData)))
@@ -65,7 +65,7 @@ plotsp(Xtrain, 1:p; nsamp = 1, xlabel = "Pixel", ylabel = "Grey level").f
 ```julia
 model = plsqda(nlv = 25)
 fit!(model, Xtrain, ytrain)
-pred = predict(model, Xtest).pred
+@head pred = predict(model, Xtest).pred
 ```
 
 - Error rates (proportions)
@@ -80,7 +80,7 @@ merrp(pred, ytest) # average by class
 
 #### Confusion matrix
 
-Using function `freqtable` of package `FreqTables`
+a) Using function `freqtable` of package `FreqTables`
 
 - Counts
 
@@ -94,7 +94,7 @@ res = freqtable(ytest, vec(pred))
 round.(100 * res ./ rowsum(res); digits = 1)
 ```
 
-Using function `conf` of package `Jchemo`
+b) Using function `conf` of package `Jchemo`
 
 ```julia
 cf = conf(pred, ytest)
