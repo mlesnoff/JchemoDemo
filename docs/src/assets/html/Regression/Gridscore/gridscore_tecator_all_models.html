@@ -3,7 +3,7 @@
 <HEAD>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>gridscore - tecator - All models</title>
+  <title>Grid-search (gridscore) - tecator - All models</title>
   
 
   <script type="text/x-mathjax-config">
@@ -653,7 +653,7 @@ div.title {text-align: center;}
     <div class = "row">
       <div class = "col-md-12 twelve columns">
         <div class="title">
-          <h1 class="title">gridscore - tecator - All models</h1>
+          <h1 class="title">Grid-search (gridscore) - tecator - All models</h1>
           
           
         </div>
@@ -666,7 +666,7 @@ div.title {text-align: center;}
 
 
 
-<h4>Data importation</h4>
+<h4>Import data</h4>
 
 
 <pre class='hljl'>
@@ -681,8 +681,7 @@ div.title {text-align: center;}
 
 <pre class='hljl'>
 <span class='hljl-n'>X</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>dat</span><span class='hljl-oB'>.</span><span class='hljl-n'>X</span><span class='hljl-t'>
-</span><span class='hljl-n'>Y</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>dat</span><span class='hljl-oB'>.</span><span class='hljl-n'>Y</span><span class='hljl-t'> 
-</span><span class='hljl-n'>ntot</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>p</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>size</span><span class='hljl-p'>(</span><span class='hljl-n'>X</span><span class='hljl-p'>)</span>
+</span><span class='hljl-n'>Y</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>dat</span><span class='hljl-oB'>.</span><span class='hljl-n'>Y</span>
 </pre>
 
 
@@ -698,7 +697,7 @@ div.title {text-align: center;}
 
 <pre class='hljl'>
 <span class='hljl-n'>wlst</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>names</span><span class='hljl-p'>(</span><span class='hljl-n'>X</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-n'>wl</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>parse</span><span class='hljl-oB'>.</span><span class='hljl-p'>(</span><span class='hljl-n'>Float64</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>wlst</span><span class='hljl-p'>)</span><span class='hljl-t'> 
+</span><span class='hljl-n'>wl</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>parse</span><span class='hljl-oB'>.</span><span class='hljl-p'>(</span><span class='hljl-n'>Float64</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>wlst</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-p'>;</span><span class='hljl-t'>
 </span><span class='hljl-cs'>#plotsp(X, wl; xlabel = &quot;Wavelength (nm)&quot;, ylabel = &quot;Absorbance&quot;).f</span>
 </pre>
 
@@ -729,6 +728,7 @@ div.title {text-align: center;}
 </span><span class='hljl-n'>Ytest</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>rmrow</span><span class='hljl-p'>(</span><span class='hljl-n'>Y</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>s</span><span class='hljl-p'>)</span><span class='hljl-t'>
 </span><span class='hljl-n'>ntrain</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>nro</span><span class='hljl-p'>(</span><span class='hljl-n'>Xtrain</span><span class='hljl-p'>)</span><span class='hljl-t'>
 </span><span class='hljl-n'>ntest</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>nro</span><span class='hljl-p'>(</span><span class='hljl-n'>Xtest</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-n'>ntot</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>ntrain</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>ntest</span><span class='hljl-t'>
 </span><span class='hljl-p'>(</span><span class='hljl-n'>ntot</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>ntot</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>ntrain</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>ntest</span><span class='hljl-p'>)</span>
 </pre>
 
@@ -742,7 +742,7 @@ div.title {text-align: center;}
 </span><span class='hljl-n'>j</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>2</span><span class='hljl-t'>  
 </span><span class='hljl-n'>nam</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>namy</span><span class='hljl-p'>[</span><span class='hljl-n'>j</span><span class='hljl-p'>]</span><span class='hljl-t'>    </span><span class='hljl-cs'># work on the j-th y-variable</span><span class='hljl-t'>
 </span><span class='hljl-n'>ytrain</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>Ytrain</span><span class='hljl-p'>[</span><span class='hljl-oB'>:</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>nam</span><span class='hljl-p'>]</span><span class='hljl-t'>
-</span><span class='hljl-n'>ytest</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>Ytest</span><span class='hljl-p'>[</span><span class='hljl-oB'>:</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>nam</span><span class='hljl-p'>]</span>
+</span><span class='hljl-n'>ytest</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>Ytest</span><span class='hljl-p'>[</span><span class='hljl-oB'>:</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>nam</span><span class='hljl-p'>]</span><span class='hljl-t'> </span><span class='hljl-p'>;</span>
 </pre>
 
 
@@ -831,6 +831,7 @@ div.title {text-align: center;}
 
 <pre class='hljl'>
 <span class='hljl-n'>lb</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nfB'>10.0</span><span class='hljl-oB'>.^</span><span class='hljl-p'>(</span><span class='hljl-oB'>-</span><span class='hljl-ni'>15</span><span class='hljl-oB'>:</span><span class='hljl-nfB'>.1</span><span class='hljl-oB'>:</span><span class='hljl-ni'>3</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-cs'>#lb = logrange(1e-15, 1e3, 50)   # alternative syntax</span><span class='hljl-t'>
 </span><span class='hljl-n'>model</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>rr</span><span class='hljl-p'>()</span><span class='hljl-t'>
 </span><span class='hljl-n'>res</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>gridscore</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xcal</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>ycal</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xval</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>yval</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>score</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>rmsep</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>lb</span><span class='hljl-p'>)</span><span class='hljl-t'> 
 </span><span class='hljl-n'>loglb</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>round</span><span class='hljl-oB'>.</span><span class='hljl-p'>(</span><span class='hljl-n'>log</span><span class='hljl-oB'>.</span><span class='hljl-p'>(</span><span class='hljl-ni'>10</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>res</span><span class='hljl-oB'>.</span><span class='hljl-n'>lb</span><span class='hljl-p'>),</span><span class='hljl-t'> </span><span class='hljl-n'>digits</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>3</span><span class='hljl-p'>)</span><span class='hljl-t'>
@@ -869,7 +870,9 @@ div.title {text-align: center;}
 
 <pre class='hljl'>
 <span class='hljl-n'>lb</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nfB'>10.0</span><span class='hljl-oB'>.^</span><span class='hljl-p'>(</span><span class='hljl-oB'>-</span><span class='hljl-ni'>15</span><span class='hljl-oB'>:</span><span class='hljl-ni'>5</span><span class='hljl-p'>)</span><span class='hljl-t'> 
+</span><span class='hljl-cs'>#lb = logrange(1e-15, 1e3, 50)   # alternative syntax</span><span class='hljl-t'>
 </span><span class='hljl-n'>gamma</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nfB'>10.0</span><span class='hljl-oB'>.^</span><span class='hljl-p'>(</span><span class='hljl-oB'>-</span><span class='hljl-ni'>3</span><span class='hljl-oB'>:</span><span class='hljl-ni'>5</span><span class='hljl-p'>)</span><span class='hljl-t'> 
+</span><span class='hljl-cs'>#gamma = logrange(1e-3, 1e5, 10)   # alternative syntax</span><span class='hljl-t'>
 </span><span class='hljl-n'>pars</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>mpar</span><span class='hljl-p'>(</span><span class='hljl-n'>gamma</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>gamma</span><span class='hljl-p'>)</span><span class='hljl-t'> 
 </span><span class='hljl-nf'>length</span><span class='hljl-p'>(</span><span class='hljl-n'>pars</span><span class='hljl-p'>[</span><span class='hljl-ni'>1</span><span class='hljl-p'>])</span><span class='hljl-t'>
 </span><span class='hljl-n'>model</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>krr</span><span class='hljl-p'>()</span><span class='hljl-t'>
@@ -928,7 +931,7 @@ div.title {text-align: center;}
 
 
 <pre class='hljl'>
-<span class='hljl-n'>nlvdis</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-ni'>10</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>15</span><span class='hljl-p'>];</span><span class='hljl-t'> </span><span class='hljl-n'>metric</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-sc'>:mah</span><span class='hljl-p'>]</span><span class='hljl-t'> 
+<span class='hljl-n'>nlvdis</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-ni'>10</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>15</span><span class='hljl-p'>]</span><span class='hljl-t'> </span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>metric</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-sc'>:mah</span><span class='hljl-p'>]</span><span class='hljl-t'> 
 </span><span class='hljl-n'>h</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-ni'>1</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>2</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>4</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>6</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>Inf</span><span class='hljl-p'>]</span><span class='hljl-t'>
 </span><span class='hljl-n'>k</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-ni'>30</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>50</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>100</span><span class='hljl-p'>]</span><span class='hljl-t'>  
 </span><span class='hljl-n'>nlv</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>0</span><span class='hljl-oB'>:</span><span class='hljl-ni'>15</span><span class='hljl-t'> 
@@ -952,8 +955,8 @@ div.title {text-align: center;}
 
 
 <pre class='hljl'>
-<span class='hljl-n'>nlvdis</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-ni'>10</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>15</span><span class='hljl-p'>];</span><span class='hljl-t'> </span><span class='hljl-n'>metric</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-sc'>:mah</span><span class='hljl-p'>]</span><span class='hljl-t'> 
-</span><span class='hljl-n'>h</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-ni'>1</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>2</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>5</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>Inf</span><span class='hljl-p'>];</span><span class='hljl-t'> </span><span class='hljl-n'>k</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-ni'>30</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>50</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>100</span><span class='hljl-p'>]</span><span class='hljl-t'>  
+<span class='hljl-n'>nlvdis</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-ni'>10</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>15</span><span class='hljl-p'>]</span><span class='hljl-t'> </span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>metric</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-sc'>:mah</span><span class='hljl-p'>]</span><span class='hljl-t'> 
+</span><span class='hljl-n'>h</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-ni'>1</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>2</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>5</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>Inf</span><span class='hljl-p'>]</span><span class='hljl-t'> </span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>k</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-ni'>30</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>50</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>100</span><span class='hljl-p'>]</span><span class='hljl-t'>  
 </span><span class='hljl-n'>nlv</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-ni'>0</span><span class='hljl-oB'>:</span><span class='hljl-ni'>5</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-ni'>0</span><span class='hljl-oB'>:</span><span class='hljl-ni'>10</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-oB'>:</span><span class='hljl-ni'>5</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-oB'>:</span><span class='hljl-ni'>10</span><span class='hljl-p'>]</span><span class='hljl-t'>
 </span><span class='hljl-n'>pars</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>mpar</span><span class='hljl-p'>(</span><span class='hljl-n'>nlv</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>nlv</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>nlvdis</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>nlvdis</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>metric</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>metric</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>h</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>h</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>k</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>k</span><span class='hljl-p'>)</span><span class='hljl-t'> 
 </span><span class='hljl-nf'>length</span><span class='hljl-p'>(</span><span class='hljl-n'>pars</span><span class='hljl-p'>[</span><span class='hljl-ni'>1</span><span class='hljl-p'>])</span><span class='hljl-t'>
@@ -973,7 +976,7 @@ div.title {text-align: center;}
 
 
 <pre class='hljl'>
-<span class='hljl-n'>nlvdis</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-ni'>15</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>20</span><span class='hljl-p'>];</span><span class='hljl-t'> </span><span class='hljl-n'>metric</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-sc'>:eucl</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-sc'>:mah</span><span class='hljl-p'>]</span><span class='hljl-t'> 
+<span class='hljl-n'>nlvdis</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-ni'>15</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>20</span><span class='hljl-p'>]</span><span class='hljl-t'> </span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>metric</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-sc'>:eucl</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-sc'>:mah</span><span class='hljl-p'>]</span><span class='hljl-t'> 
 </span><span class='hljl-n'>h</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-ni'>1</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>2</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>4</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>6</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>Inf</span><span class='hljl-p'>]</span><span class='hljl-t'> 
 </span><span class='hljl-n'>k</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-ni'>1</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-nf'>collect</span><span class='hljl-p'>(</span><span class='hljl-ni'>5</span><span class='hljl-oB'>:</span><span class='hljl-ni'>10</span><span class='hljl-oB'>:</span><span class='hljl-ni'>50</span><span class='hljl-p'>)]</span><span class='hljl-t'> 
 </span><span class='hljl-n'>pars</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>mpar</span><span class='hljl-p'>(</span><span class='hljl-n'>nlvdis</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>nlvdis</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>metric</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>metric</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>h</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>h</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>k</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>k</span><span class='hljl-p'>)</span><span class='hljl-t'> 
@@ -995,6 +998,7 @@ div.title {text-align: center;}
 
 <pre class='hljl'>
 <span class='hljl-n'>n_trees</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-ni'>200</span><span class='hljl-p'>]</span><span class='hljl-t'>
+</span><span class='hljl-n'>p</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>nco</span><span class='hljl-p'>(</span><span class='hljl-n'>Xcal</span><span class='hljl-p'>)</span><span class='hljl-t'>
 </span><span class='hljl-n'>n_subfeatures</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>LinRange</span><span class='hljl-p'>(</span><span class='hljl-ni'>10</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>p</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-ni'>10</span><span class='hljl-p'>)</span><span class='hljl-t'>
 </span><span class='hljl-n'>max_depth</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-ni'>6</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>10</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>20</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>50</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-ni'>2000</span><span class='hljl-p'>]</span><span class='hljl-t'>
 </span><span class='hljl-n'>model</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>rfr</span><span class='hljl-p'>()</span><span class='hljl-t'>
@@ -1011,7 +1015,7 @@ div.title {text-align: center;}
 
 
 
-<h4>SVMR</h4>
+<h4>Svmr</h4>
 
 
 <pre class='hljl'>
@@ -1038,7 +1042,7 @@ div.title {text-align: center;}
         <div class="footer">
           <p>
             Published from <a href="gridscore_tecator_all_models.jmd">gridscore_tecator_all_models.jmd</a>
-            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.12 on 2025-10-03.
+            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.12 on 2026-04-28.
           </p>
         </div>
       </div>
