@@ -18,7 +18,7 @@ The contents of this project are regularly updated.
         - [Discrimination](https://mlesnoff.github.io/JchemoDemo/docs/build/discrimination/)
         - [Notes](https://mlesnoff.github.io/JchemoDemo/docs/build/notes/)
     
-    - [**Julia markdown scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Ex/jmd) corresponding to the above Html 
+    - [**Julia scripts**](https://github.com/mlesnoff/JchemoDemo/tree/main/Ex/jmd) (markdown) corresponding to the above Html 
 
 Note: The datasets used in the examples are part of package [**JchemoData**](https://github.com/mlesnoff/JchemoData.jl). This package 
 is contained in the **JchemoDemo** [**environment**](https://github.com/mlesnoff/JchemoDemo/blob/main/Project.toml) (no need to 
