@@ -14,6 +14,10 @@ convert(Vector{Float64}, x)
 convert.(Float64, x)
 Float64.(x)
 
+A = [1.2 missing ; 3.4 5.6]
+convert(Matrix{Union{Missing, Float32}}, A)
+passmissing(Float16).(A)
+
 ############### Dictionnary, Names  
 
 ## https://docs.julialang.org/en/v1/base/collections/#Dictionaries
