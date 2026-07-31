@@ -75,8 +75,8 @@ into a new category `test`.
 
 ```julia
 ## Training/test (0/1) observations
-typ2 = ones(Int, nro(typ))
-typ2[typ .== "train"] .= 0
+typ2 = fill("1", nro(typ))
+typ2[typ .== "train"] .= "0"
 tab(typ2)
 ```
 
@@ -91,7 +91,7 @@ namy = names(Y)[1:3]
 j = 2
 nam = namy[2]
 y = Y[:, nam]
-s = typ2 .== 0
+s = typ2 .== "0"
 ytrain = y[s] 
 ytest = rmrow(y, s) 
 ```
@@ -137,7 +137,7 @@ f
 ```julia
 f = Figure(size = (400, 300))
 ax = Axis(f[1, 1]; xticks = (0:1, ["Train", "Test"]), xlabel = "Group", ylabel = uppercase(nam))
-boxplot!(ax, typ2, y; width = .3, show_notch = true)
+boxplot!(ax, parse.(Int, typ2), y; width = .3, show_notch = true)
 f
 ```
 
@@ -150,7 +150,7 @@ colm = cgrad(:Dark2_5; categorical = true, alpha = .8)[1:nlev]
 cols = colm[indexin(typ2, unique(typ2))]
 #cols = (:red, .5)
 f = Figure(size = (600, 300))
-ax = Axis(f[1, 1]; xticks = (0:1, ["Train", "Test"]), ylabel = uppercase(nam))
+ax = Axis(f[1, 1]; xticks = (1:2, ["Train", "Test"]), ylabel = uppercase(nam))
 rainclouds!(ax, typ2, y; clouds = hist, markersize = 5, color = cols, gap = .3)
 f
 ```

@@ -66,7 +66,7 @@ summ(Y).res
 ```
 
 ```julia
-year = Y.year
+year = string.(Y.year)
 tab(year)
 ```
 
@@ -97,7 +97,7 @@ summ(y, year)
 ```julia
 f = Figure(size = (400, 300))
 ax = Axis(f[1, 1]; xlabel = "Year", ylabel = "TBC")
-boxplot!(ax, year, y; width = .7, show_notch = true)
+boxplot!(ax, parse.(Int, year), y; width = .7, show_notch = true)
 f
 ```
 
@@ -110,7 +110,7 @@ colm = [(:blue, tsp), (:orange, tsp), (:green, tsp), (:red, tsp), (:purple, tsp)
 cols = colm[indexin(year, unique(year))]
 #cols = (:red, .5)
 f = Figure(size = (600, 250))
-ax = Axis(f[1, 1]; xlabel = "Year", ylabel = "TBC") 
+ax = Axis(f[1, 1]; xticks = (1:5, lev), xlabel = "Year", ylabel = "TBC") 
 rainclouds!(ax, year, y; clouds = hist, jitter_width = .1, markersize = 10, color = cols)
 f
 ```

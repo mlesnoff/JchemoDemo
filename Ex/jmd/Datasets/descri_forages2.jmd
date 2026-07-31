@@ -54,7 +54,7 @@ tab(typ)
 ```
 
 ```julia
-test = Y.test  # training/test (0/1) observations
+test = string.(Y.test)  # training/test (0/1) observations
 tab(test)
 freqtable(Y.typ, test)
 ```
@@ -74,7 +74,7 @@ summ(Y[:, namy], test)
 j = 2
 nam = namy[2]
 y = Float64.(Y[:, nam])
-s = test .== 0
+s = test .== "0"
 ytrain = y[s] 
 ytest = rmrow(y, s)
 ```
@@ -120,7 +120,7 @@ f
 ```julia
 f = Figure(size = (400, 300))
 ax = Axis(f[1, 1]; xticks = (0:1, ["Train", "Test"]), xlabel = "Group", ylabel = uppercase(nam))
-boxplot!(ax, test, y; width = .3, show_notch = true)
+boxplot!(ax, parse.(Int, test), y; width = .3, show_notch = true)
 f
 ```
 ```julia
@@ -132,7 +132,7 @@ colm = cgrad(:Dark2_5; categorical = true, alpha = .8)[1:nlev]
 cols = colm[indexin(test, unique(test))]
 #cols = (:red, .5)
 f = Figure(size = (600, 300))
-ax = Axis(f[1, 1]; xticks = (0:1, ["Train", "Test"]), ylabel = uppercase(nam))
+ax = Axis(f[1, 1]; xticks = (1:2, ["Train", "Test"]), ylabel = uppercase(nam))
 rainclouds!(ax, test, y; clouds = hist, markersize = 5, color = cols, gap = .3)
 f
 ```
