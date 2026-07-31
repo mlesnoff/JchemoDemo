@@ -35,7 +35,7 @@ Y = dat.Y
 
 ```julia
 y = Y.typ   # response variable (class membership)  # the classes 
-test = Y.test
+test = string.(Y.test)
 tab(y)
 ```
 
@@ -60,7 +60,7 @@ sampling (random, systematic or any other designs). See for instance functions
 `samprand`, `sampsys`, etc.
 
 ```julia
-s = Bool.(test)
+s = test .== "1"
 Xtrain = rmrow(X, s)
 ytrain = rmrow(y, s)
 Xtest = X[s, :]

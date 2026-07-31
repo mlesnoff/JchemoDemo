@@ -65,7 +65,7 @@ freqtable(string.(typ, " - ", Y.label))
 ```
 
 ```julia
-test = Y.test  # training/test (0/1) observations
+test = string.(Y.test) # training/test (0/1) observations
 tab(test) 
 freqtable(typ, test)
 ```
@@ -73,7 +73,7 @@ freqtable(typ, test)
 #### Split Train/Test from Tot 
 
 ```julia
-s = Bool.(test) # same as: s = Y.test .== 1
+s = test .== "1"
 Xtrain = rmrow(Xp, s)
 typtrain = rmrow(typ, s)
 Xtest = Xp[s, :]
