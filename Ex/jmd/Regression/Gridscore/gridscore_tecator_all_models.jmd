@@ -109,7 +109,7 @@ rmsep(pred, ytest)
 
 ```julia results = "hidden"
 nlv = 0:20
-pars = mpar(scal = [false; true])
+pars = mpar(scal = [:none; :std])
 length(pars[1])
 model = plskern()  
 res = gridscore(model, Xcal, ycal, Xval, yval; score = rmsep, pars, nlv) 

@@ -157,7 +157,7 @@ plotxy(pred, ytest; size = (500, 400), color = (:red, .5), bisect = true, title 
 #### Additional parameters in the grid
 
 ```julia
-pars = mpar(scal = [false; true])
+pars = mpar(scal = [:none; :std])
 lb = 10.0.^(-15:.1:3)
 #lb = logrange(1e-15, 1e3, 50)   # alternative syntax
 model = rr()

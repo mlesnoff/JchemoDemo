@@ -211,7 +211,7 @@ If other parameters have to be defined in the grid, they must be set in argument
 `pars` built with function `mpar`, such as in the example below.
 
 ```julia
-pars = mpar(scal = [false; true])
+pars = mpar(scal = [:none; :std])
 nlv = 0:20
 model = plskern()
 @head res = gridcv(model, Xtrain, ytrain; segm, score = rmsep, pars, nlv).res

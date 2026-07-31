@@ -109,7 +109,7 @@ Below, the importance of each class is made equal and the error is measured with
 (recommended if classes are unbalanced) and a X-scaling is evaluated. 
 
 ```julia
-pars = mpar(prior = [:unif], scal = [false; true])
+pars = mpar(prior = [:unif], scal = [:none; :std])
 nlv = 0:20
 model = plsrda()
 res = gridscore(model, Xcal, ycal, Xval, yval; score = merrp, pars, nlv)
