@@ -114,11 +114,11 @@ fitm = model.fitm ;
 ```
 
 ```julia
-typeof(fitm.fitm)
+typeof(fitm.fitm_emb)
 ```
 
 ```julia
-@names fitm.fitm
+@names fitm.fitm_emb
 ```
 
 ```julia

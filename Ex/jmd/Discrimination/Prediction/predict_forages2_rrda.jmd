@@ -88,11 +88,11 @@ fitm = model.fitm ;
 ```
 
 ```julia
-typeof(fitm.fitm)
+typeof(fitm.fitm_emb)
 ```
 
 ```julia
-@names fitm.fitm
+@names fitm.fitm_emb
 ```
 
 ```julia
@@ -107,7 +107,7 @@ res = predict(model, Xtest)
 ```
 
 ```julia
-predict(model, Xtest; lb = [.1, .01]).pred
+predict(model, Xtest, [.1, .01]).pred
 ```
 
 ```julia
