@@ -82,7 +82,7 @@ ytest = Ytest[:, nam] ;
 
 ```julia
 lb = 1e-3
-model = rr(; lb)    # se also function 'rrchol'
+model = rr(; lb)    # see also function 'rrchol'
 fit!(model, Xtrain, ytrain)
 @names model
 fitm = model.fitm ;
@@ -96,11 +96,12 @@ fitm = model.fitm ;
 ```
 
 ```julia
-@head predict(model, Xtest; lb = .1).pred
+## Only for function 'rr' (does not work with 'rrchol')
+predict(model, Xtest, .1).pred   # predictions with lb = .1
 ```
 
 ```julia
-predict(model, Xtest; lb = [.1, 1e-3]).pred
+predict(model, Xtest, [.1, 1e-3]).pred  # predictions with lb = .1 and 1e-3
 ```
 
 ```julia

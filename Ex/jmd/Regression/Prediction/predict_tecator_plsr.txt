@@ -103,11 +103,11 @@ fitm = model.fitm ;
 ```
 
 ```julia
-@head predict(model, Xtest; nlv = 2).pred
+@head predict(model, Xtest, 2).pred
 ```
 
 ```julia
-predict(model, Xtest; nlv = 0:2).pred
+predict(model, Xtest, 0:2).pred
 ```
 
 ```julia
