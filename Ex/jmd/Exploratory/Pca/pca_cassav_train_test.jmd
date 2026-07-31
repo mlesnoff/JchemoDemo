@@ -33,12 +33,12 @@ Y = dat.Y
 ```
 
 ```julia
-year = Y.year 
+year = string.(Y.year) 
 tab(year)
 ```
 
 ```julia
-s = year .<= 2012
+s = Y.year .<= 2012
 Xtrain = X[s, :] 
 Xtest = rmrow(X, s) 
 ntot = nro(X) 

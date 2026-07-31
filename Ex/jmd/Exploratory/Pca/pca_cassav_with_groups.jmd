@@ -16,7 +16,6 @@ using JLD2, CairoMakie, GLMakie
 #### Import data
 
 ```julia
-using JchemoData, JLD2, CairoMakie, GLMakie
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/cassav.jld2")
 @load db dat
@@ -34,7 +33,7 @@ Y = dat.Y
 ```
 
 ```julia
-year = Y.year
+year = string.(Y.year)
 tab(year)
 ```
 

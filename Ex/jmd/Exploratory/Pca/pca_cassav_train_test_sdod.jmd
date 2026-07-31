@@ -22,7 +22,6 @@ using JLD2, CairoMakie
 #### Import data
 
 ```julia
-using JchemoData, JLD2, CairoMakie
 path_jdat = dirname(dirname(pathof(JchemoData)))
 db = joinpath(path_jdat, "data/cassav.jld2")
 @load db dat
@@ -40,14 +39,14 @@ Y = dat.Y
 ```
 
 ```julia
-year = Y.year 
+year = string.(Y.year) 
 tab(year)
 ```
 
 #### Split Tot to Train/Test
 
 ```julia
-s = year .<= 2012
+s = Y.year .<= 2012
 Xtrain = X[s, :] 
 Xtest = rmrow(X, s) 
 ntot = nro(X) 
@@ -82,7 +81,7 @@ fitm = model.fitm ;
 **Prediction on test** 
 
 ```julia
-res = predict(model, Xtest)
+res = predict(model, Matrix(Xtest))   # need Matrix here (bug to correct in next Jchemo version)
 @names res
 @head dtest = res.d
 ```
