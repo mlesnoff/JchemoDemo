@@ -719,13 +719,8 @@ div.title {text-align: center;}
 </pre>
 
 
-<pre class="output">
-OrderedCollections.OrderedDict&#123;String, Int64&#125; with 3 entries:
-  &quot;Cereal and grass forages&quot; &#61;&gt; 160
-  &quot;Forage trees&quot;             &#61;&gt; 101
-  &quot;Legume forages&quot;           &#61;&gt; 224
-</pre>
 
+<div><div style = "float: left;"><span>3×2 DataFrame</span></div><div style = "clear: both;"></div></div><div class = "data-frame" style = "overflow-x: scroll;"><table class = "data-frame" style = "margin-bottom: 6px;"><thead><tr class = "columnLabelRow"><th class = "stubheadLabel" style = "font-weight: bold; text-align: right;">Row</th><th style = "text-align: left;">lev</th><th style = "text-align: left;">n</th></tr><tr class = "columnLabelRow"><th class = "stubheadLabel" style = "font-weight: bold; text-align: right;"></th><th title = "String" style = "text-align: left;">String</th><th title = "Int64" style = "text-align: left;">Int64</th></tr></thead><tbody><tr class = "dataRow"><td class = "rowLabel" style = "font-weight: bold; text-align: right;">1</td><td style = "text-align: left;">Cereal and grass forages</td><td style = "text-align: right;">160</td></tr><tr class = "dataRow"><td class = "rowLabel" style = "font-weight: bold; text-align: right;">2</td><td style = "text-align: left;">Forage trees</td><td style = "text-align: right;">101</td></tr><tr class = "dataRow"><td class = "rowLabel" style = "font-weight: bold; text-align: right;">3</td><td style = "text-align: left;">Legume forages</td><td style = "text-align: right;">224</td></tr></tbody></table></div>
 
 
 <pre class='hljl'>
@@ -781,13 +776,8 @@ Legume forages           │ 167   57
 </pre>
 
 
-<pre class="output">
-OrderedCollections.OrderedDict&#123;String, Int64&#125; with 3 entries:
-  &quot;Cereal and grass forages&quot; &#61;&gt; 100
-  &quot;Forage trees&quot;             &#61;&gt; 56
-  &quot;Legume forages&quot;           &#61;&gt; 167
-</pre>
 
+<div><div style = "float: left;"><span>3×2 DataFrame</span></div><div style = "clear: both;"></div></div><div class = "data-frame" style = "overflow-x: scroll;"><table class = "data-frame" style = "margin-bottom: 6px;"><thead><tr class = "columnLabelRow"><th class = "stubheadLabel" style = "font-weight: bold; text-align: right;">Row</th><th style = "text-align: left;">lev</th><th style = "text-align: left;">n</th></tr><tr class = "columnLabelRow"><th class = "stubheadLabel" style = "font-weight: bold; text-align: right;"></th><th title = "String" style = "text-align: left;">String</th><th title = "Int64" style = "text-align: left;">Int64</th></tr></thead><tbody><tr class = "dataRow"><td class = "rowLabel" style = "font-weight: bold; text-align: right;">1</td><td style = "text-align: left;">Cereal and grass forages</td><td style = "text-align: right;">100</td></tr><tr class = "dataRow"><td class = "rowLabel" style = "font-weight: bold; text-align: right;">2</td><td style = "text-align: left;">Forage trees</td><td style = "text-align: right;">56</td></tr><tr class = "dataRow"><td class = "rowLabel" style = "font-weight: bold; text-align: right;">3</td><td style = "text-align: left;">Legume forages</td><td style = "text-align: right;">167</td></tr></tbody></table></div>
 
 
 <pre class='hljl'>
@@ -795,13 +785,8 @@ OrderedCollections.OrderedDict&#123;String, Int64&#125; with 3 entries:
 </pre>
 
 
-<pre class="output">
-OrderedCollections.OrderedDict&#123;String, Int64&#125; with 3 entries:
-  &quot;Cereal and grass forages&quot; &#61;&gt; 60
-  &quot;Forage trees&quot;             &#61;&gt; 45
-  &quot;Legume forages&quot;           &#61;&gt; 57
-</pre>
 
+<div><div style = "float: left;"><span>3×2 DataFrame</span></div><div style = "clear: both;"></div></div><div class = "data-frame" style = "overflow-x: scroll;"><table class = "data-frame" style = "margin-bottom: 6px;"><thead><tr class = "columnLabelRow"><th class = "stubheadLabel" style = "font-weight: bold; text-align: right;">Row</th><th style = "text-align: left;">lev</th><th style = "text-align: left;">n</th></tr><tr class = "columnLabelRow"><th class = "stubheadLabel" style = "font-weight: bold; text-align: right;"></th><th title = "String" style = "text-align: left;">String</th><th title = "Int64" style = "text-align: left;">Int64</th></tr></thead><tbody><tr class = "dataRow"><td class = "rowLabel" style = "font-weight: bold; text-align: right;">1</td><td style = "text-align: left;">Cereal and grass forages</td><td style = "text-align: right;">60</td></tr><tr class = "dataRow"><td class = "rowLabel" style = "font-weight: bold; text-align: right;">2</td><td style = "text-align: left;">Forage trees</td><td style = "text-align: right;">45</td></tr><tr class = "dataRow"><td class = "rowLabel" style = "font-weight: bold; text-align: right;">3</td><td style = "text-align: left;">Legume forages</td><td style = "text-align: right;">57</td></tr></tbody></table></div>
 
 <h4>Model fit</h4>
 <p><strong>&#39;PLSDA&#39;</strong> is a family of methods, for instance PLSR–DA &#40;&#61; PLS-MLR-DA&#41;, PLS-LDA, PLS-QDA or PLS-KDE-DA. </p>
@@ -853,29 +838,29 @@ Jchemo.JchemoModel&#123;typeof&#40;plsrda&#41;, Base.Pairs&#123;Symbol, Int64, N
 
 
 <pre class="output">
-&#40;:fitm, :ni, :priors, :lev, :par&#41;
+&#40;:fitm_emb, :ni, :priors, :lev, :par&#41;
 </pre>
 
 
 
 <pre class='hljl'>
-<span class='hljl-nf'>typeof</span><span class='hljl-p'>(</span><span class='hljl-n'>fitm</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span><span class='hljl-p'>)</span>
+<span class='hljl-nf'>typeof</span><span class='hljl-p'>(</span><span class='hljl-n'>fitm</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm_emb</span><span class='hljl-p'>)</span>
 </pre>
 
 
 <pre class="output">
-Jchemo.Plsr
+Jchemo.Plsr&#123;Float64&#125;
 </pre>
 
 
 
 <pre class='hljl'>
-<span class='hljl-nd'>@names</span><span class='hljl-t'> </span><span class='hljl-n'>fitm</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm</span>
+<span class='hljl-nd'>@names</span><span class='hljl-t'> </span><span class='hljl-n'>fitm</span><span class='hljl-oB'>.</span><span class='hljl-n'>fitm_emb</span>
 </pre>
 
 
 <pre class="output">
-&#40;:T, :V, :R, :W, :C, :TT, :xmeans, :xscales, :ymeans, :yscales, :weights, :niter, :par&#41;
+&#40;:T, :V, :R, :W, :C, :TT, :xmeans, :xscales, :ymeans, :yscales, :weights, :par&#41;
 </pre>
 
 
@@ -887,7 +872,7 @@ Jchemo.Plsr
 
 
 <pre class="output">
-&#40;:pred, :posterior&#41;
+&#40;:pred, :posterior, :nlv&#41;
 </pre>
 
 
@@ -923,22 +908,19 @@ Jchemo.Plsr
 
 
 <pre class='hljl'>
-<span class='hljl-nd'>@head</span><span class='hljl-t'> </span><span class='hljl-nf'>predict</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xtest</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>nlv</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>2</span><span class='hljl-p'>)</span><span class='hljl-oB'>.</span><span class='hljl-n'>pred</span>
+<span class='hljl-nd'>@head</span><span class='hljl-t'> </span><span class='hljl-nf'>predict</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xtest</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-ni'>2</span><span class='hljl-p'>)</span><span class='hljl-oB'>.</span><span class='hljl-n'>pred</span>
 </pre>
 
 
 <pre class="output">
-3×1 Matrix&#123;String&#125;:
- &quot;Legume forages&quot;
- &quot;Cereal and grass forages&quot;
- &quot;Cereal and grass forages&quot;
-... &#40;162, 1&#41;
+1-element Vector&#123;Matrix&#123;String&#125;&#125;:
+ &#91;&quot;Legume forages&quot;; &quot;Cereal and grass forages&quot;; … ; &quot;Cereal and grass forages&quot;; &quot;Legume forages&quot;;;&#93;
 </pre>
 
 
 
 <pre class='hljl'>
-<span class='hljl-nf'>predict</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xtest</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>nlv</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>0</span><span class='hljl-oB'>:</span><span class='hljl-ni'>2</span><span class='hljl-p'>)</span><span class='hljl-oB'>.</span><span class='hljl-n'>pred</span>
+<span class='hljl-nf'>predict</span><span class='hljl-p'>(</span><span class='hljl-n'>model</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>Xtest</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-ni'>0</span><span class='hljl-oB'>:</span><span class='hljl-ni'>2</span><span class='hljl-p'>)</span><span class='hljl-oB'>.</span><span class='hljl-n'>pred</span>
 </pre>
 
 
@@ -1053,7 +1035,7 @@ Jchemo.Plsr
         <div class="footer">
           <p>
             Published from <a href="predict_forages2_plsda.jmd">predict_forages2_plsda.jmd</a>
-            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.12 on 2026-04-28.
+            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.12 on 2026-08-01.
           </p>
         </div>
       </div>

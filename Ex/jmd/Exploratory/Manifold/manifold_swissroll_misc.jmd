@@ -80,17 +80,17 @@ plotxy(T[:, i], T[:, i + 1]; color = labs,
 #### Tsne
 
 ```julia
-p = 30
-maxoutdim = 2
-M = ManifoldLearning.fit(TSNE, X'; p, maxoutdim) 
-Tt =  ManifoldLearning.predict(M) 
-@head T = Tt'
+#p = 30
+#maxoutdim = 2
+#M = ManifoldLearning.fit(TSNE, Xt; p, maxoutdim) 
+#Tt =  ManifoldLearning.predict(M) 
+#@head T = Tt'
 ```
 
 ```julia
-i = 1
-plotxy(T[:, i], T[:, i + 1]; color = labs,
-    xlabel = string("LV", i), ylabel = string("LV", i + 1), title = "t-SNE").f  
+#i = 1
+#plotxy(T[:, i], T[:, i + 1]; color = labs,
+#    xlabel = string("LV", i), ylabel = string("LV", i + 1), title = "t-SNE").f  
 ```
 
 ### Kpca
