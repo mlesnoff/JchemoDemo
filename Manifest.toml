@@ -2020,9 +2020,9 @@ version = "1.12.0"
 
 [[deps.SpecialFunctions]]
 deps = ["IrrationalConstants", "LogExpFunctions", "OpenLibm_jll", "OpenSpecFun_jll"]
-git-tree-sha1 = "6547cbdd8ce32efba0d21c5a40fa96d1a3548f9f"
+git-tree-sha1 = "97c8329c5f503d2936fb36719fe25b9f94b1ae8a"
 uuid = "276daf66-3868-5448-9aa4-cd146d93841b"
-version = "2.8.0"
+version = "2.8.1"
 weakdeps = ["ChainRulesCore"]
 
     [deps.SpecialFunctions.extensions]
@@ -2312,9 +2312,9 @@ version = "1.6.1"
 
 [[deps.XLSX]]
 deps = ["Colors", "Dates", "OrderedCollections", "PrecompileTools", "Printf", "Random", "Tables", "UUIDs", "Unicode", "XML", "ZipArchives"]
-git-tree-sha1 = "8b7c7e86b4b5c6688f532df1697606090d23b385"
+git-tree-sha1 = "463064f7cb84a1f7a3978ca0e966a779b3b80d6f"
 uuid = "fdbf4ff8-1666-58a4-91e7-1b58723a45e0"
-version = "0.12.1"
+version = "0.12.2"
 weakdeps = ["FileIO", "StyledStrings"]
 
     [deps.XLSX.extensions]

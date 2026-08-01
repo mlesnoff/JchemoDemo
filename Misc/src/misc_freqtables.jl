@@ -4,8 +4,6 @@ x = rand(1:5, 100)
 res = countmap(x)
 propertynames(res)
 keys(res)
-res.keys
-res.vals
 values(res)
 sort(res)
 

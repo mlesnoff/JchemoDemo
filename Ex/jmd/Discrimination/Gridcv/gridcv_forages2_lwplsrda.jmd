@@ -80,8 +80,8 @@ segm = segmkf(ntrain, K; rep = rep)
 ```
 
 ```julia
-nlvdis = [15; 25]; metric = [:mah]
-h = [1; 2; 4; 6; Inf]; k = [30; 50; 100]  
+nlvdis = [15; 25] ; metric = [:mah]
+h = [1; 2; 4; 6; Inf] ; k = [30; 50; 100]  
 nlv = 0:15
 pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k) 
 length(pars[1])

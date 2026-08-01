@@ -276,17 +276,17 @@ f = Figure(size = (1000, 200))
 ax1 = Axis(f, xlabel = "Distance", ylabel = "Nb. observations",)
 hist!(ax1, d, bins = 30)
 ##
-h = 1
+h = 1.
 w = winvs(d; h) 
 ax2 = Axis(f, xlabel = "Distance", ylabel = "Weight", title = "h = 1")
 scatter!(ax2, d, w)
 ##
-h = 4
+h = 4.
 w = winvs(d; h) 
 ax3 = Axis(f, xlabel = "Distance", ylabel = "Weight", title = "h = 4")
 scatter!(ax3, d, w)
 ##
-h = 10
+h = 10.
 w = winvs(d; h) 
 ax4 = Axis(f, xlabel = "Distance", ylabel = "Weight", title = "h = 10")
 scatter!(ax4, d, w)
@@ -412,7 +412,6 @@ various types of materials analyzed)
 ```julia echo = false, out_width = "70%"
 lev = mlev(Y.typ)
 nlev = length(lev)
-ztyp = recod_catbyint(Y.typ)
 nlv = 3
 model = pcasvd(; nlv)
 fit!(model, X)
@@ -515,7 +514,7 @@ f
 It is also usefull to check the representativity of the *y*-variable.
 
 ```julia
-summ(y, Y.test)
+summ(y, string.(Y.test))
 ```
 
 ```julia, echo = false
@@ -548,7 +547,7 @@ sampling designs (e.g. random) could be chosen.
 
 ```julia
 nval = 300
-s = sampsys(1:ntrain, nval)
+s = sampsys(Float64.(1:ntrain), nval)
 Xcal = Xtrain[s.train, :]
 ycal = ytrain[s.train]
 Xval = Xtrain[s.test, :]
@@ -580,7 +579,7 @@ is [`gridcv`](https://github.com/mlesnoff/Jchemo.jl/blob/master/src/gridscore.jl
 model = lwplsr()
 res = gridscore(model, Xcal, ycal, Xval, yval; 
     score = rmsep,  # performance criterion computed on VAL 
-    pars,           # defined grid of parameters 
+    pars,           # grid of parameters defined above
     nlv             # parameter 'nlv' has been set out of 'pars' to decrease the computation time (see gridscore help-page)  
     )
 @head res   # first rows of the result table

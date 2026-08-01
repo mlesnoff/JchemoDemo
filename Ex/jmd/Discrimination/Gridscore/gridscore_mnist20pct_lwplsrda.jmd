@@ -74,8 +74,8 @@ ncal = ntrain - nval
 #### Grid-search 
 
 ```julia
-nlvdis = [10; 20]; metric = [:mah]
-h = [1; 2; 5; Inf]; k = [200; 300; 500; 1000]  
+nlvdis = [10; 20] ; metric = [:mah]
+h = [1; 2; 5; Inf] ; k = [200; 300; 500; 1000]  
 nlv = 0:15
 pars = mpar(nlvdis = nlvdis, metric = metric, h = h, k = k) 
 length(pars[1])
