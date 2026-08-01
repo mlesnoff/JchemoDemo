@@ -81,7 +81,7 @@ fitm = model.fitm ;
 **Prediction on test** 
 
 ```julia
-res = predict(model, Matrix(Xtest))   # need Matrix here (bug to correct in next Jchemo version)
+res = predict(model, Xtest)
 @names res
 @head dtest = res.d
 ```
